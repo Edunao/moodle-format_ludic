@@ -1,0 +1,236 @@
+{
+  "skin_definitions": {
+    "1": {
+      "location": "section",
+      "type": "avatar",
+      "title": "Lutin fermier",
+      "image": "icon/identifiantunique",
+      "info": "Some explanation of this skin configuration...",
+      "properties": {
+        "slots": [
+          {
+            "name": "right_hand",
+            "image": "avatar/slot/identifiantunique"
+          },
+          {
+            "name": "left_hand",
+            "image": "avatar/slot/identifiantunique"
+          },
+          {
+            "name": "hat",
+            "image": "avatar/slot/identifiantunique"
+          },
+          {
+            "name": "body",
+            "image": "avatar/slot/identifiantunique"
+          },
+          {
+            "name": "legs",
+            "image": "avatar/slot/identifiantunique"
+          }
+        ],
+        "items": [
+          {
+            "hidden": 0,
+            "cost": 0,
+            "name": "avatar",
+            "slot": "",
+            "icon": "avatar/slot/identifiantunique",
+            "image_1": "avatar/image/identifiantunique",
+            "z_offset_1": 1,
+            "image_2": "avatar/image/identifiantunique",
+            "z_offset_2": 2,
+            "image_3": "avatar/image/identifiantunique",
+            "z_offset_3": 3
+          },
+          {
+            "hidden": 0,
+            "cost": 100,
+            "name": "queue de chat",
+            "slot": "right_hand",
+            "icon": "avatar/slot/identifiantunique",
+            "image_1": "avatar/image/identifiantunique",
+            "z_offset_1": 1,
+            "image_2": "avatar/image/identifiantunique",
+            "z_offset_2": 2,
+            "image_3": "avatar/image/identifiantunique",
+            "z_offset_3": 3
+          }
+        ],
+        "css": "{background-color: red;}"
+      }
+    },
+    "2": {
+      "location": "section",
+      "type": "score",
+      "title": "Score Money Bag",
+      "properties": {
+        "images": [
+          {
+            "threshold": 110,
+            "image": "score/image/identifiantunique"
+          },
+          {
+            "threshold": 250,
+            "image": "score/image/identifiantunique"
+          }
+        ],
+        "css": "{background-color: #000;}"
+      }
+    },
+    "3": {
+      "location": "section",
+      "type": "progress",
+      "title": "Super fusée",
+      "properties": {
+        "target_score": 70,
+        "images": [
+          {
+            "threshold": 0,
+            "image_1": "progress/image/identifiantunique",
+            "image_2": "progress/image/identifiantunique",
+            "image_3": "progress/image/identifiantunique",
+            "image_4": "",
+            "image_5": "",
+            "css": "{background-color: red;}"
+          },
+          {
+            "threshold": 50,
+            "image_1": "progress/image/identifiantunique",
+            "image_2": "progress/image/identifiantunique",
+            "image_3": "progress/image/identifiantunique",
+            "image_4": "progress/image/identifiantunique",
+            "image_5": "",
+            "css": "{background-color: blue;}"
+          },
+          {
+            "threshold": 100,
+            "image_1": "progress/image/identifiantunique",
+            "image_2": "progress/image/identifiantunique",
+            "image_3": "progress/image/identifiantunique",
+            "image_4": "progress/image/identifiantunique",
+            "image_5": "progress/image/identifiantunique",
+            "css": "{background-color: green;}"
+          }
+        ],
+        "css": "{background-color: #000;}"
+      }
+    },
+    "4": {
+      "location": "section",
+      "type": "collection",
+      "title": "virtualisation de la collection du meilleur collectionneur",
+      "properties": {
+        "base_image": "collection/image/identifiantunique",
+        "final_image": "collection/image/identifiantunique",
+        "stamp_images": [
+          {
+            "index": 1,
+            "image_off": "collection/image/identifiantunique",
+            "image_on": "collection/image/identifiantunique",
+            "image_3": "collection/image/identifiantunique",
+            "image_4": "",
+            "image_5": "",
+            "css": "{background-color: red;}"
+          },
+          {
+            "index": 2,
+            "image_1": "collection/image/identifiantunique",
+            "image_2": "collection/image/identifiantunique",
+            "image_3": "collection/image/identifiantunique",
+            "image_4": "collection/image/identifiantunique",
+            "image_5": "",
+            "css": "{background-color: blue;}"
+          },
+          {
+            "index": 3,
+            "image_1": "collection/image/identifiantunique",
+            "image_2": "collection/image/identifiantunique",
+            "image_3": "collection/image/identifiantunique",
+            "image_4": "collection/image/identifiantunique",
+            "image_5": "collection/image/identifiantunique",
+            "css": "{background-color: green;}"
+          }
+        ],
+        "stamp_css": [
+          {
+            "number_activities": 1,
+            "css": "{width: 100%;}"
+          },
+          {
+            "number_activities": 2,
+            "css": "{width: 50%;}"
+          },
+          {
+            "number_activities": 3,
+            "css": "{width: 33.33%;}"
+          },
+          {
+            "number_activities": 4,
+            "css": "{width: 25%;}"
+          }
+        ],
+        "css": "{background-color: #000;}"
+      }
+    },
+    "10": {
+      "location": "mod",
+      "type": "progress",
+      "title": "je me renforce",
+      "properties": {
+        "images": [
+          {
+            "threshold": 0,
+            "image_1": "progress/image/identifiantunique",
+            "image_2": "progress/image/identifiantunique",
+            "image_3": "progress/image/identifiantunique",
+            "image_4": "",
+            "image_5": "",
+            "css": "{background-color: red;}"
+          },
+          {
+            "threshold": 50,
+            "image_1": "progress/image/identifiantunique",
+            "image_2": "progress/image/identifiantunique",
+            "image_3": "progress/image/identifiantunique",
+            "image_4": "progress/image/identifiantunique",
+            "image_5": "",
+            "css": "{background-color: blue;}"
+          },
+          {
+            "threshold": 100,
+            "image_1": "progress/image/identifiantunique",
+            "image_2": "progress/image/identifiantunique",
+            "image_3": "progress/image/identifiantunique",
+            "image_4": "progress/image/identifiantunique",
+            "image_5": "progress/image/identifiantunique",
+            "css": "{background-color: green;}"
+          }
+        ],
+        "css": "{background-color: #000;}"
+      }
+    },
+    "11": {
+      "location": "mod",
+      "type": "score",
+      "title": "je gagne des pièces d'or",
+      "properties": {
+        "unachieved": "achievement/image/identifiantunique",
+        "achieved": "achievement/image/identifiantunique",
+        "css": "{background-color: purple;}"
+      }
+    },
+    "12": {
+      "location": "mod",
+      "type": "achievement",
+      "title": "pile ou face",
+      "properties": {
+        "unachieved": "achievement/image/identifiantunique",
+        "achieved": "achievement/image/identifiantunique",
+        "css": "{background-color: purple;}"
+      }
+    }
+  },
+  "comment1": "4 _ Gamified section are typed as one of: avatar, progress, score and maybe collection",
+  "comment2": "2 _ Activities are gamified as one of: progress, score, achievement"
+}

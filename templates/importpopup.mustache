@@ -1,0 +1,77 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_ludic/headerbar
+
+    Displays the header bar
+
+    Context variables required for this template:
+    * buttons Array - each button is an object with a name, a link and an indicator of position (right / left).
+
+    Example context (json):
+    {
+        "buttons": [
+            {"name": "Title",   "shortname": "title",   "link": "value",                           "left": false},
+            {"name": "Course",  "shortname": "course",  "link": "/course/view.php?id=2",           "left": true},
+            {"name": "Section", "shortname": "section", "link": "/course/view.php?id=2&section=1", "left": true}
+        ]
+    }
+}}
+
+
+<div class="content-part items">
+    {{#categories}}
+        {{#category}}
+            <div class="items-header {{category}}">
+
+                <a href="{{link}}">{{name}}</a>
+            </div>
+        {{/category}}
+        {{#items}}
+            <div class="item item-{{type}}">
+
+                <div class="item-img-container">
+                    {{#pix}}{{iconname}}, format_ludic, {{#str}}{{iconname}}, format_ludic{{/str}}{{/pix}}
+                </div>
+
+                <div class="item-name">
+                    {{name}}
+                </div>
+
+            </div>
+        {{/items}}
+    {{/categories}}
+</div>
+
+<div class="content-part description">
+
+    <div class="description-icon">
+        {{#pix}}{{iconname}}, format_ludic, {{#str}}{{iconname}}, format_ludic{{/str}}{{/pix}}
+    </div>
+    <div class="description-title">
+        {{title}}
+    </div>
+    <div class="description-content">
+        {{content}}
+    </div>
+
+    <div class="buttons">
+        <button id="popup-import" type="button" class="btn-ludic">{{#str}}popup-import, format_ludic{{/str}}</button>
+        <button id="popup-cancel" type="button" class="btn-ludic">{{#str}}popup-cancel, format_ludic{{/str}}</button>
+    </div>
+
+</div>

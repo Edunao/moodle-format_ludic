@@ -1,0 +1,102 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template format_ludic/headerbar
+
+    Displays the header bar
+
+    Context variables required for this template:
+    * buttons Array - each button is an object with a name, a link and an indicator of position (right / left).
+
+    Example context (json):
+    {
+        "buttons": [
+            {"name": "Title",   "shortname": "title",   "link": "value",                           "left": false},
+            {"name": "Course",  "shortname": "course",  "link": "/course/view.php?id=2",           "left": true},
+            {"name": "Section", "shortname": "section", "link": "/course/view.php?id=2&section=1", "left": true}
+        ]
+    }
+}}
+{{#categories}}
+    {{#catname}}
+        <div class="category-header">
+            {{catname}}
+        </div>
+    {{/catname}}
+
+    {{#items}}
+        <div class="item item-{{type}}">
+
+            <div class="item-img-container">
+                <img src="{{imgsrc}}" alt="{{imgalt}}">
+            </div>
+
+            <div class="item-name">
+                {{name}}
+            </div>
+
+        </div>
+    {{/items}}
+{{/categories}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="content-part items">
+    {{#items}}
+        <div class="item item-{{type}}">
+
+            <div class="item-img-container">
+                <img src="{{imgsrc}}" alt="{{imgalt}}">
+            </div>
+
+            <div class="item-name">
+                {{name}}
+            </div>
+
+        </div>
+    {{/items}}
+</div>
+
+<div class="content-part description">
+
+    <div class="description-icon">
+
+    </div>
+    <div class="description-title">
+
+    </div>
+    <div class="description-content">
+
+    </div>
+
+    <div class="buttons">
+        {{#buttons}}
+            <button id="popup-{{type}}" type="button" class="btn-ludic btn-ludic-{{type}}">{{#str}}popup{{type}}, format_ludic{{/str}}</button>
+        {{/buttons}}
+    </div>
+
+</div>
