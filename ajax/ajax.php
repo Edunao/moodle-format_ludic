@@ -15,24 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'format_ludic', language 'en'
+ * Main ajax file for ludic format.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+require_once(__DIR__ . '/../../../../config.php');
+require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-$string['pluginname']     = 'Ludic';
-$string['hidefromothers'] = 'Hide section';
-$string['showfromothers'] = 'Show section';
 
-// Privacy
-$string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
+// Check capabilities
+if (!isloggedin()) {
+    redirect($CFG->wwwroot . '/login/index.php');
+}
+$frontcontroller = new \format_ludic\front_controller();
 
-// Course format options.
-$string['ludicconfiglabel']     = 'Ludic course configuration data';
-$string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
-
-// popup
-$string['popupconfirm'] = 'OK';
-$string['popupcancel']  = 'Cancel';
+//call the controller method and print the result
+echo $frontcontroller->execute();

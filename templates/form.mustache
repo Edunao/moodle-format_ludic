@@ -31,19 +31,8 @@
         ]
     }
 }}
-<div id="{{popupid}}" class="format-ludic ludic-popup hide {{class}}">
-
-    <div class="popup-header">
-        {{#headericon}}
-            <img src="{{imgsrc}}" alt="{{imgalt}}">
-        {{/headericon}}
-        <h2>{{title}}</h2>
-        <button type="button" class="close-ludic-popup">
-            {{#pix}}close-button, format_ludic, {{#str}}closebuttontitle, core{{/str}}{{/pix}}
-        </button>
-    </div>
-
-    <div class="popup-content">
+<div class="ludic-container container-form">
+    <form id="{{id}}" action="{{action}}" method="{{method}}" class="ludic-form" data-type="{{type}}" data-itemid="{{itemid}}">
         {{{content}}}
-    </div>
+    </form>
 </div>

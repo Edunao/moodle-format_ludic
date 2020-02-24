@@ -24,35 +24,22 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$contexthelper = \format_ludic\context_helper::get_instance($PAGE);
-$headerbar     = new \format_ludic\header_bar($PAGE);
-$output        = $headerbar->render();
-
+$courseid = $COURSE->id;
+$context  = \context_course::instance($courseid);
+$PAGE->set_context($context);
 $renderer = $PAGE->get_renderer('format_ludic');
-$items    = [
-        'items' => [
-                [
-                        'name' => 'Section 1', 'type' => 'section', 'imgsrc' => 'section-img', 'imgalt' => 'section alt'
-                ],
-                [
-                        'name' => 'Section 2', 'type' => 'section', 'imgsrc' => 'section-img 2', 'imgalt' => 'section alt 2'
-                ],
-                [
-                        'name' => 'Section 3', 'type' => 'section', 'imgsrc' => 'section-img 3', 'imgalt' => 'section alt 3'
-                ],
-        ]
-];
-$columncontent =  $renderer->render_from_template('format_ludic/blockitems', $items);
-$columns   = ['columns' => [
-        'width' => 100,
-        'content' => $columncontent
-]];
-$popupcontent       = $renderer->render_from_template('format_ludic/columns', $columns);
-$popup    = [
-        'content' => $popupcontent, 'title' => 'Pop up en une colonne', 'headericon' => [
-                'imgsrc' => 'avatar-img', 'imgalt' => 'avatar alt'
-        ]
 
-];
-$output   = $renderer->render_from_template('format_ludic/popup', $popup);
-echo $output;
+
+
+echo $renderer->render_edit_page();
+$params = ['courseid' => $courseid, 'userid' => $USER->id, 'editmode' => $PAGE->user_is_editing()];
+//$PAGE->requires->js_module('core_filepicker');
+//$module = array('name'=>'form_filepicker', 'fullpath'=>'/lib/form/filepicker.js', 'requires'=>array('core_filepicker', 'node', 'node-event-simulate', 'core_dndupload'));
+//$PAGE->requires->js_module($module);
+$PAGE->requires->js('/lib/form/dndupload.js');
+$PAGE->requires->js('/repository/filepicker.js');
+$PAGE->requires->js('/lib/form/filepicker.js');
+
+$PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init', ['params' => $params]);
+$PAGE->requires->js_call_amd('format_ludic/format_ludic', 'get_parents', ['type' => 'section']);
+//$PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init_filepicker', ['savepath' => $savepath]);

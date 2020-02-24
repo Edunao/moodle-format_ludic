@@ -15,24 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'format_ludic', language 'en'
+ * Items (sections, bravos, skins) for ludic course format.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class format_ludic_item implements renderable {
 
-$string['pluginname']     = 'Ludic';
-$string['hidefromothers'] = 'Hide section';
-$string['showfromothers'] = 'Show section';
+    public $id;
+    public $order;
+    public $title;
+    public $itemtype;
+    public $imgsrc;
+    public $imgalt;
+    public $draggable;
+    public $droppable;
 
-// Privacy
-$string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
-
-// Course format options.
-$string['ludicconfiglabel']     = 'Ludic course configuration data';
-$string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
-
-// popup
-$string['popupconfirm'] = 'OK';
-$string['popupcancel']  = 'Cancel';
+}

@@ -1,0 +1,26 @@
+<div class="ludic-form-group" data-type="selection_popup">
+
+    <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
+        {{label}}
+    </label>
+
+    <div
+        {{#id}}id="{{id}}-display" {{/id}}
+        data-popupid="{{popupid}}"
+        class="open-popup {{class}}"
+        {{#multiple}}multiple {{/multiple}}
+        {{#autofocus}}autofocus {{/autofocus}}
+        {{#disabled}}disabled {{/disabled}}
+        {{#required}}required{{/required}}
+    >
+        {{#icon}}
+            <img src="{{imgsrc}}" alt="{{imgalt}}">
+        {{/icon}}
+    </div>
+    {{> format_ludic/hidden_form_element }}
+    {{> format_ludic/popup }}
+
+</div>
+
+
+

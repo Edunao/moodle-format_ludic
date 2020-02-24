@@ -33,13 +33,14 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
  */
 class context_helper {
 
+    // Singleton
+    public static $instance;
+
     // Environment properties
     private $page            = null;
     private $user            = null;
     private $dbapi           = null;
     private $dataapi         = null;
-    private $logapi          = null;
-    private $fileapi         = null;
     private $contextcourse   = null;
     private $courseid        = null;
     private $sectionid       = null;
@@ -48,8 +49,9 @@ class context_helper {
     private $sections        = null;
     private $cminfo          = null;
     private $cmsinfo         = null;
-    private $modinfo         = null;
     private $currentlocation = null;
+    private $modinfo         = null;
+    private $modinfocms      = null;
 
     /**
      * context_helper constructor.
@@ -62,10 +64,18 @@ class context_helper {
         $this->user    = $USER;
         $this->dbapi   = new database_api($this);
         $this->dataapi = new data_api($this);
-        $this->logapi  = new log_api($this);
-        $this->fileapi = new file_api($this);
     }
 
+    /**
+     * @param \moodle_page $page
+     * @return context_helper
+     */
+    public static function get_instance(\moodle_page $page) {
+        if (!(self::$instance instanceof self)) {
+            self::$instance = new self($page);
+        }
+        return self::$instance;
+    }
 
     //-------------------------------------------------------------------------
     // Moodle context
@@ -78,9 +88,23 @@ class context_helper {
     }
 
     /**
+     * @return database_api
+     */
+    public function get_database_api() {
+        return $this->dbapi;
+    }
+
+    /**
+     * @return data_api
+     */
+    public function get_data_api() {
+        return $this->dataapi;
+    }
+
+    /**
      * @return int
      */
-    public function get_userid() {
+    public function get_user_id() {
         return $this->user->id;
     }
 
@@ -141,7 +165,7 @@ class context_helper {
             } else if (isset($this->page->cm->section)) {
                 // we're in an activity that is declaring its section id so we need to lookup the corresponding course-relative index
                 $sectionid        = $this->page->cm->section;
-                $this->sectionidx = $sectionid ? $this->db->get_sectionidx_by_sectionid($sectionid) : 0;
+                $this->sectionidx = $sectionid ? $this->db->get_section_idx_by_id($sectionid) : 0;
             } else {
                 $this->sectionidx = -1;
             }
@@ -198,160 +222,6 @@ class context_helper {
     }
 
     /**
-     * @return array of course sections with a lot of data
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    public function get_course_sections() {
-        if ($this->sections === null) {
-
-            $this->sections = [];
-            $modinfo        = $this->get_modinfo();
-            $cms            = $this->get_cms_info();
-
-            // get sections list
-            $sectionrecords = $this->db->get_course_sections_by_courseid($this->get_course_id());
-
-            // Fixup the records to make sure that they are complete
-            foreach ($sectionrecords as $section) {
-                // Section is visible for user.
-                $sectioninfo          = $modinfo->get_section_info($section->section);
-                $section->uservisible = $sectioninfo->uservisible;
-
-                $section->sequence = explode(',', $section->sequence);
-                $sequenceidx       = 0;
-                foreach ($section->sequence as $cmid) {
-                    if (isset($cms[$cmid])) {
-                        $sequenceidx++;
-
-                        $cm      = $cms[$cmid];
-                        $cm->idx = $sequenceidx;
-
-                        $section->cms[] = $cm;
-                    }
-                }
-
-                $this->sections[$section->section] = $section;
-            }
-        }
-        return $this->sections;
-    }
-
-    /**
-     * Get current section with course modules.
-     *
-     * @return mixed|null
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    public function get_current_section() {
-        if ($this->section == null) {
-
-            // Return false if we can't retrieve section id.
-            if (!$sectionid = $this->get_section_id()) {
-                return false;
-            }
-
-            // Get section by id.
-            $section = $this->db->get_course_sections_by_id($this->get_section_id());
-
-            // Add course modules to section.
-            $cms               = $this->get_cms_info();
-            $section->sequence = explode(',', $section->sequence);
-            $sequenceidx       = 0;
-            foreach ($section->sequence as $cmid) {
-                if (isset($cms[$cmid])) {
-                    $sequenceidx++;
-
-                    $cm      = $cms[$cmid];
-                    $cm->idx = $sequenceidx;
-
-                    $section->cms[] = $cm;
-                }
-            }
-
-            $this->section = $section;
-        }
-        return $this->section;
-    }
-
-    /**
-     * @return array of course modules
-     * @throws \moodle_exception
-     */
-    public function get_cms_info() {
-        // if the value of the attribute has already been retrieved then we return it
-        if ($this->cmsinfo !== null) {
-            return $this->cmsinfo;
-        }
-
-        $this->cmsinfo = [];
-
-        $cms = $this->db->get_course_modules_by_courseid($this->courseid);
-
-        $modinfo = $this->get_modinfo();
-        foreach ($cms as $cmid => $cminfo) {
-            if ($cminfo->visible == 1) {
-                $cm                   = $modinfo->get_cm($cmid);
-                $cminfo->name         = $cm->name;
-                $cminfo->visible      = $cm->uservisible;
-                $this->cmsinfo[$cmid] = $cminfo;
-            }
-        }
-
-        return $this->cmsinfo;
-    }
-
-    /**
-     * @return object|false : current cminfo with a lot of data
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    public function get_cm_info() {
-        // If the value of the attribute has already been retrieved then we return it.
-        if ($this->cminfo !== null) {
-            return $this->cminfo;
-        }
-
-        $cmid   = $this->get_cm_id();
-        $cminfo = $this->db->get_course_modules_by_id($cmid);
-
-        // Course modules not found, return false.
-        if (!$cminfo) {
-            $this->cminfo = false;
-            return $this->cminfo;
-        }
-
-        $modinfo         = $this->get_modinfo();
-        $cm              = $modinfo->get_cm($cmid);
-        $cminfo->name    = $cm->name;
-        $cminfo->visible = $cm->uservisible;
-
-        // Update the value in the cache if it has already been loaded.
-
-        if ($this->cmsinfo !== null) {
-            $this->cmsinfo[$cmid] = $cminfo;
-        }
-
-        $this->cminfo = $cminfo;
-
-        return $this->cminfo;
-    }
-
-    /**
-     * @return \course_modinfo
-     * @throws \moodle_exception
-     */
-    public function get_modinfo() {
-        if ($this->modinfo === null) {
-            $this->modinfo = get_fast_modinfo($this->get_course_id(), $this->get_userid());
-        }
-
-        return $this->modinfo;
-    }
-
-    /**
      * Return where the user is in course - course / section / mod
      *
      * @return string
@@ -382,7 +252,7 @@ class context_helper {
      * @return bool
      */
     public function is_user_admin() {
-        return is_siteadmin($this->get_userid());
+        return is_siteadmin($this->get_user_id());
     }
 
     /**
@@ -394,7 +264,7 @@ class context_helper {
         if (!$roleid = $this->db->get_role_id_by_role_shortname($roleshortname)) {
             return false;
         }
-        return user_has_role_assignment($this->get_userid(), $roleid, $this->get_context_course_id());
+        return user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_course_id());
     }
 
     /**
@@ -409,7 +279,7 @@ class context_helper {
                 $hasrole = false;
                 continue;
             }
-            $hasrole = user_has_role_assignment($this->get_userid(), $roleid, $this->get_context_course_id());
+            $hasrole = user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_course_id());
         }
         return $hasrole;
     }
@@ -436,4 +306,28 @@ class context_helper {
         }
         return false;
     }
+
+    /**
+     * @return \course_modinfo
+     * @throws \moodle_exception
+     */
+    public function get_fast_modinfo($courseid, $userid = null) {
+        global $USER;
+        //if ($this->modinfo == null) {
+            if ($userid == null) {
+                $userid = $USER->id;
+            }
+            $this->modinfo = get_fast_modinfo($courseid, $userid);
+        //}
+        return $this->modinfo;
+    }
+
+    public function get_modinfo_cms($courseid, $userid) {
+        if ($this->modinfocms == null) {
+            $modinfo          = $this->get_fast_modinfo($courseid, $userid);
+            $this->modinfocms = $modinfo->get_cms();
+        }
+        return $this->modinfocms;
+    }
+
 }

@@ -49,8 +49,17 @@ class database_api {
      * @return mixed
      * @throws \dml_exception
      */
-    public function get_sectionidx_by_sectionid($sectionid) {
+    public function get_section_idx_by_id($sectionid) {
         return $this->db->get_field('course_sections', 'section', ['id' => $sectionid]);
+    }
+
+    /**
+     * @param $sectionid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_section_sequence_by_id($sectionid) {
+        return $this->db->get_field('course_sections', 'sequence', ['id' => $sectionid]);
     }
 
     /**
@@ -79,7 +88,7 @@ class database_api {
      * @return mixed
      * @throws \dml_exception
      */
-    public function get_course_sections_by_id($id) {
+    public function get_section_by_id($id) {
         return $this->db->get_record('course_sections', ['id' => $id]);
     }
 
@@ -102,7 +111,7 @@ class database_api {
      * @return mixed
      * @throws \dml_exception
      */
-    public function get_course_modules_by_id($id) {
+    public function get_course_module_by_id($id) {
         return $this->db->get_record_sql('
             SELECT cm.id, cm.id as cmid, cm.instance, m.name as modname, cm.section, cm.visible
             FROM {course_modules} cm
@@ -118,6 +127,10 @@ class database_api {
      */
     public function get_role_id_by_role_shortname($roleshortname) {
         return $this->db->get_field('role', 'id', ['shortname' => $roleshortname]);
+    }
+
+    public function update_section($dbsection) {
+        return $this->db->update_record('course_sections', $dbsection);
     }
 }
 

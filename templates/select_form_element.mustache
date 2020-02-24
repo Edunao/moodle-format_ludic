@@ -1,0 +1,27 @@
+<div class="ludic-form-group" data-type="select">
+
+    <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
+        {{label}}
+    </label>
+
+    <select
+        {{#id}}id="{{id}}" {{/id}}
+        {{#name}}name="{{name}}" {{/name}}
+        {{#class}}class="{{class}}" {{/class}}
+        {{#size}}size="{{size}}" {{/size}}
+        {{#multiple}}multiple {{/multiple}}
+        {{#autofocus}}autofocus {{/autofocus}}
+        {{#disabled}}disabled {{/disabled}}
+        {{#readonly}}readonly {{/readonly}}
+        {{#required}}required{{/required}}
+    >
+        {{#options}}
+            {{#value}}
+                <option value="{{value}}" {{#selected}}selected{{/selected}}>
+                    {{#name}}{{name}}{{/name}}
+                </option>
+            {{/value}}
+        {{/options}}
+    </select>
+</div>
+

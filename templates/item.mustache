@@ -31,19 +31,19 @@
         ]
     }
 }}
-<div id="{{popupid}}" class="format-ludic ludic-popup hide {{class}}">
+<div id="{{itemtype}}-{{id}}"
+    class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}"
+    data-type="{{itemtype}}"
+    data-id="{{id}}"
+    data-order="{{order}}"
+    {{#draggable}} draggable="true"{{/draggable}}>
 
-    <div class="popup-header">
-        {{#headericon}}
-            <img src="{{imgsrc}}" alt="{{imgalt}}">
-        {{/headericon}}
-        <h2>{{title}}</h2>
-        <button type="button" class="close-ludic-popup">
-            {{#pix}}close-button, format_ludic, {{#str}}closebuttontitle, core{{/str}}{{/pix}}
-        </button>
+    <div class="item-img-container">
+        <img src="{{imgsrc}}" alt="{{imgalt}}">
     </div>
 
-    <div class="popup-content">
-        {{{content}}}
+    <div class="item-title">
+        {{title}}
     </div>
+
 </div>

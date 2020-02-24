@@ -1,1 +1,57 @@
+@import 'order.less';
+@import 'item.less';
 @import 'share.less';
+
+#ludic-main-container {
+  width: 100%;
+  height: 600px;
+  border: 1px solid black;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+
+  .ludic-container {
+    width: 100%;
+    display: flex;
+
+    &.container-items {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      width: calc(~'100% - 220px');
+      margin-right: 20px;
+      .container-parents {
+        border: 1px solid black;
+        height: 200px;
+        margin-bottom: 20px;
+      }
+      .container-children {
+        border: 1px solid black;
+
+        height: calc(~'100% - 220px');
+      }
+      .item {
+        cursor: pointer;
+      }
+    }
+
+    &.container-properties {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      width: 200px;
+      .container-content {
+        border: 1px solid black;
+
+        height: calc(~'100% - 150px');
+        margin-bottom: 20px;
+      }
+      .container-buttons {
+        border: 1px solid black;
+        height: 130px;
+      }
+    }
+
+  }
+}

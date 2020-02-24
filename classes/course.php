@@ -15,24 +15,34 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'format_ludic', language 'en'
+ * This file contains main class for the course format Ludic
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname']     = 'Ludic';
-$string['hidefromothers'] = 'Hide section';
-$string['showfromothers'] = 'Show section';
+namespace format_ludic;
 
-// Privacy
-$string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
+class course extends model {
 
-// Course format options.
-$string['ludicconfiglabel']     = 'Ludic course configuration data';
-$string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
+    public    $course;
+    protected $sections;
+    public    $coursemodules;
 
-// popup
-$string['popupconfirm'] = 'OK';
-$string['popupcancel']  = 'Cancel';
+    public function __construct($course) {
+        $this->course = $course;
+        parent::__construct($this->course);
+    }
+
+    public function get_sections() {
+        // Retrieve sections if attribute sections is empty.
+        if (empty($this->sections)) {
+            $dataapi        = $this->contexthelper->get_data_api();
+            $this->sections = $dataapi->get_sections_by_course_id($this->id);
+        }
+
+        return $this->sections;
+    }
+
+}

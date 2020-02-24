@@ -1,0 +1,68 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ * Items (sections, bravos, skins) for ludic course format.
+ *
+ * @package   format_ludic
+ * @copyright 2020 Edunao SAS (contact@edunao.com)
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+require_once($CFG->dirroot . '/lib/form/filepicker.php');
+
+class format_ludic_filepicker_form_element extends format_ludic_form_element {
+
+    public $filepicker;
+    public $content;
+    public $options;
+
+    public function __construct(\format_ludic\form_element $element) {
+        parent::__construct($element);
+        $this->filepicker = new MoodleQuickForm_filepicker($this->name, $this->name, ['id' => 'id_' . $this->name]);
+        $this->content = $this->filepicker->toHtml();
+        $this->options = json_encode($this->get_js_options());
+    }
+
+    public function get_js_options() {
+        global $PAGE, $CFG;
+        // Définir un nombre max pour le format
+        $fpmaxbytes     = 0;
+        $coursemaxbytes = 0;
+        if (!empty($PAGE->course->maxbytes)) {
+            $coursemaxbytes = $PAGE->course->maxbytes;
+        }
+        $coursemaxbytes = get_user_max_upload_file_size($PAGE->context, $CFG->maxbytes, $coursemaxbytes, $fpmaxbytes);
+
+        $args = new stdClass();
+        // need these three to filter repositories list
+        $args->accepted_types = 'web_image';         // Définir les types autorisés pour le format
+        $args->return_types   = FILE_INTERNAL;
+        $args->itemid         = $this->filepicker->getValue();
+        $args->maxbytes       = $coursemaxbytes;
+        $args->context        = $PAGE->context;
+        $args->buttonname     = $this->filepicker->getName() . 'choose';
+        $args->elementname    = $this->filepicker->getName();
+
+        $fp               = new file_picker($args);
+        $options          = $fp->options;
+        $options->context = $PAGE->context;
+        $options->savepath = 'custom/savepath/';
+
+        return $options;
+    }
+
+}

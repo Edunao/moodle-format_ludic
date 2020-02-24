@@ -15,24 +15,32 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'format_ludic', language 'en'
+ * Popup for ludic course format.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class format_ludic_popup implements renderable {
 
-$string['pluginname']     = 'Ludic';
-$string['hidefromothers'] = 'Hide section';
-$string['showfromothers'] = 'Show section';
+    public $title;
+    public $content;
+    public $headericon;
 
-// Privacy
-$string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
+    public function __construct($title = '', $content = '', $headericon = null) {
+        $this->title   = $title;
+        $this->content = $content;
 
-// Course format options.
-$string['ludicconfiglabel']     = 'Ludic course configuration data';
-$string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
+        // If the header icon is defined, we make sure that there is no missing data.
+        if ($headericon) {
+            if (!isset($headericon['imgsrc'])) {
+                $headericon['imgsrc'] = 'https://picsum.photos/80';
+            }
+            if (!isset($headericon['imgalt'])) {
+                $headericon['imgalt'] = '';
+            }
+        }
+        $this->headericon = $headericon;
+    }
 
-// popup
-$string['popupconfirm'] = 'OK';
-$string['popupcancel']  = 'Cancel';
+}

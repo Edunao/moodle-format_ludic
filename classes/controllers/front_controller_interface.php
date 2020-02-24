@@ -15,24 +15,49 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'format_ludic', language 'en'
+ * Front controller interface
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['pluginname']     = 'Ludic';
-$string['hidefromothers'] = 'Hide section';
-$string['showfromothers'] = 'Show section';
+namespace format_ludic;
 
-// Privacy
-$string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
+require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-// Course format options.
-$string['ludicconfiglabel']     = 'Ludic course configuration data';
-$string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
+/**
+ * Interface front_controller_interface
+ *
+ * @package format_ludic
+ */
+interface front_controller_interface {
 
-// popup
-$string['popupconfirm'] = 'OK';
-$string['popupcancel']  = 'Cancel';
+    /**
+     * @return mixed
+     */
+    public function execute();
+
+    /**
+     * Set controller
+     *
+     * @param callable $controller
+     * @return mixed
+     */
+    public function set_controller($controller);
+
+    /**
+     * Set action to call
+     *
+     * @param callable $action
+     * @return mixed
+     */
+    public function set_action($action);
+
+    /**
+     * Set params
+     *
+     * @return mixed
+     */
+    public function set_params();
+}
