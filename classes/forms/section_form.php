@@ -37,33 +37,39 @@ class section_form extends form {
         }
 
         $id          = isset($this->object->id) ? $this->object->id : null;
-        $name          = isset($this->object->name) ? $this->object->name : null;
-        $defaultname   = isset($this->object->defaultname) ? 'Section ' . $id : 'Section sans id';
-        $skinid        = isset($this->object->skinid) ? $this->object->skinid : null;
+        $name        = isset($this->object->name) ? $this->object->name : null;
+        $defaultname = isset($this->object->defaultname) ? 'Section ' . $id : 'Section sans id';
+        $skinid      = isset($this->object->skinid) ? $this->object->skinid : null;
 
         $selectdefault = [
                 'options' => [
-        ['name' => 'section ' . $id . ' option 1', 'value' => 1],
-        ['name' => 'section ' . $id . ' option 2', 'value' => 2],
-        ['name' => 'section ' . $id . ' option 3', 'value' => 3],
-        ['name' => 'section ' . $id . ' option 4', 'value' => 4, 'selected' => true],
-        ['name' => 'section ' . $id . ' option 5', 'value' => 5]
+                        ['name' => 'section ' . $id . ' option 1', 'value' => 1],
+                        ['name' => 'section ' . $id . ' option 2', 'value' => 2],
+                        ['name' => 'section ' . $id . ' option 3', 'value' => 3],
+                        ['name' => 'section ' . $id . ' option 4', 'value' => 4, 'selected' => true],
+                        ['name' => 'section ' . $id . ' option 5', 'value' => 5]
                 ]
         ];
-        $elements   = [];
-        $elements[] = new form_element('hidden', 'id', 'section-id', $id, 0);
-        $elements[] = new form_element('text', 'name', 'section-name', $name, $defaultname, 'section text label');
-        $elements[] = new form_element('number', 'weight', 'section-weight', null, 800, 'section number label', ['min' => 0, 'max' => 1000, 'step' => 100]);
-        $elements[] = new form_element('checkbox', 'hidden', 'section-hidden', null, 0, 'section checkbox label');
-        $elements[] = new form_element('textarea', 'css', 'section-css', null, '[section-tile] {
+        $elements      = [];
+        $elements[]    = new form_element('hidden', 'id', 'section-id', $id, 0);
+        $elements[]    = new form_element('text', 'name', 'section-name', $name, $defaultname, 'section text label');
+        $elements[]    = new form_element('number', 'weight', 'section-weight', null, 800, 'section number label',
+                ['min' => 0, 'max' => 1000, 'step' => 100]);
+        $elements[]    = new form_element('checkbox', 'hidden', 'section-hidden', null, 0, 'section checkbox label');
+        $elements[]    = new form_element('textarea', 'css', 'section-css', null, '[section-tile] {
         }', 'section textarea label');
-        $elements[] = new form_element('select', 'sectiontype', 'section-type', null, null, 'section select label', [],
+        $elements[]    = new form_element('select', 'sectiontype', 'section-type', null, null, 'section select label', [],
                 $selectdefault);
-        $elements[] = new form_element('selection_popup', 'skinid', 'section-skinid', $skinid, 0, 'section skinid label', ['multiple' => false], ['selecttype' => 'skin']);
-        $elements[] = new form_element('filepicker', 'image-1', 'section-image-1', null, null, 'section filepicker label');
+        $elements[]    = new form_element('selection_popup', 'skinid', 'section-skinid', $skinid, 0, 'section skinid label',
+                ['multiple' => false],
+                [
+                        'controller' => 'skin',
+                        'action'     => 'get_section_skin_selector'
+                ]
+        );
+        $elements[]    = new form_element('filepicker', 'image-1', 'section-image-1', null, null, 'section filepicker label');
+        $elements[]    = new form_element('filepicker', 'image-2', 'section-image-2', null, null, 'section filepicker label');
         return $elements;
     }
-
-
 
 }

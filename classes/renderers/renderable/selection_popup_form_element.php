@@ -24,9 +24,8 @@
 class format_ludic_selection_popup_form_element extends format_ludic_form_element {
 
     public $icon;
-    public $headericon;
-    public $title;
-    public $content;
+    public $controller;
+    public $action;
 
 
     public function __construct(\format_ludic\form_element $element) {
@@ -37,27 +36,14 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
         $this->icon['imgsrc'] = 'https://picsum.photos/80';
 
         if (isset($specific['icon']['imgsrc'])) {
-            $this->headericon['imgsrc'] = $specific['icon']['imgsrc'];
+            $this->icon['imgsrc'] = $specific['icon']['imgsrc'];
         }
         if (isset($specific['icon']['imgalt'])) {
-            $this->headericon['imgalt'] = $specific['icon']['imgalt'];
+            $this->icon['imgalt'] = $specific['icon']['imgalt'];
         }
 
-        $this->headericon = isset($specific['headericon']) ? $specific['headericon'] : [];
-        $this->headericon['imgsrc'] = 'https://picsum.photos/80';
-
-        if (isset($specific['headericon']['imgsrc'])) {
-            $this->headericon['imgsrc'] = $specific['headericon']['imgsrc'];
-        }
-        if (isset($specific['headericon']['imgalt'])) {
-            $this->headericon['imgalt'] = $specific['headericon']['imgalt'];
-        }
-
-        $this->title = isset($specific['title']) ? $specific['title'] : 'Pas de titre';
-        $this->content = 'TODO';
-
-        //$contexthelper = \format_ludic\context_helper::get_instance($PAGE);
-        //$dataapi = $contexthelper->get_data_api();
+        $this->controller = isset($specific['controller']) ? $specific['controller'] : 'Pas de titre';
+        $this->action = isset($specific['action']) ? $specific['action'] : 'Pas de titre';
 
     }
 }

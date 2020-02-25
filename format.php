@@ -29,7 +29,12 @@ $context  = \context_course::instance($courseid);
 $PAGE->set_context($context);
 $renderer = $PAGE->get_renderer('format_ludic');
 
+$args = new stdClass();
+$args->context = $context;
+$args->accepted_types = '*';
+$args->return_types = 2;
 
+initialise_filepicker($args);
 
 echo $renderer->render_edit_page();
 $params = ['courseid' => $courseid, 'userid' => $USER->id, 'editmode' => $PAGE->user_is_editing()];

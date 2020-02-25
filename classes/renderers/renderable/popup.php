@@ -23,11 +23,13 @@
  */
 class format_ludic_popup implements renderable {
 
+    public $popupid;
     public $title;
     public $content;
     public $headericon;
 
-    public function __construct($title = '', $content = '', $headericon = null) {
+    public function __construct($id, $title = '', $content = '', $headericon = null) {
+        $this->popupid = $id;
         $this->title   = $title;
         $this->content = $content;
 

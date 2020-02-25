@@ -40,14 +40,18 @@ class skin_controller extends controller_base {
     public function execute() {
         $action = $this->get_param('action');
         switch ($action) {
+            case 'get_properties' :
+                $skinid = $this->get_param('id', PARAM_INT);
+                return $this->get_properties($skinid);
+            case 'get_children' :
+                $skinid = $this->get_param('id', PARAM_INT);
+                return $this->get_children($skinid);
             case 'get_cm_skin_selector' :
                 return $this->get_cm_skin_selector();
-
             case 'get_section_skin_selector' :
-                //$sectionid = $this->get_param('id', PARAM_INT);
+                //$skinid = $this->get_param('id', PARAM_INT);
                 //$text      = $this->get_param('text');
                 return $this->get_section_skin_selector();
-
             // Default case if no parameter is necessary.
             default :
                 return $this->$action();
@@ -71,18 +75,18 @@ class skin_controller extends controller_base {
         $renderer = $PAGE->get_renderer('format_ludic');
         //$skins = $this->get_cm_skins();
         $title = 'SECTION SKIN SELECTION';
-        $content = $renderer->render_from_template('format_ludic/test', []);
-        $popup = new \format_ludic_popup($title, $content);
+        $content = $renderer->render_from_template('format_ludic/test_skin_selection', []);
+        $popup = new \format_ludic_popup('popup_skin_section_selector', $title, $content);
         $json = ['html' => $renderer->render_popup($popup)];
         return json_encode($json);
     }
 
-    public function get_cm_skins() {
-        return [
-                ['id' => 10, 'title' => 'score xp'],
-                ['id' => 15, 'title' => 'progress xp'],
-                ['id' => 21, 'title' => 'avatar xp']
-        ];
+    public function get_children($skinid) {
+        return 'NO CHILDREN FOR SKIN => ' . $skinid;
+    }
+
+    public function get_properties($skinid) {
+        return 'SKIN ' . $skinid . ' PROPERTIES';
     }
 
 }

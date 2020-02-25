@@ -1,24 +1,27 @@
-<div class="ludic-form-group" data-type="selection_popup">
+<div class="ludic-form-group ludic-action display-selection-popup"
+     data-controller="{{controller}}"
+     data-action="{{action}}"
+     data-callback="display_popup"
+>
 
     <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
         {{label}}
     </label>
 
-    <div
-        {{#id}}id="{{id}}-display" {{/id}}
-        data-popupid="{{popupid}}"
-        class="open-popup {{class}}"
+    <div id="{{id}}-overview"
+        class="selection-overview"
         {{#multiple}}multiple {{/multiple}}
         {{#autofocus}}autofocus {{/autofocus}}
         {{#disabled}}disabled {{/disabled}}
         {{#required}}required{{/required}}
     >
         {{#icon}}
-            <img src="{{imgsrc}}" alt="{{imgalt}}">
+            <div class="overview-img-container">
+                <img src="{{imgsrc}}" alt="{{imgalt}}">
+            </div>
         {{/icon}}
     </div>
     {{> format_ludic/hidden_form_element }}
-    {{> format_ludic/popup }}
 
 </div>
 

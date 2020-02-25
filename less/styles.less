@@ -2,14 +2,62 @@
 @import 'item.less';
 @import 'share.less';
 
+#ludic-background {
+  display: none;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #aaa;
+  opacity: .5;
+}
+
 #ludic-main-container {
   width: 100%;
-  height: 600px;
   border: 1px solid black;
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+
+  .format-ludic.ludic-popup {
+    z-index: 1010;
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+    padding: 20px;
+    background: #FFF;
+    border: 1px solid black;
+    border-radius: 10px;
+
+    .popup-header {
+      border: 1px solid black;
+      padding: 10px;
+      margin-bottom: 30px;
+      text-align: center;
+
+      h2 {
+        display: inline-block;
+      }
+
+      .close-ludic-popup {
+        float: right;
+        cursor: pointer;
+
+        img.icon {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .popup-content {
+      border: 1px solid black;
+      padding: 10px;
+    }
+  }
 
   .ludic-container {
     width: 100%;
@@ -17,41 +65,74 @@
 
     &.container-items {
       display: flex;
-      flex-wrap: wrap;
-      flex-direction: column;
-      width: calc(~'100% - 220px');
-      margin-right: 20px;
-      .container-parents {
-        border: 1px solid black;
-        height: 200px;
-        margin-bottom: 20px;
-      }
-      .container-children {
-        border: 1px solid black;
+      flex-direction: row;
+      width: 100%;
 
-        height: calc(~'100% - 220px');
+      .container-parents {
+        flex-wrap: wrap;
+        flex-direction: row;
+        border: 1px solid black;
+        margin-bottom: 20px;
+        width: calc(~'70% - 20px');
+        height: fit-content;
+        margin-right: 20px;
+        padding: 10px;
+
+        .container-children {
+          border: 1px solid black;
+          order: 1000;
+        }
+
+        .item {
+          cursor: pointer;
+        }
+
+        .item.selected {
+          border: 3px solid red;
+        }
       }
-      .item {
-        cursor: pointer;
+
+
+      .container-properties {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        width: 30%;
+
+        .container-content {
+          border: 1px solid black;
+          margin-bottom: 20px;
+        }
+
+        .container-buttons {
+          border: 1px solid black;
+          height: 130px;
+        }
       }
     }
+  }
 
-    &.container-properties {
+  .ludic-action {
+    cursor: pointer;
+  }
+
+  .ludic-form {
+    width: 100%;
+    padding: 20px;
+    .ludic-form-group {
       display: flex;
       flex-wrap: wrap;
       flex-direction: column;
-      width: 200px;
-      .container-content {
-        border: 1px solid black;
-
-        height: calc(~'100% - 150px');
-        margin-bottom: 20px;
+      margin-bottom: 20px;
+      border: 1px solid black;
+      padding: 10px;
+      label {
+        width: 100%;
+        float: left;
       }
-      .container-buttons {
-        border: 1px solid black;
-        height: 130px;
+      input:not(.fp-btn-choose), select, textarea, .selection-overview, .ludic-filepicker-container {
+        float: right;
       }
     }
-
   }
 }

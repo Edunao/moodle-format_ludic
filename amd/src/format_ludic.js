@@ -122,15 +122,22 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          */
         init_events: function () {
             console.log('init_events');
+
             let body = $('body.format-ludic');
 
-            // For each button makes an ajax call to the controller defined in data-controller with the action defined in data-action.
+            ludic.init_popup();
+
+            // For each element with ludic-action class.
+            // Makes an ajax call to the controller defined in data-controller with the action defined in data-action.
             // Then call a callback function defined in data-callback.
-            body.on('click', '.ludic-button', function () {
-                console.log('click on button');
+            body.on('click', '.ludic-action', function () {
+                console.log('click on ludic action');
                 let callback = $(this).data('callback');
                 let controller = $(this).data('controller');
                 let action = $(this).data('action');
+                console.log('callback => ', callback);
+                console.log('controller => ', controller);
+                console.log('action => ', action);
                 if (controller && action) {
                     ludic.ajax_call({
                         controller: controller,
@@ -146,12 +153,18 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             // Then display the return in .container-children.
             body.on('click', '.container-items .container-parents .item', function () {
                 console.log('click on item, get_children');
+                let container = $(this).closest('.container-items');
+                let id = $(this).data('id');
+                let type =  $(this).data('type');
+                if (!id || !type) {
+                    return false;
+                }
                 ludic.ajax_call({
-                    id: $(this).data('id'),
-                    controller: $(this).data('type'),
+                    id: id,
+                    controller: type,
                     action: 'get_children',
                     callback: function (html) {
-                        $('.container-items .container-children').html(html);
+                        container.find('.container-children').html(html);
                     }
                 });
             });
@@ -166,30 +179,91 @@ define(['jquery', 'jqueryui'], function ($, ui) {
 
             let body = $('body.format-ludic');
 
-            ludic.init_popup();
             ludic.init_drag_and_drop();
 
             // When you click on an item in .container-parents, call the get_properties() function on the controller of the same type.
             // Then display the return in .container-properties.
             body.on('click', '.container-items .container-parents .item', function () {
                 console.log('click on item, get_properties');
+                let container = $(this).closest('.container-items');
+                container.find('.item.selected').removeClass('selected');
+                $(this).addClass('selected');
+                let id = $(this).data('id');
+                let type =  $(this).data('type');
+                if (!id || !type) {
+                    return false;
+                }
                 ludic.ajax_call({
-                    id: $(this).data('id'),
-                    controller: $(this).data('type'),
+                    id: id,
+                    controller: type,
                     action: 'get_properties',
                     callback: function (html) {
-                        $('.container-properties').html(html);
-                        console.log('M ', M);
-                        //
-                        let options = $('.container-properties .ludic-filepicker-container').data('options');
-                        console.log(options);
-                        // M.core_filepicker.instances = [];
-                        // Y.use('node', 'node-event-simulate', function(Y) {
-                        //     console.log('grgrgrg');
-                        // });
-                        M.form_filepicker.init(Y, options);
+
+                        M.core_filepicker.instances = [];
+
+                        container.find('.container-properties .container-content').html(html);
+
+                        container.find('.container-properties .ludic-filepicker-container').each(function() {
+                            let options =  $(this).data('options');
+                            if (options) {
+                                ludic.init_filepicker(options);
+                            }
+                        });
                     }
                 });
+            });
+
+            body.on('click', '.selection-submit', function () {
+                console.log('click on selection submit');
+                // Find popup.
+                let popup = $(this).closest('.format-ludic.ludic-popup');
+
+                // Find selected item to get img and value.
+                let selecteditem = popup.find('.item.selected');
+                let selectedimg  = selecteditem.find('.item-img-container').html();
+                let selectedvalue = selecteditem.data('id');
+
+                // Find input and update value.
+                let inputid = $(this).data('inputid');
+                $(inputid).attr('value', selectedvalue);
+
+                // Find img in overview and update value.
+                let overview = $(inputid + '-overview .overview-img-container');
+                overview.html(selectedimg);
+
+                // Data required for DOMNodeInserted event.
+                let container = $('#ludic-main-container');
+                let popupid = popup.attr('id');
+
+                // Be sure to have only one active event
+                container.unbind('DOMNodeInserted');
+
+                // Add event to auto select selected-item when reopening a popup
+                container.on('DOMNodeInserted', function (e) {
+                    if (e.target.id && e.target.id === popupid) {
+                        $('#' + popupid + ' .item[data-id="'+ selectedvalue +'"]').addClass('selected');
+                    }
+                });
+
+                // Trigger click on close button to close popup.
+                popup.find('.close-ludic-popup').click();
+            });
+
+            body.on('DOMNodeInserted', function (e) {
+                if (e.target.className && e.target.className === 'ludic-container container-form') {
+                    // Set form before update.
+                    let form   = $(e.target.outerHTML);
+                    let formid = form.children().attr('id');
+                    sessionStorage.setItem(formid, form.html());
+                }
+            });
+
+            body.on('click', '.form-revert', function () {
+                // Find the item linked to the form and click on it to reset the form.
+                let container = $(this).closest('.container-properties');
+                let form = container.find('form.ludic-form');
+                let itemid = '#' + form.data('type') + '-' + form.data('itemid');
+                $(itemid).click();
             });
         },
         /**
@@ -203,8 +277,9 @@ define(['jquery', 'jqueryui'], function ($, ui) {
 
             // Close ludic popup.
             body.on('click', '.close-ludic-popup', function () {
+                let popup = $(this).closest('.format-ludic.ludic-popup');
                 $('#ludic-background').hide();
-                $('.format-ludic.ludic-popup').hide();
+                $(popup).remove();
             });
         },
         /**
@@ -283,27 +358,22 @@ define(['jquery', 'jqueryui'], function ($, ui) {
 
             // Call the right function with the right parameters.
             switch (name) {
-                case 'replace_and_show_popup':
-                    return ludic.replace_and_show_popup(html);
+                case 'display_popup':
+                    return ludic.display_popup(html);
                 default:
                     return false;
             }
         },
         /**
-         * Replace the content of a popup and show it.
-         * @param html
-         */
-        replace_and_show_popup: function (html) {
-            console.log('replace_and_show_popup');
-            $('.format-ludic.ludic-popup').replaceWith(html);
-            ludic.show_popup();
-        },
-        /**
          * Show popup.
          */
-        show_popup: function() {
+        display_popup: function(html) {
+            let selectorid  = '#' + $(html).attr('id');
+            $(selectorid).remove();
+            console.log(selectorid);
+
             $('#ludic-background').show();
-            $('.format-ludic.ludic-popup').show();
+            $('#ludic-main-container').prepend(html);
         },
         /**
          * Call the get_parents() function in ajax to the controller in parameter.
@@ -315,7 +385,10 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                 controller: type,
                 action: 'get_parents',
                 callback: function (html) {
+                    let children = $('.container-items .container-parents .container-children')[0].outerHTML;
+                    console.log('children', children);
                     $('.container-items .container-parents').html(html);
+                    $('.container-items .container-parents').append(children);
                     $('.container-items .container-parents .item:first-child').trigger('click');
                 }
             });
@@ -325,7 +398,7 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          * @param type
          */
         get_properties: function (type) {
-            console.log('get_parents');
+            console.log('get_properties');
             ludic.ajax_call({
                 controller: type,
                 action: 'get_parents',
@@ -336,22 +409,20 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             });
         },
         /**
-         * Add savepath (filepath) to filepicker because Moodle don't do it.
-         * @param savepath
+         * Initialise the filepicker component
+         * @param options
          */
-        init_filepicker: function (savepath) {
-            console.log('init_filepicker');
+        init_filepicker: function (options) {
+            console.log('init_filepicker', options);
+
             let interval = setInterval(function () {
                 if (M.core_filepicker.instances !== 'undefined') {
-                    for (let i in M.core_filepicker.instances) {
-                        let currentelement = M.core_filepicker.instances[i].options.elementname;
-                        let currentsavepath = savepath[currentelement];
-                        console.log('savepath added => ', currentsavepath);
-                        M.core_filepicker.instances[i].options.savepath = currentsavepath;
-                    }
+                    M.form_filepicker.init(Y, options);
+
                     clearInterval(interval);
                 }
             }, 1000);
+
         },
         hello_world: function (params) {
             console.log('hello world', params);

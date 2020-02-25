@@ -33,8 +33,8 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
         $this->filepicker = new MoodleQuickForm_filepicker($this->name, $this->name, ['id' => 'id_' . $this->name]);
-        $this->content = $this->filepicker->toHtml();
-        $this->options = json_encode($this->get_js_options());
+        $this->content    = $this->filepicker->toHtml();
+        $this->options    = json_encode($this->get_js_options());
     }
 
     public function get_js_options() {
@@ -57,12 +57,23 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
         $args->buttonname     = $this->filepicker->getName() . 'choose';
         $args->elementname    = $this->filepicker->getName();
 
-        $fp               = new file_picker($args);
-        $options          = $fp->options;
-        $options->context = $PAGE->context;
-        $options->savepath = 'custom/savepath/';
+        $fp                 = new file_picker($args);
+        $options            = $fp->options;
+        $options->context   = $PAGE->context;
+        $options->savepath  = 'custom/savepath/';
+        $options->client_id = $this->extract_client_id();
 
         return $options;
+    }
+
+    /**
+     * Extract the client id from the html output
+     *
+     * @return mixed
+     */
+    public function extract_client_id() {
+        preg_match('/(?<=\id="filepicker-wrapper-)[^"]*/', $this->content, $matches);
+        return $matches[0];
     }
 
 }
