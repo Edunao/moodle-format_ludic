@@ -72,6 +72,34 @@ class format_ludic_renderer extends format_section_renderer_base {
         return 'page title';// get_string('topicoutline');
     }
 
+
+
+    /**
+     * @param format_ludic_modchooser $popup
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_modchooser(format_ludic_modchooser $modchooser) {
+        return $this->render_from_template('format_ludic/modchooser', $modchooser);
+    }
+
+    /**
+     * @param $course
+     * @param $sectionidx
+     * @param $order
+     * @return string
+     */
+    public function render_modchooser($course, $sectionidx, $order) {
+        $this->page->course->id = $course->id;
+        $modchooser = $this->courserenderer->course_section_add_cm_control($course, $sectionidx);
+        $modchooser = new format_ludic_modchooser($modchooser, $sectionidx, $order);
+        return $this->render($modchooser);
+    }
+
+    public function try_js() {
+        return $this->page->requires->should_create_one_time_item_now('core_course_modchooser');
+    }
+
     /**
      * @param format_ludic_popup $popup
      * @return bool|string

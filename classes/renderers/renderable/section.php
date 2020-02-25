@@ -26,15 +26,17 @@ class format_ludic_section extends format_ludic_item {
     public $iconsrc;
 
     public function __construct(\format_ludic\section $section) {
-        $this->id       = $section->id;
-        $this->order    = $section->section;
-        $this->title    = $section->name;
-        $this->itemtype = 'section';
-        $this->draggable = true;
-        $this->droppable = true;
-        $this->imgsrc   = $this->get_section_img_src();
-        $this->imgalt   = $this->get_section_img_alt();
-        $this->iconsrc  = isset($section->iconsrc) ? $section->iconsrc : false;
+        $this->selectorid = 'section-' . $section->section;
+        $this->id         = $section->id;
+        $this->order      = $section->section;
+        $this->title      = $section->name;
+        $this->itemtype   = 'section';
+        $this->draggable  = true;
+        $this->droppable  = true;
+        $this->imgsrc     = $this->get_section_img_src();
+        $this->imgalt     = $this->get_section_img_alt();
+        $this->iconsrc    = isset($section->iconsrc) ? $section->iconsrc : false;
+        $this->issection  = true;
     }
 
     public function get_section_img_info() {

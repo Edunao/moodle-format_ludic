@@ -15,24 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Items (sections, bravos, skins) for ludic course format.
+ * Popup for ludic course format.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class format_ludic_item implements renderable {
+class format_ludic_modchooser implements renderable {
 
-    public $selectorid;
-    public $id;
+    public $modchooser;
+    public $section;
     public $order;
-    public $title;
-    public $itemtype;
-    public $imgsrc;
-    public $imgalt;
-    public $draggable;
-    public $droppable;
-    public $issection;
-    public $isskin;
+
+    public function __construct($content, $section, $order) {
+        $this->modchooser = $content;
+        $this->section = $section;
+        $this->order      = $order;
+    }
 
 }

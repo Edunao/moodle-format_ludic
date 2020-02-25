@@ -31,21 +31,8 @@
         ]
     }
 }}
-<div id="ludic-{{selectorid}}"
-    class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}"
-    data-type="{{itemtype}}"
-    data-id="{{id}}"
-    data-order="{{order}}"
-    {{#draggable}} draggable="true"{{/draggable}}>
 
-    {{#issection}}<div class="content hide"><ul class="section"></ul></div>{{/issection}}
-
-    <div class="item-img-container">
-        <img src="{{imgsrc}}" alt="{{imgalt}}">
-    </div>
-
-    <div class="item-title">
-        {{title}}
-    </div>
-
+<div id="section-{{section}}" class="ludic-modchooser section hide" data-section="{{section}}" data-order="{{order}}">
+    <div class="content hide"><ul class="section"></ul></div>
+    {{{modchooser}}}
 </div>

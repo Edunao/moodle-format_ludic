@@ -22,8 +22,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace format_ludic;
-
 defined('MOODLE_INTERNAL') || die();
 
 // Course lib.
@@ -52,6 +50,7 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/select_form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/filepicker_form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/selection_popup_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/modchooser.php');
 
 // Controller.
 require_once $CFG->dirroot . '/course/format/ludic/classes/controllers/front_controller_interface.php';
@@ -90,10 +89,10 @@ class format_ludic extends \format_base {
      * The returned object's property (boolean)capable indicates that
      * the course format supports Moodle course ajax features.
      *
-     * @return \stdClass
+     * @return stdClass
      */
     public function supports_ajax() {
-        $ajaxsupport          = new \stdClass();
+        $ajaxsupport          = new stdClass();
         $ajaxsupport->capable = true;
         return $ajaxsupport;
     }
@@ -147,7 +146,7 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
     }
 
     // Make sure the user is logged in and has access to the module (plugins that are not course modules should leave out the 'cm' part).
-    \require_login($course, true);
+    require_login($course, true);
 
     // Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
     $itemid = array_shift($args); // The first item in the $args array.

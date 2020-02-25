@@ -20,34 +20,8 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-// Javascript functions for ludic course format
 
-M.course = M.course || {};
-
-M.course.format = M.course.format || {};
-
-/**
- * Get sections config for this format
- *
- * The section structure is:
- * <ul class="topics">
- *  <li class="section">...</li>
- *  <li class="section">...</li>
- *   ...
- * </ul>
- *
- * @return {object} section list configuration
- */
-M.course.format.get_config = function () {
-    return {
-        container_node: 'div',
-        container_class: 'container-parents',
-        section_node: 'div',
-        section_class: 'section'
-    };
-};
-
-console.log('FORMAT LUDIC JS => OK');
+// Javascript functions for ludic course format.
 
 define(['jquery', 'jqueryui'], function ($, ui) {
     let courseid = null;
@@ -65,6 +39,7 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             ludic.init_events();
             if (ludic.editmode) {
                 ludic.init_editmode();
+                ludic.get_parents('section');
             }
         },
         /**
@@ -185,11 +160,14 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             // Then display the return in .container-properties.
             body.on('click', '.container-items .container-parents .item', function () {
                 console.log('click on item, get_properties');
-                let container = $(this).closest('.container-items');
+                let item = $(this);
+                console.log('ITEM', item);
+
+                let container = item.closest('.container-items');
                 container.find('.item.selected').removeClass('selected');
-                $(this).addClass('selected');
-                let id = $(this).data('id');
-                let type =  $(this).data('type');
+                item.addClass('selected');
+                let id = item.data('id');
+                let type =  item.data('type');
                 if (!id || !type) {
                     return false;
                 }
@@ -209,6 +187,23 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                                 ludic.init_filepicker(options);
                             }
                         });
+
+                        let modchooserconfig = {
+                            courseid: ludic.courseid,
+                            closeButtonTitle: undefined
+                        };
+
+                        let modchooser = container.find('.ludic-modchooser');
+                        if (modchooser) {
+                            console.log('AJOUT D\'UN MODCHOOSER !!!');
+                            let interval = setInterval(function () {
+                                if (typeof M.course.init_chooser === 'function') {
+                                    M.course.init_chooser(modchooserconfig);
+                                    modchooser.show();
+                                    clearInterval(interval);
+                                }
+                            }, 1000);
+                        }
                     }
                 });
             });

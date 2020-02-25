@@ -26,6 +26,7 @@ class format_ludic_course_module extends format_ludic_item {
     public $iconsrc;
 
     public function __construct(\format_ludic\course_module $coursemodule) {
+        $this->selectorid  = 'coursemodule-' . $coursemodule->order;
         $this->id       = $coursemodule->id;
         $this->order    = $coursemodule->order;
         $this->title    = $coursemodule->name;

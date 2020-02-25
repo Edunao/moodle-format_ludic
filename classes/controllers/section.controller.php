@@ -73,15 +73,19 @@ class section_controller extends controller_base {
         $renderer = $PAGE->get_renderer('format_ludic');
         foreach ($sections as $section) {
             $output .= $renderer->render_section($section);
+
         }
+
 
         return $output;
     }
 
     public function get_children($sectionid) {
         global $PAGE;
-        $dataapi = $this->contexthelper->get_data_api();
-        $section = $dataapi->get_section_by_id($sectionid);
+        $dataapi    = $this->contexthelper->get_data_api();
+        $section    = $dataapi->get_section_by_id($sectionid);
+        $course     = $section->get_course()->course;
+        $sectionidx = $section->section;
 
         $coursemodules = $section->get_course_modules();
 
@@ -89,8 +93,12 @@ class section_controller extends controller_base {
         $renderer = $PAGE->get_renderer('format_ludic');
         foreach ($coursemodules as $order => $coursemodule) {
             $coursemodule->order = $order;
-            $output .= $renderer->render_course_module($coursemodule);
+            $output              .= $renderer->render_course_module($coursemodule);
         }
+
+        $order  = count($coursemodules) + 1;
+        $output .= $renderer->render_modchooser($course, $sectionidx, $order);
+
         return $output;
     }
 
@@ -129,8 +137,5 @@ class section_controller extends controller_base {
         $sectiontomove->move_section_to($aftersectionidx);
         return $this->get_parents();
     }
-
-
-
 
 }
