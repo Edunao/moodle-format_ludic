@@ -24,6 +24,8 @@
 
 namespace format_ludic;
 
+defined('MOODLE_INTERNAL') || die();
+
 class activity_skin_score_form extends form {
 
     public function __construct($id = null) {
@@ -35,16 +37,14 @@ class activity_skin_score_form extends form {
     }
 
     public function get_definition() {
-        $elements   = [];
-        $elements[] = [
-                'name' => 'linear_score_part',
-                'type' => 'number',
-                'value' => 1,
-                'attributes' => [
-                        'min' => 0,
-                        'max' => 100
-                ]
-        ];
-        return $elements;
+        return [];
+    }
+
+    public function update() {
+        // TODO: Implement update() method.
+    }
+
+    public function children_validation() {
+        // TODO: Implement children_validation() method.
     }
 }

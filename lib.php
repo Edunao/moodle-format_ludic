@@ -51,19 +51,29 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/filepicker_form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/selection_popup_form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/modchooser.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/buttons.php');
 
 // Controller.
-require_once $CFG->dirroot . '/course/format/ludic/classes/controllers/front_controller_interface.php';
+require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/front_controller_interface.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/front_controller.php');
-require_once $CFG->dirroot . '/course/format/ludic/classes/controllers/controller_base.php';
-require_once $CFG->dirroot . '/course/format/ludic/classes/controllers/section.controller.php';
-require_once $CFG->dirroot . '/course/format/ludic/classes/controllers/skin.controller.php';
+require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/controller_base.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/section.controller.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/skin.controller.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/coursemodule.controller.php');
 
 // Form.
-require_once $CFG->dirroot . '/course/format/ludic/classes/forms/form.php';
-require_once $CFG->dirroot . '/course/format/ludic/classes/forms/section_form.php';
-require_once $CFG->dirroot . '/course/format/ludic/classes/forms/activity_skin_score_form.php';
-require_once $CFG->dirroot . '/course/format/ludic/classes/forms/form_element.php';
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/form.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/section_form.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/activity_skin_score_form.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/checkbox_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/filepicker_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/hidden_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/number_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/select_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/selection_popup_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/text_form_element.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/textarea_form_element.php');
 
 /**
  * Main class for the Ludic course format
@@ -139,13 +149,13 @@ class format_ludic extends \format_base {
  * @param array $options additional options affecting the file serving
  * @return bool false if the file not found, just send the file otherwise and do not return anything
  */
-function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options=array()) {
+function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     if ($context->contextlevel != CONTEXT_COURSE) {
         return false;
     }
 
-    // Make sure the user is logged in and has access to the module (plugins that are not course modules should leave out the 'cm' part).
+    // Make sure the user is logged in and has access to the module.
     require_login($course, true);
 
     // Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
@@ -157,18 +167,47 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
     // Extract the filename / filepath from the $args array.
     $filename = array_pop($args); // The last item in the $args array.
     if (!$args) {
-        $filepath = '/'; // $args is empty => the path is '/'
+        // If $args is empty the path is '/'.
+        $filepath = '/';
     } else {
-        $filepath = '/'.implode('/', $args).'/'; // $args contains items of the filepath
+        // Else $args contains items of the filepath.
+        $filepath = '/' . implode('/', $args) . '/';
     }
 
     // Retrieve the file from the Files API.
-    $fs = get_file_storage();
+    $fs   = get_file_storage();
     $file = $fs->get_file($context->id, 'course', 'section', $itemid, $filepath, $filename);
     if (!$file) {
-        return false; // The file does not exist.
+        // The file does not exist.
+        return false;
     }
 
     // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
     send_stored_file($file, 86400, 0, $forcedownload, $options);
+}
+
+/**
+ * @param $context
+ */
+function format_ludic_init_edit_mode($context) {
+    global $PAGE;
+
+    // Filepicker.
+    $args                 = new \stdClass();
+    $args->context        = $context;
+    $args->accepted_types = '*';
+    $args->return_types   = 2;
+    initialise_filepicker($args);
+
+    $PAGE->requires->js('/lib/form/dndupload.js');
+    $PAGE->requires->js('/repository/filepicker.js');
+    $PAGE->requires->js('/lib/form/filepicker.js');
+
+    // Modchooser.
+    $PAGE->requires->yui_module('moodle-course-modchooser', 'M.course.init_chooser', array(
+            array(
+                    'courseid'         => $context->instanceid,
+                    'closeButtonTitle' => null
+            )
+    ));
 }

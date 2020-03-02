@@ -21,6 +21,9 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 class format_ludic_course_module extends format_ludic_item {
 
     public $iconsrc;
@@ -39,7 +42,7 @@ class format_ludic_course_module extends format_ludic_item {
     }
 
     public function get_section_img_info() {
-        return ['imgsrc' => 'https://picsum.photos/80', 'imgalt' => '.          cmid => ' . $this->id];
+        return ['imgsrc' => 'https://picsum.photos/id/'.$this->id.'/80/80', 'imgalt' => '. . . . .cmid => ' . $this->id];
     }
 
     public function get_section_img_src() {

@@ -33,10 +33,10 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
  */
 class context_helper {
 
-    // Singleton
+    // Singleton.
     public static $instance;
 
-    // Environment properties
+    // Environment properties.
     private $page            = null;
     private $user            = null;
     private $dbapi           = null;
@@ -76,9 +76,6 @@ class context_helper {
         }
         return self::$instance;
     }
-
-    //-------------------------------------------------------------------------
-    // Moodle context
 
     /**
      * @return \moodle_page
@@ -163,7 +160,8 @@ class context_helper {
             if ($this->page->url->param('section') > 0) {
                 $this->sectionidx = $this->page->url->param('section');
             } else if (isset($this->page->cm->section)) {
-                // we're in an activity that is declaring its section id so we need to lookup the corresponding course-relative index
+                // We're in an activity that is declaring its section id
+                // so we need to lookup the corresponding course-relative index.
                 $sectionid        = $this->page->cm->section;
                 $this->sectionidx = $sectionid ? $this->db->get_section_idx_by_id($sectionid) : 0;
             } else {
@@ -180,22 +178,25 @@ class context_helper {
      * @throws \dml_exception
      */
     public function get_section_id() {
-        // if we haven't got a stored section id then try generating one
+        // If we haven't got a stored section id then try generating one.
         if ($this->sectionid === null) {
             $coursesection = optional_param('section', 0, PARAM_INT);
             if ($this->page->pagetype == 'course-view-ludic') {
-                // we're on a course view page and the course-relative section number is provided so lookup the real section id
-                $this->sectionid = $coursesection ?
-                        $this->db->get_sectionid_by_courseid_and_sectionidx($this->get_course_id(), $coursesection) : 0;
+                $dbapi = $this->get_database_api();
+                // We're on a course view page and the course-relative section number is provided so lookup the real section id.
+                $this->sectionid = 0;
+                if ($coursesection) {
+                    $this->sectionid = $dbapi->get_sectionid_by_courseid_and_sectionidx($this->get_course_id(), $coursesection);
+                }
             } else if (isset($this->page->cm->section)) {
-                // we're in an activity that is declaring its section id so we're in luck
+                // We're in an activity that is declaring its section id so we're in luck.
                 $this->sectionid = $this->page->cm->section;
             } else {
-                // no luck so replace the null with a 0 to avoid wasting times on trying to re-evaluate next time round
+                // No luck so replace the null with a 0 to avoid wasting times on trying to re-evaluate next time round.
                 $this->sectionid = $coursesection;
             }
         }
-        // return the stored result
+        // Return the stored result.
         return $this->sectionid;
     }
 
@@ -234,7 +235,7 @@ class context_helper {
         $cmid       = $this->get_cm_id();
         $sectionidx = $this->get_section_idx();
 
-        // course page by default
+        // On course page by default.
         $currentlocation = 'course';
 
         if ($cmid > 0) {
@@ -313,11 +314,11 @@ class context_helper {
      */
     public function get_fast_modinfo($courseid, $userid = null) {
         global $USER;
-        //if ($this->modinfo == null) {
-            if ($userid == null) {
-                $userid = $USER->id;
-            }
-            $this->modinfo = get_fast_modinfo($courseid, $userid);
+        // TODO cache. if ($this->modinfo == null) {
+        if ($userid == null) {
+            $userid = $USER->id;
+        }
+        $this->modinfo = get_fast_modinfo($courseid, $userid);
         //}
         return $this->modinfo;
     }

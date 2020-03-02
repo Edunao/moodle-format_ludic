@@ -31,72 +31,7 @@
         ]
     }
 }}
-{{#categories}}
-    {{#catname}}
-        <div class="category-header">
-            {{catname}}
-        </div>
-    {{/catname}}
 
-    {{#items}}
-        <div class="item item-{{type}}">
-
-            <div class="item-img-container">
-                <img src="{{imgsrc}}" alt="{{imgalt}}">
-            </div>
-
-            <div class="item-name">
-                {{name}}
-            </div>
-
-        </div>
-    {{/items}}
-{{/categories}}
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="content-part items">
-    {{#items}}
-        <div class="item item-{{type}}">
-
-            <div class="item-img-container">
-                <img src="{{imgsrc}}" alt="{{imgalt}}">
-            </div>
-
-            <div class="item-name">
-                {{name}}
-            </div>
-
-        </div>
-    {{/items}}
-</div>
-
-<div class="content-part description">
-
-    <div class="description-icon">
-
-    </div>
-    <div class="description-title">
-
-    </div>
-    <div class="description-content">
-
-    </div>
-
-    <div class="buttons">
-        {{#buttons}}
-            <button id="popup-{{type}}" type="button" class="btn-ludic btn-ludic-{{type}}">{{#str}}popup{{type}}, format_ludic{{/str}}</button>
-        {{/buttons}}
-    </div>
+<div id="ludic-main-container">
 
 </div>

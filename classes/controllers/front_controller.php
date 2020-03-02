@@ -24,8 +24,9 @@
 
 namespace format_ludic;
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
+defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 /**
  * Class front_controller
@@ -85,15 +86,15 @@ class front_controller implements front_controller_interface {
      */
     public function set_controller($controller) {
         global $CFG;
-        $controller_url = $CFG->dirroot . '/course/format/ludic/classes/controllers/' . $controller . '.controller.php';
-        if (!file_exists($controller_url)) {
-            print_error('Controller file not found : ' . $controller_url);
+        $controllerurl = $CFG->dirroot . '/course/format/ludic/classes/controllers/' . $controller . '.controller.php';
+        if (!file_exists($controllerurl)) {
+            print_error('Controller file not found : ' . $controllerurl);
         }
-        require_once $controller_url;
-        
+        require_once($controllerurl);
+
         $controller = strtolower($controller) . "_controller";
-        
-        if (!class_exists($this->namespace.$controller)) {
+
+        if (!class_exists($this->namespace . $controller)) {
             throw new \InvalidArgumentException("The action controller '$controller' has not been defined.");
         }
         $this->controller = $controller;
@@ -128,7 +129,7 @@ class front_controller implements front_controller_interface {
      * Execute the controller action
      */
     public function execute() {
-        $class = $this->namespace . $this->controller;
+        $class      = $this->namespace . $this->controller;
         $controller = new $class($this->params);
         return $controller->execute();
     }

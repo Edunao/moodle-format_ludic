@@ -131,6 +131,23 @@ class database_api {
 
     public function update_section($dbsection) {
         return $this->db->update_record('course_sections', $dbsection);
+
+    }
+
+    public function file_exists_in_draft($itemid) {
+        return $this->db->record_exists_sql('
+        SELECT *
+        FROM {files}
+        WHERE component = :component
+            AND filearea = :filearea
+            AND filename <> :filename
+            AND itemid = :itemid
+        ', [
+                'component' => 'user',
+                'filearea'  => 'draft',
+                'filename'  => '.',
+                'itemid'    => $itemid
+        ]);
     }
 }
 

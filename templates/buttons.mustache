@@ -32,8 +32,12 @@
     }
 }}
 
-{{#columns}}
-    <div class="ludic-col ludic-col-{{width}}">
-        {{{content}}}
-    </div>
-{{/columns}}
+<div {{#selectorid}}id="{{selectorid}}"{{/selectorid}}
+        class="ludic-container container-buttons"
+        {{#itemtype}}data-itemtype="{{itemtype}}"{{/itemtype}}
+        {{#itemid}}data-itemid="{{itemid}}"{{/itemid}}
+>
+    {{#buttons}}
+        {{>format_ludic/button}}
+    {{/buttons}}
+</div>

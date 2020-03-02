@@ -24,12 +24,13 @@
 require_once(__DIR__ . '/../../../../config.php');
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
+$courseid = required_param('courseid', PARAM_INT);
 
-// Check capabilities
-if (!isloggedin()) {
-    redirect($CFG->wwwroot . '/login/index.php');
-}
+// Check capabilities.
+require_login($courseid);
+
+// The front controller will execute the action defined in parameter with the controller defined in parameter.
 $frontcontroller = new \format_ludic\front_controller();
 
-//call the controller method and print the result
+// Call the controller method and print the result.
 echo $frontcontroller->execute();

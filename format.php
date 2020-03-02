@@ -26,30 +26,19 @@ defined('MOODLE_INTERNAL') || die();
 
 $courseid = $COURSE->id;
 $context  = \context_course::instance($courseid);
-$PAGE->set_context($context);
-//$PAGE->set_course($COURSE);
 $renderer = $PAGE->get_renderer('format_ludic');
+$editmode = $PAGE->user_is_editing();
+$params = ['courseid' => $courseid, 'userid' => $USER->id, 'editmode' => $editmode];
 
+$PAGE->set_context($context);
 
-$args = new stdClass();
-$args->context = $context;
-$args->accepted_types = '*';
-$args->return_types = 2;
-
-initialise_filepicker($args);
-
-echo $renderer->render_edit_page();
-
-$params = ['courseid' => $courseid, 'userid' => $USER->id, 'editmode' => $PAGE->user_is_editing()];
-$PAGE->requires->yui_module('moodle-course-modchooser', 'M.course.init_chooser', array(
-        array(
-                'courseid'         => $courseid,
-                'closeButtonTitle' => null
-        )
-));
-$PAGE->requires->js('/lib/form/dndupload.js');
-$PAGE->requires->js('/repository/filepicker.js');
-$PAGE->requires->js('/lib/form/filepicker.js');
+// Display course.
+if ($editmode) {
+    format_ludic_init_edit_mode($context);
+    echo $renderer->render_edit_page();
+} else {
+    echo $renderer->render_page();
+}
 
 $PAGE->requires->js('/course/format/ludic/format.js');
 $PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init', ['params' => $params]);

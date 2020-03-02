@@ -21,12 +21,15 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 class format_ludic_form implements renderable {
 
     public $id;
     public $action;
     public $method;
-    public $type;
+    public $itemtype;
     public $itemid;
     public $content;
 
@@ -35,10 +38,10 @@ class format_ludic_form implements renderable {
         if ($form->id) {
             $this->id .= '-' . $form->id;
         }
-        $this->action  = '';
-        $this->method  = 'post';
-        $this->itemid  = $form->id;
-        $this->type    = $form->type;
-        $this->content = $form->content;
+        $this->action   = '';
+        $this->method   = 'post';
+        $this->itemid   = $form->id;
+        $this->itemtype = $form->type;
+        $this->content  = $form->content;
     }
 }

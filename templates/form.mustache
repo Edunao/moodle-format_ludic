@@ -32,7 +32,17 @@
     }
 }}
 <div class="ludic-container container-form">
-    <form id="{{id}}" action="{{action}}" method="{{method}}" class="ludic-form" data-type="{{type}}" data-itemid="{{itemid}}">
+
+    <div class="ludic-container container-success"></div>
+
+    <form id="{{id}}"
+          class="ludic-form"
+          action="{{action}}"
+          method="{{method}}"
+          data-itemtype="{{itemtype}}"
+          data-itemid="{{itemid}}"
+    >
         {{{content}}}
     </form>
+
 </div>

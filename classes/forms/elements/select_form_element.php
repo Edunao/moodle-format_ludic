@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Front controller interface
+ * This file contains main class for the course format Ludic form
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -26,40 +26,27 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
+class select_form_element extends form_element {
 
-/**
- * Interface front_controller_interface
- *
- * @package format_ludic
- */
-interface front_controller_interface {
+    public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
+        $this->type = 'select';
+        parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
+    }
 
-    /**
-     * @return mixed
-     */
-    public function execute();
+    public function validate_value($value) {
+        $options = isset($this->specific['options']) ? $this->specific['options'] : [];
+        $valueinoptions = false;
+        foreach ($options as $option) {
+            if ($value == $option['value']) {
+                $valueinoptions = true;
+            }
+        }
+        if (!$valueinoptions) {
+            return ['success' => 0];
+        }
+        $value = clean_param($value, PARAM_RAW);
+        return ['success' => 1,  'value' => (string) ($value)];
+    }
 
-    /**
-     * Set controller
-     *
-     * @param callable $controller
-     * @return mixed
-     */
-    public function set_controller($controller);
 
-    /**
-     * Set action to call
-     *
-     * @param callable $action
-     * @return mixed
-     */
-    public function set_action($action);
-
-    /**
-     * Set params
-     *
-     * @return mixed
-     */
-    public function set_params();
 }

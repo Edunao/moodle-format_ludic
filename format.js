@@ -21,7 +21,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-// Moodle init
+// Moodle course format javascript.
 
 M.course = M.course || {};
 
@@ -45,13 +45,5 @@ M.course.format.get_config = function () {
         container_class: 'container-parents',
         section_node: 'div',
         section_class: 'section'
-        // container_node: null, // compulsory
-        // container_class: null, // compulsory
-        // section_wrapper_node: null, // optional
-        // section_wrapper_class: null, // optional
-        // section_node: null,  // compulsory
-        // section_class: null  // compulsory
     };
 };
-
-console.log('FORMAT LUDIC JS => OK', M.course.format.get_config());

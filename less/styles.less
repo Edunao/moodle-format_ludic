@@ -1,18 +1,10 @@
+@import 'loading.less';
 @import 'order.less';
+@import 'form.less';
+@import 'popup.less';
 @import 'item.less';
 @import 'share.less';
-
-#ludic-background {
-  display: none;
-  z-index: 1000;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: #aaa;
-  opacity: .5;
-}
+@import 'modchooser.less';
 
 #ludic-main-container {
   width: 100%;
@@ -22,46 +14,14 @@
   flex-wrap: wrap;
   flex-direction: row;
 
-  .format-ludic.ludic-popup {
-    z-index: 1010;
-    position: fixed;
-    top: 20%;
-    left: 20%;
-    width: 60%;
-    padding: 20px;
-    background: #FFF;
-    border: 1px solid black;
-    border-radius: 10px;
-
-    .popup-header {
-      border: 1px solid black;
-      padding: 10px;
-      margin-bottom: 30px;
-      text-align: center;
-
-      h2 {
-        display: inline-block;
-      }
-
-      .close-ludic-popup {
-        float: right;
-        cursor: pointer;
-
-        img.icon {
-          margin-right: 0;
-        }
-      }
-    }
-
-    .popup-content {
-      border: 1px solid black;
-      padding: 10px;
-    }
-  }
-
   .ludic-container {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
+
+    &.hide {
+      display: none;
+    }
 
     &.container-items {
       display: flex;
@@ -69,7 +29,7 @@
       width: 100%;
 
       .container-parents {
-        flex-wrap: wrap;
+        //flex-wrap: wrap;
         flex-direction: row;
         border: 1px solid black;
         margin-bottom: 20px;
@@ -95,18 +55,39 @@
 
       .container-properties {
         display: flex;
-        flex-wrap: wrap;
         flex-direction: column;
         width: 30%;
 
         .container-content {
+          padding: 20px;
+          margin-bottom: 40px;
+          //flex-wrap: wrap;
+          flex-direction: column;
           border: 1px solid black;
-          margin-bottom: 20px;
+          .container-buttons {
+            border: 1px solid black;
+            height: 100px;
+            flex-wrap: wrap;
+            flex-direction: row;
+            button {
+              width: 50%;
+            }
+            .container-sub-buttons {
+              padding: 10px;
+              border: 1px solid black;
+              position: absolute;
+              button {
+                width: 100%;
+              }
+            }
+          }
         }
 
-        .container-buttons {
+        .container-help {
+          height: 100px;
+          padding: 20px;
+          text-align: center;
           border: 1px solid black;
-          height: 130px;
         }
       }
     }
@@ -116,23 +97,5 @@
     cursor: pointer;
   }
 
-  .ludic-form {
-    width: 100%;
-    padding: 20px;
-    .ludic-form-group {
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: column;
-      margin-bottom: 20px;
-      border: 1px solid black;
-      padding: 10px;
-      label {
-        width: 100%;
-        float: left;
-      }
-      input:not(.fp-btn-choose), select, textarea, .selection-overview, .ludic-filepicker-container {
-        float: right;
-      }
-    }
-  }
+
 }

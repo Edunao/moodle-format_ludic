@@ -1,8 +1,11 @@
 <div class="ludic-form-group" data-type="text">
 
-    <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
-        {{label}}
-    </label>
+<label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
+    {{label}}
+    {{#required}}
+        {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
+    {{/required}}
+ </label>
 
     <input type="text"
         {{#id}}id="{{id}}" {{/id}}
@@ -12,7 +15,6 @@
         {{#placeholder}}placeholder="{{placeholder}}" {{/placeholder}}
         {{#minlength}}minlength="{{minlength}}" {{/minlength}}
         {{#maxlength}}maxlength="{{maxlength}}" {{/maxlength}}
-        {{#size}}size="{{size}}" {{/size}}
         {{#autofocus}}autofocus {{/autofocus}}
         {{#disabled}}disabled {{/disabled}}
         {{#readonly}}readonly {{/readonly}}

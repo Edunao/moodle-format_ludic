@@ -24,15 +24,18 @@
 
 namespace format_ludic;
 
+defined('MOODLE_INTERNAL') || die();
+
 class course extends model {
 
-    public    $course;
     protected $sections;
-    public    $coursemodules;
+
+    public $moodlecourse;
+    public $coursemodules;
 
     public function __construct($course) {
-        $this->course = $course;
-        parent::__construct($this->course);
+        $this->moodlecourse = $course;
+        parent::__construct($this->moodlecourse);
     }
 
     public function get_sections() {

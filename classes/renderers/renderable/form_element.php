@@ -21,6 +21,9 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 class format_ludic_form_element implements renderable {
 
     public $id;
@@ -40,7 +43,7 @@ class format_ludic_form_element implements renderable {
     public $required;
 
     public function __construct(\format_ludic\form_element $element) {
-        $this->id         = $element->selectorid;
+        $this->id         = $element->id;
         $this->name       = $element->name;
         $this->attributes = $element->attributes;
         $this->specific   = $element->specific;
@@ -49,11 +52,11 @@ class format_ludic_form_element implements renderable {
         $this->defaultvalue = $element->defaultvalue;
 
         $this->class = isset($this->specific['class']) ? $this->specific['class'] : '';
-        $this->class = is_array($this->class) ?  implode(' ', $this->class) : $this->class;
+        $this->class = is_array($this->class) ? implode(' ', $this->class) : $this->class;
 
         $this->label      = $element->label;
         $this->labelclass = isset($this->specific['labelclass']) ? $this->specific['labelclass'] : '';
-        $this->labelclass = is_array($this->labelclass) ?  implode(' ', $this->labelclass) : $this->labelclass;
+        $this->labelclass = is_array($this->labelclass) ? implode(' ', $this->labelclass) : $this->labelclass;
 
         $this->placeholder = isset($element->attributes['placeholder']) ? $element->attributes['placeholder'] : false;
         $this->autofocus   = isset($element->attributes['autofocus']) ? $element->attributes['autofocus'] : false;

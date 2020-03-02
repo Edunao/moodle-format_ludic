@@ -24,19 +24,22 @@
 
 namespace format_ludic;
 
+defined('MOODLE_INTERNAL') || die();
+
 class section extends model {
 
-    public  $dbrecord;
-    public  $courseid;
-    public  $section;
-    public  $sectioninfo;
-    public  $name;
-    public  $sequence;
-    public  $visible;
-    public  $coursemodules;
-    public  $defaultname = 'Section';
-    public  $skinid;
     private $course;
+
+    public $dbrecord;
+    public $courseid;
+    public $section;
+    public $sectioninfo;
+    public $name;
+    public $sequence;
+    public $visible;
+    public $coursemodules;
+    public $defaultname = 'Section';
+    public $skinid;
 
     public function __construct($section) {
         parent::__construct($section);
@@ -68,7 +71,7 @@ class section extends model {
     }
 
     public function move_section_to($sectionidx) {
-        $course = $this->get_course()->course;
+        $course = $this->get_course()->moodlecourse;
         return move_section_to($course, $this->section, $sectionidx);
     }
 
@@ -83,7 +86,64 @@ class section extends model {
         return $form->render();
     }
 
-    public function __toString() {
-        return 'Section ' . $this->section;
+    public function render_edit_buttons() {
+        global $PAGE, $CFG;
+        $renderer       = $PAGE->get_renderer('format_ludic');
+        $editsectionurl = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id;
+        $buttons        = [];
+        $buttons[]      = [
+                'identifier' => 'form-save',
+                'order'      => 1
+        ];
+        $buttons[]      = [
+                'identifier' => 'form-revert',
+                'order'      => 2
+        ];
+        $buttons[]      = [
+                'identifier' => 'item-preview',
+                'order'      => 4
+        ];
+        $buttons[]      = [
+                'identifier'    => 'edit',
+                'order'         => 3,
+                'hassubbuttons' => true,
+                'subbuttons'    => [
+                        ['identifier' => 'edit-settings', 'link' => $editsectionurl],
+                        ['identifier' => 'duplicate'],
+                        ['identifier' => 'delete']
+                ]
+        ];
+        return $renderer->render_buttons($buttons, $this->id, 'section');
+    }
+
+    public function update($data) {
+        if (!isset($data['id']) || $data['id'] !== $this->dbrecord->id) {
+            return false;
+        }
+        if (isset($data['name']) && $data['name'] !== $this->dbrecord->name) {
+            $this->dbrecord->name = $data['name'];
+            $this->contexthelper->get_database_api()->update_section($this->dbrecord);
+            $this->trigger_update();
+        }
+        return true;
+    }
+
+    /**
+     * Trigger update event when the page is updated
+     */
+    public function trigger_update() {
+        $event = \core\event\course_section_updated::create(
+                array(
+                        'objectid' => $this->id,
+                        'courseid' => $this->courseid,
+                        'context'  => $this->get_context(),
+                        'other'    => array('sectionnum' => $this->section)
+                )
+        );
+        $event->trigger();
+    }
+
+    public function get_context() {
+        return \context_course::instance($this->courseid);
     }
 }

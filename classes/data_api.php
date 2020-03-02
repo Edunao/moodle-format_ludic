@@ -65,7 +65,7 @@ class data_api {
     public function get_sections_by_course_id($courseid) {
 
         // If the value of the attribute has already been retrieved then we return it.
-        //if ($this->sections !== null) {
+        // TODO if ($this->sections !== null) {.
         //    return $this->sections;
         //}
 
@@ -107,12 +107,12 @@ class data_api {
 
     public function get_course_modules($courseid, $userid) {
         //if ($this->coursemodules == null) {
-            $modinfocms    = $this->contexthelper->get_modinfo_cms($courseid, $userid);
-            $coursemodules = [];
-            foreach ($modinfocms as $modinfocm) {
-                $coursemodules[] = new course_module($modinfocm);
-            }
-            $this->coursemodules = $coursemodules;
+        $modinfocms    = $this->contexthelper->get_modinfo_cms($courseid, $userid);
+        $coursemodules = [];
+        foreach ($modinfocms as $modinfocm) {
+            $coursemodules[] = new course_module($modinfocm);
+        }
+        $this->coursemodules = $coursemodules;
         //}
         return $this->coursemodules;
     }
@@ -136,8 +136,6 @@ class data_api {
                 }
             }
         }
-
-
         return $sectioncms;
     }
 
@@ -146,30 +144,6 @@ class data_api {
         $sequencestr = $databaseapi->get_section_sequence_by_id($sectionid);
         return array_filter(explode(',', $sequencestr));
     }
-
-    //public function set_section_sequence_by_id($sectionid, $sequence = null) {
-    //    $databaseapi = $this->contexthelper->get_database_api();
-    //    $sectionidx  = $databaseapi->get_section_idx_by_id($sectionid);
-    //    $isset = isset($this->sections[$sectionidx]);
-    //    if ($isset) {
-    //        $sequence = $sequence == null ? $this->get_section_sequence_by_id($sectionid) : $sequence;
-    //        $this->sections[$sectionidx]->sequence = $sequence;
-    //    }
-    //    return $isset;
-    //}
-    //
-    //public function set_course_module(course_module $coursemoduletoset) {
-    //    if ($this->coursemodules == null) {
-    //        return 'da';
-    //    }
-    //    foreach ($this->coursemodules as $key => $coursemodule) {
-    //        if ($coursemodule->id == $coursemoduletoset->id) {
-    //            $this->coursemodules[$key] = $coursemoduletoset;
-    //            return true;
-    //        }
-    //    }
-    //    return false;
-    //}
 
 }
 

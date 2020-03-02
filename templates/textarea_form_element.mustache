@@ -1,8 +1,11 @@
 <div class="ludic-form-group" data-type="textarea">
 
-    <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
-        {{label}}
-    </label>
+<label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
+    {{label}}
+    {{#required}}
+        {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
+    {{/required}}
+ </label>
 
     <textarea
         {{#id}}id="{{id}}" {{/id}}

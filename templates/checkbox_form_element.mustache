@@ -1,8 +1,11 @@
 <div class="ludic-form-group" data-type="checkbox">
 
-    <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
-        {{label}}
-    </label>
+<label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
+    {{label}}
+    {{#required}}
+        {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
+    {{/required}}
+</label>
 
     <input type="checkbox"
         {{#id}}id="{{id}}" {{/id}}
@@ -13,7 +16,6 @@
         {{#autofocus}}autofocus {{/autofocus}}
         {{#disabled}}disabled {{/disabled}}
         {{#readonly}}readonly {{/readonly}}
-        {{#required}}required{{/required}}
     >
 </div>
 

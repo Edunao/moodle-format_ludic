@@ -23,6 +23,9 @@
  */
 
 namespace format_ludic;
+
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class section_controller extends controller_base {
@@ -39,6 +42,10 @@ class section_controller extends controller_base {
     public function execute() {
         $action = $this->get_param('action');
         switch ($action) {
+            case 'validate_form' :
+                $sectionid = $this->get_param('id', PARAM_INT);
+                $data      = $this->get_param('data', 'array');
+                return $this->validate_form($sectionid, $data);
             case 'move_to_section' :
                 $cmid      = $this->get_param('idtomove', PARAM_INT);
                 $sectionid = $this->get_param('toid', PARAM_INT);
@@ -73,10 +80,8 @@ class section_controller extends controller_base {
         $renderer = $PAGE->get_renderer('format_ludic');
         foreach ($sections as $section) {
             $output .= $renderer->render_section($section);
-
         }
-
-
+        $output .= $renderer->render_container_children();
         return $output;
     }
 
@@ -84,7 +89,7 @@ class section_controller extends controller_base {
         global $PAGE;
         $dataapi    = $this->contexthelper->get_data_api();
         $section    = $dataapi->get_section_by_id($sectionid);
-        $course     = $section->get_course()->course;
+        $course     = $section->get_course()->moodlecourse;
         $sectionidx = $section->section;
 
         $coursemodules = $section->get_course_modules();
@@ -105,7 +110,9 @@ class section_controller extends controller_base {
     public function get_properties($sectionid) {
         $dataapi = $this->contexthelper->get_data_api();
         $section = $dataapi->get_section_by_id($sectionid);
-        return $section->render_form();
+        $output  = $section->render_form();
+        $output  .= $section->render_edit_buttons();
+        return $output;
     }
 
     public function move_to_section($cmid, $sectionid) {
@@ -136,6 +143,17 @@ class section_controller extends controller_base {
 
         $sectiontomove->move_section_to($aftersectionidx);
         return $this->get_parents();
+    }
+
+    public function validate_form($sectionid, $data) {
+        $form = new section_form($sectionid);
+        $success = $form->validate_and_update($data);
+        if ($success) {
+            $return = array('success' => 1, 'value' => $form->get_success_message());
+        } else {
+            $return = array('success' => 0, 'value' => $form->get_error_message());
+        }
+        return json_encode($return);
     }
 
 }

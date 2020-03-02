@@ -36,22 +36,12 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 class format_ludic_renderer extends format_section_renderer_base {
 
     /**
-     * Constructor method, calls the parent constructor
-     *
-     * @param moodle_page $page
-     * @param string $target one of rendering target constants
-     */
-    public function __construct(moodle_page $page, $target) {
-        parent::__construct($page, $target);
-    }
-
-    /**
      * Generate the starting container html for a list of sections
      *
      * @return string HTML to output.
      */
     protected function start_section_list() {
-        return html_writer::start_tag('ul', array('class' => 'ludic'));
+        return html_writer::start_tag('div', array('class' => 'container-parents'));
     }
 
     /**
@@ -60,7 +50,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string HTML to output.
      */
     protected function end_section_list() {
-        return html_writer::end_tag('ul');
+        return html_writer::end_tag('div');
     }
 
     /**
@@ -69,10 +59,9 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string the page title
      */
     protected function page_title() {
-        return 'page title';// get_string('topicoutline');
+        // Old : get_string('topicoutline'); .
+        return 'page title';
     }
-
-
 
     /**
      * @param format_ludic_modchooser $popup
@@ -96,10 +85,6 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render($modchooser);
     }
 
-    public function try_js() {
-        return $this->page->requires->should_create_one_time_item_now('core_course_modchooser');
-    }
-
     /**
      * @param format_ludic_popup $popup
      * @return bool|string
@@ -116,6 +101,21 @@ class format_ludic_renderer extends format_section_renderer_base {
     public function render_popup(format_ludic_popup $popup = null) {
         $popup = $popup ? $popup : new format_ludic_popup();
         return $this->render($popup);
+    }
+
+    /**
+     * @param format_ludic_buttons $buttons
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_buttons(format_ludic_buttons $buttons) {
+        return $this->render_from_template('format_ludic/buttons', $buttons);
+    }
+
+
+    public function render_buttons($buttons, $itemid = null, $type = null) {
+        $buttons = new format_ludic_buttons($buttons, $itemid, $type);
+        return $this->render($buttons);
     }
 
     /**
@@ -176,6 +176,13 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render_from_template('format_ludic/editpage', []);
     }
 
+    public function render_page() {
+        return $this->render_from_template('format_ludic/page', []);
+    }
+
+    public function render_container_children() {
+        return $this->render_from_template('format_ludic/container_children', []);
+    }
     /**
      * @param format_ludic_hidden_form_element $element
      * @return bool|string
@@ -246,5 +253,14 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     protected function render_format_ludic_selection_popup_form_element(format_ludic_selection_popup_form_element $element) {
         return $this->render_from_template('format_ludic/selection_popup_form_element', $element);
+    }
+
+    /**
+     * @param  $errors
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_form_errors($errors) {
+        return $this->render_from_template('format_ludic/form_errors', $errors);
     }
 }

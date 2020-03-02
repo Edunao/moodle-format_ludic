@@ -24,6 +24,8 @@
 
 namespace format_ludic;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 
@@ -127,7 +129,7 @@ class controller_base {
                     print_error('param : ' . $paramname . ' must be a string for the value : ' . $value);
                 }
                 return (string) $value;
-            //add cases for new types here :
+            // Add cases for new types here .
             default :
                 return $value;
                 break;

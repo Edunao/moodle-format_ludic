@@ -22,17 +22,44 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+// General.
 $string['pluginname']     = 'Ludic';
 $string['hidefromothers'] = 'Hide section';
 $string['showfromothers'] = 'Show section';
 
-// Privacy
+// Privacy.
 $string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
 
 // Course format options.
 $string['ludicconfiglabel']     = 'Ludic course configuration data';
 $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
 
-// popup
-$string['popupconfirm'] = 'OK';
-$string['popupcancel']  = 'Cancel';
+// Section edition.
+$string['default-section-title'] = 'default-section-title {$a->section}-STR';
+$string['label-section-title'] = 'label-section-title {$a->section}-STR';
+$string['label-section-visible'] = 'label-section-visible-STR';
+
+// Settings.
+$string['setting-weight-title'] = 'Poids des activités.';
+$string['setting-weight-description'] = 'Poids possibles pour les activités, séparés par une virgule.';
+
+// Forms.
+$string['form-success'] = 'Success';
+$string['errors'] = 'Errors';
+$string['default-error'] = 'An error has occurred.';
+$string['error-required'] = 'You must supply a value here.';
+$string['error-str-min-length'] = 'You must enter at least {$a} characters here.';
+$string['error-str-max-length'] = 'You must enter no more than {$a} characters here.';
+$string['error-int-min'] = 'The value must be greater than {$a}.';
+$string['error-int-max'] = 'The value must be less than {$a}.';
+$string['error-int-step'] = 'The value must be a multiple of {$a}.';
+
+
+// Buttons.
+$string['form-save'] = 'form-save-STR';
+$string['form-revert'] = 'form-revert-STR';
+$string['item-preview'] = 'item-preview-STR';
+$string['edit'] = 'edit-STR';
+$string['edit-settings'] = 'edit-settings-STR';
+$string['duplicate'] = 'duplicate-STR';
+$string['delete'] = 'delete-STR';

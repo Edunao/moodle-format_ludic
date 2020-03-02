@@ -1,0 +1,52 @@
+#ludic-background {
+  display: none;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #aaa;
+  opacity: .5;
+}
+
+#ludic-main-container {
+
+  .format-ludic.ludic-popup {
+    z-index: 1010;
+    position: fixed;
+    top: 20%;
+    left: 20%;
+    width: 60%;
+    padding: 20px;
+    background: #FFF;
+    border: 1px solid black;
+    border-radius: 10px;
+
+    .popup-header {
+      border: 1px solid black;
+      padding: 10px;
+      margin-bottom: 30px;
+      text-align: center;
+
+      h2 {
+        display: inline-block;
+      }
+
+      .close-ludic-popup {
+        float: right;
+        cursor: pointer;
+
+        img.icon {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .popup-content {
+      border: 1px solid black;
+      padding: 10px;
+    }
+
+  }
+}

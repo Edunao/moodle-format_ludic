@@ -21,6 +21,9 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 class format_ludic_selection_popup_form_element extends format_ludic_form_element {
 
     public $icon;
@@ -33,6 +36,8 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
         $specific = $this->specific;
 
         $this->icon = isset($specific['icon']) ? $specific['icon'] : [];
+
+        // TODO delete after.
         $this->icon['imgsrc'] = 'https://picsum.photos/80';
 
         if (isset($specific['icon']['imgsrc'])) {
@@ -42,8 +47,8 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
             $this->icon['imgalt'] = $specific['icon']['imgalt'];
         }
 
-        $this->controller = isset($specific['controller']) ? $specific['controller'] : 'Pas de titre';
-        $this->action = isset($specific['action']) ? $specific['action'] : 'Pas de titre';
+        $this->controller = isset($specific['controller']) ? $specific['controller'] : null;
+        $this->action = isset($specific['action']) ? $specific['action'] : null;
 
     }
 }

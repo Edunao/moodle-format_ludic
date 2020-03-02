@@ -22,6 +22,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot . '/lib/form/filepicker.php');
 
 class format_ludic_filepicker_form_element extends format_ludic_form_element {
@@ -39,7 +41,8 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
 
     public function get_js_options() {
         global $PAGE, $CFG;
-        // Définir un nombre max pour le format
+
+        // Définir un nombre max pour le format.
         $fpmaxbytes     = 0;
         $coursemaxbytes = 0;
         if (!empty($PAGE->course->maxbytes)) {
@@ -48,8 +51,8 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
         $coursemaxbytes = get_user_max_upload_file_size($PAGE->context, $CFG->maxbytes, $coursemaxbytes, $fpmaxbytes);
 
         $args = new stdClass();
-        // need these three to filter repositories list
-        $args->accepted_types = 'web_image';         // Définir les types autorisés pour le format
+        // Need these three to filter repositories list.
+        $args->accepted_types = 'web_image';         // Définir les types autorisés pour le format.
         $args->return_types   = FILE_INTERNAL;
         $args->itemid         = $this->filepicker->getValue();
         $args->maxbytes       = $coursemaxbytes;

@@ -21,17 +21,18 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 class format_ludic_text_form_element extends format_ludic_form_element {
 
     public $minlength;
     public $maxlength;
-    public $size;
 
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
         $this->minlength = isset($element->attributes['minlength']) ? $element->attributes['minlength'] : false;
         $this->maxlength = isset($element->attributes['maxlength']) ? $element->attributes['maxlength'] : false;
-        $this->size      = isset($element->attributes['size']) ? $element->attributes['size'] : false;
     }
 
 }

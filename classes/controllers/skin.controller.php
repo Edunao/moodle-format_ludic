@@ -24,6 +24,8 @@
 
 namespace format_ludic;
 
+defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class skin_controller extends controller_base {
@@ -49,8 +51,6 @@ class skin_controller extends controller_base {
             case 'get_cm_skin_selector' :
                 return $this->get_cm_skin_selector();
             case 'get_section_skin_selector' :
-                //$skinid = $this->get_param('id', PARAM_INT);
-                //$text      = $this->get_param('text');
                 return $this->get_section_skin_selector();
             // Default case if no parameter is necessary.
             default :
@@ -62,7 +62,7 @@ class skin_controller extends controller_base {
         global $PAGE;
         $this->set_context();
         $renderer = $PAGE->get_renderer('format_ludic');
-        //$skins = $this->get_cm_skins();
+        // TODO $skins = $this->get_cm_skins();.
         $title = 'CM SKIN SELECTION';
         $content = $renderer->render_from_template('format_ludic/test', []);
         $popup = new \format_ludic_popup($title, $content);
@@ -73,7 +73,7 @@ class skin_controller extends controller_base {
         global $PAGE;
         $this->set_context();
         $renderer = $PAGE->get_renderer('format_ludic');
-        //$skins = $this->get_cm_skins();
+        // TODO $skins = $this->get_cm_skins();.
         $title = 'SECTION SKIN SELECTION';
         $content = $renderer->render_from_template('format_ludic/test_skin_selection', []);
         $popup = new \format_ludic_popup('popup_skin_section_selector', $title, $content);

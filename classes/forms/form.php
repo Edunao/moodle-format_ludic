@@ -24,12 +24,16 @@
 
 namespace format_ludic;
 
+defined('MOODLE_INTERNAL') || die();
+
 abstract class form {
 
     public $id;
     public $type;
     public $content;
     public $object;
+    public $errors;
+    public $formvalues = null;
 
     /**
      * Context helper
@@ -49,14 +53,14 @@ abstract class form {
         $this->type          = $type;
         $this->content       = '';
         $this->contexthelper = context_helper::get_instance($PAGE);
-        $this->elements      = $this->get_definition();
-    }
-
-    public function add_element(form_element $element) {
-        $this->elements[] = $element;
+        $this->errors        = [];
     }
 
     public abstract function get_definition();
+
+    public abstract function update();
+
+    public abstract function children_validation();
 
     public function render() {
         global $PAGE;
@@ -68,4 +72,76 @@ abstract class form {
         return $renderer->render_form($this);
     }
 
+    public function validate_and_update($data) {
+        $this->set_form_values($data);
+        if (!$this->validate_elements()) {
+            return false;
+        }
+        if (!$this->children_validation()) {
+            return false;
+        }
+        return $this->update();
+    }
+
+    public function set_form_values($data) {
+        $values = [];
+        foreach ($data as $input) {
+            if (!isset($input['name']) || !isset($input['value'])) {
+                return false;
+            }
+            $values[$input['name']] = $input['value'];
+        }
+        $this->formvalues = $values;
+        return $this->formvalues;
+    }
+
+    public function validate_elements() {
+        if (!$this->formvalues) {
+            return false;
+        }
+        $valid    = true;
+        foreach ($this->elements as $element) {
+
+            // Javascript serializeArray function returns the checkbox elements only if they are checked.
+            // If they are not it means that the value is 0.
+            if ($element->type === 'checkbox' && !isset($this->formvalues[$element->name])) {
+                $this->formvalues[$element->name] = 0;
+            }
+
+            // Validate value of element.
+            $value             = $this->formvalues[$element->name];
+            $elementvalidation = $element->validate_value($value);
+
+            // If element is valid, update his value, else add error.
+            if ($elementvalidation['success']) {
+                // Update the value to be sure it is of the expected type and format.
+                $this->formvalues[$element->name] = $elementvalidation['value'];
+            } else {
+                // Add an error to the error list.
+                $defaulterror = get_string('default-error', 'format_ludic');
+                $this->errors[] = [
+                        'id'    => $element->id,
+                        'label' => $element->label,
+                        'name'  => $element->name,
+                        'error' => isset($elementvalidation['value']) ? $elementvalidation['value'] : $defaulterror
+                ];
+                $valid = false;
+            }
+        }
+        return $valid;
+    }
+
+    public function add_element($element) {
+        $this->elements[] = $element;
+    }
+
+    public function get_success_message() {
+        return get_string('form-success', 'format_ludic');
+    }
+
+    public function get_error_message() {
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+        return $renderer->render_form_errors(['errors' => $this->errors]);
+    }
 }

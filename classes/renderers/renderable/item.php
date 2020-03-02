@@ -21,6 +21,9 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+defined('MOODLE_INTERNAL') || die();
+
 class format_ludic_item implements renderable {
 
     public $selectorid;
@@ -33,6 +36,6 @@ class format_ludic_item implements renderable {
     public $draggable;
     public $droppable;
     public $issection;
-    public $isskin;
+    public $isnotvisible;
 
 }

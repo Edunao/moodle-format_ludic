@@ -31,8 +31,10 @@
         ]
     }
 }}
-<div class="format-ludic sections sections-container">
-    {{#sections}}
 
-    {{/sections}}
-</div>
+<div class="form-errors-title">{{#str}}errors, format_ludic{{/str}} :</div>
+<ul class="form-errors-list">
+    {{#errors}}
+        <li class="form-error" for="{{id}}" data-name="{{name}}"><b>{{label}}</b> : {{error}}</li>
+    {{/errors}}
+</ul>

@@ -24,34 +24,19 @@
 
 namespace format_ludic;
 
-class form_element {
+defined('MOODLE_INTERNAL') || die();
 
-    public $type;
-    public $name;
-    public $selectorid;
-    public $value;
-    public $defaultvalue;
-    public $label;
-    public $attributes;
-    public $specific;
+class hidden_form_element extends form_element {
 
-    public function __construct($type, $name, $selectorid, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
-        $this->type         = $type;
-        $this->name         = $name;
-        $this->selectorid   = $selectorid;
-        $this->value        = $value;
-        $this->defaultvalue = $defaultvalue;
-        $this->label        = $label;
-        $this->attributes   = $attributes;
-        $this->specific     = $specific;
+    public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
+        $this->type = 'hidden';
+        parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 
-    public function render() {
-        global $PAGE;
-        $renderer = $PAGE->get_renderer('format_ludic');
-        $class    = '\\format_ludic_' . $this->type . '_form_element';
-        $element  = new $class($this);
-        return $renderer->render($element);
+    public function validate_value($value) {
+        $value = clean_param($value, PARAM_RAW);
+        return ['success' => 1,  'value' => (string) ($value)];
     }
+
 
 }

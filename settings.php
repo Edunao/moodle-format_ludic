@@ -15,51 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Front controller interface
+ * Settings for the ludic course format.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die;
 
-namespace format_ludic;
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
-/**
- * Interface front_controller_interface
- *
- * @package format_ludic
- */
-interface front_controller_interface {
-
-    /**
-     * @return mixed
-     */
-    public function execute();
-
-    /**
-     * Set controller
-     *
-     * @param callable $controller
-     * @return mixed
-     */
-    public function set_controller($controller);
-
-    /**
-     * Set action to call
-     *
-     * @param callable $action
-     * @return mixed
-     */
-    public function set_action($action);
-
-    /**
-     * Set params
-     *
-     * @return mixed
-     */
-    public function set_params();
+if ($ADMIN->fulltree) {
+    // Weight settings.
+    $name        = 'format_ludic/weight';
+    $title       = get_string('setting-weight-title', 'format_ludic');
+    $description = get_string('setting-weight-description', 'format_ludic');
+    $default     = '0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000';
+    $setting     = new admin_setting_configtext($name, $title, $description, $default, PARAM_RAW, 50);
+    $settings->add($setting);
 }
+
+

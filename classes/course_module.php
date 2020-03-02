@@ -24,6 +24,8 @@
 
 namespace format_ludic;
 
+defined('MOODLE_INTERNAL') || die();
+
 class course_module extends model {
 
     public $name;

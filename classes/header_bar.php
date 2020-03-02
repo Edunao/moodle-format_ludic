@@ -46,7 +46,7 @@ class header_bar {
     }
 
     public function get_buttons() {
-        // TODO
+        // TODO.
         return array(
                 'buttons' => array(
                         0    => array(
