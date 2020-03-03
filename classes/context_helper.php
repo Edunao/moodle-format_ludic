@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
+ * This class makes it possible to recover all the data necessary for the course.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -28,9 +28,6 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-/**
- *  The goal of this class is to provide isolation from the outside world.
- */
 class context_helper {
 
     // Singleton.
@@ -119,7 +116,6 @@ class context_helper {
         if ($this->contextcourse === null) {
             $this->contextcourse = \context_course::instance($this->get_course_id());
         }
-
         return $this->contextcourse;
     }
 
@@ -163,7 +159,8 @@ class context_helper {
                 // We're in an activity that is declaring its section id
                 // so we need to lookup the corresponding course-relative index.
                 $sectionid        = $this->page->cm->section;
-                $this->sectionidx = $sectionid ? $this->db->get_section_idx_by_id($sectionid) : 0;
+                $dbapi = $this->get_database_api();
+                $this->sectionidx = $sectionid ? $dbapi->get_section_idx_by_id($sectionid) : 0;
             } else {
                 $this->sectionidx = -1;
             }
@@ -201,29 +198,7 @@ class context_helper {
     }
 
     /**
-     * @return string
-     */
-    public function get_course_fullname() {
-        return $this->page->course->fullname;
-    }
-
-    /**
-     * @return string
-     */
-    public function get_section_fullname() {
-        $section = $this->get_current_section();
-        return $section->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function get_cm_fullname() {
-        return isset($this->page->cm->name) ? $this->page->cm->name : '';
-    }
-
-    /**
-     * Return where the user is in course - course / section / mod
+     * Return where the user is in course - course / section / mod.
      *
      * @return string
      * @throws \dml_exception
@@ -323,6 +298,12 @@ class context_helper {
         return $this->modinfo;
     }
 
+    /**
+     * @param $courseid
+     * @param $userid
+     * @return \cm_info[]|null
+     * @throws \moodle_exception
+     */
     public function get_modinfo_cms($courseid, $userid) {
         if ($this->modinfocms == null) {
             $modinfo          = $this->get_fast_modinfo($courseid, $userid);

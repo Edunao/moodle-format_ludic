@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity skin interface
+ * Activity skin interface.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -30,5 +30,9 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 interface activity_skin_interface {
 
+    /**
+     * Returns the html of the activity defined by the skin.
+     * @return string
+     */
     public function render_activity_view();
 }

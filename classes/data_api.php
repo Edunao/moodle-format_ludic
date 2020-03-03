@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Database interface
+ * Data interface.
+ * All data must be retrieved in this class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -45,6 +46,8 @@ class data_api {
     }
 
     /**
+     * Get course by id.
+     *
      * @return course
      * @throws \dml_exception
      */
@@ -57,7 +60,7 @@ class data_api {
     }
 
     /**
-     * Return course sections.
+     * Return all course sections of a course.
      *
      * @return section[]
      * @throws \moodle_exception
@@ -87,6 +90,8 @@ class data_api {
     }
 
     /**
+     * Get section by id.
+     *
      * @param $sectionid
      * @return section
      * @throws \dml_exception
@@ -105,6 +110,15 @@ class data_api {
         return new section($sectionrecord);
     }
 
+    /**
+     * Get all course modules.
+     *
+     * @param $courseid
+     * @param $userid
+     * @return course_module[]|null
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function get_course_modules($courseid, $userid) {
         //if ($this->coursemodules == null) {
         $modinfocms    = $this->contexthelper->get_modinfo_cms($courseid, $userid);
@@ -117,6 +131,16 @@ class data_api {
         return $this->coursemodules;
     }
 
+    /**
+     * Get course module by id.
+     *
+     * @param $courseid
+     * @param $userid
+     * @param $cmid
+     * @return course_module
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function get_course_module_by_id($courseid, $userid, $cmid) {
         $modinfo      = $this->contexthelper->get_fast_modinfo($courseid, $userid);
         $modinfocm    = $modinfo->get_cm($cmid);
@@ -124,6 +148,15 @@ class data_api {
         return $coursemodule;
     }
 
+    /**
+     * Get all course modules of section.
+     * @param $courseid
+     * @param $userid
+     * @param $sectionid
+     * @return course_module[]
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function get_section_course_modules($courseid, $userid, $sectionid) {
         $coursemodules = $this->get_course_modules($courseid, $userid);
         $sectioncms    = [];
@@ -139,6 +172,13 @@ class data_api {
         return $sectioncms;
     }
 
+    /**
+     * Get section sequence array.
+     *
+     * @param $sectionid
+     * @return array
+     * @throws \dml_exception
+     */
     public function get_section_sequence_by_id($sectionid) {
         $databaseapi = $this->contexthelper->get_database_api();
         $sequencestr = $databaseapi->get_section_sequence_by_id($sectionid);

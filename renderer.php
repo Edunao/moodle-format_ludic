@@ -64,12 +64,12 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param format_ludic_modchooser $popup
-     * @return bool|string
-     * @throws moodle_exception
+     * @param format_ludic_popup $popup
+     * @return string
      */
-    protected function render_format_ludic_modchooser(format_ludic_modchooser $modchooser) {
-        return $this->render_from_template('format_ludic/modchooser', $modchooser);
+    public function render_popup(format_ludic_popup $popup = null) {
+        $popup = $popup ? $popup : new format_ludic_popup('');
+        return $this->render($popup);
     }
 
     /**
@@ -86,45 +86,25 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param format_ludic_popup $popup
-     * @return bool|string
-     * @throws moodle_exception
+     * @param $sectionid
+     * @return string
+     * @throws coding_exception
      */
-    protected function render_format_ludic_popup(format_ludic_popup $popup) {
-        return $this->render_from_template('format_ludic/popup', $popup);
+    public function render_section_form($sectionid) {
+        $form = new \format_ludic\section_form($sectionid);
+        return $form->render();
     }
 
+
     /**
-     * @param format_ludic_popup $popup
+     * @param $buttons
+     * @param null $itemid
+     * @param null $type
      * @return string
      */
-    public function render_popup(format_ludic_popup $popup = null) {
-        $popup = $popup ? $popup : new format_ludic_popup();
-        return $this->render($popup);
-    }
-
-    /**
-     * @param format_ludic_buttons $buttons
-     * @return bool|string
-     * @throws moodle_exception
-     */
-    protected function render_format_ludic_buttons(format_ludic_buttons $buttons) {
-        return $this->render_from_template('format_ludic/buttons', $buttons);
-    }
-
-
     public function render_buttons($buttons, $itemid = null, $type = null) {
         $buttons = new format_ludic_buttons($buttons, $itemid, $type);
         return $this->render($buttons);
-    }
-
-    /**
-     * @param format_ludic_section $section
-     * @return bool|string
-     * @throws moodle_exception
-     */
-    protected function render_format_ludic_section(format_ludic_section $section) {
-        return $this->render_from_template('format_ludic/section', $section);
     }
 
     /**
@@ -137,12 +117,12 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param format_ludic_course_module $coursemodule
-     * @return bool|string
-     * @throws moodle_exception
+     * @param $form
+     * @return string
      */
-    protected function render_format_ludic_course_module(format_ludic_course_module $coursemodule) {
-        return $this->render_from_template('format_ludic/course_module', $coursemodule);
+    public function render_form($form) {
+        $form = new format_ludic_form($form);
+        return $this->render($form);
     }
 
     /**
@@ -155,6 +135,85 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param format_ludic_modchooser $popup
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_modchooser(format_ludic_modchooser $modchooser) {
+        return $this->render_from_template('format_ludic/modchooser', $modchooser);
+    }
+
+    /**
+     * @param format_ludic_popup $popup
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_popup(format_ludic_popup $popup) {
+        return $this->render_from_template('format_ludic/popup', $popup);
+    }
+
+    /**
+     * @param $sectionid
+     * @return mixed
+     */
+    public function render_section_edit_buttons($sectionid) {
+        global $PAGE, $CFG;
+        $renderer       = $PAGE->get_renderer('format_ludic');
+        $editsectionurl = $CFG->wwwroot . '/course/editsection.php?id=' . $sectionid;
+        $buttons        = [];
+        $buttons[]      = [
+                'identifier' => 'form-save',
+                'order'      => 1
+        ];
+        $buttons[]      = [
+                'identifier' => 'form-revert',
+                'order'      => 2
+        ];
+        $buttons[]      = [
+                'identifier' => 'item-preview',
+                'order'      => 4
+        ];
+        $buttons[]      = [
+                'identifier'    => 'edit',
+                'order'         => 3,
+                'hassubbuttons' => true,
+                'subbuttons'    => [
+                        ['identifier' => 'edit-settings', 'link' => $editsectionurl],
+                        ['identifier' => 'duplicate'],
+                        ['identifier' => 'delete']
+                ]
+        ];
+        return $renderer->render_buttons($buttons, $sectionid, 'section');
+    }
+
+    /**
+     * @param format_ludic_buttons $buttons
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_buttons(format_ludic_buttons $buttons) {
+        return $this->render_from_template('format_ludic/buttons', $buttons);
+    }
+
+    /**
+     * @param format_ludic_section $section
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_section(format_ludic_section $section) {
+        return $this->render_from_template('format_ludic/section', $section);
+    }
+
+    /**
+     * @param format_ludic_course_module $coursemodule
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_course_module(format_ludic_course_module $coursemodule) {
+        return $this->render_from_template('format_ludic/course_module', $coursemodule);
+    }
+
+    /**
      * @param format_ludic_form $form
      * @return bool|string
      * @throws moodle_exception
@@ -164,25 +223,29 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param $form
-     * @return string
+     * @return bool|string
+     * @throws moodle_exception
      */
-    public function render_form($form) {
-        $form = new format_ludic_form($form);
-        return $this->render($form);
-    }
-
     public function render_edit_page() {
         return $this->render_from_template('format_ludic/editpage', []);
     }
 
+    /**
+     * @return bool|string
+     * @throws moodle_exception
+     */
     public function render_page() {
         return $this->render_from_template('format_ludic/page', []);
     }
 
+    /**
+     * @return bool|string
+     * @throws moodle_exception
+     */
     public function render_container_children() {
         return $this->render_from_template('format_ludic/container_children', []);
     }
+
     /**
      * @param format_ludic_hidden_form_element $element
      * @return bool|string

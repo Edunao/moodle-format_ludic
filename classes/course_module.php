@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic
+ * Ludic course module class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -35,6 +35,12 @@ class course_module extends model {
     public $sectionid;
     public $accessible;
 
+    /**
+     * course_module constructor.
+     *
+     * @param \cm_info $cminfo
+     * @throws \dml_exception
+     */
     public function __construct(\cm_info $cminfo) {
         parent::__construct($cminfo);
         $dataapi         = $this->contexthelper->get_data_api();
@@ -44,6 +50,14 @@ class course_module extends model {
         $this->cminfo = $cminfo;
     }
 
+    /**
+     * Move a course module to another section.
+     *
+     * @param $sectionid
+     * @param null $beforeid
+     * @return int
+     * @throws \dml_exception
+     */
     public function move_to_section($sectionid, $beforeid = null) {
         $dataapi = $this->contexthelper->get_data_api();
         $section = $dataapi->get_section_by_id($sectionid);
@@ -56,6 +70,13 @@ class course_module extends model {
         return $this->accessible;
     }
 
+    /**
+     * Move a course module after a course module on the same section.
+     *
+     * @param $cmidtomove
+     * @param $aftercmid
+     * @return bool
+     */
     public function move_on_section($cmidtomove, $aftercmid) {
         $sequence    = $this->section->sequence;
         $newsequence = [];

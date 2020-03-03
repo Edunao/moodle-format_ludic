@@ -14,23 +14,6 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-{{!
-    @template format_ludic/headerbar
-
-    Displays the header bar
-
-    Context variables required for this template:
-    * buttons Array - each button is an object with a name, a link and an indicator of position (right / left).
-
-    Example context (json):
-    {
-        "buttons": [
-            {"name": "Title",   "shortname": "title",   "link": "value",                           "left": false},
-            {"name": "Course",  "shortname": "course",  "link": "/course/view.php?id=2",           "left": true},
-            {"name": "Section", "shortname": "section", "link": "/course/view.php?id=2&section=1", "left": true}
-        ]
-    }
-}}
 <div id="{{popupid}}" class="format-ludic ludic-popup">
 
     <div class="popup-header">

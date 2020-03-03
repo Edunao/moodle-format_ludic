@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic form
+ * Section form.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -53,7 +53,7 @@ class section_form extends form {
                 'required' => true, 'maxlength' => 30
         ]);
 
-        // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
+        //// ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
         //$visible        = $this->object->visible;
         //$defaultvisible = 1;
         //$labelvisible   = get_string('label-section-visible', 'format_ludic');
@@ -83,18 +83,18 @@ class section_form extends form {
         //                'action'     => 'get_section_skin_selector'
         //        ]
         //);
-
+        //
         //$elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
         //$elements[]    = new filepicker_form_element('image-2', 'section-image-2', null, null, 'section filepicker label');
 
         return $elements;
     }
 
-    public function update() {
+    public function child_update() {
         return $this->object->update($this->formvalues);
     }
 
-    public function children_validation() {
+    public function child_validation() {
         return true;
     }
 }

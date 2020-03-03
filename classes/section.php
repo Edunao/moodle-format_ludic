@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic
+ * Ludic section class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -38,9 +38,14 @@ class section extends model {
     public $sequence;
     public $visible;
     public $coursemodules;
-    public $defaultname = 'Section';
     public $skinid;
 
+    /**
+     * section constructor.
+     *
+     * @param $section \stdClass course_sections record
+     * @throws \moodle_exception
+     */
     public function __construct($section) {
         parent::__construct($section);
         $this->dbrecord    = $section;
@@ -53,6 +58,13 @@ class section extends model {
         $this->sectioninfo = $modinfo->get_section_info($this->section);
     }
 
+    /**
+     * Get all ludic course modules of section.
+     *
+     * @return course_module[]
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function get_course_modules() {
         $dataapi  = $this->contexthelper->get_data_api();
         $courseid = $this->courseid;
@@ -60,87 +72,59 @@ class section extends model {
         return $dataapi->get_section_course_modules($courseid, $userid, $this->id);
     }
 
+    /**
+     * Update section sequence.
+     *
+     * @param $newsequence
+     * @throws \dml_exception
+     */
     public function update_sequence($newsequence) {
-        $this->sequence = $newsequence;
-
-        $newsequencestr      = implode(',', $newsequence);
-        $dbsection           = $this->dbrecord;
-        $dbsection->sequence = $newsequencestr;
-        $dbapi               = $this->contexthelper->get_database_api();
-        return $dbapi->update_section($dbsection);
+        $dbapi            = $this->contexthelper->get_database_api();
+        $moodlecourse     = $this->get_moodle_course();
+        $this->sequence   = $newsequence;
+        $data             = [];
+        $data['sequence'] = implode(',', $newsequence);
+        $dbapi->update_section($moodlecourse, $this->dbrecord, $data);
     }
 
+    /**
+     * Move this section after another section.
+     *
+     * @param $sectionidx
+     * @return bool
+     */
     public function move_section_to($sectionidx) {
         $course = $this->get_course()->moodlecourse;
         return move_section_to($course, $this->section, $sectionidx);
     }
 
+    /**
+     * Get ludic course.
+     *
+     * @return course
+     */
     public function get_course() {
         $dataapi      = $this->contexthelper->get_data_api();
         $this->course = $dataapi->get_course_by_id($this->courseid);
         return $this->course;
     }
 
-    public function render_form() {
-        $form = new section_form($this->id);
-        return $form->render();
-    }
-
-    public function render_edit_buttons() {
-        global $PAGE, $CFG;
-        $renderer       = $PAGE->get_renderer('format_ludic');
-        $editsectionurl = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id;
-        $buttons        = [];
-        $buttons[]      = [
-                'identifier' => 'form-save',
-                'order'      => 1
-        ];
-        $buttons[]      = [
-                'identifier' => 'form-revert',
-                'order'      => 2
-        ];
-        $buttons[]      = [
-                'identifier' => 'item-preview',
-                'order'      => 4
-        ];
-        $buttons[]      = [
-                'identifier'    => 'edit',
-                'order'         => 3,
-                'hassubbuttons' => true,
-                'subbuttons'    => [
-                        ['identifier' => 'edit-settings', 'link' => $editsectionurl],
-                        ['identifier' => 'duplicate'],
-                        ['identifier' => 'delete']
-                ]
-        ];
-        return $renderer->render_buttons($buttons, $this->id, 'section');
+    public function get_moodle_course() {
+        $course = $this->get_course();
+        return $course->moodlecourse;
     }
 
     public function update($data) {
+        $dbapi        = $this->contexthelper->get_database_api();
+        $moodlecourse = $this->get_moodle_course();
+
         if (!isset($data['id']) || $data['id'] !== $this->dbrecord->id) {
             return false;
         }
         if (isset($data['name']) && $data['name'] !== $this->dbrecord->name) {
-            $this->dbrecord->name = $data['name'];
-            $this->contexthelper->get_database_api()->update_section($this->dbrecord);
-            $this->trigger_update();
+            $dbapi->update_section($moodlecourse, $this->dbrecord, $data);
         }
         return true;
-    }
-
-    /**
-     * Trigger update event when the page is updated
-     */
-    public function trigger_update() {
-        $event = \core\event\course_section_updated::create(
-                array(
-                        'objectid' => $this->id,
-                        'courseid' => $this->courseid,
-                        'context'  => $this->get_context(),
-                        'other'    => array('sectionnum' => $this->section)
-                )
-        );
-        $event->trigger();
     }
 
     public function get_context() {

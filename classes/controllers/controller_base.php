@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Abstract controller class
+ * Abstract controller class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -28,13 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-
-/**
- * Class controller_base
- *
- * @package format_ludic
- */
-class controller_base {
+abstract class controller_base {
 
     /**
      * @var array
@@ -50,6 +44,7 @@ class controller_base {
      * controller_base constructor.
      *
      * @param $params
+     * @throws \moodle_exception
      */
     public function __construct($params) {
         global $PAGE;
@@ -135,5 +130,7 @@ class controller_base {
                 break;
         }
     }
+
+    abstract public function execute();
 
 }

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Items (sections, bravos, skins) for ludic course format.
+ * Course module item for ludic course format.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)

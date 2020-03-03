@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic form
+ * Selection popup form element class.
+ * This a input hidden with a custom visual select to update the value of the hidden input.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)

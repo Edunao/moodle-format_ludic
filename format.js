@@ -31,11 +31,11 @@ M.course.format = M.course.format || {};
  * Get sections config for this format
  *
  * The section structure is:
- * <ul class="topics">
- *  <li class="section">...</li>
- *  <li class="section">...</li>
+ * <div class="container-parents">
+ *  <div class="section">...</div>
+ *  <div class="section">...</div>
  *   ...
- * </ul>
+ * </div>
  *
  * @return {object} section list configuration
  */

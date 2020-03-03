@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic form
+ * Activity skin score form.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -40,11 +40,11 @@ class activity_skin_score_form extends form {
         return [];
     }
 
-    public function update() {
+    public function child_update() {
         // TODO: Implement update() method.
     }
 
-    public function children_validation() {
-        // TODO: Implement children_validation() method.
+    public function child_validation() {
+        // TODO: Implement child_validation() method.
     }
 }

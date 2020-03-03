@@ -27,6 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 // Course lib.
 require_once($CFG->dirroot . '/course/format/lib.php');
 
+// Classes.
 require_once($CFG->dirroot . '/course/format/ludic/classes/data_api.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/database_api.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/context_helper.php');
@@ -138,7 +139,7 @@ class format_ludic extends \format_base {
 }
 
 /**
- * Serve the files from the MYPLUGIN file areas
+ * Serve the files from the format_ludic file areas.
  *
  * @param \stdClass $course the course object
  * @param \stdClass $cm the course module object
@@ -148,6 +149,9 @@ class format_ludic extends \format_base {
  * @param bool $forcedownload whether or not force download
  * @param array $options additional options affecting the file serving
  * @return bool false if the file not found, just send the file otherwise and do not return anything
+ * @throws coding_exception
+ * @throws moodle_exception
+ * @throws require_login_exception
  */
 function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
     // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
@@ -187,6 +191,7 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
 }
 
 /**
+ * Requires javascript for filepicker and modchooser.
  * @param $context
  */
 function format_ludic_init_edit_mode($context) {

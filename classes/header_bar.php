@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Database interface
+ * TODO Header bar.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)

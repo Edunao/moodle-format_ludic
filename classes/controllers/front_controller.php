@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Abstract controller class
+ * Front controller class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -28,11 +28,6 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-/**
- * Class front_controller
- *
- * @package format_ludic
- */
 class front_controller implements front_controller_interface {
 
     /**

@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Items (sections, bravos, skins) for ludic course format.
+ * Selection popup form element for ludic course format.
+ * This a input hidden with a custom visual select to update the value of the hidden input.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -30,7 +31,11 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
     public $controller;
     public $action;
 
-
+    /**
+     * format_ludic_selection_popup_form_element constructor.
+     *
+     * @param \format_ludic\form_element $element
+     */
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
         $specific = $this->specific;

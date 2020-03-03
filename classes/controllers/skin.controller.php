@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Skin controller class
+ * Skin controller class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -31,13 +31,9 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 class skin_controller extends controller_base {
 
     /**
-     * Execute an action
-     *
-     * @return bool|int|void
-     * @throws \coding_exception
-     * @throws \dml_exception
+     * Execute an action.
+     * @return false|string
      * @throws \moodle_exception
-     * @throws \required_capability_exception
      */
     public function execute() {
         $action = $this->get_param('action');
@@ -58,6 +54,12 @@ class skin_controller extends controller_base {
         }
     }
 
+    /**
+     * TODO implements.
+     *
+     * @return false|string
+     * @throws \moodle_exception
+     */
     public function get_cm_skin_selector() {
         global $PAGE;
         $this->set_context();
@@ -69,6 +71,13 @@ class skin_controller extends controller_base {
         $json = ['html' => $renderer->render_popup($popup)];
         return json_encode($json);
     }
+
+    /**
+     * TODO implements.
+     *
+     * @return false|string
+     * @throws \moodle_exception
+     */
     public function get_section_skin_selector() {
         global $PAGE;
         $this->set_context();
@@ -81,10 +90,22 @@ class skin_controller extends controller_base {
         return json_encode($json);
     }
 
+    /**
+     * TODO implements.
+     *
+     * @param $skinid
+     * @return string
+     */
     public function get_children($skinid) {
         return 'NO CHILDREN FOR SKIN => ' . $skinid;
     }
 
+    /**
+     * TODO implements.
+     *
+     * @param $skinid
+     * @return string
+     */
     public function get_properties($skinid) {
         return 'SKIN ' . $skinid . ' PROPERTIES';
     }

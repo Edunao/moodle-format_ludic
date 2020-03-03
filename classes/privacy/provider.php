@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Score
+ * Provider class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -23,6 +23,7 @@
  */
 
 namespace format_ludic\privacy;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**

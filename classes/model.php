@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic
+ * Extend this class so that the child inherits the context helper.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -32,7 +32,6 @@ class model {
      * @var int
      */
     public $id;
-
 
     /**
      * Context helper

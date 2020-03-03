@@ -54,7 +54,6 @@ $string['error-int-min'] = 'The value must be greater than {$a}.';
 $string['error-int-max'] = 'The value must be less than {$a}.';
 $string['error-int-step'] = 'The value must be a multiple of {$a}.';
 
-
 // Buttons.
 $string['form-save'] = 'form-save-STR';
 $string['form-revert'] = 'form-revert-STR';

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Database interface
+ * TODO Log interface.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -32,6 +32,11 @@ class log_api {
 
     private $contexthelper;
 
+    /**
+     * log_api constructor.
+     *
+     * @param $contexthelper
+     */
     public function __construct($contexthelper) {
         $this->contexthelper = $contexthelper;
     }

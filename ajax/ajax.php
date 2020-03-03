@@ -29,7 +29,7 @@ $courseid = required_param('courseid', PARAM_INT);
 // Check capabilities.
 require_login($courseid);
 
-// The front controller will execute the action defined in parameter with the controller defined in parameter.
+// The front controller will execute the action defined in post/get parameter with the controller defined in post/get parameter.
 $frontcontroller = new \format_ludic\front_controller();
 
 // Call the controller method and print the result.

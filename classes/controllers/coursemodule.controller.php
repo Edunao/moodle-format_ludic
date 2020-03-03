@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Section controller class
+ * Course module controller class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -34,10 +34,7 @@ class coursemodule_controller extends controller_base {
      * Execute an action
      *
      * @return mixed
-     * @throws \coding_exception
-     * @throws \dml_exception
      * @throws \moodle_exception
-     * @throws \required_capability_exception
      */
     public function execute() {
         $action = $this->get_param('action');

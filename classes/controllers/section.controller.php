@@ -33,11 +33,9 @@ class section_controller extends controller_base {
     /**
      * Execute an action
      *
-     * @return mixed
-     * @throws \coding_exception
+     * @return false|string
      * @throws \dml_exception
      * @throws \moodle_exception
-     * @throws \required_capability_exception
      */
     public function execute() {
         $action = $this->get_param('action');
@@ -70,6 +68,13 @@ class section_controller extends controller_base {
         }
     }
 
+    /**
+     * Return sections html.
+     *
+     * @return string
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function get_parents() {
         global $PAGE;
         $dataapi  = $this->contexthelper->get_data_api();
@@ -85,6 +90,13 @@ class section_controller extends controller_base {
         return $output;
     }
 
+    /**
+     * Return course modules html.
+     *
+     * @param $sectionid
+     * @return string
+     * @throws \dml_exception
+     */
     public function get_children($sectionid) {
         global $PAGE;
         $dataapi    = $this->contexthelper->get_data_api();
@@ -107,14 +119,31 @@ class section_controller extends controller_base {
         return $output;
     }
 
+    /**
+     * Return section form with edit buttons.
+     *
+     * @param $sectionid
+     * @return string
+     * @throws \dml_exception
+     */
     public function get_properties($sectionid) {
-        $dataapi = $this->contexthelper->get_data_api();
-        $section = $dataapi->get_section_by_id($sectionid);
-        $output  = $section->render_form();
-        $output  .= $section->render_edit_buttons();
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+        $output  = $renderer->render_section_form($sectionid);
+        $output  .= $renderer->render_section_edit_buttons($sectionid);
         return $output;
     }
 
+    /**
+     * Move a course module to a section.
+     * Return course modules html.
+     *
+     * @param $cmid
+     * @param $sectionid
+     * @return string
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function move_to_section($cmid, $sectionid) {
         $courseid     = $this->get_course_id();
         $userid       = $this->get_user_id();
@@ -125,6 +154,16 @@ class section_controller extends controller_base {
         return $this->get_children($oldsectionid);
     }
 
+    /**
+     * Move course module on section, change order.
+     * Return course modules html.
+     *
+     * @param $cmidtomove
+     * @param $aftercmid
+     * @return string
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function move_on_section($cmidtomove, $aftercmid) {
         $courseid     = $this->get_course_id();
         $userid       = $this->get_user_id();
@@ -135,6 +174,16 @@ class section_controller extends controller_base {
         return $this->get_children($sectionid);
     }
 
+    /**
+     * Move section on course, change order.
+     * Return sections html.
+     *
+     * @param $sectionidtomove
+     * @param $aftersectionid
+     * @return string
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function move_section_to($sectionidtomove, $aftersectionid) {
         $dataapi         = $this->contexthelper->get_data_api();
         $dbapi           = $this->contexthelper->get_database_api();
@@ -145,6 +194,15 @@ class section_controller extends controller_base {
         return $this->get_parents();
     }
 
+    /**
+     * Validate form.
+     * If everything is valid => update and return a success message.
+     * Else does not update and return an error message.
+     *
+     * @param $sectionid
+     * @param $data
+     * @return false|string
+     */
     public function validate_form($sectionid, $data) {
         $form = new section_form($sectionid);
         $success = $form->validate_and_update($data);

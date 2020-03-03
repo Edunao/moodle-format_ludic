@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Section skin interface
+ * Section skin interface.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -29,6 +29,15 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 interface section_skin_interface {
+    /**
+     * Returns the html of the section in a course view defined by the skin.
+     * @return string
+     */
     public function render_course_view();
+
+    /**
+     * Returns the html of the section in a section view defined by the skin.
+     * @return string
+     */
     public function render_section_view();
 }

@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Database interface
+ * Database interface.
+ * All database calls must be made in this class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -45,6 +46,8 @@ class database_api {
     }
 
     /**
+     * Get section idx (number) from a sectionid.
+     *
      * @param $sectionid
      * @return mixed
      * @throws \dml_exception
@@ -54,6 +57,8 @@ class database_api {
     }
 
     /**
+     * Get section sequence (1,2,3,...) from a sectionid.
+     *
      * @param $sectionid
      * @return mixed
      * @throws \dml_exception
@@ -63,6 +68,8 @@ class database_api {
     }
 
     /**
+     * Get sectionid from a courseid and a section idx (number).
+     *
      * @param $courseid
      * @param $sectionidx
      * @return mixed
@@ -75,6 +82,8 @@ class database_api {
     }
 
     /**
+     * Get course_sections records by courseid.
+     *
      * @param $courseid
      * @return array
      * @throws \dml_exception
@@ -84,6 +93,8 @@ class database_api {
     }
 
     /**
+     * Get course_sections record by id.
+     *
      * @param $id
      * @return mixed
      * @throws \dml_exception
@@ -93,6 +104,8 @@ class database_api {
     }
 
     /**
+     * Get course_modules records of a course.
+     *
      * @param $courseid
      * @return array
      * @throws \dml_exception
@@ -107,6 +120,8 @@ class database_api {
     }
 
     /**
+     * Get course_modules record by id.
+     *
      * @param $id
      * @return mixed
      * @throws \dml_exception
@@ -121,6 +136,7 @@ class database_api {
     }
 
     /**
+     * Get role id by his shortname.
      * @param $roleshortname
      * @return mixed
      * @throws \dml_exception
@@ -129,11 +145,25 @@ class database_api {
         return $this->db->get_field('role', 'id', ['shortname' => $roleshortname]);
     }
 
-    public function update_section($dbsection) {
-        return $this->db->update_record('course_sections', $dbsection);
-
+    /**
+     * Update section using moodle function.
+     *
+     * @param $moodlecourse
+     * @param $dbrecord
+     * @param $data
+     * @throws \moodle_exception
+     */
+    public function update_section($moodlecourse, $dbrecord, $data) {
+        course_update_section($moodlecourse, $dbrecord, $data);
     }
 
+    /**
+     * Check if a file exists in draft by itemid.
+     *
+     * @param $itemid
+     * @return bool
+     * @throws \dml_exception
+     */
     public function file_exists_in_draft($itemid) {
         return $this->db->record_exists_sql('
         SELECT *

@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Popup for ludic course format.
+ * Modchooser for ludic course format.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -32,7 +32,7 @@ class format_ludic_modchooser implements renderable {
 
     public function __construct($content, $section, $order) {
         $this->modchooser = $content;
-        $this->section = $section;
+        $this->section    = $section;
         $this->order      = $order;
     }
 

@@ -40,5 +40,6 @@ if ($editmode) {
     echo $renderer->render_page();
 }
 
+// Requires format ludic javascript.
 $PAGE->requires->js('/course/format/ludic/format.js');
 $PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init', ['params' => $params]);

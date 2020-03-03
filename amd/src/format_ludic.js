@@ -14,9 +14,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Main js file of formatLudic
+ * Main js file of format_ludic
  *
- * @package   formatLudic
+ * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -30,7 +30,7 @@ define(['jquery', 'jqueryui'], function ($, ui) {
     let ludic = {
 
         /**
-         * Always called in a formatLudic page
+         * Always called in a format_ludic page
          * Initialize all required events.
          * @param {object} params
          */
@@ -238,7 +238,7 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                         container.removeClass(unwantedClass);
                         container.addClass(newClass);
 
-                        // Refresh the updated elements.
+                        // Refresh the updated elements - updateFunction ex : displaySections.
                         let updateFunction = 'display' + itemType.charAt(0).toUpperCase() + itemType.slice(1) + 's';
                         let params = {
                             callback: function () {
@@ -442,6 +442,11 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                 let dropId = dropItem.data('id');
                 let dropType = dropItem.data('type');
 
+                if (dragItem.is(dropItem)) {
+                    console.log('drop on same item, nothing to do');
+                    return false;
+                }
+
                 // Define the action here.
                 let action = false;
                 if (dragType === 'section' && dropType === 'section') {
@@ -482,14 +487,14 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                 return;
             }
 
-            // Initialize required variable for the M.formFilepicker.init() function.
-            M.core_filepicker.instances = [];
-
             // Initialize each filepicker, with his options.
             filepickers.each(function () {
-                console.log('initFilepicker');
+                console.log('init_filepicker');
                 let options = $(this).data('options');
                 M.form_filepicker.init(Y, options);
+
+                // Hide options.
+                $(this).removeAttr('data-options');
             });
 
         },

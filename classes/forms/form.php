@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic form
+ * Abstract form class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -47,6 +47,12 @@ abstract class form {
      */
     protected $elements;
 
+    /**
+     * form constructor.
+     *
+     * @param $type
+     * @param null $id
+     */
     public function __construct($type, $id = null) {
         global $PAGE;
         $this->id            = $id;
@@ -56,12 +62,29 @@ abstract class form {
         $this->errors        = [];
     }
 
+    /**
+     * @return form_element[]
+     */
     public abstract function get_definition();
 
-    public abstract function update();
+    /**
+     * Validation of child specific form.
+     * @return bool all is valid or not.
+     */
+    public abstract function child_validation();
 
-    public abstract function children_validation();
+    /**
+     *
+     * @return bool update success.
+     */
+    public abstract function child_update();
 
+    /**
+     * Returns the html of the form.
+     *
+     * @return string
+     * @throws \coding_exception
+     */
     public function render() {
         global $PAGE;
         $elements = $this->elements;
@@ -72,17 +95,31 @@ abstract class form {
         return $renderer->render_form($this);
     }
 
+    /**
+     * Validate the form, if everything is valid.
+     * Update and return update success.
+     *
+     * @param $data
+     * @return bool
+     */
     public function validate_and_update($data) {
         $this->set_form_values($data);
         if (!$this->validate_elements()) {
             return false;
         }
-        if (!$this->children_validation()) {
+        if (!$this->child_validation()) {
             return false;
         }
-        return $this->update();
+        return $this->child_update();
     }
 
+    /**
+     * Set data from serializeArray in an array [name => value].
+     * Return form values.
+     *
+     * @param $data
+     * @return array|bool
+     */
     public function set_form_values($data) {
         $values = [];
         foreach ($data as $input) {
@@ -95,6 +132,12 @@ abstract class form {
         return $this->formvalues;
     }
 
+    /**
+     * Validate elements.
+     * Each element validates its value and returns it if valid, otherwise an error message.
+     * @return bool
+     * @throws \coding_exception
+     */
     public function validate_elements() {
         if (!$this->formvalues) {
             return false;
@@ -131,14 +174,30 @@ abstract class form {
         return $valid;
     }
 
+    /**
+     * Add an element in form.
+     *
+     * @param form_element $element
+     */
     public function add_element($element) {
         $this->elements[] = $element;
     }
 
+    /**
+     * Return success message.
+     *
+     * @return string
+     * @throws \coding_exception
+     */
     public function get_success_message() {
         return get_string('form-success', 'format_ludic');
     }
 
+    /**
+     * Return error message.
+     *
+     * @return string
+     */
     public function get_error_message() {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');

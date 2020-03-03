@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic form
+ * Abstract form element class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -48,6 +48,17 @@ abstract class form_element {
     public $required;
     public $readonly;
 
+    /**
+     * form_element constructor.
+     *
+     * @param $name
+     * @param $id
+     * @param $value
+     * @param $defaultvalue
+     * @param string $label
+     * @param array $attributes
+     * @param array $specific
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         global $PAGE;
         $this->contexthelper = context_helper::get_instance($PAGE);
@@ -64,6 +75,12 @@ abstract class form_element {
         $this->readonly     = isset($this->attributes['readonly']) ? $this->attributes['readonly'] : null;
     }
 
+    /**
+     * Returns the element's html from its mustache model.
+     *
+     * @return string
+     * @throws \coding_exception
+     */
     public function render() {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
@@ -72,6 +89,13 @@ abstract class form_element {
         return $renderer->render($element);
     }
 
+    /**
+     * Each element must implement this function in order to validate its value.
+     * Return an array with success (element is valid) and value (error message or typed value).
+     *
+     * @param $value
+     * @return array
+     */
     public abstract function validate_value($value);
 
 }

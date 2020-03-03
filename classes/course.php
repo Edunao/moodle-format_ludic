@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file contains main class for the course format Ludic
+ * Ludic course class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -33,11 +33,22 @@ class course extends model {
     public $moodlecourse;
     public $coursemodules;
 
+    /**
+     * course constructor.
+     *
+     * @param $course
+     */
     public function __construct($course) {
         $this->moodlecourse = $course;
         parent::__construct($this->moodlecourse);
     }
 
+    /**
+     * Return array of course sections.
+     *
+     * @return section[]
+     * @throws \moodle_exception
+     */
     public function get_sections() {
         // Retrieve sections if attribute sections is empty.
         if (empty($this->sections)) {
