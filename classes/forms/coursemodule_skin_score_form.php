@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity skin interface.
+ * Activity skin score form.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -26,13 +26,24 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
+class coursemodule_skin_score_form extends form {
 
-interface activity_skin_interface {
+    public function __construct($id = null) {
+        parent::__construct('coursemodule_skin_score', $id);
+        if ($id) {
+            skin::get_by_id($id);
+        }
+    }
 
-    /**
-     * Returns the html of the activity defined by the skin.
-     * @return string
-     */
-    public function render_activity_view();
+    public function get_definition() {
+        return [];
+    }
+
+    public function update_child() {
+        // TODO: Implement update() method.
+    }
+
+    public function validate_child() {
+        // TODO: Implement validate_child() method.
+    }
 }

@@ -28,9 +28,115 @@ $courseid = $COURSE->id;
 $context  = \context_course::instance($courseid);
 $renderer = $PAGE->get_renderer('format_ludic');
 $editmode = $PAGE->user_is_editing();
-$params = ['courseid' => $courseid, 'userid' => $USER->id, 'editmode' => $editmode];
+$params   = ['courseid' => $courseid, 'userid' => $USER->id, 'editmode' => $editmode];
 
 $PAGE->set_context($context);
+
+$staticconfig = [
+        'skins' => [
+                1 => [
+                        'id'         => 1,
+                        'location'   => 'section',
+                        'type'       => 'score',
+                        'title'      => 'Coffre au trésor',
+                        'properties' => [
+                                'images' => [
+                                        [
+                                                'threshold' => 0,
+                                                'imgsrc'    => 'https://picsum.photos/id/100/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 100,
+                                                'imgsrc'    => 'https://picsum.photos/id/101/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 200,
+                                                'imgsrc'    => 'https://picsum.photos/id/102/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 300,
+                                                'imgsrc'    => 'https://picsum.photos/id/103/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 400,
+                                                'imgsrc'    => 'https://picsum.photos/id/104/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 500,
+                                                'imgsrc'    => 'https://picsum.photos/id/105/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 600,
+                                                'imgsrc'    => 'https://picsum.photos/id/106/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 700,
+                                                'imgsrc'    => 'https://picsum.photos/id/107/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 800,
+                                                'imgsrc'    => 'https://picsum.photos/id/108/80/80', 'imgalt' => ''
+                                        ]
+                                ],
+                                'css'    => '{background-color: #000;}'
+                        ]
+                ],
+                2 => [
+                        'id'         => 2,
+                        'location'   => 'section',
+                        'type'       => 'score',
+                        'title'      => 'Coffre de pièces',
+                        'properties' => [
+                                'images' => [
+                                        [
+                                                'threshold' => 0,
+                                                'imgsrc'    => 'https://picsum.photos/id/200/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 100,
+                                                'imgsrc'    => 'https://picsum.photos/id/201/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 200,
+                                                'imgsrc'    => 'https://picsum.photos/id/202/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 300,
+                                                'imgsrc'    => 'https://picsum.photos/id/203/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 400,
+                                                'imgsrc'    => 'https://picsum.photos/id/204/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 500,
+                                                'imgsrc'    => 'https://picsum.photos/id/205/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 600,
+                                                'imgsrc'    => 'https://picsum.photos/id/206/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 700,
+                                                'imgsrc'    => 'https://picsum.photos/id/207/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 800,
+                                                'imgsrc'    => 'https://picsum.photos/id/208/80/80', 'imgalt' => ''
+                                        ]
+                                ],
+                        ],
+                        'css'        => '{background-color: #efefef;}'
+                ]
+        ]
+];
+
+$contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+$staticconfig  = json_encode($staticconfig);
+$contexthelper->update_course_format_options(['ludic_config' => $staticconfig]);
+$config = $contexthelper->get_course_format_option_by_name('ludic_config');
+
+var_dump(optional_param('section', 0, PARAM_INT));
 
 // Display course.
 if ($editmode) {

@@ -27,14 +27,25 @@ defined('MOODLE_INTERNAL') || die();
 // Course lib.
 require_once($CFG->dirroot . '/course/format/lib.php');
 
-// Classes.
-require_once($CFG->dirroot . '/course/format/ludic/classes/data_api.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/database_api.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/context_helper.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/model.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/course.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/section.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/course_module.php');
+// Data.
+require_once($CFG->dirroot . '/course/format/ludic/classes/data/context_helper.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/data/data_api.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/data/database_api.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/data/file_api.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/data/log_api.php');
+
+// Models.
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/model.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/course.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/section.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/course_module.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/header_bar.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/skin.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/coursemodule_skin_interface.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/inline.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/score.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/section_skins/section_skin_interface.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/section_skins/score.php');
 
 // Renderable.
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/popup.php');
@@ -65,7 +76,7 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/coursemod
 // Form.
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/section_form.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/activity_skin_score_form.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/coursemodule_skin_score_form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/checkbox_form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/filepicker_form_element.php');
@@ -136,6 +147,7 @@ class format_ludic extends \format_base {
 
         return $courseformatoptions;
     }
+
 }
 
 /**

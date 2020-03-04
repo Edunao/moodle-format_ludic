@@ -15,23 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity skin inline.
+ * Extend this class so that the child inherits the context helper.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace format_ludic\activity;
+namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
+class model {
 
-class inline implements \format_ludic\activity_skin_interface {
+    /**
+     * @var int
+     */
+    public $id;
 
-    public function render_activity_view() {
-        return 'activity inline';
+    /**
+     * Context helper
+     * @var context_helper
+     */
+    public $contexthelper;
+
+    /**
+     * model constructor.
+     *
+     * @param $object object
+     */
+    public function __construct($object) {
+        global $PAGE;
+        $this->contexthelper = context_helper::get_instance($PAGE);
+        $this->id = $object->id;
     }
 }
-

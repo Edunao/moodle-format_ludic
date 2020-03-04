@@ -15,7 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Checkbox form element class.
+ * Data interface.
+ * All data must be retrieved in this class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -26,16 +27,22 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-class checkbox_form_element extends form_element {
+require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-    public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
-        $this->type = 'checkbox';
-        parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
+class data_api {
+
+    private $contexthelper;
+
+    /**
+     * data_api constructor.
+     *
+     * @param $contexthelper context_helper
+     */
+    public function __construct($contexthelper) {
+        $this->contexthelper = $contexthelper;
     }
 
-    public function validate_value($value) {
-        $value = empty($value) ? 0 : 1;
-        return ['success' => 1,  'value' => ($value)];
-    }
+    // TODO GET_user progression ect...
 
 }
+

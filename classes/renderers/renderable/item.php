@@ -31,11 +31,16 @@ class format_ludic_item implements renderable {
     public $order;
     public $title;
     public $itemtype;
+
+
     public $imgsrc;
     public $imgalt;
+
     public $draggable;
     public $droppable;
+
     public $issection;
+
     public $isnotvisible;
 
 }

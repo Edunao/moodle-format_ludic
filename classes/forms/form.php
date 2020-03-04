@@ -71,13 +71,13 @@ abstract class form {
      * Validation of child specific form.
      * @return bool all is valid or not.
      */
-    public abstract function child_validation();
+    public abstract function validate_child();
 
     /**
      *
      * @return bool update success.
      */
-    public abstract function child_update();
+    public abstract function update_child();
 
     /**
      * Returns the html of the form.
@@ -107,10 +107,10 @@ abstract class form {
         if (!$this->validate_elements()) {
             return false;
         }
-        if (!$this->child_validation()) {
+        if (!$this->validate_child()) {
             return false;
         }
-        return $this->child_update();
+        return $this->update_child();
     }
 
     /**

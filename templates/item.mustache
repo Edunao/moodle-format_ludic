@@ -14,13 +14,15 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div id="ludic-{{selectorid}}"
+<div
+    id="{{selectorid}}"
     class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}} is-not-visible{{/isnotvisible}}"
-    data-type="{{itemtype}}"
+    {{#draggable}} draggable="true"{{/draggable}}
     data-id="{{id}}"
+    data-type="{{itemtype}}"
     data-order="{{order}}"
-    {{#draggable}} draggable="true"{{/draggable}}>
-
+>
+    {{! For moodle drag and drop javascript. }}
     {{#issection}}<div class="content hide"><ul class="section"></ul></div>{{/issection}}
 
     <div class="item-img-container">

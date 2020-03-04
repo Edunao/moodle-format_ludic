@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class section extends model {
 
-    private $course;
+    private $course = null;
 
     public $dbrecord;
     public $courseid;
@@ -39,6 +39,7 @@ class section extends model {
     public $visible;
     public $coursemodules;
     public $skinid;
+    public $skin;
 
     /**
      * section constructor.
@@ -48,14 +49,19 @@ class section extends model {
      */
     public function __construct($section) {
         parent::__construct($section);
+        $dbapi             = $this->contexthelper->get_database_api();
         $this->dbrecord    = $section;
         $this->courseid    = $section->course;
         $this->section     = $section->section;
         $this->name        = $section->name;
         $this->sequence    = array_filter(explode(',', $section->sequence));
         $this->visible     = $section->visible;
-        $modinfo           = $this->contexthelper->get_fast_modinfo($this->courseid);
+        $modinfo           = $this->contexthelper->get_fast_modinfo();
         $this->sectioninfo = $modinfo->get_section_info($this->section);
+        $this->skinid      = $dbapi->get_skin_id_by_section_id($this->id);
+        if ($this->skinid) {
+            $this->skin = skin::get_by_id($this->skinid);
+        }
     }
 
     /**
@@ -66,10 +72,22 @@ class section extends model {
      * @throws \moodle_exception
      */
     public function get_course_modules() {
-        $dataapi  = $this->contexthelper->get_data_api();
-        $courseid = $this->courseid;
-        $userid   = $this->contexthelper->get_user_id();
-        return $dataapi->get_section_course_modules($courseid, $userid, $this->id);
+        $this->coursemodules = [];
+        $coursemodules       = $this->contexthelper->get_course_modules();
+
+        if (!$coursemodules) {
+            return $this->coursemodules;
+        }
+
+        foreach ($this->sequence as $order => $cmid) {
+            foreach ($coursemodules as $coursemodule) {
+                if ($coursemodule->id == $cmid) {
+                    $this->coursemodules[] = $coursemodule;
+                }
+            }
+        }
+
+        return $this->coursemodules;
     }
 
     /**
@@ -94,8 +112,8 @@ class section extends model {
      * @return bool
      */
     public function move_section_to($sectionidx) {
-        $course = $this->get_course()->moodlecourse;
-        return move_section_to($course, $this->section, $sectionidx);
+        $moodlecourse = $this->get_course()->moodlecourse;
+        return move_section_to($moodlecourse, $this->section, $sectionidx);
     }
 
     /**
@@ -104,8 +122,9 @@ class section extends model {
      * @return course
      */
     public function get_course() {
-        $dataapi      = $this->contexthelper->get_data_api();
-        $this->course = $dataapi->get_course_by_id($this->courseid);
+        if ($this->course == null) {
+            $this->course = $this->contexthelper->get_course_by_id($this->courseid);
+        }
         return $this->course;
     }
 
@@ -118,16 +137,24 @@ class section extends model {
         $dbapi        = $this->contexthelper->get_database_api();
         $moodlecourse = $this->get_moodle_course();
 
-        if (!isset($data['id']) || $data['id'] !== $this->dbrecord->id) {
+        if (!isset($data['id']) || $data['id'] !== $this->id) {
             return false;
         }
-        if (isset($data['name']) && $data['name'] !== $this->dbrecord->name) {
+        if (isset($data['name']) && $data['name'] !== $this->dbrecord->name
+            || isset($data['visible']) && $data['visible'] !== $this->dbrecord->visible
+        ) {
             $dbapi->update_section($moodlecourse, $this->dbrecord, $data);
         }
+
+        if (isset($data['skinid']) && $data['skinid'] !== $this->skinid) {
+            $dbapi->set_section_skin_id($this->courseid, $this->id, $data['skinid']);
+        }
+
         return true;
     }
 
     public function get_context() {
         return \context_course::instance($this->courseid);
     }
+
 }

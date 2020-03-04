@@ -28,13 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-class header_bar {
-
-    private $contexthelper;
-
-    public function __construct($PAGE) {
-        $this->contexthelper = context_helper::get_instance($PAGE);
-    }
+class header_bar extends model {
 
     public function render() {
         global $PAGE;

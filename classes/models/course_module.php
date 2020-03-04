@@ -43,11 +43,10 @@ class course_module extends model {
      */
     public function __construct(\cm_info $cminfo) {
         parent::__construct($cminfo);
-        $dataapi         = $this->contexthelper->get_data_api();
         $this->sectionid = $cminfo->section;
-        $this->section   = $dataapi->get_section_by_id($this->sectionid);
-        $this->name   = $cminfo->get_formatted_name();
-        $this->cminfo = $cminfo;
+        $this->section   = $this->contexthelper->get_section_by_id($this->sectionid);
+        $this->name      = $cminfo->get_formatted_name();
+        $this->cminfo    = $cminfo;
     }
 
     /**
@@ -59,13 +58,12 @@ class course_module extends model {
      * @throws \dml_exception
      */
     public function move_to_section($sectionid, $beforeid = null) {
-        $dataapi = $this->contexthelper->get_data_api();
-        $section = $dataapi->get_section_by_id($sectionid);
+        $section = $this->contexthelper->get_section_by_id($sectionid);
         if ($sectionid == $this->sectionid) {
             return $this->accessible;
         }
-        $this->section = $section;
-        $this->sectionid = $sectionid;
+        $this->section    = $section;
+        $this->sectionid  = $sectionid;
         $this->accessible = moveto_module($this->cminfo, $section->sectioninfo, $beforeid);
         return $this->accessible;
     }
@@ -75,7 +73,7 @@ class course_module extends model {
      *
      * @param $cmidtomove
      * @param $aftercmid
-     * @return bool
+     * @throws \dml_exception
      */
     public function move_on_section($cmidtomove, $aftercmid) {
         $sequence    = $this->section->sequence;
@@ -88,7 +86,7 @@ class course_module extends model {
                 $newsequence[] = $cmidtomove;
             }
         }
-        return $this->section->update_sequence($newsequence);
+        $this->section->update_sequence($newsequence);
     }
 
 }

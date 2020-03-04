@@ -57,7 +57,6 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          */
         initEvents: function () {
             console.log('initEvents');
-            let body = $('body.format-ludic');
 
             // Always init popup events.
             ludic.initPopupEvents();
@@ -68,7 +67,25 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             // For each element with ludic-action class.
             // Makes an ajax call to the controller defined in data-controller with the action defined in data-action.
             // Then call a callback function defined in data-callback.
-            body.on('click', '.ludic-action', function () {
+            ludic.initLudicActionEvent();
+
+            // When you click on an item in .container-parents, call the getChildren() function on the controller of the same type.
+            // Then display the return in .container-children.
+            ludic.initItemGetChildrenEvent();
+
+            // If we are in edit mode, initialize related events.
+            if (ludic.editMode) {
+                ludic.initEditModeEvents();
+            }
+        },
+
+        /**
+         * For each element with ludic-action class.
+         * Makes an ajax call to the controller defined in data-controller with the action defined in data-action.
+         * Then call a callback function defined in data-callback.
+         */
+        initLudicActionEvent: function () {
+            $('body.format-ludic').on('click', '.ludic-action', function () {
                 let callback = $(this).data('callback');
                 let controller = $(this).data('controller');
                 let action = $(this).data('action');
@@ -87,10 +104,14 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                     });
                 }
             });
+        },
 
-            // When you click on an item in .container-parents, call the getChildren() function on the controller of the same type.
-            // Then display the return in .container-children.
-            body.on('click', '.container-items .container-parents .item', function () {
+        /**
+         * When you click on an item in .container-parents, call the getChildren() function on the controller of the same type.
+         * Then display the return in .container-children.
+         */
+        initItemGetChildrenEvent: function () {
+            $('body.format-ludic').on('click', '.container-items .container-parents .item', function () {
                 console.log('click on item, getChildren');
                 let container = $(this).closest('.container-items');
                 let id = $(this).data('id');
@@ -99,7 +120,6 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                     return false;
                 }
                 let children = container.find('.container-children');
-                ludic.addLoading(children);
                 ludic.ajaxCall({
                     id: id,
                     controller: type,
@@ -108,32 +128,18 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                         if (!html) {
                             return false;
                         }
-                        children.html(html);
-                        // TODO click en plus sur dernier cm.
+                        ludic.displayContentWithModchooser(children, html);
                     }
                 });
             });
-
-            // If we are in edit mode, initialize related events.
-            if (ludic.editMode) {
-                ludic.initEditModeEvents();
-            }
         },
 
         /**
-         * Initialize all events specific to the edit mode to be monitored at startup in this function.
+         * When you click on an item in .container-parents, call the getProperties() function on the controller of the same type.
+         * Then display the return in .container-properties.
          */
-        initEditModeEvents: function () {
-            console.log('initEditmode');
-
-            let body = $('body.format-ludic');
-
-            // Always init drag and drop popup events in edit mode.
-            ludic.initDragAndDropEvents();
-
-            // When you click on an item in .container-parents, call the getProperties() function on the controller of the same type.
-            // Then display the return in .container-properties.
-            body.on('click', '.container-items .container-parents .item', function () {
+        initItemGetPropertiesEvent: function () {
+            $('body.format-ludic').on('click', '.container-items .container-parents .item', function () {
                 console.log('click on item, getProperties');
                 let item = $(this);
                 let container = item.closest('.container-items');
@@ -156,15 +162,18 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                         }
                         content.html(html);
                         ludic.initFilepickerComponent(container);
-                        ludic.initModchooserComponent(container);
                     }
                 });
             });
+        },
 
-            // Submit button in a selection popup.
-            // Add a input hidden with selected value.
-            // Update overview image with selected image.
-            body.on('click', '.selection-submit', function () {
+        /**
+         * Submit button in a selection popup.
+         * Add a input hidden with selected value.
+         * Update overview image with selected image.
+         */
+        initSubmitInSelectionPopupEvent: function () {
+            $('body.format-ludic').on('click', '.selection-submit', function () {
                 console.log('click on selection submit');
                 // Find popup.
                 let popup = $(this).closest('.format-ludic.ludic-popup');
@@ -199,6 +208,16 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                 // Trigger click on close button to close popup.
                 popup.find('.close-ludic-popup').click();
             });
+        },
+
+        /**
+         * Revert form content by clicking in related item.
+         * Submit form in ajax, validate and update if all is fine.
+         * Show / Hide sub buttons.
+         * Redirect for link button.
+         */
+        initLudicButtonEvents: function () {
+            let body = $('body.format-ludic');
 
             // Revert form content by clicking in related item.
             body.on('click', '.ludic-button[data-identifier="form-revert"]', function () {
@@ -275,6 +294,31 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             body.on('click', '.ludic-button[data-link]', function () {
                 window.location.href = $(this).data('link');
             });
+        },
+
+        /**
+         * Initialize all events specific to the edit mode to be monitored at startup in this function.
+         */
+        initEditModeEvents: function () {
+            console.log('initEditmode');
+
+            // Always init drag and drop popup events in edit mode.
+            ludic.initDragAndDropEvents();
+
+            // When you click on an item in .container-parents, call the getProperties() function on the controller of the same type.
+            // Then display the return in .container-properties.
+            ludic.initItemGetPropertiesEvent();
+
+            // Submit button in a selection popup.
+            // Add a input hidden with selected value.
+            // Update overview image with selected image.
+            ludic.initSubmitInSelectionPopupEvent();
+
+            // Revert form content by clicking in related item.
+            // Submit form in ajax, validate and update if all is fine.
+            // Show / Hide sub buttons.
+            // Redirect for link button.
+            ludic.initLudicButtonEvents();
         },
 
         /**
@@ -467,8 +511,7 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                         controller: 'section',
                         action: action,
                         callback: function (html) {
-                            dragParent.html(html);
-                            ludic.initModchooserComponent(dragParent);
+                            ludic.displayContentWithModchooser(dragParent, html);
                         }
                     });
                 }
@@ -500,28 +543,43 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         },
 
         /**
-         * Initialize the modchooser component.
-         * @param {object} container jQuery element - where is the modchooser
+         * Add html and initialize the modchooser component.
+         * @param {object} container jQuery element - where add the modchooser
+         * @param {html} html - where is the modchooser
          */
-        initModchooserComponent: function (container) {
+        displayContentWithModchooser: function (container, html) {
+            ludic.addLoading(container);
 
-            // Search modchooser in container, if there is none, there is nothing to do.
-            let modChooser = container.find('.ludic-modchooser');
+            // Search modchooser in container, if there is none, just show content and return.
+            let modChooser = $(html).closest('.ludic-modchooser');
             if (modChooser.length === 0) {
+                container.html(html);
                 return;
             }
 
-            // Defines some useful variables.
-            let modChooserConfig = {
-                courseid: ludic.courseid,
-                closeButtonTitle: undefined
-            };
+            // Adds the content in a non-visible way to give the modchooser time to initialize.
+            $(html).each(function () {
+                let hiddenDiv = $(this).addClass('hide-js');
+                container.append(hiddenDiv);
+            });
 
-            // Ensure that moodle function which init modchooser is ready before using it.
+            // Ensure that moodle function which init mod chooser is ready before using it.
             let interval = setInterval(function () {
                 if (typeof M.course.init_chooser === 'function') {
-                    M.course.init_chooser(modChooserConfig);
-                    modChooser.show();
+
+                    // Init mod chooser
+                    M.course.init_chooser({
+                        courseid: ludic.courseid,
+                        closeButtonTitle: undefined
+                    });
+
+                    // Show content and remove loader.
+                    container.children().each(function () {
+                        $(this).removeClass('hide-js');
+                    });
+                    ludic.removeLoading(container);
+
+                    // The job is done.
                     clearInterval(interval);
                 }
             }, 1000);
@@ -584,8 +642,8 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         /**
          * This function allows you to call another function dynamically with parameters.
          * @param {string} name
-         * @param {object} || {json} params
-         * @returns {boolean|void}
+         * @param  params
+         * @returns {mixed}
          */
         callFunction: function (name, params = {}) {
             // Ensures that params is an object.
@@ -656,6 +714,14 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          */
         addLoading: function (parent) {
             parent.html('<div class="loading"></div>');
+        },
+
+        /**
+         * Remove a loading div
+         * @param {object} parent jquery object
+         */
+        removeLoading: function (parent) {
+            parent.find('.loading').remove();
         },
     };
     return ludic;

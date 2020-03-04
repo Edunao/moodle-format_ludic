@@ -15,23 +15,47 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity skin score.
+ * Ludic course class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace format_ludic\activity;
+namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
+class course extends model {
 
-class score implements \format_ludic\activity_skin_interface {
+    private $sections = null;
 
-    public function render_activity_view() {
-        return 'activity score';
+    public $moodlecourse;
+    public $coursemodules;
+
+    /**
+     * course constructor.
+     *
+     * @param $course
+     */
+    public function __construct($course) {
+        $this->moodlecourse = $course;
+        parent::__construct($this->moodlecourse);
     }
-}
 
+    /**
+     * Return array of course sections.
+     *
+     * @return section[]
+     * @throws \moodle_exception
+     */
+    public function get_sections() {
+        // Retrieve sections if attribute sections is empty.
+        if ($this->sections == null) {
+            $this->sections = $this->contexthelper->get_sections_by_course_id($this->id);
+        }
+
+        return $this->sections;
+    }
+
+}

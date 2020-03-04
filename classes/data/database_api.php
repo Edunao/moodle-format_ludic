@@ -46,6 +46,50 @@ class database_api {
     }
 
     /**
+     * Get skin id from a section id.
+     *
+     * @param $sectionid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_skin_id_by_section_id($sectionid) {
+        return $this->db->get_field('format_ludic_cs', 'skinid', ['sectionid' => $sectionid]);
+    }
+
+    /**
+     * Set skin id for a section, update skin id if record exists, else insert record.
+     *
+     * @param $courseid
+     * @param $sectionid
+     * @param $skinid
+     * @return bool|int
+     * @throws \dml_exception
+     */
+    public function set_section_skin_id($courseid, $sectionid, $skinid) {
+        $dbrecord = $this->db->get_record('format_ludic_cs', ['sectionid' => $sectionid]);
+        if ($dbrecord) {
+            $dbrecord->skinid    = $skinid;
+            return $this->db->update_record('format_ludic_cs', $dbrecord);
+        }
+        $dbrecord            = new \stdClass();
+        $dbrecord->courseid  = $courseid;
+        $dbrecord->sectionid = $sectionid;
+        $dbrecord->skinid    = $skinid;
+        return $this->db->insert_record('format_ludic_cs', $dbrecord);
+    }
+
+    /**
+     * Get course id from a sectionid.
+     *
+     * @param $sectionid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_course_id_by_section_id($sectionid) {
+        return $this->db->get_field('course_sections', 'course', ['id' => $sectionid]);
+    }
+
+    /**
      * Get section idx (number) from a sectionid.
      *
      * @param $sectionid
@@ -137,6 +181,7 @@ class database_api {
 
     /**
      * Get role id by his shortname.
+     *
      * @param $roleshortname
      * @return mixed
      * @throws \dml_exception

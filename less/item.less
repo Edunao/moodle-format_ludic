@@ -9,11 +9,29 @@
       min-width: 130px;
       margin: 20px;
       border: 1px solid black;
+      cursor: pointer;
+
+      &.selected {
+        border: 3px solid red;
+      }
+
+      &.hide, &.hide-js {
+        display: none;
+      }
 
       &:hover, &:focus {
         border: 2px #0a6aa1 dashed;
       }
 
+      &.is-not-visible {
+        filter: grayscale(0.1);
+        background-color: rgba(200,200,200,0.1);
+        background-image: url("[[pix:moodle|i/show]]");
+        background-position-x: right;
+        background-position-y: top;
+        background-size: 50px;
+        background-repeat: no-repeat;
+      }
     }
 
   }

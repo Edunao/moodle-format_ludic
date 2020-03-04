@@ -27,7 +27,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class format_ludic_selection_popup_form_element extends format_ludic_form_element {
 
-    public $icon;
+    public $imgsrc;
+    public $imgalt;
     public $controller;
     public $action;
 
@@ -40,16 +41,12 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
         parent::__construct($element);
         $specific = $this->specific;
 
-        $this->icon = isset($specific['icon']) ? $specific['icon'] : [];
 
-        // TODO delete after.
-        $this->icon['imgsrc'] = 'https://picsum.photos/80';
-
-        if (isset($specific['icon']['imgsrc'])) {
-            $this->icon['imgsrc'] = $specific['icon']['imgsrc'];
+        if (isset($specific['icon']->imgsrc)) {
+            $this->imgsrc = $specific['icon']->imgsrc;
         }
-        if (isset($specific['icon']['imgalt'])) {
-            $this->icon['imgalt'] = $specific['icon']['imgalt'];
+        if (isset($specific['icon']->imgalt)) {
+            $this->imgalt = $specific['icon']->imgalt;
         }
 
         $this->controller = isset($specific['controller']) ? $specific['controller'] : null;

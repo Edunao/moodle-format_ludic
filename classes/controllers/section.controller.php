@@ -77,15 +77,17 @@ class section_controller extends controller_base {
      */
     public function get_parents() {
         global $PAGE;
-        $dataapi  = $this->contexthelper->get_data_api();
-        $courseid = $this->get_course_id();
-        $course   = $dataapi->get_course_by_id($courseid);
-        $sections = $course->get_sections();
-        $output   = '';
         $renderer = $PAGE->get_renderer('format_ludic');
+        $course   = $this->contexthelper->get_course();
+        $sections = $course->get_sections();
+
+        // Render sections.
+        $output   = '';
         foreach ($sections as $section) {
             $output .= $renderer->render_section($section);
         }
+
+        // Render container for course modules.
         $output .= $renderer->render_container_children();
         return $output;
     }
@@ -99,8 +101,8 @@ class section_controller extends controller_base {
      */
     public function get_children($sectionid) {
         global $PAGE;
-        $dataapi    = $this->contexthelper->get_data_api();
-        $section    = $dataapi->get_section_by_id($sectionid);
+
+        $section    = $this->contexthelper->get_section_by_id($sectionid);
         $course     = $section->get_course()->moodlecourse;
         $sectionidx = $section->section;
 
@@ -145,10 +147,7 @@ class section_controller extends controller_base {
      * @throws \moodle_exception
      */
     public function move_to_section($cmid, $sectionid) {
-        $courseid     = $this->get_course_id();
-        $userid       = $this->get_user_id();
-        $dataapi      = $this->contexthelper->get_data_api();
-        $coursemodule = $dataapi->get_course_module_by_id($courseid, $userid, $cmid);
+        $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
         $oldsectionid = $coursemodule->sectionid;
         $isvisible    = $coursemodule->move_to_section($sectionid);
         return $this->get_children($oldsectionid);
@@ -165,10 +164,7 @@ class section_controller extends controller_base {
      * @throws \moodle_exception
      */
     public function move_on_section($cmidtomove, $aftercmid) {
-        $courseid     = $this->get_course_id();
-        $userid       = $this->get_user_id();
-        $dataapi      = $this->contexthelper->get_data_api();
-        $coursemodule = $dataapi->get_course_module_by_id($courseid, $userid, $cmidtomove);
+        $coursemodule = $this->contexthelper->get_course_module_by_id($cmidtomove);
         $sectionid    = $coursemodule->sectionid;
         $coursemodule->move_on_section($cmidtomove, $aftercmid);
         return $this->get_children($sectionid);
@@ -185,11 +181,9 @@ class section_controller extends controller_base {
      * @throws \moodle_exception
      */
     public function move_section_to($sectionidtomove, $aftersectionid) {
-        $dataapi         = $this->contexthelper->get_data_api();
-        $dbapi           = $this->contexthelper->get_database_api();
-        $sectiontomove   = $dataapi->get_section_by_id($sectionidtomove);
-        $aftersectionidx = $dbapi->get_section_idx_by_id($aftersectionid);
-
+        $sectiontomove   = $this->contexthelper->get_section_by_id($sectionidtomove);
+        $aftersection    = $this->contexthelper->get_section_by_id($aftersectionid);
+        $aftersectionidx = $aftersection->section;
         $sectiontomove->move_section_to($aftersectionidx);
         return $this->get_parents();
     }
@@ -202,6 +196,7 @@ class section_controller extends controller_base {
      * @param $sectionid
      * @param $data
      * @return false|string
+     * @throws \coding_exception
      */
     public function validate_form($sectionid, $data) {
         $form = new section_form($sectionid);
