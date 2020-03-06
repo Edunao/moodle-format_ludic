@@ -23,7 +23,7 @@
 
 // Javascript functions for ludic course format.
 
-define(['jquery', 'jqueryui'], function ($, ui) {
+define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
     let courseId = null;
     let userId = null;
     let editMode = null;
@@ -39,6 +39,9 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             ludic.courseId = params.courseid;
             ludic.userId = params.userid;
             ludic.editMode = params.editmode;
+
+            // Add a background for the display of popup.
+            $('body.format-ludic').prepend('<div id="ludic-background"></div>');
 
             // Initialize all required events.
             ludic.initEvents();
@@ -58,20 +61,19 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         initEvents: function () {
             console.log('initEvents');
 
-            // Always init popup events.
-            ludic.initPopupEvents();
-
             // Save the element selector of the last clicked event.
             ludic.initSaveLastItemClickedEvents();
 
-            // For each element with ludic-action class.
-            // Makes an ajax call to the controller defined in data-controller with the action defined in data-action.
-            // Then call a callback function defined in data-callback.
+            /**
+             * For each element with data-action attribute.
+             *
+             * If there is a controller and an action makes an ajax call to the controller defined in data-controller
+             * with the action defined in data-action.
+             * Then call a callback function defined in data-callback.
+             *
+             * Else if there is only an action call javascript function defined in data-action.
+             */
             ludic.initLudicActionEvent();
-
-            // When you click on an item in .container-parents, call the getChildren() function on the controller of the same type.
-            // Then display the return in .container-children.
-            ludic.initItemGetChildrenEvent();
 
             // If we are in edit mode, initialize related events.
             if (ludic.editMode) {
@@ -80,57 +82,58 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         },
 
         /**
-         * For each element with ludic-action class.
-         * Makes an ajax call to the controller defined in data-controller with the action defined in data-action.
+         * For each element with data-action attribute.
+         *
+         * If there is a controller and an action makes an ajax call to the controller defined in data-controller
+         * with the action defined in data-action.
          * Then call a callback function defined in data-callback.
+         *
+         * Else if there is only an action call javascript function defined in data-action with this on param and a callback.
          */
         initLudicActionEvent: function () {
-            $('body.format-ludic').on('click', '.ludic-action', function () {
-                let callback = $(this).data('callback');
-                let controller = $(this).data('controller');
-                let action = $(this).data('action');
-                console.log('click on ludic action callback => ', callback, ' controller => ', controller, ' action => ', action);
+            $('body.format-ludic').on('click', '[data-action]', function () {
+                let item = $(this);
+                let action = item.data('action');
+                let callback = item.data('callback');
+                let controller = item.data('controller');
+
+                let params = {
+                    item: item,
+                    id: item.data('id') ? item.data('id') : null,
+                    type: item.data('type') ? item.data('type') : null,
+                    itemId: item.data('itemid') ? item.data('itemid') : null,
+                    itemType: item.data('itemtype') ? item.data('itemtype') : null,
+                    callback: callback
+                };
+
+                params.itemSelectorId = params.itemType && params.itemId ? '.item.' + params.itemType + '[data-id="' + params.itemId + '"]' : null;
                 if (controller && action) {
+                    console.log('click on ludic action callback => ', callback, ' controller => ', controller, ' action => ', action);
                     ludic.ajaxCall({
                         controller: controller,
                         action: action,
-                        callback: function (params) {
+                        id: params.id,
+                        callback: function (response) {
                             if (callback) {
+
+                                // Ensures that response is an object.
+                                let isHtml = /<\/?[a-z][\s\S]*>/i.test(response);
+                                let responseParams = isHtml ? {html: response} : response;
+                                responseParams = typeof params === "object" ? responseParams : JSON.parse(responseParams);
+
+                                // Merge params.
+                                params = Object.assign(params, responseParams);
+
+                                // Call function defined in callback (string : name of function).
                                 ludic.callFunction(callback, params);
-                            } else {
-                                console.log('no callback');
+
                             }
                         }
                     });
+                } else if (action) {
+                    console.log('click on ludic action => ', action, ' with params => ', params);
+                    ludic.callFunction(action, params);
                 }
-            });
-        },
-
-        /**
-         * When you click on an item in .container-parents, call the getChildren() function on the controller of the same type.
-         * Then display the return in .container-children.
-         */
-        initItemGetChildrenEvent: function () {
-            $('body.format-ludic').on('click', '.container-items .container-parents .item', function () {
-                console.log('click on item, getChildren');
-                let container = $(this).closest('.container-items');
-                let id = $(this).data('id');
-                let type = $(this).data('type');
-                if (!id || !type) {
-                    return false;
-                }
-                let children = container.find('.container-children');
-                ludic.ajaxCall({
-                    id: id,
-                    controller: type,
-                    action: 'get_children',
-                    callback: function (html) {
-                        if (!html) {
-                            return false;
-                        }
-                        ludic.displayContentWithModchooser(children, html);
-                    }
-                });
             });
         },
 
@@ -212,89 +215,112 @@ define(['jquery', 'jqueryui'], function ($, ui) {
 
         /**
          * Revert form content by clicking in related item.
+         *
+         * @param itemSelectorId
+         */
+        revertForm(itemSelectorId) {
+            $(itemSelectorId).click();
+        },
+
+        /**
+         * Save form.
+         *
+         * @param {jquery} button
+         * @returns {void}
+         */
+        saveForm: function (button) {
+            let itemType = $(button).data('itemtype');
+            let itemId = $(button).data('itemid');
+            if (!itemType || !itemId) {
+                return;
+            }
+            let form = $('#ludic-form-' + itemType + '-' + itemId);
+            let serialize = form.serializeArray();
+            let container = form.parent().find('.container-success');
+            ludic.addLoading(container);
+            ludic.ajaxCall({
+                controller: itemType,
+                id: itemId,
+                data: serialize,
+                dataType: 'json',
+                action: 'validate_form',
+                callback: function (json) {
+                    console.log('form is validate', json);
+                    let newClass = json.success ? 'success' : 'error';
+                    let unwantedClass = json.success ? 'error' : 'success';
+                    container.html(json.value);
+                    container.removeClass(unwantedClass);
+                    container.addClass(newClass);
+
+                    // Refresh the updated elements - updateFunction ex : displaySections.
+                    let updateFunction = 'display' + itemType.charAt(0).toUpperCase() + itemType.slice(1) + 's';
+                    let params = {
+                        callback: function () {
+                            $('.item.' + itemType + '[data-id="' + itemId + '"]').addClass('selected');
+                        }
+                    };
+                    ludic.callFunction(updateFunction, params);
+                }
+            });
+        },
+
+        /**
+         * Show sub buttons
+         *
+         * @param {jquery} button
+         */
+        showSubButtons: function (button) {
+            let identifier = $(button).data('identifier');
+            $(button).removeClass('show-sub-buttons');
+            $(button).addClass('hide-sub-buttons');
+            let subButtons = $('.container-sub-buttons[for="' + identifier + '"]');
+            subButtons.outerWidth($(button).outerWidth());
+            subButtons.css('top', $(button).position().top + $(button).outerHeight());
+            subButtons.css('left', $(button).position().left);
+            subButtons.removeClass('hide');
+            $(button).data('action', 'hideSubButtons');
+        },
+
+        /**
+         * Hide sub buttons
+         *
+         * @param {jquery} button
+         */
+        hideSubButtons: function (button) {
+            let identifier = $(button).data('identifier');
+            $(button).removeClass('hide-sub-buttons');
+            $(button).addClass('show-sub-buttons');
+            let subButtons = $('.container-sub-buttons[for="' + identifier + '"]');
+            subButtons.addClass('hide');
+            $(button).data('action', 'showSubButtons');
+        },
+
+        /**
+         * Redirect to the link in button.
+         *
+         * @param {jquery} button
+         */
+        redirectToFromButton: function (button) {
+            let url = $(button).data('link');
+            ludic.redirectTo(url);
+        },
+
+        deleteSection: function (button) {
+            // Add confirmation before delete.
+            console.log('confirmation');
+            ludic.displayConfirmationPopup();
+            // if (!confirm('vraiment ?')) {
+            e.stopImmediatePropagation();
+            // }
+            return false;
+        },
+
+        /**
+         * Revert form content by clicking in related item.
          * Submit form in ajax, validate and update if all is fine.
          * Show / Hide sub buttons.
          * Redirect for link button.
          */
-        initLudicButtonEvents: function () {
-            let body = $('body.format-ludic');
-
-            // Revert form content by clicking in related item.
-            body.on('click', '.ludic-button[data-identifier="form-revert"]', function () {
-                // Find the item linked to the form and click on it to reset the form.
-                let itemType = $(this).data('itemtype');
-                let itemId = $(this).data('itemid');
-                if (!itemType || !itemId) {
-                    return false;
-                }
-                let itemSelectorId = '.item.' + itemType + '[data-id="' + itemId + '"]';
-                $(itemSelectorId).click();
-            });
-
-            // Submit form in ajax.
-            // Validate and update if all is fine.
-            body.on('click', '.ludic-button[data-identifier="form-save"]', function () {
-                let itemType = $(this).data('itemtype');
-                let itemId = $(this).data('itemid');
-                if (!itemType || !itemId) {
-                    return false;
-                }
-                let form = $('#ludic-form-' + itemType + '-' + itemId);
-                let serialize = form.serializeArray();
-                let container = form.parent().find('.container-success');
-                ludic.addLoading(container);
-                ludic.ajaxCall({
-                    controller: itemType,
-                    id: itemId,
-                    data: serialize,
-                    dataType: 'json',
-                    action: 'validate_form',
-                    callback: function (json) {
-                        console.log('form is validate', json);
-                        let newClass = json.success ? 'success' : 'error';
-                        let unwantedClass = json.success ? 'error' : 'success';
-                        container.html(json.value);
-                        container.removeClass(unwantedClass);
-                        container.addClass(newClass);
-
-                        // Refresh the updated elements - updateFunction ex : displaySections.
-                        let updateFunction = 'display' + itemType.charAt(0).toUpperCase() + itemType.slice(1) + 's';
-                        let params = {
-                            callback: function () {
-                                $('.item.' + itemType + '[data-id="' + itemId + '"]').addClass('selected');
-                            }
-                        };
-                        ludic.callFunction(updateFunction, params);
-                    }
-                });
-            });
-
-            // Show sub buttons.
-            body.on('click', '.ludic-button.show-sub-buttons', function () {
-                let identifier = $(this).data('identifier');
-                $(this).removeClass('show-sub-buttons');
-                $(this).addClass('hide-sub-buttons');
-                let subButtons = $('.container-sub-buttons[for="' + identifier + '"]');
-                subButtons.outerWidth($(this).outerWidth());
-                subButtons.css('top', $(this).position().top + $(this).outerHeight());
-                subButtons.css('left', $(this).position().left);
-                subButtons.removeClass('hide');
-            });
-
-            // Hide sub buttons.
-            body.on('click', '.ludic-button.hide-sub-buttons', function () {
-                let identifier = $(this).data('identifier');
-                $(this).removeClass('hide-sub-buttons');
-                $(this).addClass('show-sub-buttons');
-                let subButtons = $('.container-sub-buttons[for="' + identifier + '"]');
-                subButtons.addClass('hide');
-            });
-
-            // Redirect to the link in button.
-            body.on('click', '.ludic-button[data-link]', function () {
-                window.location.href = $(this).data('link');
-            });
-        },
 
         /**
          * Initialize all events specific to the edit mode to be monitored at startup in this function.
@@ -314,29 +340,19 @@ define(['jquery', 'jqueryui'], function ($, ui) {
             // Update overview image with selected image.
             ludic.initSubmitInSelectionPopupEvent();
 
-            // Revert form content by clicking in related item.
-            // Submit form in ajax, validate and update if all is fine.
-            // Show / Hide sub buttons.
-            // Redirect for link button.
-            ludic.initLudicButtonEvents();
         },
 
         /**
-         * Initialize all events specific to the display of popups to be monitored at startup in this function.
+         * Close ludic popup.
+         *
+         * @param {jquery} button
          */
-        initPopupEvents: function () {
-            let body = $('body.format-ludic');
-
-            // Add a background for the display of popup.
-            body.prepend('<div id="ludic-background"></div>');
-
-            // Close ludic popup.
-            body.on('click', '.close-ludic-popup', function () {
-                let popup = $(this).closest('.format-ludic.ludic-popup');
-                $('#ludic-background').hide();
-                $(popup).remove();
-            });
+        closePopup: function (button) {
+            let popup = $(button).closest('.format-ludic.ludic-popup');
+            $('#ludic-background').hide();
+            $(popup).remove();
         },
+
 
         /**
          * Save the last item clicked in sessionStorage.
@@ -429,8 +445,18 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          *  Click on the last item clicked.
          */
         clickOnTheLastItemClicked: function () {
-            // Retrieve selector of the last item clicked.
-            let lastCLick = sessionStorage.getItem('lastClick');
+
+            // If an anchor is specified click on it.
+            let anchor = window.location.hash.substr(1);
+            let lastCLick = '#ludic-' + anchor;
+
+            // Remove anchor for next refresh.
+            history.replaceState(null, null, ' ');
+
+            // Else retrieve selector of the last item clicked.
+            if (!anchor) {
+                lastCLick = sessionStorage.getItem('lastClick');
+            }
 
             // If there is not item, there is nothing to do.
             if (!lastCLick) {
@@ -504,15 +530,15 @@ define(['jquery', 'jqueryui'], function ($, ui) {
                 // If an action has been found, make an ajax call to the section controller.
                 // Then set the html on the parent of the dragged object.
                 if (action) {
-                    console.log('execute ', action);
+                    let callbackFunction = action === 'move_section_to' ? ludic.displaySections : ludic.displayCourseModulesHtml;
+                    console.log('execute ', action, callbackFunction);
+
                     ludic.ajaxCall({
                         idtomove: dragId,
                         toid: dropId,
                         controller: 'section',
                         action: action,
-                        callback: function (html) {
-                            ludic.displayContentWithModchooser(dragParent, html);
-                        }
+                        callback: callbackFunction
                     });
                 }
             });
@@ -523,6 +549,8 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          * @param {object} container jQuery element - where are filepickers
          */
         initFilepickerComponent: function (container) {
+            console.log('initFilepickerComponent');
+
 
             // Search filepicker in container, if there is none, there is nothing to do.
             let filepickers = container.find('.container-properties .ludic-filepicker-container');
@@ -543,11 +571,15 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         },
 
         /**
-         * Add html and initialize the modchooser component.
-         * @param {object} container jQuery element - where add the modchooser
-         * @param {html} html - where is the modchooser
+         * Display course modules html and init mod chooser component.
+         *
+         * @param html
          */
-        displayContentWithModchooser: function (container, html) {
+        displayCourseModulesHtml(html) {
+            console.log('displayCourseModulesHtml');
+
+            // Find container and add a loading.
+            let container = $('.container-children.coursemodules');
             ludic.addLoading(container);
 
             // Search modchooser in container, if there is none, just show content and return.
@@ -569,17 +601,17 @@ define(['jquery', 'jqueryui'], function ($, ui) {
 
                     // Init mod chooser
                     M.course.init_chooser({
-                        courseid: ludic.courseid,
+                        courseid: ludic.courseId,
                         closeButtonTitle: undefined
                     });
 
-                    // Show content and remove loader.
+                    // Show content.
                     container.children().each(function () {
                         $(this).removeClass('hide-js');
                     });
-                    ludic.removeLoading(container);
 
                     // The job is done.
+                    ludic.removeLoading(container);
                     clearInterval(interval);
                 }
             }, 1000);
@@ -590,7 +622,8 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          * @param {object} params
          */
         ajaxCall: function (params) {
-            console.log('ajax call ', params);
+            console.log('ajaxCall => ', params);
+
             let that = this;
 
             // Constant params.
@@ -646,17 +679,40 @@ define(['jquery', 'jqueryui'], function ($, ui) {
          * @returns {mixed}
          */
         callFunction: function (name, params = {}) {
-            // Ensures that params is an object.
-            params = typeof params === "object" ? params : JSON.parse(params);
-            console.log('call ', name, ' with params ', params);
+            console.log('callFunction => ', name, ' with params => ', params);
 
             // Define all possible parameters here.
             let html = params.html ? params.html : null;
             let callback = params.callback ? params.callback : null;
+            let item = params.item ? params.item : null;
+            let id = params.id ? params.id : null;
+            let itemSelectorId = params.itemSelectorId ? params.itemSelectorId : null;
+            let container = params.container ? params.container : null;
 
             let result = false;
             // Call the right function with the right parameters.
             switch (name) {
+                case 'displayCourseModulesHtml' :
+                    result = ludic.displayCourseModulesHtml(html);
+                    break;
+                case 'deleteSection' :
+                    result = ludic.deleteSection(item);
+                    break;
+                case 'redirectToFromButton' :
+                    result = ludic.redirectToFromButton(item);
+                    break;
+                case 'showSubButtons' :
+                    result = ludic.showSubButtons(item);
+                    break;
+                case 'hideSubButtons' :
+                    result = ludic.hideSubButtons(item);
+                    break;
+                case 'saveForm' :
+                    result = ludic.saveForm(item);
+                    break;
+                case 'revertForm' :
+                    result = ludic.revertForm(itemSelectorId);
+                    break;
                 case 'displaySections' :
                     result = ludic.displaySections(callback);
                     break;
@@ -678,6 +734,14 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         },
 
         /**
+         * Redirect to url.
+         * @param url
+         */
+        redirectTo: function (url) {
+            window.location.href = url;
+        },
+
+        /**
          * Display popup.
          * @param {string} html - full html of the popup.
          */
@@ -691,14 +755,38 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         },
 
         /**
+         * Display confirmation popup.
+         */
+        displayConfirmationPopup: function () {
+
+            let context = {
+                popupid: 'confirmation-popup',
+                title: M.util.get_string('confirmation-popup-title', 'format_ludic'),
+                content: M.util.get_string('confirmation-popup-content', 'format_ludic'),
+            };
+
+            console.log('displayConfirmationPopup', context);
+
+            templates.render('format_ludic/popup_confirm', context).then(
+                function (html, js) {
+                    ludic.displayPopup(html);
+                }).fail(function (ex) {
+                console.log('ConfirmationPopupError');
+            });
+        },
+
+        /**
          * Display sections in ajax.
+         * @param callback
          */
         displaySections: function (callback) {
+            console.log('displaySections');
+
             let container = $('.container-items .container-parents');
             ludic.addLoading(container);
             ludic.ajaxCall({
                 controller: 'section',
-                action: 'get_parents',
+                action: 'get_course_sections',
                 callback: function (html) {
                     container.html(html);
                     if (typeof callback === 'function') {
@@ -723,6 +811,8 @@ define(['jquery', 'jqueryui'], function ($, ui) {
         removeLoading: function (parent) {
             parent.find('.loading').remove();
         },
+
+
     };
     return ludic;
 });

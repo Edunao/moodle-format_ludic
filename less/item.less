@@ -10,9 +10,33 @@
       margin: 20px;
       border: 1px solid black;
       cursor: pointer;
+      position: relative;
+
+      .item-img-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: calc(~'100% - 30px');
+        img {
+          width: 80px;
+          height: 80px;
+          border: 1px solid black;
+        }
+      }
+
+      .item-title {
+        line-height: 30px;
+        text-align: center;
+        padding: 0 10px;
+      }
 
       &.selected {
         border: 3px solid red;
+
+        &.is-not-visible:after {
+          border-left: 3px solid red !important;
+          border-bottom: 3px solid red !important;
+        }
       }
 
       &.hide, &.hide-js {
@@ -24,14 +48,25 @@
       }
 
       &.is-not-visible {
-        filter: grayscale(0.1);
-        background-color: rgba(200,200,200,0.1);
-        background-image: url("[[pix:moodle|i/show]]");
-        background-position-x: right;
-        background-position-y: top;
-        background-size: 50px;
-        background-repeat: no-repeat;
+        background-color: #efefef;
+
+        &:after {
+          content: '';
+          display: inline-block;
+          width: 30px;
+          height: 30px;
+          position: absolute;
+          right: 0;
+          top: 0;
+          border-left: 1px solid black;
+          border-bottom: 1px solid black;
+          background-image: url("[[pix:moodle|i/show]]");
+          background-size: 25px;
+          background-repeat: no-repeat;
+          background-position: center center;
+        }
       }
+
     }
 
   }

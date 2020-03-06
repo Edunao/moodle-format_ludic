@@ -28,12 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class skin extends model {
 
-    public $id;
-    public $location;
-    public $type;
-    public $title;
+    public  $id;
+    public  $location;
+    public  $type;
+    public  $title;
     private $properties;
-    public $css;
+    public  $css;
 
     /**
      * skin constructor.
@@ -74,7 +74,6 @@ abstract class skin extends model {
         return class_exists($classname) ? new $classname($skin) : null;
     }
 
-
     public function get_stylesheet($selectorid) {
         $output = '<style>';
         $output .= '#' . $selectorid . ' ' . $this->css;
@@ -87,4 +86,12 @@ abstract class skin extends model {
     }
 
     public abstract function get_edit_image();
+
+    public static function get_undefined_skin_image($location) {
+        $imgsrc = $location == 'section' ? 'https://picsum.photos/id/159/80/80' : 'https://picsum.photos/id/152/80/80';
+        return (object) [
+                'imgsrc' => $imgsrc,
+                'imgalt' => 'undefined skin'
+        ];
+    }
 }

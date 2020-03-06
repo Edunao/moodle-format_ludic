@@ -80,8 +80,8 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     public function render_modchooser($course, $sectionidx, $order) {
         $this->page->course->id = $course->id;
-        $modchooser = $this->courserenderer->course_section_add_cm_control($course, $sectionidx);
-        $modchooser = new format_ludic_modchooser($modchooser, $sectionidx, $order);
+        $modchooser             = $this->courserenderer->course_section_add_cm_control($course, $sectionidx);
+        $modchooser             = new format_ludic_modchooser($modchooser, $sectionidx, $order);
         return $this->render($modchooser);
     }
 
@@ -95,7 +95,6 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $form->render();
     }
 
-
     /**
      * @param $buttons
      * @param null $itemid
@@ -105,6 +104,22 @@ class format_ludic_renderer extends format_section_renderer_base {
     public function render_buttons($buttons, $itemid = null, $type = null) {
         $buttons = new format_ludic_buttons($buttons, $itemid, $type);
         return $this->render($buttons);
+    }
+
+    public function render_add_section_button($courseid, $order) {
+        global $CFG;
+
+        $addsectionurl = $CFG->wwwroot . '/course/changenumsections.php?courseid=' . $courseid . '&insertsection=0&sesskey=' .
+                         sesskey() . '&sectionreturn=' . $order . '&numsections=1';
+
+        $button = [
+                'buttonclass' => 'ludic-add-button',
+                'action'      => 'redirectToFromButton',
+                'order'       => $order,
+                'link'        => $addsectionurl
+        ];
+
+        return $this->render_from_template('format_ludic/button', $button);
     }
 
     /**
@@ -150,40 +165,6 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     protected function render_format_ludic_popup(format_ludic_popup $popup) {
         return $this->render_from_template('format_ludic/popup', $popup);
-    }
-
-    /**
-     * @param $sectionid
-     * @return mixed
-     */
-    public function render_section_edit_buttons($sectionid) {
-        global $PAGE, $CFG;
-        $renderer       = $PAGE->get_renderer('format_ludic');
-        $editsectionurl = $CFG->wwwroot . '/course/editsection.php?id=' . $sectionid;
-        $buttons        = [];
-        $buttons[]      = [
-                'identifier' => 'form-save',
-                'order'      => 1
-        ];
-        $buttons[]      = [
-                'identifier' => 'form-revert',
-                'order'      => 2
-        ];
-        $buttons[]      = [
-                'identifier' => 'item-preview',
-                'order'      => 4
-        ];
-        $buttons[]      = [
-                'identifier'    => 'edit',
-                'order'         => 3,
-                'hassubbuttons' => true,
-                'subbuttons'    => [
-                        ['identifier' => 'edit-settings', 'link' => $editsectionurl],
-                        ['identifier' => 'duplicate'],
-                        ['identifier' => 'delete']
-                ]
-        ];
-        return $renderer->render_buttons($buttons, $sectionid, 'section');
     }
 
     /**
@@ -239,11 +220,12 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param $type string of children
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_container_children() {
-        return $this->render_from_template('format_ludic/container_children', []);
+    public function render_container_children($childrentype) {
+        return $this->render_from_template('format_ludic/container_children', ['childrentype' => $childrentype]);
     }
 
     /**

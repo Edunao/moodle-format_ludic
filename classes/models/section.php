@@ -157,4 +157,55 @@ class section extends model {
         return \context_course::instance($this->courseid);
     }
 
+    public function has_course_modules() {
+        return count($this->sequence) > 0;
+    }
+
+    public function get_edit_buttons() {
+        global $CFG;
+
+        $editsectionurl = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id . '&sr=' . $this->section;
+
+        // Check if section can be deleted.
+        $deletebutton = ['identifier' => 'delete'];
+        if (!$this->has_course_modules()) {
+            $deletebutton['link'] = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id . '&sr=1&delete=1&sesskey=' .
+                                    sesskey();
+        } else {
+            $deletebutton['disabled'] = true;
+        }
+
+        return [
+                [
+                    // Submit form button.
+                        'identifier' => 'form-save',
+                        'action'     => 'saveForm',
+                        'order'      => 1
+                ],
+                [
+                    // Revert form button.
+                        'identifier' => 'form-revert',
+                        'action'     => 'revertForm',
+                        'order'      => 2
+                ],
+                [
+                    // Edit buttons : section settings, duplicate section, delete section.
+                        'identifier'    => 'edit',
+                        'order'         => 3,
+                        'hassubbuttons' => true,
+                        'action'        => 'showSubButtons',
+                        'subbuttons'    => [
+                                ['identifier' => 'edit-settings', 'action' => 'redirectToFromButton', 'link' => $editsectionurl],
+                                ['identifier' => 'duplicate'],
+                                $deletebutton
+                        ]
+                ],
+                [
+                    // Preview student section view button.
+                        'identifier' => 'item-preview',
+                        'order'      => 4
+                ]
+        ];
+    }
+
 }

@@ -148,6 +148,21 @@ class format_ludic extends \format_base {
         return $courseformatoptions;
     }
 
+    /**
+     * Whether this format allows to delete sections
+     *
+     * If format supports deleting sections it is also recommended to define language string
+     * 'deletesection' inside the format.
+     *
+     * Do not call this function directly, instead use {@link course_can_delete_section()}
+     *
+     * @param int|stdClass|section_info $section
+     * @return bool
+     */
+    public function can_delete_section($section) {
+        return true;
+    }
+
 }
 
 /**

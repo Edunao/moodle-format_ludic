@@ -42,7 +42,7 @@ class number_form_element extends form_element {
 
     public function validate_value($value) {
         if ($this->required && $value === '') {
-            return ['success' => 0,  'value' => get_string('error-required', 'form')];
+            return ['success' => 0,  'value' => get_string('error-required', 'format_ludic')];
         }
 
         $value = clean_param($value, PARAM_INT);

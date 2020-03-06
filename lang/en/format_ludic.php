@@ -62,3 +62,10 @@ $string['edit'] = 'edit-STR';
 $string['edit-settings'] = 'edit-settings-STR';
 $string['duplicate'] = 'duplicate-STR';
 $string['delete'] = 'delete-STR';
+
+// Popups.
+$string['confirmation-popup-title'] = 'Fenêtre de validation.';
+$string['confirmation-popup-content'] = 'Êtes-vous sûr de vouloir effectuer cette action ?';
+$string['close-button-alt'] = 'Fermer';
+$string['confirmation-button-confirm'] = 'Confirmer';
+$string['confirmation-button-cancel'] = 'Annuler';

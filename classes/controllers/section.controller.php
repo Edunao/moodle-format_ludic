@@ -59,9 +59,9 @@ class section_controller extends controller_base {
             case 'get_properties' :
                 $sectionid = $this->get_param('id', PARAM_INT);
                 return $this->get_properties($sectionid);
-            case 'get_children' :
+            case 'get_course_modules' :
                 $sectionid = $this->get_param('id', PARAM_INT);
-                return $this->get_children($sectionid);
+                return $this->get_course_modules($sectionid);
             // Default case if no parameter is necessary.
             default :
                 return $this->$action();
@@ -75,20 +75,23 @@ class section_controller extends controller_base {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function get_parents() {
+    public function get_course_sections() {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
         $course   = $this->contexthelper->get_course();
         $sections = $course->get_sections();
 
         // Render sections.
-        $output   = '';
+        $output = '';
         foreach ($sections as $section) {
             $output .= $renderer->render_section($section);
         }
 
+        // Add section button.
+        $output .= $renderer->render_add_section_button($course->id, count($sections) + 1);
+
         // Render container for course modules.
-        $output .= $renderer->render_container_children();
+        $output .= $renderer->render_container_children('coursemodules');
         return $output;
     }
 
@@ -99,7 +102,7 @@ class section_controller extends controller_base {
      * @return string
      * @throws \dml_exception
      */
-    public function get_children($sectionid) {
+    public function get_course_modules($sectionid) {
         global $PAGE;
 
         $section    = $this->contexthelper->get_section_by_id($sectionid);
@@ -131,8 +134,14 @@ class section_controller extends controller_base {
     public function get_properties($sectionid) {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
-        $output  = $renderer->render_section_form($sectionid);
-        $output  .= $renderer->render_section_edit_buttons($sectionid);
+
+        // Get edit buttons.
+        $section     = $this->contexthelper->get_section_by_id($sectionid);
+        $editbuttons = $section->get_edit_buttons();
+
+        // Render section form with edit buttons.
+        $output = $renderer->render_section_form($sectionid);
+        $output .= $renderer->render_buttons($editbuttons, $section->id, 'section');
         return $output;
     }
 
@@ -150,7 +159,7 @@ class section_controller extends controller_base {
         $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
         $oldsectionid = $coursemodule->sectionid;
         $isvisible    = $coursemodule->move_to_section($sectionid);
-        return $this->get_children($oldsectionid);
+        return $this->get_course_modules($oldsectionid);
     }
 
     /**
@@ -167,7 +176,7 @@ class section_controller extends controller_base {
         $coursemodule = $this->contexthelper->get_course_module_by_id($cmidtomove);
         $sectionid    = $coursemodule->sectionid;
         $coursemodule->move_on_section($cmidtomove, $aftercmid);
-        return $this->get_children($sectionid);
+        return $this->get_course_modules($sectionid);
     }
 
     /**
@@ -185,7 +194,7 @@ class section_controller extends controller_base {
         $aftersection    = $this->contexthelper->get_section_by_id($aftersectionid);
         $aftersectionidx = $aftersection->section;
         $sectiontomove->move_section_to($aftersectionidx);
-        return $this->get_parents();
+        return $this->get_course_sections();
     }
 
     /**
@@ -199,7 +208,7 @@ class section_controller extends controller_base {
      * @throws \coding_exception
      */
     public function validate_form($sectionid, $data) {
-        $form = new section_form($sectionid);
+        $form    = new section_form($sectionid);
         $success = $form->validate_and_update($data);
         if ($success) {
             $return = array('success' => 1, 'value' => $form->get_success_message());

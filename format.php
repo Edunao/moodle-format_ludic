@@ -137,6 +137,7 @@ $contexthelper->update_course_format_options(['ludic_config' => $staticconfig]);
 $config = $contexthelper->get_course_format_option_by_name('ludic_config');
 
 var_dump(optional_param('section', 0, PARAM_INT));
+var_dump(optional_param('clickon', null, PARAM_URL));
 
 // Display course.
 if ($editmode) {
@@ -147,5 +148,6 @@ if ($editmode) {
 }
 
 // Requires format ludic javascript.
+$PAGE->requires->strings_for_js(['confirmation-popup-title', 'confirmation-popup-content'], 'format_ludic');
 $PAGE->requires->js('/course/format/ludic/format.js');
 $PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init', ['params' => $params]);

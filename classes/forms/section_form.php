@@ -78,7 +78,8 @@ class section_form extends form {
         $elements[] = new selection_popup_form_element('skinid', 'section-skinid', $skinid, 0, 'section skinid label',
                 ['required' => true, 'multiple' => false],
                 [
-                        'icon'      => $this->object->skin->get_edit_image(),
+                        'icon'      => !empty($this->object->skinid) ? $this->object->skin->get_edit_image() :
+                                skin::get_undefined_skin_image('section'),
                         'controller' => 'skin',
                         'action'     => 'get_section_skin_selector'
                 ]

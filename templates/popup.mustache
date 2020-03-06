@@ -21,12 +21,13 @@
             <img src="{{imgsrc}}" alt="{{imgalt}}">
         {{/headericon}}
         <h2>{{title}}</h2>
-        <button type="button" class="close-ludic-popup">
-            {{#pix}}close-button, format_ludic, {{#str}}closebuttontitle, core{{/str}}{{/pix}}
+        <button type="button" class="close-ludic-popup" data-action="close-popup">
+            {{#pix}}close-button, format_ludic, {{#str}}close-button-alt, format_ludic{{/str}}{{/pix}}
         </button>
     </div>
 
     <div class="popup-content">
         {{{content}}}
     </div>
+
 </div>

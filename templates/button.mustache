@@ -14,8 +14,10 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<button type="button" class="ludic-button{{#hasaction}} ludic-action{{/hasaction}}{{#hassubbuttons}} show-sub-buttons{{/hassubbuttons}}"
+<button type="button" class="ludic-button{{#hasaction}} ludic-action{{/hasaction}}{{#hassubbuttons}}
+show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass}}"
     data-identifier="{{identifier}}"
+    {{#buttonid}}id="{{buttonid}}"{{/buttonid}}
     {{#itemtype}}data-itemtype="{{itemtype}}"{{/itemtype}}
     {{#itemid}}data-itemid="{{itemid}}"{{/itemid}}
     {{#link}} data-link="{{link}}"{{/link}}
@@ -25,7 +27,7 @@
     {{#callback}} data-callback="{{callback}}"{{/callback}}
     {{#order}} data-order="{{order}}"{{/order}}
 >
-    {{name}}{{#hassubbuttons}}<span> <b>Ʉ</b></span>{{/hassubbuttons}}
+    {{#name}}{{name}}{{/name}}{{#hassubbuttons}}<span> <b>Ʉ</b></span>{{/hassubbuttons}}
 </button>
 
 {{#hassubbuttons}}

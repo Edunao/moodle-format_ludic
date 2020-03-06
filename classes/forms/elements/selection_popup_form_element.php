@@ -37,7 +37,7 @@ class selection_popup_form_element extends form_element {
     public function validate_value($value) {
         $value = clean_param($value, PARAM_RAW);
         if ($this->required && $value === '') {
-            return ['success' => 0,  'value' => get_string('error-required', 'form')];
+            return ['success' => 0,  'value' => get_string('error-required', 'format_ludic')];
         }
         return ['success' => 1,  'value' => (string) ($value)];
     }

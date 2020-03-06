@@ -26,8 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 class format_ludic_section extends format_ludic_item {
 
-    //public $iconsrc;
-
     public function __construct(\format_ludic\section $section) {
         $this->selectorid = 'ludic-section-' . $section->section;
         $this->id         = $section->id;
@@ -38,15 +36,19 @@ class format_ludic_section extends format_ludic_item {
         $defaulttitle = get_string('default-section-title', 'format_ludic', $section);
         $this->title  = !empty($section->name) ? $section->name : $defaulttitle;
 
-        $imageobject  = $section->skin->get_edit_image();
+        $imageobject  = !empty($section->skinid) ? $section->skin->get_edit_image() :
+                \format_ludic\skin::get_undefined_skin_image('section');
         $this->imgsrc = $imageobject->imgsrc;
         $this->imgalt = $imageobject->imgalt;
 
         $this->isnotvisible = !$section->visible;
-        $this->draggable    = true;
-        $this->droppable    = true;
 
-        //$this->iconsrc = isset($section->iconsrc) ? $section->iconsrc : false;
+        $this->action     = 'get_course_modules';
+        $this->controller = 'section';
+        $this->callback   = 'displayCourseModulesHtml';
+
+        $this->draggable = true;
+        $this->droppable = true;
     }
 
 }

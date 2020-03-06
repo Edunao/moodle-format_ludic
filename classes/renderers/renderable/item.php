@@ -36,6 +36,9 @@ class format_ludic_item implements renderable {
     public $imgsrc;
     public $imgalt;
 
+    public $action;
+    public $controller;
+    public $callback;
     public $draggable;
     public $droppable;
 
