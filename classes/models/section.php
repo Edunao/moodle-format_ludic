@@ -65,6 +65,16 @@ class section extends model {
     }
 
     /**
+     * @return string
+     * @throws \coding_exception
+     */
+    public function get_title() {
+        $defaulttitle = get_string('default-section-title', 'format_ludic', $this->section);
+        return !empty($this->name) ? $this->name : $defaulttitle;
+    }
+
+
+    /**
      * Get all ludic course modules of section.
      *
      * @return course_module[]
@@ -153,10 +163,6 @@ class section extends model {
         return true;
     }
 
-    public function get_context() {
-        return \context_course::instance($this->courseid);
-    }
-
     public function has_course_modules() {
         return count($this->sequence) > 0;
     }
@@ -169,8 +175,9 @@ class section extends model {
         // Check if section can be deleted.
         $deletebutton = ['identifier' => 'delete'];
         if (!$this->has_course_modules()) {
-            $deletebutton['link'] = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id . '&sr=1&delete=1&sesskey=' .
-                                    sesskey();
+            $deletebutton['link']   = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id . '&sr=1&delete=1&sesskey=' .
+                                      sesskey();
+            $deletebutton['action'] = 'confirmAndDeleteSection';
         } else {
             $deletebutton['disabled'] = true;
         }
@@ -195,8 +202,14 @@ class section extends model {
                         'hassubbuttons' => true,
                         'action'        => 'showSubButtons',
                         'subbuttons'    => [
-                                ['identifier' => 'edit-settings', 'action' => 'redirectToFromButton', 'link' => $editsectionurl],
-                                ['identifier' => 'duplicate'],
+                                [
+                                        'identifier' => 'edit-settings', 'action' => 'getDataLinkAndRedirectTo',
+                                        'link'       => $editsectionurl
+                                ],
+                                [
+                                        'identifier' => 'duplicate', 'controller' => 'section', 'action' => 'duplicate_section',
+                                        'callback'   => 'displaySections', 'itemid' => $this->id
+                                ],
                                 $deletebutton
                         ]
                 ],
@@ -206,6 +219,43 @@ class section extends model {
                         'order'      => 4
                 ]
         ];
+    }
+
+    /**
+     * Duplicate this section.
+     *
+     * @return section|false
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     * @throws \restore_controller_exception
+     */
+    public function duplicate() {
+        $dbapi      = $this->contexthelper->get_database_api();
+        $newsection = $this->contexthelper->create_section($this->courseid);
+
+        // Copy course section name.
+        $newsection->name = $this->get_title() . get_string('duplicate-suffix', 'format_ludic');
+        $newsection->dbrecord->name = $newsection->name;
+        $dbapi->update_section_record($newsection->dbrecord);
+
+        // Copy skin.
+        if ($this->skinid) {
+            $dbapi->set_section_skin_id($this->courseid, $newsection->id, $this->skinid);
+            $newsection->skinid = $this->skinid;
+            $newsection->skin   = $this->skin;
+        }
+
+        // Copy course modules.
+        $coursemodules = $this->get_course_modules();
+        $course        = $this->get_moodle_course();
+        foreach ($coursemodules as $coursemodule) {
+            $newcm = $coursemodule->duplicate($course);
+            $newcm->move_to_section($newsection->id);
+        }
+
+        rebuild_course_cache($this->courseid, true);
+        return $newsection;
     }
 
 }

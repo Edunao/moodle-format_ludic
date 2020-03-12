@@ -50,6 +50,7 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/models/section_skins/
 // Renderable.
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/popup.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/item.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/skin.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/section.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/course_module.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/form.php');
@@ -95,6 +96,20 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/textar
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class format_ludic extends \format_base {
+
+    private $contexthelper;
+
+    /**
+     * format_ludic constructor.
+     *
+     * @param $format
+     * @param $courseid
+     */
+    protected function __construct($format, $courseid) {
+        global $PAGE;
+        parent::__construct($format, $courseid);
+        $this->contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+    }
 
     /**
      * Returns true if this course format uses sections
@@ -161,6 +176,28 @@ class format_ludic extends \format_base {
      */
     public function can_delete_section($section) {
         return true;
+    }
+
+
+
+    /**
+     * Returns course section name.
+     *
+     * @param int|stdClass $section Section object from database or just field course_sections.section
+     * @return string section name;
+     * @throws coding_exception
+     * @throws dml_exception
+     */
+    public function get_section_name($section) {
+        if (is_object($section)) {
+            $sectionnum = $section->section;
+        } else {
+            $sectionnum = $section;
+        }
+
+        $dbapi = $this->contexthelper->get_database_api();
+        $name = $dbapi->get_section_name_by_courseid_and_sectionidx($this->courseid, $sectionnum);
+        return !empty($name) ? $name : get_string('default-section-title', 'format_ludic', $sectionnum);
     }
 
 }

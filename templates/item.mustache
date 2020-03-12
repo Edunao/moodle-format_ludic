@@ -15,21 +15,22 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <div id="{{selectorid}}"
-    class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}} is-not-visible{{/isnotvisible}}"
+    class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}}
+    is-not-visible{{/isnotvisible}}{{#selected}} selected{{/selected}}"
     {{#draggable}} draggable="true"{{/draggable}}
     data-id="{{id}}"
     data-type="{{itemtype}}"
     data-order="{{order}}"
+    {{#skinid}} data-skinid="{{skinid}}"{{/skinid}}
     {{#controller}} data-controller="{{controller}}"{{/controller}}
     {{#action}} data-action="{{action}}"{{/action}}
+    {{#propertiesaction}} data-propertiesaction="{{propertiesaction}}"{{/propertiesaction}}
     {{#callback}} data-callback="{{callback}}"{{/callback}}
 >
     {{! For moodle drag and drop javascript. }}
     {{#issection}}<div class="content hide"><ul class="section"></ul></div>{{/issection}}
 
-    <div class="item-img-container">
-        <img src="{{imgsrc}}" alt="{{imgalt}}">
-    </div>
+    <div class="item-img-container" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
 
     <div class="item-title">
         {{title}}

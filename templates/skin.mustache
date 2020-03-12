@@ -14,13 +14,4 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-
-<div
-    {{#skinid}} id="skin-{{skinid}}" data-skinid="{{skinid}}"{{/skinid}}
-    class="skin-container"
-    {{#skinlocation}} data-skinlocation="{{skinlocation}}"{{/skinlocation}}
-    {{#skintype}} data-skintype="{{skintype}}"{{/skintype}}
->
-    {{{skincontent}}}
-</div>
-{{#skinstylesheet}}{{{skinstylesheet}}}{{/skinstylesheet}}
+{{> format_ludic/item}}

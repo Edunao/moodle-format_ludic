@@ -34,6 +34,9 @@ show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass
     <div class="container-sub-buttons hide" for="{{identifier}}">
         {{#subbuttons}}
             <button type="button" class="ludic-button sub-buttons{{#hasaction}} ludic-action{{/hasaction}}" data-identifier="{{identifier}}"
+                {{#buttonid}}id="{{buttonid}}"{{/buttonid}}
+                {{#itemtype}}data-itemtype="{{itemtype}}"{{/itemtype}}
+                {{#itemid}}data-itemid="{{itemid}}"{{/itemid}}
                 {{#link}} data-link="{{link}}"{{/link}}
                 {{#disabled}} disabled{{/disabled}}
                 {{#controller}} data-controller="{{controller}}"{{/controller}}
@@ -41,7 +44,7 @@ show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass
                 {{#callback}} data-callback="{{callback}}"{{/callback}}
                 {{#order}} data-order="{{order}}"{{/order}}
             >
-                {{name}}
+                {{#name}}{{name}}{{/name}}
             </button>
         {{/subbuttons}}
     </div>

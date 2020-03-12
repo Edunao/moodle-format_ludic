@@ -15,9 +15,12 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <div class="ludic-form-group ludic-action display-selection-popup"
-     data-controller="{{controller}}"
-     data-action="{{action}}"
-     data-callback="displayPopup"
+     data-selectorid="{{id}}"
+     data-action="selectAndUpdateInput"
+     data-itemid="{{itemid}}"
+     data-itemcontroller="{{itemcontroller}}"
+     data-itemaction="{{itemaction}}"
+     data-title="{{popuptitle}}"
 >
 
     <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
@@ -34,9 +37,7 @@
         {{#disabled}}disabled {{/disabled}}
         {{#required}}required{{/required}}
     >
-        <div class="overview-img-container">
-            <img src="{{imgsrc}}" alt="{{imgalt}}">
-        </div>
+        <div class="overview-img-container" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
     </div>
     {{> format_ludic/hidden_form_element }}
 

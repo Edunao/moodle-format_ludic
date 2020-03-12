@@ -67,8 +67,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @param format_ludic_popup $popup
      * @return string
      */
-    public function render_popup(format_ludic_popup $popup = null) {
-        $popup = $popup ? $popup : new format_ludic_popup('');
+    public function render_popup(format_ludic_popup $popup) {
         return $this->render($popup);
     }
 
@@ -114,7 +113,7 @@ class format_ludic_renderer extends format_section_renderer_base {
 
         $button = [
                 'buttonclass' => 'ludic-add-button',
-                'action'      => 'redirectToFromButton',
+                'action'      => 'getDataLinkAndRedirectTo',
                 'order'       => $order,
                 'link'        => $addsectionurl
         ];
@@ -129,6 +128,15 @@ class format_ludic_renderer extends format_section_renderer_base {
     public function render_section($section) {
         $section = new format_ludic_section($section);
         return $this->render($section);
+    }
+
+    /**
+     * @param $skin
+     * @return string
+     */
+    public function render_skin($skin) {
+        $skin = new format_ludic_skin($skin);
+        return $this->render($skin);
     }
 
     /**
@@ -177,6 +185,15 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param format_ludic_skin $skin
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_skin(format_ludic_skin $skin) {
+        return $this->render_from_template('format_ludic/skin', $skin);
+    }
+
+    /**
      * @param format_ludic_section $section
      * @return bool|string
      * @throws moodle_exception
@@ -201,6 +218,38 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     protected function render_format_ludic_form(format_ludic_form $form) {
         return $this->render_from_template('format_ludic/form', $form);
+    }
+
+    public function render_container_items($type, $parentscontent = '', $propertiescontent = '', $helpcontent = '') {
+        return $this->render_from_template('format_ludic/container_items', [
+                'parentstype'       => $type,
+                'parentscontent'    => $parentscontent,
+                'propertiescontent' => $propertiescontent,
+                'propertieshelp'    => $helpcontent,
+        ]);
+
+    }
+
+    /**
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_container_parents($type, $content = '') {
+        return $this->render_from_template('format_ludic/container_parents', [
+                'parentstype' => $type, 'parentscontent' =>
+                        $content
+        ]);
+    }
+
+    /**
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_container_properties($content = '', $helpcontent = '') {
+        return $this->render_from_template('format_ludic/container_properties', [
+                'propertiescontent' => $content, 'propertieshelp'
+                                    => $helpcontent
+        ]);
     }
 
     /**

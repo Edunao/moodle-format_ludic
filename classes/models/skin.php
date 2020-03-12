@@ -32,8 +32,11 @@ abstract class skin extends model {
     public  $location;
     public  $type;
     public  $title;
+    public  $description;
     private $properties;
     public  $css;
+    public  $selected;
+    public  $propertiesaction;
 
     /**
      * skin constructor.
@@ -42,11 +45,12 @@ abstract class skin extends model {
      */
     public function __construct($skin) {
         parent::__construct($skin);
-        $this->location   = isset($skin->location) ? $skin->location : null;
-        $this->type       = isset($skin->type) ? $skin->type : null;
-        $this->title      = isset($skin->title) ? $skin->title : null;
-        $this->properties = isset($skin->properties) ? $skin->properties : null;
-        $this->css        = isset($skin->properties->css) ? $skin->properties->css : null;
+        $this->location    = isset($skin->location) ? $skin->location : null;
+        $this->type        = isset($skin->type) ? $skin->type : null;
+        $this->title       = isset($skin->title) ? $skin->title : null;
+        $this->description = isset($skin->description) ? $skin->description : null;
+        $this->properties  = isset($skin->properties) ? $skin->properties : null;
+        $this->css         = isset($skin->properties->css) ? $skin->properties->css : null;
     }
 
     /**
@@ -91,7 +95,7 @@ abstract class skin extends model {
         $imgsrc = $location == 'section' ? 'https://picsum.photos/id/159/80/80' : 'https://picsum.photos/id/152/80/80';
         return (object) [
                 'imgsrc' => $imgsrc,
-                'imgalt' => 'undefined skin'
+                'imgalt' => 'Undefined skin.'
         ];
     }
 }

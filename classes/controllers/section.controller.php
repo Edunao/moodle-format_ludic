@@ -56,6 +56,9 @@ class section_controller extends controller_base {
                 $sectionidtomove = $this->get_param('idtomove', PARAM_INT);
                 $aftersectionid  = $this->get_param('toid', PARAM_INT);
                 return $this->move_section_to($sectionidtomove, $aftersectionid);
+            case 'duplicate_section' :
+                $sectionid = $this->get_param('id', PARAM_INT);
+                return $this->duplicate_section($sectionid);
             case 'get_properties' :
                 $sectionid = $this->get_param('id', PARAM_INT);
                 return $this->get_properties($sectionid);
@@ -98,9 +101,10 @@ class section_controller extends controller_base {
     /**
      * Return course modules html.
      *
-     * @param $sectionid
+     * @param int $sectionid
      * @return string
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_course_modules($sectionid) {
         global $PAGE;
@@ -216,6 +220,33 @@ class section_controller extends controller_base {
             $return = array('success' => 0, 'value' => $form->get_error_message());
         }
         return json_encode($return);
+    }
+
+    /**
+     * Duplicate section with id = $sectionid
+     * Return sections html
+     *
+     * @param $sectionid
+     * @return string
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     * @throws \restore_controller_exception
+     */
+    public function duplicate_section($sectionid) {
+        $section = $this->contexthelper->get_section_by_id($sectionid);
+
+        if (!$section) {
+            return false;
+        }
+
+        $newsection = $section->duplicate();
+
+        // trigger event update course
+        $event = \core\event\course_updated::create(array('context' => $this->get_context(), 'objectid' => $newsection->courseid));
+        $event->trigger();
+
+        return $this->get_course_sections();
     }
 
 }

@@ -33,9 +33,9 @@ class format_ludic_section extends format_ludic_item {
         $this->issection  = true;
         $this->order      = $section->section;
 
-        $defaulttitle = get_string('default-section-title', 'format_ludic', $section);
-        $this->title  = !empty($section->name) ? $section->name : $defaulttitle;
+        $this->title = $section->get_title();
 
+        $this->skinid = isset($section->skinid) && !empty($section->skinid) ? $section->skinid : null;
         $imageobject  = !empty($section->skinid) ? $section->skin->get_edit_image() :
                 \format_ludic\skin::get_undefined_skin_image('section');
         $this->imgsrc = $imageobject->imgsrc;
@@ -43,9 +43,10 @@ class format_ludic_section extends format_ludic_item {
 
         $this->isnotvisible = !$section->visible;
 
-        $this->action     = 'get_course_modules';
-        $this->controller = 'section';
-        $this->callback   = 'displayCourseModulesHtml';
+        $this->action           = 'get_course_modules';
+        $this->propertiesaction = 'get_properties';
+        $this->controller       = 'section';
+        $this->callback         = 'displayCourseModulesHtml';
 
         $this->draggable = true;
         $this->droppable = true;

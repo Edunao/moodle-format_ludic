@@ -36,6 +36,8 @@ class format_ludic_item implements renderable {
     public $imgsrc;
     public $imgalt;
 
+    public $skinid;
+    public $propertiesaction;
     public $action;
     public $controller;
     public $callback;

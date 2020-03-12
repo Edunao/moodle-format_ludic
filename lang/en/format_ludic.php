@@ -35,9 +35,15 @@ $string['ludicconfiglabel']     = 'Ludic course configuration data';
 $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
 
 // Section edition.
-$string['default-section-title'] = 'default-section-title {$a->section}-STR';
-$string['label-section-title'] = 'label-section-title {$a->section}-STR';
+$string['default-section-title'] = 'default-section-title {$a}-STR';
+$string['label-section-title'] = 'label-section-title {$a}-STR';
 $string['label-section-visible'] = 'label-section-visible-STR';
+$string['duplicate-suffix'] = ' (copy)';
+$string['section-skin-selection'] = 'Select a skin for the section';
+
+// Course module edition.
+$string['course-module-skin-selection'] = 'Select a skin for the course module';
+
 
 // Settings.
 $string['setting-weight-title'] = 'Poids des activités.';

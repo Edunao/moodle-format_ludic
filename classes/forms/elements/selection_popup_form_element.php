@@ -29,18 +29,24 @@ defined('MOODLE_INTERNAL') || die();
 
 class selection_popup_form_element extends form_element {
 
+    public $itemcontroller;
+    public $itemaction;
+    public $popuptitle;
+
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
-        $this->type = 'selection_popup';
+        $this->type           = 'selection_popup';
+        $this->itemcontroller = isset($specific['itemcontroller']) ? $specific['itemcontroller'] : null;
+        $this->itemaction     = isset($specific['itemaction']) ? $specific['itemaction'] : null;
+        $this->popuptitle     = isset($specific['popuptitle']) ? $specific['popuptitle'] : null;
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 
     public function validate_value($value) {
         $value = clean_param($value, PARAM_RAW);
         if ($this->required && $value === '') {
-            return ['success' => 0,  'value' => get_string('error-required', 'format_ludic')];
+            return ['success' => 0, 'value' => get_string('error-required', 'format_ludic')];
         }
-        return ['success' => 1,  'value' => (string) ($value)];
+        return ['success' => 1, 'value' => (string) ($value)];
     }
-
 
 }

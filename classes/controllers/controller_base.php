@@ -41,6 +41,11 @@ abstract class controller_base {
     protected $contexthelper;
 
     /**
+     * @var \context_course
+     */
+    private $context;
+
+    /**
      * controller_base constructor.
      *
      * @param $params
@@ -57,14 +62,19 @@ abstract class controller_base {
     /**
      * Set course context
      *
-     * @return \context_course
      * @throws \moodle_exception
      */
     public function set_context() {
         global $PAGE;
-        $context = \context_course::instance($this->get_course_id());
-        $PAGE->set_context($context);
-        return $context;
+        $this->context = \context_course::instance($this->get_course_id());
+        $PAGE->set_context($this->context);
+    }
+
+    /**
+     * @return \context_course context instance
+     */
+    public function get_context() {
+        return $this->context;
     }
 
     /**

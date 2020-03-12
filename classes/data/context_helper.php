@@ -149,7 +149,7 @@ class context_helper {
             // We're on a course view page and the course-relative section number is provided
             // so lookup the real section id.
             $courseid        = $this->get_course_id();
-            $sectionid       = $this->dbapi->get_sectionid_by_courseid_and_sectionidx($courseid, $sectionidx);
+            $sectionid       = $this->dbapi->get_section_id_by_courseid_and_sectionidx($courseid, $sectionidx);
             $this->sectionid = $sectionid;
 
         } else if (isset($this->page->cm->section)) {
@@ -439,13 +439,13 @@ class context_helper {
      * Get section by id.
      *
      * @param $sectionid
-     * @return section
+     * @return section|false
      * @throws \dml_exception
      * @throws \moodle_exception
      */
     public function get_section_by_id($sectionid) {
         $sectionrecord = $this->dbapi->get_section_by_id($sectionid);
-        return new section($sectionrecord);
+        return $sectionrecord ? new section($sectionrecord): false;
     }
 
     /**
@@ -586,9 +586,75 @@ class context_helper {
         return $this->ludicconfig;
     }
 
+    /**
+     * @return array
+     */
     public function get_skins_config() {
         $ludicconfig = $this->get_ludic_config();
         return isset($ludicconfig['skins']) ? get_object_vars($ludicconfig['skins']) : [];
     }
 
+    /**
+     * @return skin[]
+     */
+    public function get_skins() {
+        $skins = [];
+        $skinsconfig = $this->get_skins_config();
+        foreach ($skinsconfig as $skinconfig) {
+            $skins[$skinconfig->id] = skin::get_by_instance($skinconfig);
+        }
+        return $skins;
+    }
+
+    /**
+     * @return skin[]
+     */
+    public function get_section_skins($sectionid = null) {
+        $skins = $this->get_skins();
+        $sectionskins = [];
+        foreach ($skins as $skin) {
+            if ($skin->location === 'section') {
+                $sectionskins[$skin->id] = $skin;
+            }
+        }
+        return $sectionskins;
+    }
+
+    /**
+     * @return skin[]
+     */
+    public function get_course_modules_skins() {
+        $skins = $this->get_skins();
+        $coursemodulesskins = [];
+        foreach ($skins as $skin) {
+            if ($skin->location === 'section') {
+                $coursemodulesskins[$skin->id] = $skin;
+            }
+        }
+        return $coursemodulesskins;
+    }
+
+    /**
+     * Create an section in the course defined in $courseid.
+     *
+     * @param $courseid
+     * @return bool|false|section
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function create_section($courseid) {
+        $nbsections = $this->dbapi->count_course_sections($courseid);
+
+        if (!$this->dbapi->create_section($courseid, $nbsections)) {
+            return false;
+        }
+
+        if (!$newsection = $this->dbapi->get_course_last_section($courseid)) {
+            return false;
+        }
+
+        //rebuild_course_cache($courseid, true);
+
+        return $this->get_section_by_id($newsection->id);
+    }
 }

@@ -112,15 +112,29 @@ class database_api {
     }
 
     /**
-     * Get sectionid from a courseid and a section idx (number).
+     * Get section id from a courseid and a section idx (number).
      *
      * @param $courseid
      * @param $sectionidx
      * @return mixed
      * @throws \dml_exception
      */
-    public function get_sectionid_by_courseid_and_sectionidx($courseid, $sectionidx) {
+    public function get_section_id_by_courseid_and_sectionidx($courseid, $sectionidx) {
         return $this->db->get_field('course_sections', 'id', [
+                'course' => $courseid, 'section' => $sectionidx
+        ]);
+    }
+
+    /**
+     * Get section name from a courseid and a section idx (number).
+     *
+     * @param $courseid
+     * @param $sectionidx
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_section_name_by_courseid_and_sectionidx($courseid, $sectionidx) {
+        return $this->db->get_field('course_sections', 'name', [
                 'course' => $courseid, 'section' => $sectionidx
         ]);
     }
@@ -200,6 +214,45 @@ class database_api {
      */
     public function update_section($moodlecourse, $dbrecord, $data) {
         course_update_section($moodlecourse, $dbrecord, $data);
+    }
+
+    /**
+     * @param $record
+     * @return bool
+     * @throws \dml_exception
+     */
+    public function update_section_record($record) {
+        return $this->db->update_record('course_sections', $record);
+    }
+
+    /**
+     * @param int $courseid
+     * @param int $nbsections
+     * @return bool
+     */
+    public function create_section($courseid, $nbsections) {
+        return course_create_sections_if_missing($courseid, [$nbsections]);
+    }
+
+    /**
+     * Count all course sections
+     *
+     * @param int $courseid
+     * @return int
+     * @throws \dml_exception
+     */
+    public function count_course_sections($courseid) {
+        return $this->db->count_records('course_sections', array('course' => $courseid));
+    }
+
+    /**
+     * @param int $courseid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_course_last_section($courseid) {
+        return $this->db->get_record_sql('SELECT * FROM {course_sections} WHERE course = :courseid ORDER BY section DESC LIMIT 1',
+                ['courseid' => $courseid]);
     }
 
     /**

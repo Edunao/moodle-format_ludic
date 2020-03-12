@@ -29,8 +29,11 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
 
     public $imgsrc;
     public $imgalt;
-    public $controller;
     public $action;
+    public $itemid;
+    public $itemcontroller;
+    public $itemaction;
+    public $popuptitle;
 
     /**
      * format_ludic_selection_popup_form_element constructor.
@@ -41,7 +44,6 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
         parent::__construct($element);
         $specific = $this->specific;
 
-
         if (isset($specific['icon']->imgsrc)) {
             $this->imgsrc = $specific['icon']->imgsrc;
         }
@@ -49,8 +51,11 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
             $this->imgalt = $specific['icon']->imgalt;
         }
 
-        $this->controller = isset($specific['controller']) ? $specific['controller'] : null;
-        $this->action = isset($specific['action']) ? $specific['action'] : null;
+        $this->action         = 'selectAndUpdateInput';
+        $this->itemid         = isset($specific['itemid']) ? $specific['itemid'] : null;
+        $this->itemaction     = isset($specific['itemaction']) ? $specific['itemaction'] : null;
+        $this->itemcontroller = isset($specific['itemcontroller']) ? $specific['itemcontroller'] : null;
+        $this->popuptitle     = isset($specific['popuptitle']) ? $specific['popuptitle'] : null;
 
     }
 }

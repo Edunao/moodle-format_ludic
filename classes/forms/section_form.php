@@ -36,14 +36,12 @@ class section_form extends form {
 
     public function get_definition() {
         global $PAGE;
-        $a          = new \stdClass();
-        $a->section = $this->object->section;
 
         $id = $this->object->id;
 
         $title        = $this->object->name;
-        $defaulttitle = get_string('default-section-title', 'format_ludic', $a);
-        $labeltitle   = get_string('label-section-title', 'format_ludic', $a);
+        $defaulttitle = get_string('default-section-title', 'format_ludic', $this->object->section);
+        $labeltitle   = get_string('label-section-title', 'format_ludic', $this->object->section);
 
         $elements   = [];
         $elements[] = new hidden_form_element('id', 'section-id', $id, 0);
@@ -80,8 +78,10 @@ class section_form extends form {
                 [
                         'icon'      => !empty($this->object->skinid) ? $this->object->skin->get_edit_image() :
                                 skin::get_undefined_skin_image('section'),
-                        'controller' => 'skin',
-                        'action'     => 'get_section_skin_selector'
+                        'itemid' => $id,
+                        'itemcontroller' => 'skin',
+                        'itemaction'     => 'get_section_skin_selector',
+                        'popuptitle'     => get_string('section-skin-selection', 'format_ludic')
                 ]
         );
         //

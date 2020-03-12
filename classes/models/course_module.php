@@ -31,6 +31,7 @@ class course_module extends model {
     public $name;
     public $order;
     public $cminfo;
+    public $courseid;
     public $section;
     public $sectionid;
     public $accessible;
@@ -43,6 +44,7 @@ class course_module extends model {
      */
     public function __construct(\cm_info $cminfo) {
         parent::__construct($cminfo);
+        $this->courseid  = $cminfo->course;
         $this->sectionid = $cminfo->section;
         $this->section   = $this->contexthelper->get_section_by_id($this->sectionid);
         $this->name      = $cminfo->get_formatted_name();
@@ -64,7 +66,13 @@ class course_module extends model {
         }
         $this->section    = $section;
         $this->sectionid  = $sectionid;
-        $this->accessible = moveto_module($this->cminfo, $section->sectioninfo, $beforeid);
+        $movetosection    = (object) [
+                'id'      => $section->id,
+                'section' => $section->section,
+                'course'  => $section->courseid,
+                'visible' => $section->visible
+        ];
+        $this->accessible = moveto_module($this->cminfo, $movetosection, $beforeid);
         return $this->accessible;
     }
 
@@ -89,4 +97,25 @@ class course_module extends model {
         $this->section->update_sequence($newsequence);
     }
 
+    /**
+     * Duplicate the module
+     *
+     * @param $course
+     * @return course_module
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     * @throws \restore_controller_exception
+     */
+    public function duplicate($course) {
+        $coursemodule = (object) [
+                'id'      => $this->id,
+                'course'  => $this->courseid,
+                'section' => $this->sectionid,
+                'name'    => $this->name,
+                'modname' => $this->cminfo->modname
+        ];
+        $newcm        = duplicate_module($course, $coursemodule);
+        return new course_module($newcm);
+    }
 }

@@ -35,11 +35,12 @@ $PAGE->set_context($context);
 $staticconfig = [
         'skins' => [
                 1 => [
-                        'id'         => 1,
-                        'location'   => 'section',
-                        'type'       => 'score',
-                        'title'      => 'Coffre au trésor',
-                        'properties' => [
+                        'id'          => 1,
+                        'location'    => 'section',
+                        'type'        => 'score',
+                        'title'       => 'Coffre au trésor',
+                        'description' => 'Ce coffre stock des trésors',
+                        'properties'  => [
                                 'images' => [
                                         [
                                                 'threshold' => 0,
@@ -82,11 +83,12 @@ $staticconfig = [
                         ]
                 ],
                 2 => [
-                        'id'         => 2,
-                        'location'   => 'section',
-                        'type'       => 'score',
-                        'title'      => 'Coffre de pièces',
-                        'properties' => [
+                        'id'          => 2,
+                        'location'    => 'section',
+                        'type'        => 'score',
+                        'title'       => 'Coffre de pièces',
+                        'description' => 'Ce coffre stock des pièces',
+                        'properties'  => [
                                 'images' => [
                                         [
                                                 'threshold' => 0,
@@ -126,7 +128,7 @@ $staticconfig = [
                                         ]
                                 ],
                         ],
-                        'css'        => '{background-color: #efefef;}'
+                        'css'         => '{background-color: #efefef;}'
                 ]
         ]
 ];
@@ -134,7 +136,6 @@ $staticconfig = [
 $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
 $staticconfig  = json_encode($staticconfig);
 $contexthelper->update_course_format_options(['ludic_config' => $staticconfig]);
-$config = $contexthelper->get_course_format_option_by_name('ludic_config');
 
 var_dump(optional_param('section', 0, PARAM_INT));
 var_dump(optional_param('clickon', null, PARAM_URL));
