@@ -39,28 +39,75 @@ class coursemodule_controller extends controller_base {
     public function execute() {
         $action = $this->get_param('action');
         switch ($action) {
+            case 'validate_form' :
+                $cmid = $this->get_param('id', PARAM_INT);
+                $data = $this->get_param('data');
+                return $this->validate_form($cmid, $data);
             case 'get_properties' :
                 $cmid = $this->get_param('id', PARAM_INT);
                 return $this->get_properties($cmid);
-            case 'get_children' :
+            case 'delete_format_ludic_cm' :
                 $cmid = $this->get_param('id', PARAM_INT);
-                return $this->get_children($cmid);
+                return $this->delete_format_ludic_cm($cmid);
             // Default case if no parameter is necessary.
             default :
                 return $this->$action();
         }
     }
 
-    public function get_parents() {
-        return 'coursemodule::get_parents()';
-    }
-
-    public function get_children($cmid) {
-        return false;
-        return 'coursemodule::get_children('.$cmid.')';
-    }
-
+    /**
+     * @param $cmid
+     * @return string
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function get_properties($cmid) {
-        return 'coursemodule::get_properties('.$cmid.')';
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+
+        // Get edit buttons.
+        $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
+        $editbuttons  = $coursemodule->get_edit_buttons();
+
+        // Render section form with edit buttons.
+        $output = $renderer->render_course_module_form($cmid);
+        $output .= $renderer->render_buttons($editbuttons, $coursemodule->id, 'coursemodule');
+        return $output;
     }
+
+    /**
+     * Validate form.
+     * If everything is valid => update and return a success message.
+     * Else does not update and return an error message.
+     *
+     * @param $cmid
+     * @param $data
+     * @return false|string
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function validate_form($cmid, $data) {
+        $form    = new coursemodule_form($cmid);
+        $success = $form->validate_and_update($data);
+        if ($success) {
+            $return = array('success' => 1, 'value' => $form->get_success_message());
+        } else {
+            $return = array('success' => 0, 'value' => $form->get_error_message());
+        }
+        return json_encode($return);
+    }
+
+    /**
+     * Delete course module <-> skin relation, then delete course module with moodle function.
+     *
+     * @param $cmid
+     * @return bool
+     * @throws \dml_exception
+     */
+    public function delete_format_ludic_cm($cmid) {
+        $dbapi = $this->contexthelper->get_database_api();
+        return $dbapi->delete_format_ludic_cm($cmid);
+    }
+
 }

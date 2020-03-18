@@ -57,6 +57,40 @@ class database_api {
     }
 
     /**
+     * Get skin id from a course module id (cmid).
+     *
+     * @param $cmid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_skin_id_by_course_module_id($cmid) {
+        return $this->db->get_field('format_ludic_cm', 'skinid', ['cmid' => $cmid]);
+    }
+
+    /**
+     * Get format_ludic_cm db record.
+     *
+     * @param $cmid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_format_ludic_cm_by_cmid($cmid) {
+        return $this->db->get_record('format_ludic_cm', ['cmid' => $cmid]);
+    }
+
+    /**
+     * Add new format_ludic_cm db record.
+     * Return new id.
+     *
+     * @param $dataobject
+     * @return bool|int
+     * @throws \dml_exception
+     */
+    public function add_format_ludic_cm_record($dataobject) {
+        return $this->db->insert_record('format_ludic_cm', $dataobject, true);
+    }
+
+    /**
      * Set skin id for a section, update skin id if record exists, else insert record.
      *
      * @param $courseid
@@ -68,7 +102,7 @@ class database_api {
     public function set_section_skin_id($courseid, $sectionid, $skinid) {
         $dbrecord = $this->db->get_record('format_ludic_cs', ['sectionid' => $sectionid]);
         if ($dbrecord) {
-            $dbrecord->skinid    = $skinid;
+            $dbrecord->skinid = $skinid;
             return $this->db->update_record('format_ludic_cs', $dbrecord);
         }
         $dbrecord            = new \stdClass();
@@ -76,6 +110,60 @@ class database_api {
         $dbrecord->sectionid = $sectionid;
         $dbrecord->skinid    = $skinid;
         return $this->db->insert_record('format_ludic_cs', $dbrecord);
+    }
+
+    /**
+     * Remove skin for a given section id.
+     *
+     * @param $sectionid
+     * @return bool
+     * @throws \dml_exception
+     */
+    public function delete_section_skin_id($sectionid) {
+        return $this->db->delete_records('format_ludic_cs', ['sectionid' => $sectionid]);
+    }
+
+    /**
+     * Remove ludic record for a given course module id.
+     *
+     * @param $cmid
+     * @return bool
+     * @throws \dml_exception
+     */
+    public function delete_format_ludic_cm($cmid) {
+        return $this->db->delete_records('format_ludic_cm', ['cmid' => $cmid]);
+    }
+
+    /**
+     * Set skin id, weight, hidden, linked for a course module.
+     * Update if record exists, else insert record.
+     *
+     * @param $courseid
+     * @param $cmid
+     * @param $skinid
+     * @param $weight
+     * @param $hidden
+     * @param null $linked
+     * @return bool|int
+     * @throws \dml_exception
+     */
+    public function set_format_ludic_cm($courseid, $cmid, $skinid, $weight, $hidden, $linked = null) {
+        $dbrecord = $this->db->get_record('format_ludic_cm', ['cmid' => $cmid]);
+        if ($dbrecord) {
+            $dbrecord->skinid = $skinid;
+            $dbrecord->weight = $weight;
+            $dbrecord->hidden = $hidden;
+            $dbrecord->linked = $linked;
+            return $this->db->update_record('format_ludic_cm', $dbrecord);
+        }
+        $dbrecord           = new \stdClass();
+        $dbrecord->courseid = $courseid;
+        $dbrecord->cmid     = $cmid;
+        $dbrecord->skinid   = $skinid;
+        $dbrecord->weight   = $weight;
+        $dbrecord->hidden   = $hidden;
+        $dbrecord->linked   = $linked;
+        return $this->db->insert_record('format_ludic_cm', $dbrecord);
     }
 
     /**
@@ -162,22 +250,6 @@ class database_api {
     }
 
     /**
-     * Get course_modules records of a course.
-     *
-     * @param $courseid
-     * @return array
-     * @throws \dml_exception
-     */
-    public function get_course_modules_by_courseid($courseid) {
-        return $this->db->get_records_sql('
-            SELECT cm.id, cm.id as cmid, cm.instance, m.name as modname, cm.section, cm.visible
-            FROM {course_modules} cm
-            JOIN {modules} m ON m.id = cm.module
-            WHERE cm.course = ?
-            AND cm.deletioninprogress = 0', ['course' => $courseid]);
-    }
-
-    /**
      * Get course_modules record by id.
      *
      * @param $id
@@ -186,11 +258,25 @@ class database_api {
      */
     public function get_course_module_by_id($id) {
         return $this->db->get_record_sql('
-            SELECT cm.id, cm.id as cmid, cm.instance, m.name as modname, cm.section, cm.visible
+            SELECT cm.*, m.name as modname
             FROM {course_modules} cm
             JOIN {modules} m ON m.id = cm.module
-            WHERE cm.id = ?
-            AND cm.deletioninprogress = 0', ['id' => $id]);
+            WHERE cm.id = ?', ['id' => $id]);
+    }
+
+    /**
+     * Get module name (forum, ...) by cmid.
+     *
+     * @param $cmid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_module_name_by_course_module_id($cmid) {
+        return $this->db->get_field_sql('
+            SELECT m.name
+            FROM {course_modules} cm
+            JOIN {modules} m ON m.id = cm.module
+            WHERE cm.id = ?', ['id' => $cmid]);
     }
 
     /**
@@ -214,6 +300,36 @@ class database_api {
      */
     public function update_section($moodlecourse, $dbrecord, $data) {
         course_update_section($moodlecourse, $dbrecord, $data);
+    }
+
+    /**
+     * Update course module name only.
+     *
+     * @param $cmid
+     * @param $name
+     * @return bool
+     * @throws \dml_exception
+     */
+    public function update_course_module_name($cmid, $name) {
+        $cmrecord = $this->get_course_module_by_id($cmid);
+        if (!$cmrecord) {
+            return false;
+        }
+        $updaterecord = (object) ['id' => $cmrecord->instance, 'name' => $name];
+        return $this->db->update_record($cmrecord->modname, $updaterecord);
+    }
+
+    /**
+     * Update course module name only.
+     *
+     * @param $cmid
+     * @param $visible
+     * @return bool
+     * @throws \dml_exception
+     */
+    public function update_course_module_visible($cmid, $visible) {
+        $updaterecord = (object) ['id' => $cmid, 'visible' => $visible];
+        return $this->db->update_record('course_modules', $updaterecord);
     }
 
     /**

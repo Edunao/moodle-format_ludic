@@ -30,7 +30,7 @@
                 <FIELD NAME="skinid"   TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
                 <FIELD NAME="weight"   TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
                 <FIELD NAME="hidden"   TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="linked"   TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="linked"   TYPE="int" LENGTH="1"  NOTNULL="false" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary"  TYPE="primary" FIELDS="id"/>

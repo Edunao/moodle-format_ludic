@@ -35,4 +35,10 @@ interface coursemodule_skin_interface {
      * @return string
      */
     public function render_coursemodule_view();
+
+    /**
+     * This skin use and require grade.
+     * @return bool
+     */
+    public function require_grade();
 }

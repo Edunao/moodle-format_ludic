@@ -101,6 +101,7 @@ abstract class form {
      *
      * @param $data
      * @return bool
+     * @throws \coding_exception
      */
     public function validate_and_update($data) {
         $this->set_form_values($data);

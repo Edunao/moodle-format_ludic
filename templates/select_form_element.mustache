@@ -16,12 +16,12 @@
 }}
 <div class="ludic-form-group" data-type="select">
 
-<label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
-    {{label}}
-    {{#required}}
-        {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
-    {{/required}}
- </label>
+    <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
+        {{label}}
+        {{#required}}
+            {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
+        {{/required}}
+    </label>
 
     <select
         {{#id}}id="{{id}}" {{/id}}
@@ -35,11 +35,7 @@
         {{#required}}required{{/required}}
     >
         {{#options}}
-            {{#value}}
-                <option value="{{value}}" {{#selected}}selected{{/selected}}>
-                    {{#name}}{{name}}{{/name}}
-                </option>
-            {{/value}}
+            <option value="{{value}}" {{#selected}}selected{{/selected}}>{{name}}</option>
         {{/options}}
     </select>
 </div>

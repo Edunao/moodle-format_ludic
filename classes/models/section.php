@@ -105,6 +105,7 @@ class section extends model {
      *
      * @param $newsequence
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function update_sequence($newsequence) {
         $dbapi            = $this->contexthelper->get_database_api();

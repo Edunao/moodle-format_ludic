@@ -52,7 +52,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             }
 
             // Click on last item clicked in order to keep navigation.
-            ludic.clickOnTheLastItemClicked();
+            ludic.clickOnLastItemClicked();
         },
 
         /**
@@ -110,7 +110,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 params.itemSelectorId = params.itemType && params.itemId ? '.item.' + params.itemType + '[data-id="' + params.itemId + '"]' : null;
                 if (controller && action) {
                     // Add a loading now if needed.
-                    ludic.addLoadingBeforeAjax(callback);
+                    ludic.addLoadingBeforeCallback(callback);
 
                     console.log('click on ludic action callback => ', callback, ' controller => ', controller, ' action => ', action);
                     ludic.ajaxCall({
@@ -179,6 +179,15 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 case 'confirmAndDeleteSection' :
                     result = ludic.confirmAndDeleteSection(item);
                     break;
+                case 'deleteSection' :
+                    result = ludic.deleteSection(item);
+                    break;
+                case 'confirmAndDeleteCourseModule' :
+                    result = ludic.confirmAndDeleteCourseModule(item);
+                    break;
+                case 'deleteCourseModule' :
+                    result = ludic.deleteCourseModule(item);
+                    break;
                 case 'showSubButtons' :
                     result = ludic.showSubButtons(item);
                     break;
@@ -232,6 +241,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             delete params.async;
             delete params.callback;
 
+            console.log('params ', params);
             // Execute ajax call with good params.
             $.ajax({
                 method: method,
@@ -305,7 +315,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         /**
          * When item is added with selected class, click on it by default.
          */
-        initAddSelectedItemEvent: function () {
+        initClickOnSelectedItemEvent: function () {
             $('body.format-ludic').on('DOMNodeInserted', function (e) {
                 let selectedItem = $(e.target).find('.item.selected');
                 if (selectedItem.length) {
@@ -417,8 +427,69 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         confirmAndDeleteSection: function (section) {
             // Add confirmation before delete.
             console.log('confirmation', section);
-            let context = {link: $(section).data('link') ? $(section).data('link') : null};
-            ludic.displayChoicePopup('confirmation-popup', 'getDataLinkAndRedirectTo', context);
+            let context = {
+                itemid: $(section).data('itemid') ? $(section).data('itemid') : null,
+                link: $(section).data('link') ? $(section).data('link') : null
+            };
+            ludic.displayChoicePopup('confirmation-popup', 'deleteSection', context);
+        },
+
+        /**
+         * Delete section <-> skin relation, then delete section with moodle function.
+         * @param section
+         */
+        deleteSection: function (section) {
+            let id = $(section).data('itemid');
+            let link = $(section).data('link');
+            if (!id || !link) {
+                return;
+            }
+            ludic.ajaxCall({
+                controller: 'section',
+                action: 'delete_section_skin_id',
+                id: id,
+                callback: function () {
+                    ludic.redirectTo(link);
+                }
+            });
+        },
+
+        /**
+         * Confirm and delete course module.
+         *
+         * @param coursemodule
+         */
+        confirmAndDeleteCourseModule: function (coursemodule) {
+            // Add confirmation before delete.
+            console.log('confirmation', coursemodule);
+            let context = {
+                itemid: $(coursemodule).data('itemid') ? $(coursemodule).data('itemid') : null,
+                link: $(coursemodule).data('link') ? $(coursemodule).data('link') : null
+            };
+            ludic.displayChoicePopup('confirmation-popup', 'deleteCourseModule', context);
+        },
+
+        /**
+         * Delete course module <-> skin relation, then delete course module with moodle function.
+         *
+         * @param coursemodule
+         */
+        deleteCourseModule: function (coursemodule) {
+            let id = $(coursemodule).data('itemid');
+            let link = $(coursemodule).data('link');
+            if (!id || !link) {
+                console.log('id ', id)
+                console.log('link ', link)
+                return;
+            }
+            ludic.ajaxCall({
+                controller: 'coursemodule',
+                action: 'delete_format_ludic_cm',
+                id: id,
+                callback: function () {
+                    ludic.redirectTo(link);
+                }
+            });
         },
 
         /**
@@ -434,6 +505,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let itemController = $(selectionPopup).data('itemcontroller') ? $(selectionPopup).data('itemcontroller') : null;
             let itemAction = $(selectionPopup).data('itemaction') ? $(selectionPopup).data('itemaction') : null;
             let title = $(selectionPopup).data('title') ? $(selectionPopup).data('title') : null;
+            let itemId = $(selectionPopup).data('itemid') ? $(selectionPopup).data('itemid') : null;
 
             if (!itemAction || !itemController) {
                 return false;
@@ -443,6 +515,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 controller: itemController,
                 action: itemAction,
                 selectedid: inputValue,
+                itemid: itemId,
                 callback: function (content) {
                     let context = {
                         selectorid: inputSelectorId,
@@ -496,7 +569,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.initConfirmInSelectionPopupEvent();
 
             // When item is added with .selected class, click on it by default.
-            ludic.initAddSelectedItemEvent();
+            ludic.initClickOnSelectedItemEvent();
 
         },
 
@@ -521,11 +594,20 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Use this variable as an indicator to know if we have already saved the last click.
             let lastTimeStamp = 0;
 
+            // Return the list of classes to select item.
+            let getClassListSelector = function (classList) {
+                // Remove selected class because .selected can be added in javascript.
+                classList = classList !== undefined ? classList.replace(' selected', '') : '';
+                return classList ? "." + $.trim(classList).replace(/\s/gi, ".") : '';
+            };
+
             // Save the selector of the last element clicked by the user in the .container-parents.
-            $('#ludic-main-container .container-parents').on('click', '*', function (e) {
+            $('#ludic-main-container .container-parents').on('click', '.item', function (e) {
+                console.log('initSaveLastItemClickedEvents');
 
                 // If it's not a real click, ignore it.
                 if (!e.hasOwnProperty('originalEvent')) {
+                    console.log('pas un vrai event');
                     return;
                 }
 
@@ -537,65 +619,40 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                     lastTimeStamp = eventTimeStamp;
                 } else {
                     // If the last timestamp is equal to the event timestamp, this means that we already save the last click, so return.
+                    console.log('doublon event');
                     return;
                 }
 
-                // Defines some useful variables.
-                let id = $(this).attr('id');
+
+                let tree = [this];
+                $(this).parentsUntil('.course-content').each(function (id, item) {
+                    tree[id + 1] = item;
+                });
+
                 let selector = '';
+                // For each elements add it's selector.
+                $(tree).each(function () {
 
-                // If there is not consistent id, save the DOM tree selector.
-                if (!id || id.indexOf('yui_') === 0) {
+                    // If it exists, set the id selector.
+                    let currentId = $(this).attr("id");
+                    let selectorId = currentId && currentId.indexOf('yui_') === -1 ? '#' + currentId : '';
 
-                    // Return the list of classes to select it.
-                    let getClassListSelector = function (classList) {
-                        return classList ? "." + $.trim(classList).replace(/\s/gi, ".") : '';
-                    };
+                    // Composes the selector of the current element.
+                    let currentSelector = ' > ' + this.tagName + selectorId + getClassListSelector($(this).attr("class"));
 
-                    // Set indicator to know if we are in a ludic course tree.
-                    let inLudicContainer = true;
+                    // Add it to selector.
+                    selector = currentSelector + selector;
 
-                    // For each parent we add its selector if it is part of the ludic course tree.
-                    $(this).parents().each(function () {
+                });
 
-                        // Check if we are in a ludic course tree.
-                        if ($(this).attr('id') === 'ludic-main-container') {
-                            // From now on we are no longer in a ludic course tree.
-                            inLudicContainer = false;
-                        }
-
-                        // Not in ludic course tree, continue.
-                        if (!inLudicContainer) {
-                            return;
-                        }
-
-                        // If it exists, set the id selector.
-                        let currentId = $(this).attr("id");
-                        let selectorId = currentId && currentId.indexOf('yui_') === -1 ? '#' + currentId : '';
-
-                        // Composes the selector of the current element.
-                        let currentSelector = ' > ' + this.tagName + selectorId + getClassListSelector($(this).attr("class"));
-
-                        // Add it to selector.
-                        selector = currentSelector + selector;
-                    });
-
-                    // Remove first ' > '.
-                    selector = selector.substring(3);
-
-                } else {
-
-                    // Element has id attribute, so save it.
-                    let selector = '#' + id;
-
-                }
+                // Remove first ' > '.
+                selector = selector.substring(3);
 
                 // Ensure that selector is not empty.
                 if (selector) {
-
+                    console.log('Save selector : ', selector);
                     // Set last click selector in session storage.
                     sessionStorage.setItem('lastClick', selector);
-
                 }
 
             });
@@ -604,34 +661,70 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         /**
          *  Click on the last item clicked.
          */
-        clickOnTheLastItemClicked: function () {
+        clickOnLastItemClicked: function () {
+            console.log('clickOnLastItemClicked');
 
             // If an anchor is specified click on it.
             let anchor = window.location.hash.substr(1);
             let lastCLick = '#ludic-' + anchor;
 
+            // Course Module is added.
+            if (lastCLick === '#ludic-section-0') {
+                anchor = 'childHasBeenAdded';
+            }
+
             // Remove anchor for next refresh.
             history.replaceState(null, null, ' ');
 
             // Else retrieve selector of the last item clicked.
-            if (!anchor) {
+            if (!anchor || anchor === 'childHasBeenAdded') {
                 lastCLick = sessionStorage.getItem('lastClick');
             }
 
-            // If there is not item, there is nothing to do.
+            // If there is not item, select the first by default.
             if (!lastCLick) {
-                return;
+                lastCLick = '.container-parents > .item:first-child';
             }
 
             // Ensure that the item is in page before clicking on it.
             let interval = setInterval(function () {
+
+                let children = $('.container-items .container-children .item');
                 let lastItemClicked = $(lastCLick);
-                if (lastItemClicked.length > 0) {
-                    lastItemClicked.click();
-                    clearInterval(interval);
-                } else {
-                    console.log('wait item ', lastCLick, ' is ready');
+
+                // If lastClick is in a child, find his parent and click on it before.
+                if (lastCLick.search('.container-children') && children.length === 0) {
+                    let regex = '\.parent-id-([0-9]+)';
+                    let parentId = lastCLick.match(regex) !== null ? lastCLick.match(regex)[1] : false;
+                    if (parentId) {
+                        $('.container-parents .item[data-id="' + parentId + '"]').click();
+                    }
                 }
+
+                // If item is ready, click on it.
+                if (lastItemClicked.length > 0) {
+
+                    // Click on parent one time only.
+                    if (lastItemClicked.hasClass('parent')) {
+                        if (children.length === 0) {
+                            lastItemClicked.click();
+                        }
+                    } else {
+                        lastItemClicked.click();
+                    }
+
+                    // If a child is added, click on it after loading, then clear interval.
+                    if (anchor === 'childHasBeenAdded') {
+                        if (children.length > 0) {
+                            children.last().click();
+                            clearInterval(interval);
+                        }
+                    } else {
+                        clearInterval(interval);
+                    }
+
+                }
+
             }, 500);
         },
 
@@ -663,9 +756,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 let dragItem = $('#' + e.originalEvent.dataTransfer.getData('text/plain'));
                 let dragId = dragItem.data('id');
                 let dragType = dragItem.data('type');
-
-                // Define the parent of the dragged object here to receive the html of the callback return.
-                let dragParent = dragItem.parent();
 
                 // Get drop item data.
                 let dropItem = $('#' + e.currentTarget.id);
@@ -814,6 +904,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 popupid: popupid,
                 action: action,
                 link: params.link ? params.link : null,
+                itemid: params.itemid ? params.itemid : null,
                 selectorid: params.selectorid ? params.selectorid : null,
                 value: params.value ? params.value : null,
                 title: params.title ? params.title : M.util.get_string('confirmation-popup-title', 'format_ludic'),
@@ -873,7 +964,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          *
          * @param {string} callback js function.
          */
-        addLoadingBeforeAjax: function (callback) {
+        addLoadingBeforeCallback: function (callback) {
             switch (callback) {
                 case 'displaySections':
                     ludic.addLoading($('.container-items .container-parents'));

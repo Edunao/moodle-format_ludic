@@ -39,39 +39,38 @@ class skin_controller extends controller_base {
     public function execute() {
         $action = $this->get_param('action');
         switch ($action) {
-            case 'get_properties' :
-                $skinid = $this->get_param('id', PARAM_INT);
-                return $this->get_properties($skinid);
-            case 'get_children' :
-                $skinid = $this->get_param('id', PARAM_INT);
-                return $this->get_children($skinid);
             case 'get_description' :
                 $skinid = $this->get_param('id', PARAM_INT);
                 return $this->get_description($skinid);
             case 'get_section_skin_selector' :
-                $selectedskinid = $this->get_param('selectedid', PARAM_INT);
+                $selectedskinid = $this->get_param('selectedid');
                 return $this->get_section_skin_selector($selectedskinid);
+            case 'get_course_module_skin_selector' :
+                $cmid           = $this->get_param('itemid', PARAM_INT);
+                $selectedskinid = $this->get_param('selectedid');
+                return $this->get_course_module_skin_selector($cmid, $selectedskinid);
             // Default case if no parameter is necessary.
             default :
                 return $this->$action();
         }
     }
 
-    /**
-     * TODO implements.
-     *
-     * @return false|string
-     * @throws \moodle_exception
-     */
-    public function get_cm_skin_selector() {
+    public function get_course_module_skin_selector($cmid, $selectedskinid) {
         global $PAGE;
-        $this->set_context();
         $renderer = $PAGE->get_renderer('format_ludic');
-        // TODO $skins = $this->get_cm_skins();.
-        $title   = 'CM SKIN SELECTION';
-        $content = $renderer->render_from_template('format_ludic/test', []);
-        $popup   = new \format_ludic_popup($title, $content);
-        return $renderer->render_popup($popup);
+        $skins    = $this->contexthelper->get_available_course_module_skins($cmid);
+
+        $content = '';
+        foreach ($skins as $skin) {
+            if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
+                $skin->selected = true;
+            }
+            $skin->propertiesaction = 'get_description';
+
+            $content .= $renderer->render_skin($skin);
+        }
+
+        return $renderer->render_container_items('coursemodule-skin', $content);
     }
 
     public function get_section_skin_selector($selectedskinid) {
@@ -81,39 +80,18 @@ class skin_controller extends controller_base {
 
         $content = '';
         foreach ($skins as $skin) {
-            if (isset($selectedskinid) && $selectedskinid == $skin->id) {
+            if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
                 $skin->selected = true;
             }
             $skin->propertiesaction = 'get_description';
-            $content .= $renderer->render_skin($skin);
+            $content                .= $renderer->render_skin($skin);
         }
 
         return $renderer->render_container_items('section-skin', $content);
     }
 
     /**
-     * TODO implements.
-     *
-     * @param $skinid
-     * @return string
-     */
-    public function get_children($skinid) {
-        return 'NO CHILDREN FOR SKIN => ' . $skinid;
-    }
-
-    /**
-     * TODO implements.
-     *
-     * @param $skinid
-     * @return string
-     */
-    public function get_properties($skinid) {
-        return 'SKIN ' . $skinid . ' PROPERTIES';
-    }
-
-
-    /**
-     * TODO implements.
+     * TODO améliorer.
      *
      * @param $skinid
      * @return string

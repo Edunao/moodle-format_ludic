@@ -21,14 +21,17 @@
  * @copyright 2020 Edunao SAS (contact@edunao.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
 defined('MOODLE_INTERNAL') || die;
+
+require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 if ($ADMIN->fulltree) {
     // Weight settings.
     $name        = 'format_ludic/weight';
     $title       = get_string('setting-weight-title', 'format_ludic');
     $description = get_string('setting-weight-description', 'format_ludic');
-    $default     = '0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000';
+    $default     = format_ludic_get_default_weight_setting();
     $setting     = new admin_setting_configtext($name, $title, $description, $default, PARAM_RAW, 50);
     $settings->add($setting);
 }

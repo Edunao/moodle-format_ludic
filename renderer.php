@@ -95,6 +95,16 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param $sectionid
+     * @return string
+     * @throws coding_exception
+     */
+    public function render_course_module_form($cmid) {
+        $form = new \format_ludic\coursemodule_form($cmid);
+        return $form->render();
+    }
+
+    /**
      * @param $buttons
      * @param null $itemid
      * @param null $type

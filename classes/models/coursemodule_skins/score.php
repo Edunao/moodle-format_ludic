@@ -35,7 +35,26 @@ class score extends \format_ludic\skin implements \format_ludic\coursemodule_ski
     }
 
     public function get_edit_image() {
-        // TODO: Implement get_edit_image() method.
+        $image = $this->get_default_image();
+        $images = $this->get_images();
+        return count($images) > 0 ? end($images) : $image;
     }
+
+    public function get_images() {
+        $properties = $this->get_properties();
+        return isset($properties['images']) ? $properties['images'] : [];
+    }
+
+    public function get_default_image() {
+        return (object) [
+                'imgsrc' => 'https://picsum.photos/id/66/80/80',
+                'imgalt' => 'score de coursemodule'
+        ];
+    }
+
+    public function require_grade() {
+        return true;
+    }
+
 }
 

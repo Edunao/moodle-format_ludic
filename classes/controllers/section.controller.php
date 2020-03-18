@@ -42,7 +42,7 @@ class section_controller extends controller_base {
         switch ($action) {
             case 'validate_form' :
                 $sectionid = $this->get_param('id', PARAM_INT);
-                $data      = $this->get_param('data', 'array');
+                $data      = $this->get_param('data');
                 return $this->validate_form($sectionid, $data);
             case 'move_to_section' :
                 $cmid      = $this->get_param('idtomove', PARAM_INT);
@@ -59,12 +59,18 @@ class section_controller extends controller_base {
             case 'duplicate_section' :
                 $sectionid = $this->get_param('id', PARAM_INT);
                 return $this->duplicate_section($sectionid);
+            case 'duplicate_course_module' :
+                $cmid = $this->get_param('id', PARAM_INT);
+                return $this->duplicate_course_module($cmid);
             case 'get_properties' :
                 $sectionid = $this->get_param('id', PARAM_INT);
                 return $this->get_properties($sectionid);
             case 'get_course_modules' :
                 $sectionid = $this->get_param('id', PARAM_INT);
                 return $this->get_course_modules($sectionid);
+            case 'delete_section_skin_id' :
+                $sectionid = $this->get_param('id', PARAM_INT);
+                return $this->delete_section_skin_id($sectionid);
             // Default case if no parameter is necessary.
             default :
                 return $this->$action();
@@ -106,9 +112,8 @@ class section_controller extends controller_base {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function get_course_modules($sectionid) {
+    public function get_course_modules($sectionid, $selectedcmid = false) {
         global $PAGE;
-
         $section    = $this->contexthelper->get_section_by_id($sectionid);
         $course     = $section->get_course()->moodlecourse;
         $sectionidx = $section->section;
@@ -119,11 +124,17 @@ class section_controller extends controller_base {
         $renderer = $PAGE->get_renderer('format_ludic');
         foreach ($coursemodules as $order => $coursemodule) {
             $coursemodule->order = $order;
-            $output              .= $renderer->render_course_module($coursemodule);
+            $coursemodule        = new \format_ludic_course_module($coursemodule);
+
+            // Selected course module.
+            if ($selectedcmid && $selectedcmid == $coursemodule->id) {
+                $coursemodule->selected = true;
+            }
+
+            $output .= $renderer->render($coursemodule);
         }
 
-        $order  = count($coursemodules) + 1;
-        $output .= $renderer->render_modchooser($course, $sectionidx, $order);
+        $output .= $renderer->render_modchooser($course, $sectionidx, count($coursemodules));
 
         return $output;
     }
@@ -223,7 +234,7 @@ class section_controller extends controller_base {
     }
 
     /**
-     * Duplicate section with id = $sectionid
+     * Duplicate section from id = $sectionid
      * Return sections html
      *
      * @param $sectionid
@@ -242,11 +253,57 @@ class section_controller extends controller_base {
 
         $newsection = $section->duplicate();
 
-        // trigger event update course
+        // Trigger event update course.
         $event = \core\event\course_updated::create(array('context' => $this->get_context(), 'objectid' => $newsection->courseid));
         $event->trigger();
 
         return $this->get_course_sections();
+    }
+
+    /**
+     * Duplicate course module from id = $cmid
+     * Return course modules html
+     *
+     * @param $cmid
+     * @return string
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     * @throws \restore_controller_exception
+     */
+    public function duplicate_course_module($cmid) {
+        $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
+
+        if (!$coursemodule) {
+            return false;
+        }
+
+        $course          = $this->contexthelper->get_course_by_id($coursemodule->courseid)->moodlecourse;
+        $newcoursemodule = $coursemodule->duplicate($course, true);
+
+        // Trigger event update course.
+        $event = \core\event\course_updated::create(array('context'  => $this->get_context(),
+                                                          'objectid' => $newcoursemodule->courseid
+        ));
+        $event->trigger();
+
+        // Reset cache.
+        rebuild_course_cache($this->get_course_id(), true);
+        $this->contexthelper->rebuild_fast_modinfo();
+
+        return $this->get_course_modules($newcoursemodule->sectionid, $newcoursemodule->id);
+    }
+
+    /**
+     * Remove skin for a given section id.
+     *
+     * @param $sectionid
+     * @return bool
+     * @throws \dml_exception
+     */
+    public function delete_section_skin_id($sectionid) {
+        $dbapi = $this->contexthelper->get_database_api();
+        return $dbapi->delete_section_skin_id($sectionid);
     }
 
 }

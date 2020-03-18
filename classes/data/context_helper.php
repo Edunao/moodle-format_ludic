@@ -26,6 +26,20 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+// Define all format globals here.
+
+// Skin inline id.
+define('FORMAT_LUDIC_CM_SKIN_INLINE_ID', 1);
+
+// Access.
+define('FORMAT_LUDIC_ACCESS_HIDDEN', 0);
+define('FORMAT_LUDIC_ACCESS_ACCESSIBLE', 1);
+define('FORMAT_LUDIC_ACCESS_CHAINED', 2);
+define('FORMAT_LUDIC_ACCESS_DISCOVERABLE', 3);
+define('FORMAT_LUDIC_ACCESS_CONTROLLED', 4);
+define('FORMAT_LUDIC_ACCESS_GROUPED', 4);
+define('FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED', 5);
+
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class context_helper {
@@ -51,6 +65,8 @@ class context_helper {
     private $coursemodule        = null;
     private $modinfo             = null;
     private $modinfocms          = null;
+    private $config              = null;
+    private $weightoptions       = null;
 
     /**
      * context_helper constructor.
@@ -340,6 +356,17 @@ class context_helper {
     }
 
     /**
+     * Rebuild fast mod info.
+     *
+     * @throws \moodle_exception
+     */
+    public function rebuild_fast_modinfo() {
+        $courseid      = $this->get_course_id();
+        $userid        = $this->get_user_id();
+        $this->modinfo = get_fast_modinfo($courseid, $userid);
+    }
+
+    /**
      * Get mod info cms of current course.
      *
      * @return \cm_info[]|null
@@ -445,7 +472,7 @@ class context_helper {
      */
     public function get_section_by_id($sectionid) {
         $sectionrecord = $this->dbapi->get_section_by_id($sectionid);
-        return $sectionrecord ? new section($sectionrecord): false;
+        return $sectionrecord ? new section($sectionrecord) : false;
     }
 
     /**
@@ -598,19 +625,30 @@ class context_helper {
      * @return skin[]
      */
     public function get_skins() {
-        $skins = [];
-        $skinsconfig = $this->get_skins_config();
-        foreach ($skinsconfig as $skinconfig) {
-            $skins[$skinconfig->id] = skin::get_by_instance($skinconfig);
+        $skins        = [];
+        $defaultskins = $this->get_default_skins();
+        $skinsconfig  = $this->get_skins_config();
+        $allskins     = array_merge($defaultskins, $skinsconfig);
+        foreach ($allskins as $skin) {
+            $skins[$skin->id] = skin::get_by_instance($skin);
         }
         return $skins;
     }
 
     /**
+     * @return array
+     */
+    public function get_default_skins() {
+        return [
+                inline::get_instance()
+        ];
+    }
+
+    /**
      * @return skin[]
      */
-    public function get_section_skins($sectionid = null) {
-        $skins = $this->get_skins();
+    public function get_section_skins() {
+        $skins        = $this->get_skins();
         $sectionskins = [];
         foreach ($skins as $skin) {
             if ($skin->location === 'section') {
@@ -623,13 +661,40 @@ class context_helper {
     /**
      * @return skin[]
      */
-    public function get_course_modules_skins() {
-        $skins = $this->get_skins();
+    public function get_course_module_skins() {
+        $skins              = $this->get_skins();
         $coursemodulesskins = [];
         foreach ($skins as $skin) {
-            if ($skin->location === 'section') {
+            if ($skin->location === 'coursemodule') {
                 $coursemodulesskins[$skin->id] = $skin;
             }
+        }
+        return $coursemodulesskins;
+    }
+
+    /**
+     * @param $cmid
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function get_available_course_module_skins($cmid) {
+        $skins   = $this->get_course_module_skins();
+        $modname = $this->dbapi->get_module_name_by_course_module_id($cmid);
+
+        // Label can use only inline skin.
+        if ($modname === 'label') {
+            return [inline::get_instance()];
+        }
+
+        $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
+
+        $coursemodulesskins = [];
+        foreach ($skins as $skin) {
+            if ($skin->require_grade() && !$isgraded) {
+                continue;
+            }
+            $coursemodulesskins[$skin->id] = $skin;
         }
         return $coursemodulesskins;
     }
@@ -656,5 +721,53 @@ class context_helper {
         //rebuild_course_cache($courseid, true);
 
         return $this->get_section_by_id($newsection->id);
+    }
+
+    public function get_course_format_config() {
+        if ($this->config == null) {
+            $this->config = get_config('format_ludic');
+        }
+
+        return $this->config;
+    }
+
+    public function get_course_module_weight_options() {
+        if ($this->weightoptions == null) {
+            $config              = $this->get_course_format_config();
+            $weightoptions       = isset($config->weight) ? $config->weight : format_ludic_get_default_weight_setting();
+            $weightoptions       = explode(',', $weightoptions);
+            $this->weightoptions = array_map('trim', $weightoptions);
+        }
+
+        return $this->weightoptions;
+    }
+
+    public function get_default_weight() {
+        $weightoptions = $this->get_course_module_weight_options();
+        $defaultkey    = round(count($weightoptions) / 2, 0, PHP_ROUND_HALF_DOWN);
+        return isset($weightoptions[$defaultkey]) ? $weightoptions[$defaultkey] : 0;
+    }
+
+    /**
+     * @param $cmid
+     * @return \stdClass
+     * @throws \dml_exception
+     */
+    public function get_format_ludic_cm_by_cmid($courseid, $cmid) {
+        $dbrecord = $this->dbapi->get_format_ludic_cm_by_cmid($cmid);
+        if ($dbrecord) {
+            return $dbrecord;
+        }
+        $skin               = skin::get_default_course_module_skin($cmid);
+        $dbrecord           = new \stdClass();
+        $dbrecord->courseid = $courseid;
+        $dbrecord->cmid     = $cmid;
+        $dbrecord->skinid   = $skin->id;
+        $dbrecord->weight   = $this->get_default_weight();
+        $dbrecord->hidden   = 1;
+        $dbrecord->linked   = null;
+
+        $newid = $this->dbapi->add_format_ludic_cm_record($dbrecord);
+        return $dbrecord;
     }
 }

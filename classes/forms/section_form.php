@@ -35,13 +35,12 @@ class section_form extends form {
     }
 
     public function get_definition() {
-        global $PAGE;
 
         $id = $this->object->id;
 
         $title        = $this->object->name;
         $defaulttitle = get_string('default-section-title', 'format_ludic', $this->object->section);
-        $labeltitle   = get_string('label-section-title', 'format_ludic', $this->object->section);
+        $labeltitle   = get_string('label-section-title', 'format_ludic');
 
         $elements   = [];
         $elements[] = new hidden_form_element('id', 'section-id', $id, 0);
@@ -50,30 +49,13 @@ class section_form extends form {
                 'required' => true, 'maxlength' => 30
         ]);
 
-        // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
         $visible        = $this->object->visible;
         $defaultvisible = 1;
         $labelvisible   = get_string('label-section-visible', 'format_ludic');
-        $elements[]     = new checkbox_form_element('visible', 'section-visible', $visible, $defaultvisible, $labelvisible);
+        $elements[]     = new checkbox_form_element('visible', 'section-visible', $visible, $defaultvisible, $labelvisible, ['required' => true]);
 
-        $skinid = isset($this->object->skinid) ? $this->object->skinid : null;
-
-        //$selectdefault = [
-        //        'options' => [
-        //                ['name' => 'section ' . $id . ' option 1', 'value' => 1],
-        //                ['name' => 'section ' . $id . ' option 2', 'value' => 2],
-        //                ['name' => 'section ' . $id . ' option 3', 'value' => 3],
-        //                ['name' => 'section ' . $id . ' option 4', 'value' => 4, 'selected' => true],
-        //                ['name' => 'section ' . $id . ' option 5', 'value' => 5]
-        //        ]
-        //];
-        //$elements[]    = new number_form_element('weight', 'section-weight', null, 800, 'section number label',
-        //        ['min' => 0, 'max' => 1000, 'step' => 100]);
-        //$elements[]    = new textarea_form_element('css', 'section-css', null, '[section-tile] {
-        //}', 'section textarea label', ['rows' => 10]);
-        //$elements[]    = new select_form_element('sectiontype', 'section-type', null, null, 'section select label', [],
-        //        $selectdefault);
-        $elements[] = new selection_popup_form_element('skinid', 'section-skinid', $skinid, 0, 'section skinid label',
+        $skinid = isset($this->object->skinid) ? $this->object->skinid : 0;
+        $elements[] = new selection_popup_form_element('skinid', 'section-skinid', $skinid, 0, get_string('label-skin-selection', 'format_ludic'),
                 ['required' => true, 'multiple' => false],
                 [
                         'icon'      => !empty($this->object->skinid) ? $this->object->skin->get_edit_image() :
@@ -84,9 +66,17 @@ class section_form extends form {
                         'popuptitle'     => get_string('section-skin-selection', 'format_ludic')
                 ]
         );
-        //
+
+
+        // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
+
         //$elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
         //$elements[]    = new filepicker_form_element('image-2', 'section-image-2', null, null, 'section filepicker label');
+        //$elements[]    = new number_form_element('weight', 'section-weight', null, 800, 'section number label',
+        //        ['min' => 0, 'max' => 1000, 'step' => 100]);
+        //$elements[]    = new textarea_form_element('css', 'section-css', null, '[section-tile] {
+        //}', 'section textarea label', ['rows' => 10]);
+
 
         return $elements;
     }

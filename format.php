@@ -34,8 +34,8 @@ $PAGE->set_context($context);
 
 $staticconfig = [
         'skins' => [
-                1 => [
-                        'id'          => 1,
+                11 => [
+                        'id'          => 11,
                         'location'    => 'section',
                         'type'        => 'score',
                         'title'       => 'Coffre au trésor',
@@ -82,8 +82,8 @@ $staticconfig = [
                                 'css'    => '{background-color: #000;}'
                         ]
                 ],
-                2 => [
-                        'id'          => 2,
+                12 => [
+                        'id'          => 12,
                         'location'    => 'section',
                         'type'        => 'score',
                         'title'       => 'Coffre de pièces',
@@ -129,6 +129,128 @@ $staticconfig = [
                                 ],
                         ],
                         'css'         => '{background-color: #efefef;}'
+                ],
+                13 => [
+                        'id'          => 13,
+                        'location'    => 'coursemodule',
+                        'type'        => 'score',
+                        'title'       => 'sac de bijoux',
+                        'description' => 'Ce sac contient quelques bijoux.',
+                        'properties'  => [
+                                'images' => [
+                                        [
+                                                'threshold' => 0,
+                                                'imgsrc'    => 'https://picsum.photos/id/120/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 100,
+                                                'imgsrc'    => 'https://picsum.photos/id/121/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 200,
+                                                'imgsrc'    => 'https://picsum.photos/id/122/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 300,
+                                                'imgsrc'    => 'https://picsum.photos/id/123/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 400,
+                                                'imgsrc'    => 'https://picsum.photos/id/124/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 500,
+                                                'imgsrc'    => 'https://picsum.photos/id/125/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 600,
+                                                'imgsrc'    => 'https://picsum.photos/id/126/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 700,
+                                                'imgsrc'    => 'https://picsum.photos/id/127/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 800,
+                                                'imgsrc'    => 'https://picsum.photos/id/128/80/80', 'imgalt' => ''
+                                        ]
+                                ],
+                                'css'    => '{background-color: #000;}'
+                        ]
+                ],
+                14 => [
+                        'id'          => 14,
+                        'location'    => 'coursemodule',
+                        'type'        => 'score',
+                        'title'       => 'Sac de pièces',
+                        'description' => 'Ce sac contient quelques pièces',
+                        'properties'  => [
+                                'images' => [
+                                        [
+                                                'threshold' => 0,
+                                                'imgsrc'    => 'https://picsum.photos/id/140/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 100,
+                                                'imgsrc'    => 'https://picsum.photos/id/141/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 200,
+                                                'imgsrc'    => 'https://picsum.photos/id/142/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 300,
+                                                'imgsrc'    => 'https://picsum.photos/id/143/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 400,
+                                                'imgsrc'    => 'https://picsum.photos/id/144/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 500,
+                                                'imgsrc'    => 'https://picsum.photos/id/145/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 600,
+                                                'imgsrc'    => 'https://picsum.photos/id/146/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 700,
+                                                'imgsrc'    => 'https://picsum.photos/id/147/80/80', 'imgalt' => ''
+                                        ],
+                                        [
+                                                'threshold' => 800,
+                                                'imgsrc'    => 'https://picsum.photos/id/158/80/80', 'imgalt' => ''
+                                        ]
+                                ],
+                        ],
+                        'css'         => '{background-color: #efefef;}'
+                ],
+                15 => [
+                        'id'          => 15,
+                        'location'    => 'coursemodule',
+                        'type'        => 'achievement',
+                        'title'       => 'chat ou chien ?',
+                        'description' => 'La réussite vous permet de voir un chat, l\'échec ne permet de voir qu\'un chien',
+                        'properties'  => [
+                                'images' => [
+                                        [
+                                                'state'     => 'achieved',
+                                                'imgsrc'    => 'https://picsum.photos/id/219/80/80',
+                                                'imgalt'    => '',
+                                                'scorepart' => 1,
+                                                'extratext' => 'chat signifie gagner'
+                                        ],
+                                        [
+                                                'state'     => 'unachieved',
+                                                'imgsrc'    => 'https://picsum.photos/id/237/80/80',
+                                                'imgalt'    => '',
+                                                'scorepart' => 0,
+                                                'extratext' => 'chien signifie perdre'
+                                        ]
+                                ],
+                        ],
+                        'css'         => '{background-color: #454545;}'
                 ]
         ]
 ];
@@ -136,9 +258,6 @@ $staticconfig = [
 $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
 $staticconfig  = json_encode($staticconfig);
 $contexthelper->update_course_format_options(['ludic_config' => $staticconfig]);
-
-var_dump(optional_param('section', 0, PARAM_INT));
-var_dump(optional_param('clickon', null, PARAM_URL));
 
 // Display course.
 if ($editmode) {
@@ -149,6 +268,6 @@ if ($editmode) {
 }
 
 // Requires format ludic javascript.
-$PAGE->requires->strings_for_js(['confirmation-popup-title', 'confirmation-popup-content'], 'format_ludic');
+$PAGE->requires->strings_for_js(format_ludic_get_strings_for_js($editmode), 'format_ludic');
 $PAGE->requires->js('/course/format/ludic/format.js');
 $PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init', ['params' => $params]);

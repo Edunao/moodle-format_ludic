@@ -44,6 +44,7 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/models/skin.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/coursemodule_skin_interface.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/inline.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/score.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/achievement.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/models/section_skins/section_skin_interface.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/models/section_skins/score.php');
 
@@ -77,6 +78,7 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/coursemod
 // Form.
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/section_form.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/coursemodule_form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/coursemodule_skin_score_form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/checkbox_form_element.php');
@@ -200,6 +202,38 @@ class format_ludic extends \format_base {
         return !empty($name) ? $name : get_string('default-section-title', 'format_ludic', $sectionnum);
     }
 
+    /**
+     * Loads all of the course sections (except section 0) into the navigation
+     *
+     * @param global_navigation $navigation
+     * @param navigation_node $node The course node within the navigation
+     * @throws dml_exception
+     * @throws coding_exception
+     */
+    public function extend_course_navigation($navigation, navigation_node $node) {
+        global $PAGE;
+
+        // If section is specified in course/view.php, make sure it is expanded in navigation.
+        if ($navigation->includesectionnum === false) {
+            $selectedsection = $this->contexthelper->get_section_id();
+            if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') &&
+                $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
+                $navigation->includesectionnum = $selectedsection;
+            }
+        }
+
+        // Check if there are callbacks to extend course navigation.
+        parent::extend_course_navigation($navigation, $node);
+
+        // Remove Section 0 from drawer.
+        $dbapi = $this->contexthelper->get_database_api();
+        $generalsectionid = $dbapi->get_section_id_by_courseid_and_sectionidx($this->courseid, 0);
+        $generalsection = $node->get($generalsectionid, navigation_node::TYPE_SECTION);
+        if ($generalsection) {
+            $generalsection->remove();
+        }
+
+    }
 }
 
 /**
@@ -255,13 +289,21 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
 }
 
 /**
+ * Return weight setting by default.
+ * @return string
+ */
+function format_ludic_get_default_weight_setting() {
+    return '0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000';
+}
+
+/**
  * Requires javascript for filepicker and modchooser.
  * @param $context
  */
 function format_ludic_init_edit_mode($context) {
     global $PAGE;
 
-    // Filepicker.
+    // Require filepicker js.
     $args                 = new \stdClass();
     $args->context        = $context;
     $args->accepted_types = '*';
@@ -272,11 +314,19 @@ function format_ludic_init_edit_mode($context) {
     $PAGE->requires->js('/repository/filepicker.js');
     $PAGE->requires->js('/lib/form/filepicker.js');
 
-    // Modchooser.
+    // Require modchooser js.
     $PAGE->requires->yui_module('moodle-course-modchooser', 'M.course.init_chooser', array(
             array(
                     'courseid'         => $context->instanceid,
                     'closeButtonTitle' => null
             )
     ));
+}
+
+function format_ludic_get_strings_for_js($editmode) {
+    if ($editmode) {
+        return ['confirmation-popup-title', 'confirmation-popup-content'];
+    } else {
+        return [];
+    }
 }

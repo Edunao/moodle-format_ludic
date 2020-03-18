@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Activity skin inline.
+ * Activity skin achievement.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -28,27 +28,35 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-class inline extends \format_ludic\skin implements \format_ludic\coursemodule_skin_interface {
+class achievement extends \format_ludic\skin implements \format_ludic\coursemodule_skin_interface {
 
     public function render_coursemodule_view() {
-        return 'activity inline';
+        return 'activity achievement';
     }
 
     public function get_edit_image() {
-        return (object) [
-                'imgsrc' => 'https://fr.seaicons.com/wp-content/uploads/2017/02/page-icon.png',
-                'imgalt' => 'In Page'
-        ];
+        $images = $this->get_images();
+        foreach ($images as $image) {
+            if ($image->state === 'achieved') {
+                return (object) [
+                        'imgsrc' => $image->imgsrc,
+                        'imgalt' => $image->imgalt
+                ];
+            }
+        }
+        return $this->get_default_image();
     }
 
-    static public function get_instance() {
-        return new inline((object) [
-                'id'          => FORMAT_LUDIC_CM_SKIN_INLINE_ID,
-                'location'    => 'coursemodule',
-                'type'        => 'inline',
-                'title'       => get_string('cm-skin-inline-title', 'format_ludic'),
-                'description' => get_string('cm-skin-inline-description', 'format_ludic')
-        ]);
+    public function get_images() {
+        $properties = $this->get_properties();
+        return isset($properties['images']) ? $properties['images'] : [];
+    }
+
+    public function get_default_image() {
+        return (object) [
+                'imgsrc' => 'https://picsum.photos/id/66/80/80',
+                'imgalt' => 'achievement de course module'
+        ];
     }
 
     public function require_grade() {

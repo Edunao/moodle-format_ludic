@@ -24,6 +24,8 @@
 
 namespace format_ludic;
 
+use format_ludic\coursemodule\inline;
+
 defined('MOODLE_INTERNAL') || die();
 
 abstract class skin extends model {
@@ -68,14 +70,33 @@ abstract class skin extends model {
      */
     public static function get_by_id($skinid) {
         global $PAGE;
+
+        if ($skinid == FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
+            return inline::get_instance();
+        }
+
         $contexthelper = context_helper::get_instance($PAGE);
         $skins         = $contexthelper->get_skins_config();
+
         if (!isset($skins[$skinid]) || empty($skins[$skinid])) {
             return null;
         }
+
         $skin      = $skins[$skinid];
         $classname = '\format_ludic\\' . $skin->location . '\\' . $skin->type;
         return class_exists($classname) ? new $classname($skin) : null;
+    }
+
+    public static function get_default_course_module_skin($cmid) {
+        global $PAGE;
+        $contexthelper = context_helper::get_instance($PAGE);
+        $skins = $contexthelper->get_available_course_module_skins($cmid);
+        foreach ($skins as $skin) {
+            if (!in_array($skin->id, [FORMAT_LUDIC_CM_SKIN_INLINE_ID])) {
+                return $skin;
+            }
+        }
+        return inline::get_instance();
     }
 
     public function get_stylesheet($selectorid) {

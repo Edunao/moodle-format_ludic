@@ -28,15 +28,37 @@ defined('MOODLE_INTERNAL') || die();
 
 class select_form_element extends form_element {
 
+    public $options;
+
+    /**
+     * select_form_element constructor.
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'select';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
+        $options = isset($this->specific['options']) ? $this->specific['options'] : [];
+        foreach ($options as $key => $value) {
+            $options[$key] = [];
+            if (is_array($value)) {
+                $options[$key]['value'] = isset($value['value']) ? $value['value'] : '';
+            } else {
+                $options[$key]['value'] = $value;
+            }
+            $options[$key]['name']  = isset($value['name']) ? $value['name'] : $options[$key]['value'];
+            $options[$key]['selected'] = $this->value == $options[$key]['value'];
+        }
+        $this->options = $options;
     }
 
+    /**
+     * Search if given value is in options or not.
+     *
+     * @param $value
+     * @return array
+     */
     public function validate_value($value) {
-        $options = isset($this->specific['options']) ? $this->specific['options'] : [];
         $valueinoptions = false;
-        foreach ($options as $option) {
+        foreach ($this->options as $option) {
             if ($value == $option['value']) {
                 $valueinoptions = true;
             }
@@ -44,9 +66,8 @@ class select_form_element extends form_element {
         if (!$valueinoptions) {
             return ['success' => 0];
         }
-        $value = clean_param($value, PARAM_RAW);
-        return ['success' => 1,  'value' => (string) ($value)];
-    }
 
+        return ['success' => 1, 'value' => $value];
+    }
 
 }

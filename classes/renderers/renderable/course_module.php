@@ -27,29 +27,26 @@ defined('MOODLE_INTERNAL') || die();
 class format_ludic_course_module extends format_ludic_item {
 
     public $iconsrc;
+    public $parentid;
+
 
     public function __construct(\format_ludic\course_module $coursemodule) {
-        $this->selectorid  = 'coursemodule-' . $coursemodule->order;
-        $this->id       = $coursemodule->id;
-        $this->order    = $coursemodule->order;
-        $this->title    = $coursemodule->name;
-        $this->itemtype = 'coursemodule';
-        $this->draggable = true;
-        $this->droppable = true;
-        $this->imgsrc   = $this->get_section_img_src();
-        $this->imgalt   = $this->get_section_img_alt();
-        $this->iconsrc  = isset($coursemodule->iconsrc) ? $coursemodule->iconsrc : false;
-    }
-
-    public function get_section_img_info() {
-        return ['imgsrc' => 'https://picsum.photos/id/'.$this->id.'/80/80', 'imgalt' => '. . . . .cmid => ' . $this->id];
-    }
-
-    public function get_section_img_src() {
-        return $this->get_section_img_info()['imgsrc'];
-    }
-
-    public function get_section_img_alt() {
-        return $this->get_section_img_info()['imgalt'];
+        $this->selectorid       = 'ludic-coursemodule-' . $coursemodule->order;
+        $this->id               = $coursemodule->id;
+        $this->order            = $coursemodule->order;
+        $this->title            = $coursemodule->name;
+        $this->parentid         = $coursemodule->sectionid;
+        $this->itemtype         = 'coursemodule';
+        $this->child            = true;
+        $this->draggable        = true;
+        $this->droppable        = true;
+        $this->skinid           = isset($coursemodule->skinid) && !empty($coursemodule->skinid) ? $coursemodule->skinid : null;
+        $imageobject            = !empty($coursemodule->skinid) ? $coursemodule->skin->get_edit_image() :
+                \format_ludic\skin::get_undefined_skin_image('section');
+        $this->imgsrc           = $imageobject->imgsrc;
+        $this->imgalt           = $imageobject->imgalt;
+        $this->iconsrc          = isset($coursemodule->iconsrc) ? $coursemodule->iconsrc : false;
+        $this->isnotvisible     = !$coursemodule->visible;
+        $this->propertiesaction = 'get_properties';
     }
 }

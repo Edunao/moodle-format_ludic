@@ -26,11 +26,18 @@ defined('MOODLE_INTERNAL') || die();
 
 class format_ludic_section extends format_ludic_item {
 
+    /**
+     * format_ludic_section constructor.
+     *
+     * @param \format_ludic\section $section
+     * @throws coding_exception
+     */
     public function __construct(\format_ludic\section $section) {
         $this->selectorid = 'ludic-section-' . $section->section;
         $this->id         = $section->id;
         $this->itemtype   = 'section';
         $this->issection  = true;
+        $this->parent     = true;
         $this->order      = $section->section;
 
         $this->title = $section->get_title();

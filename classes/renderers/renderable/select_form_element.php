@@ -34,7 +34,7 @@ class format_ludic_select_form_element extends format_ludic_form_element {
 
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
-        $this->options  = isset($this->specific['options']) ? $this->specific['options'] : false;
+        $this->options  = $element->options;
         $this->size     = isset($element->attributes['size']) ? $element->attributes['size'] : false;
         $this->multiple = isset($element->attributes['multiple']) ? $element->attributes['multiple'] : false;
     }
