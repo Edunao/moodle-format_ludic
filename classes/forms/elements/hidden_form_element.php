@@ -28,11 +28,27 @@ defined('MOODLE_INTERNAL') || die();
 
 class hidden_form_element extends form_element {
 
+    /**
+     * hidden_form_element constructor.
+     *
+     * @param $name
+     * @param $id
+     * @param $value
+     * @param $defaultvalue
+     * @param string $label
+     * @param array $attributes
+     * @param array $specific
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'hidden';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 
+    /**
+     * @param $value
+     * @return array
+     * @throws \coding_exception
+     */
     public function validate_value($value) {
         $value = clean_param($value, PARAM_RAW);
         return ['success' => 1,  'value' => (string) ($value)];

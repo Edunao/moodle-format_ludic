@@ -28,11 +28,28 @@ defined('MOODLE_INTERNAL') || die();
 
 class filepicker_form_element extends form_element {
 
+    /**
+     * filepicker_form_element constructor.
+     *
+     * @param $name
+     * @param $id
+     * @param $value
+     * @param $defaultvalue
+     * @param string $label
+     * @param array $attributes
+     * @param array $specific
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'filepicker';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 
+    /**
+     * @param $value
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
     public function validate_value($value) {
 
         // Filepicker value is never empty.

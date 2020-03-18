@@ -27,9 +27,14 @@ defined('MOODLE_INTERNAL') || die();
 class format_ludic_course_module extends format_ludic_item {
 
     public $iconsrc;
+    public $iconalt;
     public $parentid;
 
-
+    /**
+     * format_ludic_course_module constructor.
+     *
+     * @param \format_ludic\course_module $coursemodule
+     */
     public function __construct(\format_ludic\course_module $coursemodule) {
         $this->selectorid       = 'ludic-coursemodule-' . $coursemodule->order;
         $this->id               = $coursemodule->id;
@@ -40,12 +45,13 @@ class format_ludic_course_module extends format_ludic_item {
         $this->child            = true;
         $this->draggable        = true;
         $this->droppable        = true;
-        $this->skinid           = isset($coursemodule->skinid) && !empty($coursemodule->skinid) ? $coursemodule->skinid : null;
-        $imageobject            = !empty($coursemodule->skinid) ? $coursemodule->skin->get_edit_image() :
-                \format_ludic\skin::get_undefined_skin_image('section');
+        $this->skinid           = $coursemodule->skinid;
+        $imageobject            = $coursemodule->skin->get_edit_image();
         $this->imgsrc           = $imageobject->imgsrc;
         $this->imgalt           = $imageobject->imgalt;
-        $this->iconsrc          = isset($coursemodule->iconsrc) ? $coursemodule->iconsrc : false;
+        $icon                   = $coursemodule->get_mod_icon();
+        $this->iconsrc          = $icon->imgsrc;
+        $this->iconalt          = $icon->imgalt;
         $this->isnotvisible     = !$coursemodule->visible;
         $this->propertiesaction = 'get_properties';
     }

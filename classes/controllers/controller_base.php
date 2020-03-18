@@ -60,7 +60,7 @@ abstract class controller_base {
     }
 
     /**
-     * Set course context
+     * Set course context.
      *
      * @throws \moodle_exception
      */
@@ -71,6 +71,8 @@ abstract class controller_base {
     }
 
     /**
+     * Get course context.
+     *
      * @return \context_course context instance
      */
     public function get_context() {
@@ -98,6 +100,8 @@ abstract class controller_base {
     }
 
     /**
+     * Get course id.
+     *
      * @return int
      * @throws \moodle_exception
      */
@@ -106,6 +110,8 @@ abstract class controller_base {
     }
 
     /**
+     * Get user id.
+     *
      * @return int
      * @throws \moodle_exception
      */
@@ -141,6 +147,11 @@ abstract class controller_base {
         }
     }
 
+    /**
+     * Execute the controller action.
+     *
+     * @return mixed
+     */
     abstract public function execute();
 
 }

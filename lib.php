@@ -79,7 +79,6 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/coursemod
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/section_form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/coursemodule_form.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/coursemodule_skin_score_form.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/checkbox_form_element.php');
 require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/filepicker_form_element.php');
@@ -99,7 +98,7 @@ require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/textar
  */
 class format_ludic extends \format_base {
 
-    private $contexthelper;
+    protected $contexthelper;
 
     /**
      * format_ludic constructor.
@@ -180,8 +179,6 @@ class format_ludic extends \format_base {
         return true;
     }
 
-
-
     /**
      * Returns course section name.
      *
@@ -206,9 +203,10 @@ class format_ludic extends \format_base {
      * Loads all of the course sections (except section 0) into the navigation
      *
      * @param global_navigation $navigation
-     * @param navigation_node $node The course node within the navigation
-     * @throws dml_exception
+     * @param navigation_node $node
      * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function extend_course_navigation($navigation, navigation_node $node) {
         global $PAGE;
@@ -323,6 +321,12 @@ function format_ludic_init_edit_mode($context) {
     ));
 }
 
+/**
+ * String identifiers required for js.
+ *
+ * @param $editmode
+ * @return array
+ */
 function format_ludic_get_strings_for_js($editmode) {
     if ($editmode) {
         return ['confirmation-popup-title', 'confirmation-popup-content'];

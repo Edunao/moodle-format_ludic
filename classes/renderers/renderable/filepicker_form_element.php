@@ -32,6 +32,11 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
     public $content;
     public $options;
 
+    /**
+     * format_ludic_filepicker_form_element constructor.
+     *
+     * @param \format_ludic\form_element $element
+     */
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
         $this->filepicker = new MoodleQuickForm_filepicker($this->name, $this->name, ['id' => 'id_' . $this->name]);
@@ -39,10 +44,15 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
         $this->options    = json_encode($this->get_js_options());
     }
 
+    /**
+     * Get required options for js.
+     *
+     * @return stdClass
+     */
     public function get_js_options() {
         global $PAGE, $CFG;
 
-        // Définir un nombre max pour le format.
+        // TODO : Définir un nombre max pour le format.
         $fpmaxbytes     = 0;
         $coursemaxbytes = 0;
         if (!empty($PAGE->course->maxbytes)) {
@@ -52,7 +62,7 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
 
         $args = new stdClass();
         // Need these three to filter repositories list.
-        $args->accepted_types = 'web_image';         // Définir les types autorisés pour le format.
+        $args->accepted_types = 'web_image';
         $args->return_types   = FILE_INTERNAL;
         $args->itemid         = $this->filepicker->getValue();
         $args->maxbytes       = $coursemaxbytes;
@@ -63,7 +73,7 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
         $fp                 = new file_picker($args);
         $options            = $fp->options;
         $options->context   = $PAGE->context;
-        $options->savepath  = 'custom/savepath/';
+        $options->savepath  = 'custom/savepath/';//TODO define savepath !
         $options->client_id = $this->extract_client_id();
 
         return $options;

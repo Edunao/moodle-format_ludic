@@ -31,6 +31,17 @@ class text_form_element extends form_element {
     public $minlength;
     public $maxlength;
 
+    /**
+     * text_form_element constructor.
+     *
+     * @param $name
+     * @param $id
+     * @param $value
+     * @param $defaultvalue
+     * @param string $label
+     * @param array $attributes
+     * @param array $specific
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'text';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
@@ -39,6 +50,11 @@ class text_form_element extends form_element {
         $this->maxlength = isset($attributes['maxlength']) ? $attributes['maxlength'] : false;
     }
 
+    /**
+     * @param $value
+     * @return array
+     * @throws \coding_exception
+     */
     public function validate_value($value) {
         $value = clean_param($value, PARAM_RAW);
         if ($this->required && empty($value)) {

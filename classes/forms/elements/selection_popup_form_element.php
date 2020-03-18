@@ -33,6 +33,17 @@ class selection_popup_form_element extends form_element {
     public $itemaction;
     public $popuptitle;
 
+    /**
+     * selection_popup_form_element constructor.
+     *
+     * @param $name
+     * @param $id
+     * @param $value
+     * @param $defaultvalue
+     * @param string $label
+     * @param array $attributes
+     * @param array $specific
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type           = 'selection_popup';
         $this->itemcontroller = isset($specific['itemcontroller']) ? $specific['itemcontroller'] : null;
@@ -41,6 +52,11 @@ class selection_popup_form_element extends form_element {
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 
+    /**
+     * @param $value
+     * @return array
+     * @throws \coding_exception
+     */
     public function validate_value($value) {
         $value = clean_param($value, PARAM_RAW);
         if ($this->required && $value === '') {

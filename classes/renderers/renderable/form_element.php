@@ -42,6 +42,11 @@ class format_ludic_form_element implements renderable {
     public $readonly;
     public $required;
 
+    /**
+     * format_ludic_form_element constructor.
+     *
+     * @param \format_ludic\form_element $element
+     */
     public function __construct(\format_ludic\form_element $element) {
         $this->id         = $element->id;
         $this->name       = $element->name;

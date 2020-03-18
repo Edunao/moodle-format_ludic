@@ -59,6 +59,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string the page title
      */
     protected function page_title() {
+        // TODO !
         // Old : get_string('topicoutline'); .
         return 'page title';
     }
@@ -95,9 +96,11 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param $sectionid
+     * @param $cmid
      * @return string
      * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function render_course_module_form($cmid) {
         $form = new \format_ludic\coursemodule_form($cmid);
@@ -109,12 +112,19 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @param null $itemid
      * @param null $type
      * @return string
+     * @throws coding_exception
      */
     public function render_buttons($buttons, $itemid = null, $type = null) {
         $buttons = new format_ludic_buttons($buttons, $itemid, $type);
         return $this->render($buttons);
     }
 
+    /**
+     * @param $courseid
+     * @param $order
+     * @return bool|string
+     * @throws moodle_exception
+     */
     public function render_add_section_button($courseid, $order) {
         global $CFG;
 
@@ -134,6 +144,7 @@ class format_ludic_renderer extends format_section_renderer_base {
     /**
      * @param $section
      * @return string
+     * @throws coding_exception
      */
     public function render_section($section) {
         $section = new format_ludic_section($section);
@@ -230,6 +241,14 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render_from_template('format_ludic/form', $form);
     }
 
+    /**
+     * @param $type
+     * @param string $parentscontent
+     * @param string $propertiescontent
+     * @param string $helpcontent
+     * @return bool|string
+     * @throws moodle_exception
+     */
     public function render_container_items($type, $parentscontent = '', $propertiescontent = '', $helpcontent = '') {
         return $this->render_from_template('format_ludic/container_items', [
                 'parentstype'       => $type,

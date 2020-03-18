@@ -136,6 +136,7 @@ abstract class form {
     /**
      * Validate elements.
      * Each element validates its value and returns it if valid, otherwise an error message.
+     *
      * @return bool
      * @throws \coding_exception
      */

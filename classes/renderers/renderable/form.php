@@ -33,6 +33,11 @@ class format_ludic_form implements renderable {
     public $itemid;
     public $content;
 
+    /**
+     * format_ludic_form constructor.
+     *
+     * @param \format_ludic\form $form
+     */
     public function __construct(\format_ludic\form $form) {
         $this->id = 'ludic-form-' . $form->type;
         if ($form->id) {

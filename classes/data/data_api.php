@@ -31,7 +31,7 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class data_api {
 
-    private $contexthelper;
+    protected $contexthelper;
 
     /**
      * data_api constructor.

@@ -592,6 +592,8 @@ class context_helper {
     }
 
     /**
+     * Get ludic config from course format options.
+     *
      * @return array
      */
     private function get_ludic_config() {
@@ -613,6 +615,8 @@ class context_helper {
     }
 
     /**
+     * Get skins from ludic config.
+     *
      * @return array
      */
     public function get_skins_config() {
@@ -621,6 +625,8 @@ class context_helper {
     }
 
     /**
+     * Get all skins.
+     *
      * @return skin[]
      */
     public function get_skins() {
@@ -635,15 +641,20 @@ class context_helper {
     }
 
     /**
-     * @return array
+     * Get default skins.
+     * They don't depend on the ludic config !
+     *
+     * @return skin[]
      */
     public function get_default_skins() {
         return [
-                inline::get_instance()
+                coursemodule\inline::get_instance()
         ];
     }
 
     /**
+     * Get section skins.
+     *
      * @return skin[]
      */
     public function get_section_skins() {
@@ -658,6 +669,8 @@ class context_helper {
     }
 
     /**
+     * Get course modules skins.
+     *
      * @return skin[]
      */
     public function get_course_module_skins() {
@@ -672,6 +685,9 @@ class context_helper {
     }
 
     /**
+     * Get available course module skins.
+     * Returns skins with grades only if the module course supports grades.
+     *
      * @param $cmid
      * @return array
      * @throws \coding_exception
@@ -683,7 +699,7 @@ class context_helper {
 
         // Label can use only inline skin.
         if ($modname === 'label') {
-            return [inline::get_instance()];
+            return [coursemodule\inline::get_instance()];
         }
 
         $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
@@ -702,7 +718,7 @@ class context_helper {
      * Create an section in the course defined in $courseid.
      *
      * @param $courseid
-     * @return bool|false|section
+     * @return false|section
      * @throws \dml_exception
      * @throws \moodle_exception
      */
@@ -722,6 +738,12 @@ class context_helper {
         return $this->get_section_by_id($newsection->id);
     }
 
+    /**
+     * Return course format moodle config.
+     *
+     * @return \stdClass
+     * @throws \dml_exception
+     */
     public function get_course_format_config() {
         if ($this->config == null) {
             $this->config = get_config('format_ludic');
@@ -730,6 +752,12 @@ class context_helper {
         return $this->config;
     }
 
+    /**
+     * Get weight options for select element.
+     *
+     * @return array
+     * @throws \dml_exception
+     */
     public function get_course_module_weight_options() {
         if ($this->weightoptions == null) {
             $config              = $this->get_course_format_config();
@@ -741,6 +769,12 @@ class context_helper {
         return $this->weightoptions;
     }
 
+    /**
+     * Get default weight (set by default after adding an activity)
+     *
+     * @return int
+     * @throws \dml_exception
+     */
     public function get_default_weight() {
         $weightoptions = $this->get_course_module_weight_options();
         $defaultkey    = round(count($weightoptions) / 2, 0, PHP_ROUND_HALF_DOWN);
@@ -748,9 +782,14 @@ class context_helper {
     }
 
     /**
+     * Get format_ludic_cm db record.
+     * If exists return it, else create one.
+     *
+     * @param $courseid
      * @param $cmid
      * @return \stdClass
      * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function get_format_ludic_cm_by_cmid($courseid, $cmid) {
         $dbrecord = $this->dbapi->get_format_ludic_cm_by_cmid($cmid);
@@ -769,8 +808,38 @@ class context_helper {
         return $dbrecord;
     }
 
+    /**
+     * Get format_ludic_cm db record.
+     * If exists return it, else create one.
+     *
+     * @param $courseid
+     * @param $sectionid
+     * @return \stdClass
+     * @throws \dml_exception
+     */
+    public function get_format_ludic_cs_by_sectionid($courseid, $sectionid) {
+        $dbrecord = $this->dbapi->get_format_ludic_cs_by_sectionid($sectionid);
+        if ($dbrecord) {
+            return $dbrecord;
+        }
+        $skin                = skin::get_default_section_skin();
+        $dbrecord            = new \stdClass();
+        $dbrecord->courseid  = $courseid;
+        $dbrecord->sectionid = $sectionid;
+        $dbrecord->skinid    = $skin->id;
+
+        $newid = $this->dbapi->add_format_ludic_cs_record($dbrecord);
+        return $dbrecord;
+    }
+
+    /**
+     * Get access options for select element.
+     *
+     * @return array
+     * @throws \coding_exception
+     */
     public function get_access_options() {
-        $access  = [
+        $access = [
                 FORMAT_LUDIC_ACCESS_ACCESSIBLE          => 'access-accessible',
                 FORMAT_LUDIC_ACCESS_CHAINED             => 'access-chained',
                 FORMAT_LUDIC_ACCESS_DISCOVERABLE        => 'access-discoverable',

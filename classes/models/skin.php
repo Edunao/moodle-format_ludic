@@ -24,13 +24,10 @@
 
 namespace format_ludic;
 
-use format_ludic\coursemodule\inline;
-
 defined('MOODLE_INTERNAL') || die();
 
 abstract class skin extends model {
 
-    public  $id;
     public  $location;
     public  $type;
     public  $title;
@@ -56,6 +53,8 @@ abstract class skin extends model {
     }
 
     /**
+     * Get a skin by instance.
+     *
      * @param $skin
      * @return skin|null
      */
@@ -65,16 +64,20 @@ abstract class skin extends model {
     }
 
     /**
+     * Get a skin by id.
+     *
      * @param $skinid
      * @return skin|null
      */
     public static function get_by_id($skinid) {
         global $PAGE;
 
+        // Skin id is not in config.
         if ($skinid == FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
-            return inline::get_instance();
+            return coursemodule\inline::get_instance();
         }
 
+        // Skin id is in config.
         $contexthelper = context_helper::get_instance($PAGE);
         $skins         = $contexthelper->get_skins_config();
 
@@ -83,36 +86,67 @@ abstract class skin extends model {
         }
 
         $skin      = $skins[$skinid];
-        $classname = '\format_ludic\\' . $skin->location . '\\' . $skin->type;
-        return class_exists($classname) ? new $classname($skin) : null;
+        return self::get_by_instance($skin);
     }
 
+    /**
+     * Get the first available skin for a course module.
+     *
+     * @param $cmid
+     * @return mixed
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
     public static function get_default_course_module_skin($cmid) {
         global $PAGE;
         $contexthelper = context_helper::get_instance($PAGE);
-        $skins = $contexthelper->get_available_course_module_skins($cmid);
+        $skins         = $contexthelper->get_available_course_module_skins($cmid);
         foreach ($skins as $skin) {
             if (!in_array($skin->id, [FORMAT_LUDIC_CM_SKIN_INLINE_ID])) {
                 return $skin;
             }
         }
-        return inline::get_instance();
+        return coursemodule\inline::get_instance();
+    }
+
+    /**
+     * Return the first section skin.
+     *
+     * @return skin
+     */
+    public static function get_default_section_skin() {
+        global $PAGE;
+        $contexthelper = context_helper::get_instance($PAGE);
+        $skins         = $contexthelper->get_section_skins();
+        return current($skins);
     }
 
     public function get_stylesheet($selectorid) {
+        // TODO.
         $output = '<style>';
         $output .= '#' . $selectorid . ' ' . $this->css;
         $output .= '</style>';
         return $output;
     }
 
+    // TODO.
     public function get_properties() {
         return !empty($this->properties) ? get_object_vars($this->properties) : [];
     }
 
+    /**
+     * Get child edit image.
+     * @return \stdClass
+     */
     public abstract function get_edit_image();
 
+    /**
+     *
+     * @param $location
+     * @return object
+     */
     public static function get_undefined_skin_image($location) {
+        return false;
         $imgsrc = $location == 'section' ? 'https://picsum.photos/id/159/80/80' : 'https://picsum.photos/id/152/80/80';
         return (object) [
                 'imgsrc' => $imgsrc,

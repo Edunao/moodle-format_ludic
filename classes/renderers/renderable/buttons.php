@@ -31,6 +31,14 @@ class format_ludic_buttons implements renderable {
     public $itemtype;
     public $selectorid;
 
+    /**
+     * format_ludic_buttons constructor.
+     *
+     * @param $buttons
+     * @param null $itemid
+     * @param null $itemtype
+     * @throws coding_exception
+     */
     public function __construct($buttons, $itemid = null, $itemtype = null) {
         $this->itemid     = $itemid;
         $this->itemtype   = $itemtype;

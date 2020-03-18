@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Section form.
+ * Course module form.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -42,8 +42,15 @@ class coursemodule_form extends form {
     }
 
     /**
+     * Hidden : id.
+     * Text : name.
+     * Selection popup : skin id.
+     * Select : weight.
+     * Select : access.
+     *
      * @return form_element[]
      * @throws \coding_exception
+     * @throws \dml_exception
      */
     public function get_definition() {
         $id = $this->object->id;
@@ -56,13 +63,11 @@ class coursemodule_form extends form {
                         'required' => true, 'maxlength' => 30
                 ]);
 
-        $skinid     = isset($this->object->skinid) ? $this->object->skinid : 0;
-        $elements[] = new selection_popup_form_element('skinid', 'course-module-skinid', $skinid, 0,
+        $elements[] = new selection_popup_form_element('skinid', 'course-module-skinid', $this->object->skinid, 0,
                 get_string('label-skin-selection', 'format_ludic'),
                 ['required' => true, 'multiple' => false],
                 [
-                        'icon'           => !empty($this->object->skinid) ? $this->object->skin->get_edit_image() :
-                                skin::get_undefined_skin_image('section'),
+                        'icon'           => $this->object->skin->get_edit_image(),
                         'itemid'         => $id,
                         'itemcontroller' => 'skin',
                         'itemaction'     => 'get_course_module_skin_selector',
@@ -81,11 +86,18 @@ class coursemodule_form extends form {
         return $elements;
     }
 
+    /**
+     * @return bool
+     * @throws \dml_exception
+     */
     public function update_child() {
         $this->object->update($this->formvalues);
         return true;
     }
 
+    /**
+     * @return bool
+     */
     public function validate_child() {
         return true;
     }

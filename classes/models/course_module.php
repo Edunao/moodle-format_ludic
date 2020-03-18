@@ -218,7 +218,7 @@ class course_module extends model {
         if (isset($data['name']) && $data['name'] !== $this->name) {
             $dbapi->update_course_module_name($this->id, $data['name']);
         }
-        
+
         if (isset($data['skinid']) && $data['skinid'] !== $this->skinid ||
             isset($data['weight']) && $data['weight'] !== $this->weight ||
             isset($data['access']) && $data['access'] !== $this->access
@@ -229,6 +229,18 @@ class course_module extends model {
         rebuild_course_cache($this->courseid, true);
 
         return true;
+    }
+
+    /**
+     * Return course module icon.
+     *
+     * @return object
+     */
+    public function get_mod_icon() {
+        return (object) [
+                'imgsrc' => $this->cminfo->get_icon_url()->out(false),
+                'imgalt' => $this->cminfo->modname
+        ];
     }
 
 }

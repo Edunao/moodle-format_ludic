@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Section controller class
+ * Section controller class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -145,6 +145,7 @@ class section_controller extends controller_base {
      * @param $sectionid
      * @return string
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_properties($sectionid) {
         global $PAGE;

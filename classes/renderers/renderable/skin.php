@@ -28,6 +28,11 @@ class format_ludic_skin extends format_ludic_item {
 
     public $selected;
 
+    /**
+     * format_ludic_skin constructor.
+     *
+     * @param \format_ludic\skin $skin
+     */
     public function __construct(\format_ludic\skin $skin) {
 
         $this->selectorid = 'ludic-skin-' . $skin->id;

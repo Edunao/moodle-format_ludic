@@ -25,13 +25,31 @@
         padding: 0 10px;
       }
 
+      .item-icon {
+        position: absolute;
+        width: 40px;
+        height: 50px;
+        top: -20px;
+        right: -20px;
+        background-color: #FFF;
+        background-size: 30px;
+        background-repeat: no-repeat;
+        background-position: center center;
+        border: 1px solid black;
+
+      }
+
       &.selected {
         border: 3px solid red;
 
-        &.is-not-visible:after {
-          border-left: 3px solid red !important;
-          border-bottom: 3px solid red !important;
+        .item-icon {
+          border: 3px solid red !important;
         }
+
+        &.is-not-visible:after {
+          border: 3px solid red !important;
+        }
+
       }
 
       &.hide, &.hide-js {
@@ -40,6 +58,10 @@
 
       &:hover, &:focus {
         border: 2px #0a6aa1 dashed;
+
+        .item-icon, &.is-not-visible:after {
+          border: 2px #0a6aa1 dashed !important;
+        }
       }
 
       &.is-not-visible {
@@ -51,14 +73,16 @@
           width: 30px;
           height: 30px;
           position: absolute;
-          right: 0;
-          top: 0;
-          border-left: 1px solid black;
-          border-bottom: 1px solid black;
+          left: -15px;
+          top: calc(~'50% - 15px');
+          border: 1px solid #000;
+          border-radius: 15px;
+          background-color: white;
           background-image: url("[[pix:moodle|i/show]]");
-          background-size: 25px;
+          background-size: 18px;
           background-repeat: no-repeat;
           background-position: center center;
+
         }
       }
 

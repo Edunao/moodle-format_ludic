@@ -30,6 +30,13 @@ class format_ludic_modchooser implements renderable {
     public $section;
     public $order;
 
+    /**
+     * format_ludic_modchooser constructor.
+     *
+     * @param $content
+     * @param $section
+     * @param $order
+     */
     public function __construct($content, $section, $order) {
         $this->modchooser = $content;
         $this->section    = $section;

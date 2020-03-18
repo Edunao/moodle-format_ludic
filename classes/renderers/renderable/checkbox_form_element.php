@@ -28,6 +28,11 @@ class format_ludic_checkbox_form_element extends format_ludic_form_element {
 
     public $checked;
 
+    /**
+     * format_ludic_checkbox_form_element constructor.
+     *
+     * @param \format_ludic\form_element $element
+     */
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
         $this->checked = !empty($this->value);

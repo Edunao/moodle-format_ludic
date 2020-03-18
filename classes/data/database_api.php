@@ -32,7 +32,7 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 class database_api {
 
     private $db;
-    private $contexthelper;
+    protected $contexthelper;
 
     /**
      * database_api constructor.
@@ -79,6 +79,17 @@ class database_api {
     }
 
     /**
+     * Get format_ludic_cs db record.
+     *
+     * @param $sectionid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_format_ludic_cs_by_sectionid($sectionid) {
+        return $this->db->get_record('format_ludic_cs', ['sectionid' => $sectionid]);
+    }
+
+    /**
      * Add new format_ludic_cm db record.
      * Return new id.
      *
@@ -88,6 +99,18 @@ class database_api {
      */
     public function add_format_ludic_cm_record($dataobject) {
         return $this->db->insert_record('format_ludic_cm', $dataobject, true);
+    }
+
+    /**
+     * Add new format_ludic_cs db record.
+     * Return new id.
+     *
+     * @param $dataobject
+     * @return bool|int
+     * @throws \dml_exception
+     */
+    public function add_format_ludic_cs_record($dataobject) {
+        return $this->db->insert_record('format_ludic_cs', $dataobject, true);
     }
 
     /**

@@ -55,6 +55,15 @@ class skin_controller extends controller_base {
         }
     }
 
+    /**
+     * Get course modules skins for selection in popup.
+     *
+     * @param $cmid
+     * @param $selectedskinid
+     * @return mixed
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
     public function get_course_module_skin_selector($cmid, $selectedskinid) {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
@@ -73,6 +82,12 @@ class skin_controller extends controller_base {
         return $renderer->render_container_items('coursemodule-skin', $content);
     }
 
+    /**
+     * Get section skins for selection in popup.
+     *
+     * @param $selectedskinid
+     * @return string
+     */
     public function get_section_skin_selector($selectedskinid) {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
@@ -91,7 +106,7 @@ class skin_controller extends controller_base {
     }
 
     /**
-     * TODO améliorer.
+     * Get skin description.
      *
      * @param $skinid
      * @return string

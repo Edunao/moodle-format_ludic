@@ -32,7 +32,7 @@ abstract class form_element {
      * Context helper
      * @var context_helper
      */
-    public $contexthelper;
+    protected $contexthelper;
     public $type;
     public $name;
     public $id;

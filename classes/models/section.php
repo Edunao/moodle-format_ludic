@@ -49,7 +49,6 @@ class section extends model {
      */
     public function __construct($section) {
         parent::__construct($section);
-        $dbapi             = $this->contexthelper->get_database_api();
         $this->dbrecord    = $section;
         $this->courseid    = $section->course;
         $this->section     = $section->section;
@@ -58,10 +57,10 @@ class section extends model {
         $this->visible     = $section->visible;
         $modinfo           = $this->contexthelper->get_fast_modinfo();
         $this->sectioninfo = $modinfo->get_section_info($this->section);
-        $this->skinid      = $dbapi->get_skin_id_by_section_id($this->id);
-        if ($this->skinid) {
-            $this->skin = skin::get_by_id($this->skinid);
-        }
+
+        $dbrecord     = $this->contexthelper->get_format_ludic_cs_by_sectionid($this->courseid, $this->id);
+        $this->skinid = $dbrecord->skinid;
+        $this->skin   = skin::get_by_id($this->skinid);
     }
 
     /**
@@ -72,7 +71,6 @@ class section extends model {
         $defaulttitle = get_string('default-section-title', 'format_ludic', $this->section);
         return !empty($this->name) ? $this->name : $defaulttitle;
     }
-
 
     /**
      * Get all ludic course modules of section.
@@ -236,7 +234,7 @@ class section extends model {
         $newsection = $this->contexthelper->create_section($this->courseid);
 
         // Copy course section name.
-        $newsection->name = $this->get_title() . get_string('duplicate-suffix', 'format_ludic');
+        $newsection->name           = $this->get_title() . get_string('duplicate-suffix', 'format_ludic');
         $newsection->dbrecord->name = $newsection->name;
         $dbapi->update_section_record($newsection->dbrecord);
 

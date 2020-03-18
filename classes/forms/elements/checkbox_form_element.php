@@ -28,11 +28,26 @@ defined('MOODLE_INTERNAL') || die();
 
 class checkbox_form_element extends form_element {
 
+    /**
+     * checkbox_form_element constructor.
+     *
+     * @param $name
+     * @param $id
+     * @param $value
+     * @param $defaultvalue
+     * @param string $label
+     * @param array $attributes
+     * @param array $specific
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'checkbox';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 
+    /**
+     * @param $value
+     * @return array
+     */
     public function validate_value($value) {
         $value = empty($value) ? 0 : 1;
         return ['success' => 1,  'value' => ($value)];

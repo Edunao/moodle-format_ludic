@@ -59,6 +59,7 @@ class achievement extends \format_ludic\skin implements \format_ludic\coursemodu
         ];
     }
 
+
     public function require_grade() {
         return false;
     }

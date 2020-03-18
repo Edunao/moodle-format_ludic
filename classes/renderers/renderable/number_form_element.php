@@ -30,6 +30,11 @@ class format_ludic_number_form_element extends format_ludic_form_element {
     public $max;
     public $step;
 
+    /**
+     * format_ludic_number_form_element constructor.
+     *
+     * @param \format_ludic\form_element $element
+     */
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
         $this->min  = isset($element->attributes['min']) ? $element->attributes['min'] : false;

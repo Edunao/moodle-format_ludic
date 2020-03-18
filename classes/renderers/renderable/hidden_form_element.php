@@ -24,6 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class format_ludic_hidden_form_element (required for render() function)
+ */
 class format_ludic_hidden_form_element extends format_ludic_form_element {
 
 

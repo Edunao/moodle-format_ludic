@@ -30,7 +30,7 @@ require_once($CFG->dirroot. '/course/format/ludic/lib.php');
 
 class log_api {
 
-    private $contexthelper;
+    protected $contexthelper;
 
     /**
      * log_api constructor.

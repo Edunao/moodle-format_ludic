@@ -32,6 +32,17 @@ class number_form_element extends form_element {
     public $max;
     public $step;
 
+    /**
+     * number_form_element constructor.
+     *
+     * @param $name
+     * @param $id
+     * @param $value
+     * @param $defaultvalue
+     * @param string $label
+     * @param array $attributes
+     * @param array $specific
+     */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'number';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
@@ -40,6 +51,11 @@ class number_form_element extends form_element {
         $this->step  = isset($attributes['step']) ? $attributes['step'] : false;
     }
 
+    /**
+     * @param $value
+     * @return array
+     * @throws \coding_exception
+     */
     public function validate_value($value) {
         if ($this->required && $value === '') {
             return ['success' => 0,  'value' => get_string('error-required', 'format_ludic')];

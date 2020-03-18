@@ -34,6 +34,15 @@ class section_form extends form {
         $this->elements = $this->get_definition();
     }
 
+    /**
+     * Hidden : id.
+     * Text : name.
+     * Checkbox : visible.
+     * Selection popup : skin id.
+     *
+     * @return form_element[]
+     * @throws \coding_exception
+     */
     public function get_definition() {
 
         $id = $this->object->id;
@@ -52,21 +61,20 @@ class section_form extends form {
         $visible        = $this->object->visible;
         $defaultvisible = 1;
         $labelvisible   = get_string('label-section-visible', 'format_ludic');
-        $elements[]     = new checkbox_form_element('visible', 'section-visible', $visible, $defaultvisible, $labelvisible, ['required' => true]);
+        $elements[]     = new checkbox_form_element('visible', 'section-visible', $visible, $defaultvisible, $labelvisible,
+                ['required' => true]);
 
-        $skinid = isset($this->object->skinid) ? $this->object->skinid : 0;
-        $elements[] = new selection_popup_form_element('skinid', 'section-skinid', $skinid, 0, get_string('label-skin-selection', 'format_ludic'),
+        $elements[] = new selection_popup_form_element('skinid', 'section-skinid', $this->object->skinid, 0,
+                get_string('label-skin-selection', 'format_ludic'),
                 ['required' => true, 'multiple' => false],
                 [
-                        'icon'      => !empty($this->object->skinid) ? $this->object->skin->get_edit_image() :
-                                skin::get_undefined_skin_image('section'),
-                        'itemid' => $id,
+                        'icon'           => $this->object->skin->get_edit_image(),
+                        'itemid'         => $id,
                         'itemcontroller' => 'skin',
                         'itemaction'     => 'get_section_skin_selector',
                         'popuptitle'     => get_string('section-skin-selection', 'format_ludic')
                 ]
         );
-
 
         // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
 
@@ -76,7 +84,6 @@ class section_form extends form {
         //        ['min' => 0, 'max' => 1000, 'step' => 100]);
         //$elements[]    = new textarea_form_element('css', 'section-css', null, '[section-tile] {
         //}', 'section textarea label', ['rows' => 10]);
-
 
         return $elements;
     }

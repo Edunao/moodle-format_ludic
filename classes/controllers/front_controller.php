@@ -97,7 +97,7 @@ class front_controller implements front_controller_interface {
     }
 
     /**
-     * Set action to call
+     * Set action to call.
      *
      * @param string $action
      * @return $this
@@ -114,14 +114,16 @@ class front_controller implements front_controller_interface {
     }
 
     /**
-     * Set params from $_GET and $_POST
+     * Set params from $_GET and $_POST.
      */
     public function set_params() {
         $this->params = array_merge($_GET, $_POST);
     }
 
     /**
-     * Execute the controller action
+     * Execute the controller action.
+     *
+     * @return mixed
      */
     public function execute() {
         $class      = $this->namespace . $this->controller;
