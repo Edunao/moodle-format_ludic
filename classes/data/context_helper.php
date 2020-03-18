@@ -32,13 +32,12 @@ defined('MOODLE_INTERNAL') || die();
 define('FORMAT_LUDIC_CM_SKIN_INLINE_ID', 1);
 
 // Access.
-define('FORMAT_LUDIC_ACCESS_HIDDEN', 0);
 define('FORMAT_LUDIC_ACCESS_ACCESSIBLE', 1);
 define('FORMAT_LUDIC_ACCESS_CHAINED', 2);
 define('FORMAT_LUDIC_ACCESS_DISCOVERABLE', 3);
 define('FORMAT_LUDIC_ACCESS_CONTROLLED', 4);
-define('FORMAT_LUDIC_ACCESS_GROUPED', 4);
-define('FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED', 5);
+define('FORMAT_LUDIC_ACCESS_GROUPED', 5);
+define('FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED', 6);
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
@@ -764,10 +763,31 @@ class context_helper {
         $dbrecord->cmid     = $cmid;
         $dbrecord->skinid   = $skin->id;
         $dbrecord->weight   = $this->get_default_weight();
-        $dbrecord->hidden   = 1;
-        $dbrecord->linked   = null;
+        $dbrecord->access   = 1;
 
         $newid = $this->dbapi->add_format_ludic_cm_record($dbrecord);
         return $dbrecord;
+    }
+
+    public function get_access_options() {
+        $access  = [
+                FORMAT_LUDIC_ACCESS_ACCESSIBLE          => 'access-accessible',
+                FORMAT_LUDIC_ACCESS_CHAINED             => 'access-chained',
+                FORMAT_LUDIC_ACCESS_DISCOVERABLE        => 'access-discoverable',
+                FORMAT_LUDIC_ACCESS_CONTROLLED          => 'access-controlled',
+                FORMAT_LUDIC_ACCESS_GROUPED             => 'access-grouped',
+                FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED => 'access-chained-and-grouped',
+        ];
+
+        $options = [];
+        foreach ($access as $value => $identifier) {
+            $options[] = [
+                    'value'       => $value,
+                    'name'        => get_string($identifier, 'format_ludic'),
+                    'description' => get_string($identifier . '-desc', 'format_ludic')
+            ];
+        }
+
+        return $options;
     }
 }

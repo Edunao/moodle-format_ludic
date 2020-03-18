@@ -313,6 +313,20 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         },
 
         /**
+         * Display description in select if exists.
+         */
+        initDisplayDescriptionInSelect: function() {
+            $('body.format-ludic').on('change', '.ludic-form-group[data-type="select"] select', function () {
+                let descriptionContainer = $(this).parent().find('.select-description');
+                if (!descriptionContainer) {
+                    return;
+                }
+                descriptionContainer.find('.option-description').removeClass('visible');
+                descriptionContainer.find('.option-description[for="' + $(this).val() + '"]').addClass('visible');
+            });
+        },
+
+        /**
          * When item is added with selected class, click on it by default.
          */
         initClickOnSelectedItemEvent: function () {
@@ -567,6 +581,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // Update input value when clicking on confirm button.
             ludic.initConfirmInSelectionPopupEvent();
+
+            // Display description in select if exists.
+            ludic.initDisplayDescriptionInSelect();
 
             // When item is added with .selected class, click on it by default.
             ludic.initClickOnSelectedItemEvent();

@@ -46,6 +46,7 @@ $string['course-module-skin-selection'] = 'Select a skin for the course module';
 $string['label-course-module-title']    = 'Title';
 $string['label-course-module-visible']  = 'Visible';
 $string['label-select-weight']          = 'Weight';
+$string['label-select-access']          = 'Accessibility';
 
 // Access.
 $string['access-accessible']      = 'Always accessible';

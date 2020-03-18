@@ -22,9 +22,16 @@
             {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
         {{/required}}
     </label>
+    {{#hasdescription}}
+        <div id="{{id}}-desc" class="select-description">
+            {{#options}}
+                <small for="{{value}}" class="option-description{{#selected}} visible{{/selected}}">{{description}}</small>
+            {{/options}}
+        </div>
+    {{/hasdescription}}
 
     <select
-        {{#id}}id="{{id}}" {{/id}}
+        id="{{id}}"
         {{#name}}name="{{name}}" {{/name}}
         {{#class}}class="{{class}}" {{/class}}
         {{#size}}size="{{size}}" {{/size}}

@@ -34,7 +34,7 @@ class course_module extends model {
     public $courseid;
     public $section;
     public $sectionid;
-    public $accessible;
+    public $access;
     public $visible;
     public $skinid;
     public $skin;
@@ -49,16 +49,17 @@ class course_module extends model {
      */
     public function __construct(\cm_info $cminfo) {
         parent::__construct($cminfo);
-        $this->courseid  = $cminfo->course;
-        $this->sectionid = $cminfo->section;
-        $this->section   = $this->contexthelper->get_section_by_id($this->sectionid);
-        $this->name      = $cminfo->get_formatted_name();
-        $this->visible   = $cminfo->visible;
-        $this->cminfo    = $cminfo;
+        $this->courseid      = $cminfo->course;
+        $this->sectionid     = $cminfo->section;
+        $this->section       = $this->contexthelper->get_section_by_id($this->sectionid);
+        $this->name          = $cminfo->get_formatted_name();
+        $this->visible       = $cminfo->visible;
+        $this->cminfo        = $cminfo;
 
         $dbrecord     = $this->contexthelper->get_format_ludic_cm_by_cmid($this->courseid, $this->id);
-        $this->weight = $dbrecord->weight;
         $this->skinid = $dbrecord->skinid;
+        $this->weight = $dbrecord->weight;
+        $this->access = $dbrecord->access;
         $this->skin   = skin::get_by_id($this->skinid);
     }
 
@@ -67,14 +68,13 @@ class course_module extends model {
      *
      * @param $sectionid
      * @param null $beforeid
-     * @return int
      * @throws \dml_exception
      * @throws \moodle_exception
      */
     public function move_to_section($sectionid, $beforeid = null) {
         $section = $this->contexthelper->get_section_by_id($sectionid);
         if ($sectionid == $this->sectionid) {
-            return $this->accessible;
+            return;
         }
         $this->section    = $section;
         $this->sectionid  = $sectionid;
@@ -84,8 +84,7 @@ class course_module extends model {
                 'course'  => $section->courseid,
                 'visible' => $section->visible
         ];
-        $this->accessible = moveto_module($this->cminfo, $movetosection, $beforeid);
-        return $this->accessible;
+        moveto_module($this->cminfo, $movetosection, $beforeid);
     }
 
     /**
@@ -134,7 +133,7 @@ class course_module extends model {
 
         $dbapi = $this->contexthelper->get_database_api();
 
-        $dbapi->set_format_ludic_cm($this->courseid, $newcm->id, $this->skinid, $this->weight, $this->visible, null);
+        $dbapi->set_format_ludic_cm($this->courseid, $newcm->id, $this->skinid, $this->weight, $this->access);
 
         if ($movetoend) {
             $sequence = $this->section->sequence;
@@ -219,14 +218,12 @@ class course_module extends model {
         if (isset($data['name']) && $data['name'] !== $this->name) {
             $dbapi->update_course_module_name($this->id, $data['name']);
         }
-
-        if (isset($data['visible']) && $data['visible'] !== $this->visible) {
-            $dbapi->update_course_module_visible($this->id, $data['visible']);
-        }
-
+        
         if (isset($data['skinid']) && $data['skinid'] !== $this->skinid ||
-            isset($data['weight']) && $data['weight'] !== $this->weight) {
-            $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['visible']);
+            isset($data['weight']) && $data['weight'] !== $this->weight ||
+            isset($data['access']) && $data['access'] !== $this->access
+        ) {
+            $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['access']);
         }
 
         rebuild_course_cache($this->courseid, true);

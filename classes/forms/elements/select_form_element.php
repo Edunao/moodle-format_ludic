@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 class select_form_element extends form_element {
 
     public $options;
+    public $hasdescription;
 
     /**
      * select_form_element constructor.
@@ -45,7 +46,9 @@ class select_form_element extends form_element {
                 $options[$key]['value'] = $value;
             }
             $options[$key]['name']  = isset($value['name']) ? $value['name'] : $options[$key]['value'];
+            $options[$key]['description']  = isset($value['description']) ? $value['description'] : null;
             $options[$key]['selected'] = $this->value == $options[$key]['value'];
+            $this->hasdescription = $this->hasdescription || !empty($options[$key]['description']);
         }
         $this->options = $options;
     }

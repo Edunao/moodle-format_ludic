@@ -135,25 +135,23 @@ class database_api {
     }
 
     /**
-     * Set skin id, weight, hidden, linked for a course module.
+     * Set skin id, weight, access for a course module.
      * Update if record exists, else insert record.
      *
      * @param $courseid
      * @param $cmid
      * @param $skinid
      * @param $weight
-     * @param $hidden
-     * @param null $linked
+     * @param $access
      * @return bool|int
      * @throws \dml_exception
      */
-    public function set_format_ludic_cm($courseid, $cmid, $skinid, $weight, $hidden, $linked = null) {
+    public function set_format_ludic_cm($courseid, $cmid, $skinid, $weight, $access) {
         $dbrecord = $this->db->get_record('format_ludic_cm', ['cmid' => $cmid]);
         if ($dbrecord) {
             $dbrecord->skinid = $skinid;
             $dbrecord->weight = $weight;
-            $dbrecord->hidden = $hidden;
-            $dbrecord->linked = $linked;
+            $dbrecord->access = $access;
             return $this->db->update_record('format_ludic_cm', $dbrecord);
         }
         $dbrecord           = new \stdClass();
@@ -161,8 +159,7 @@ class database_api {
         $dbrecord->cmid     = $cmid;
         $dbrecord->skinid   = $skinid;
         $dbrecord->weight   = $weight;
-        $dbrecord->hidden   = $hidden;
-        $dbrecord->linked   = $linked;
+        $dbrecord->access   = $access;
         return $this->db->insert_record('format_ludic_cm', $dbrecord);
     }
 

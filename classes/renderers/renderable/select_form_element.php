@@ -27,14 +27,16 @@ defined('MOODLE_INTERNAL') || die();
 class format_ludic_select_form_element extends format_ludic_form_element {
 
     public $options;
-    public $size;
+    public $hasdescription;
 
+    public $size;
     public $multiple;
-    public $maxlength;
 
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
-        $this->options  = $element->options;
+        $this->options        = $element->options;
+        $this->hasdescription = $element->hasdescription;
+
         $this->size     = isset($element->attributes['size']) ? $element->attributes['size'] : false;
         $this->multiple = isset($element->attributes['multiple']) ? $element->attributes['multiple'] : false;
     }

@@ -56,9 +56,6 @@ class coursemodule_form extends form {
                         'required' => true, 'maxlength' => 30
                 ]);
 
-        $elements[] = new checkbox_form_element('visible', 'section-visible', $this->object->visible, 1,
-                get_string('label-section-visible', 'format_ludic'), ['required' => true]);
-
         $skinid     = isset($this->object->skinid) ? $this->object->skinid : 0;
         $elements[] = new selection_popup_form_element('skinid', 'course-module-skinid', $skinid, 0,
                 get_string('label-skin-selection', 'format_ludic'),
@@ -76,6 +73,10 @@ class coursemodule_form extends form {
         $elements[] = new select_form_element('weight', 'coursemodule-weight', $this->object->weight, null,
                 get_string('label-select-weight', 'format_ludic'), ['required' => true, 'multiple' => false],
                 ['options' => $this->contexthelper->get_course_module_weight_options()]);
+
+        $elements[] = new select_form_element('access', 'coursemodule-access', $this->object->access, null,
+                get_string('label-select-access', 'format_ludic'), ['required' => true, 'multiple' => false],
+                ['options' => $this->contexthelper->get_access_options()]);
 
         return $elements;
     }
