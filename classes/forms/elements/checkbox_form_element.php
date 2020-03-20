@@ -50,7 +50,7 @@ class checkbox_form_element extends form_element {
      */
     public function validate_value($value) {
         $value = empty($value) ? 0 : 1;
-        return ['success' => 1,  'value' => ($value)];
+        return ['success' => 1, 'value' => ($value)];
     }
 
 }

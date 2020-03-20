@@ -43,15 +43,10 @@ class coursemodule_controller extends controller_base {
                 $cmid = $this->get_param('id', PARAM_INT);
                 $data = $this->get_param('data');
                 return $this->validate_form($cmid, $data);
-            case 'get_properties' :
-                $cmid = $this->get_param('id', PARAM_INT);
-                return $this->get_properties($cmid);
-            case 'delete_format_ludic_cm' :
-                $cmid = $this->get_param('id', PARAM_INT);
-                return $this->delete_format_ludic_cm($cmid);
-            // Default case if no parameter is necessary.
             default :
-                return $this->$action();
+                // Default case if the only parameter is id.
+                $id = $this->get_param('id', PARAM_INT);
+                return $this->$action($id);
         }
     }
 
@@ -72,6 +67,7 @@ class coursemodule_controller extends controller_base {
         // Render section form with edit buttons.
         $output = $renderer->render_course_module_form($cmid);
         $output .= $renderer->render_buttons($editbuttons, $coursemodule->id, 'coursemodule');
+
         return $output;
     }
 
@@ -88,13 +84,21 @@ class coursemodule_controller extends controller_base {
      * @throws \moodle_exception
      */
     public function validate_form($cmid, $data) {
-        $form    = new coursemodule_form($cmid);
+
+        // Create form.
+        $form = new coursemodule_form($cmid);
+
+        // Update successful or errors ?
         $success = $form->validate_and_update($data);
+
+        // Define return.
         if ($success) {
             $return = array('success' => 1, 'value' => $form->get_success_message());
         } else {
             $return = array('success' => 0, 'value' => $form->get_error_message());
         }
+
+        // Return a json encode array with success and message.
         return json_encode($return);
     }
 

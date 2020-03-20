@@ -35,6 +35,7 @@ class model {
 
     /**
      * Context helper
+     *
      * @var context_helper
      */
     protected $contexthelper;
@@ -47,6 +48,6 @@ class model {
     public function __construct($object) {
         global $PAGE;
         $this->contexthelper = context_helper::get_instance($PAGE);
-        $this->id = $object->id;
+        $this->id            = $object->id;
     }
 }

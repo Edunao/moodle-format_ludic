@@ -98,8 +98,15 @@ $string['delete']        = 'Delete';
 $string['assign']        = 'Assign roles';
 
 // Popups.
-$string['confirmation-popup-title']    = 'Fenêtre de validation.';
-$string['confirmation-popup-content']  = 'Êtes-vous sûr de vouloir effectuer cette action ?';
+$string['confirmation-popup-title']   = 'Confirmation';
+$string['confirmation-popup-content'] = 'Êtes-vous sûr de vouloir effectuer cette action ?';
+
+$string['error-popup-title']   = 'Une erreur s\'est produite';
+$string['error-popup-content'] = 'Erreur, veuillez cliquer sur Confirmer pour rafraîchir la page';
+
+$string['confirmation-form-exit-title']   = 'Quitter l\'édition du formulaire ?';
+$string['confirmation-form-exit-content'] = 'Vous êtes en train d\'éditer un formulaire, si vous quittez vous risquez de perdre des données non enregistrées. Êtes-vous sûr de quitter l\'édition du formulaire ?';
+
 $string['close-button-alt']            = 'Fermer';
 $string['confirmation-button-confirm'] = 'Confirmer';
 $string['confirmation-button-cancel']  = 'Annuler';

@@ -53,17 +53,28 @@ class coursemodule_form extends form {
      * @throws \dml_exception
      */
     public function get_definition() {
-        $id = $this->object->id;
+        $elements = [];
 
-        $elements   = [];
+        // Course module id.
+        $id = $this->object->id;
         $elements[] = new hidden_form_element('id', 'course-module-id', $id, 0);
 
-        $elements[] = new text_form_element('name', 'course-module-title', $this->object->name, '',
-                get_string('label-course-module-title', 'format_ludic'), [
-                        'required' => true, 'maxlength' => 30
-                ]);
+        // Course module name.
+        $elements[] = new text_form_element(
+                'name',
+                'course-module-title',
+                $this->object->name,
+                '',
+                get_string('label-course-module-title', 'format_ludic'),
+                ['required' => true, 'maxlength' => 30]
+        );
 
-        $elements[] = new selection_popup_form_element('skinid', 'course-module-skinid', $this->object->skinid, 0,
+        // Course module skin id.
+        $elements[] = new selection_popup_form_element(
+                'skinid',
+                'course-module-skinid',
+                $this->object->skinid,
+                0,
                 get_string('label-skin-selection', 'format_ludic'),
                 ['required' => true, 'multiple' => false],
                 [
@@ -75,18 +86,34 @@ class coursemodule_form extends form {
                 ]
         );
 
-        $elements[] = new select_form_element('weight', 'coursemodule-weight', $this->object->weight, null,
-                get_string('label-select-weight', 'format_ludic'), ['required' => true, 'multiple' => false],
-                ['options' => $this->contexthelper->get_course_module_weight_options()]);
+        // Course module weight.
+        $elements[] = new select_form_element(
+                'weight',
+                'coursemodule-weight',
+                $this->object->weight,
+                null,
+                get_string('label-select-weight', 'format_ludic'),
+                ['required' => true, 'multiple' => false],
+                ['options' => format_ludic_get_weight_options()]
+        );
 
-        $elements[] = new select_form_element('access', 'coursemodule-access', $this->object->access, null,
-                get_string('label-select-access', 'format_ludic'), ['required' => true, 'multiple' => false],
-                ['options' => $this->contexthelper->get_access_options()]);
+        // Course module access.
+        $elements[] = new select_form_element(
+                'access',
+                'coursemodule-access',
+                $this->object->access,
+                null,
+                get_string('label-select-access', 'format_ludic'),
+                ['required' => true, 'multiple' => false],
+                ['options' => format_ludic_get_access_options()]
+        );
 
         return $elements;
     }
 
     /**
+     * Update course module.
+     *
      * @return bool
      * @throws \dml_exception
      */
@@ -96,6 +123,8 @@ class coursemodule_form extends form {
     }
 
     /**
+     * More course module validation.
+     *
      * @return bool
      */
     public function validate_child() {

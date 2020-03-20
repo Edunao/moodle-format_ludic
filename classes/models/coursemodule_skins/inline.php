@@ -30,10 +30,16 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class inline extends \format_ludic\skin implements \format_ludic\coursemodule_skin_interface {
 
+    /**
+     * @return string
+     */
     public function render_coursemodule_view() {
         return 'activity inline';
     }
 
+    /**
+     * @return \stdClass
+     */
     public function get_edit_image() {
         return (object) [
                 'imgsrc' => 'https://fr.seaicons.com/wp-content/uploads/2017/02/page-icon.png',
@@ -41,6 +47,12 @@ class inline extends \format_ludic\skin implements \format_ludic\coursemodule_sk
         ];
     }
 
+    /**
+     * Return an instance of this class.
+     *
+     * @return inline
+     * @throws \coding_exception
+     */
     static public function get_instance() {
         return new inline((object) [
                 'id'          => FORMAT_LUDIC_CM_SKIN_INLINE_ID,
@@ -51,6 +63,11 @@ class inline extends \format_ludic\skin implements \format_ludic\coursemodule_sk
         ]);
     }
 
+    /**
+     * This skin does not require grade.
+     *
+     * @return false
+     */
     public function require_grade() {
         return false;
     }

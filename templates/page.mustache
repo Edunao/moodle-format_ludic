@@ -15,5 +15,23 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <div id="ludic-main-container">
+    {{> format_ludic/header_bar}}
 
+    {{#globaldescription}}
+        <div class="ludic-container course-description">
+            {{{globaldescription}}}
+        </div>
+    {{/globaldescription}}
+
+    {{#sections}}
+        <div class="ludic-container sections">
+            {{{sections}}}
+        </div>
+    {{/sections}}
+
+    {{#globalactivities}}
+        <div class="ludic-container general-activities">
+            {{{globalactivities}}}
+        </div>
+    {{/globalactivities}}
 </div>

@@ -290,11 +290,12 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param $type array
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_page() {
-        return $this->render_from_template('format_ludic/page', []);
+    public function render_page($data) {
+        return $this->render_from_template('format_ludic/page', $data);
     }
 
     /**

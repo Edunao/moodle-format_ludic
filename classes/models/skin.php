@@ -81,44 +81,13 @@ abstract class skin extends model {
         $contexthelper = context_helper::get_instance($PAGE);
         $skins         = $contexthelper->get_skins_config();
 
+        // Skin not found.
         if (!isset($skins[$skinid]) || empty($skins[$skinid])) {
             return null;
         }
 
-        $skin      = $skins[$skinid];
-        return self::get_by_instance($skin);
-    }
-
-    /**
-     * Get the first available skin for a course module.
-     *
-     * @param $cmid
-     * @return mixed
-     * @throws \coding_exception
-     * @throws \dml_exception
-     */
-    public static function get_default_course_module_skin($cmid) {
-        global $PAGE;
-        $contexthelper = context_helper::get_instance($PAGE);
-        $skins         = $contexthelper->get_available_course_module_skins($cmid);
-        foreach ($skins as $skin) {
-            if (!in_array($skin->id, [FORMAT_LUDIC_CM_SKIN_INLINE_ID])) {
-                return $skin;
-            }
-        }
-        return coursemodule\inline::get_instance();
-    }
-
-    /**
-     * Return the first section skin.
-     *
-     * @return skin
-     */
-    public static function get_default_section_skin() {
-        global $PAGE;
-        $contexthelper = context_helper::get_instance($PAGE);
-        $skins         = $contexthelper->get_section_skins();
-        return current($skins);
+        // Return skin.
+        return self::get_by_instance($skins[$skinid]);
     }
 
     public function get_stylesheet($selectorid) {
@@ -136,21 +105,9 @@ abstract class skin extends model {
 
     /**
      * Get child edit image.
+     *
      * @return \stdClass
      */
     public abstract function get_edit_image();
 
-    /**
-     *
-     * @param $location
-     * @return object
-     */
-    public static function get_undefined_skin_image($location) {
-        return false;
-        $imgsrc = $location == 'section' ? 'https://picsum.photos/id/159/80/80' : 'https://picsum.photos/id/152/80/80';
-        return (object) [
-                'imgsrc' => $imgsrc,
-                'imgalt' => 'Undefined skin.'
-        ];
-    }
 }

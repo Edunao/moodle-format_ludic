@@ -27,8 +27,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
 class database_api {
 
     private $db;
@@ -123,11 +121,16 @@ class database_api {
      * @throws \dml_exception
      */
     public function set_section_skin_id($courseid, $sectionid, $skinid) {
+        // Search record in database.
         $dbrecord = $this->db->get_record('format_ludic_cs', ['sectionid' => $sectionid]);
+
+        // If we have record, update skin id.
         if ($dbrecord) {
             $dbrecord->skinid = $skinid;
             return $this->db->update_record('format_ludic_cs', $dbrecord);
         }
+
+        // If we does not have record, add it.
         $dbrecord            = new \stdClass();
         $dbrecord->courseid  = $courseid;
         $dbrecord->sectionid = $sectionid;
@@ -170,13 +173,18 @@ class database_api {
      * @throws \dml_exception
      */
     public function set_format_ludic_cm($courseid, $cmid, $skinid, $weight, $access) {
+        // Search record in database.
         $dbrecord = $this->db->get_record('format_ludic_cm', ['cmid' => $cmid]);
+
+        // If we have record, update skin id.
         if ($dbrecord) {
             $dbrecord->skinid = $skinid;
             $dbrecord->weight = $weight;
             $dbrecord->access = $access;
             return $this->db->update_record('format_ludic_cm', $dbrecord);
         }
+
+        // If we does not have record, add it.
         $dbrecord           = new \stdClass();
         $dbrecord->courseid = $courseid;
         $dbrecord->cmid     = $cmid;
@@ -281,7 +289,8 @@ class database_api {
             SELECT cm.*, m.name as modname
             FROM {course_modules} cm
             JOIN {modules} m ON m.id = cm.module
-            WHERE cm.id = ?', ['id' => $id]);
+            WHERE cm.id = ?', ['id' => $id]
+        );
     }
 
     /**
@@ -296,7 +305,8 @@ class database_api {
             SELECT m.name
             FROM {course_modules} cm
             JOIN {modules} m ON m.id = cm.module
-            WHERE cm.id = ?', ['id' => $cmid]);
+            WHERE cm.id = ?', ['id' => $cmid]
+        );
     }
 
     /**
@@ -387,8 +397,12 @@ class database_api {
      * @throws \dml_exception
      */
     public function get_course_last_section($courseid) {
-        return $this->db->get_record_sql('SELECT * FROM {course_sections} WHERE course = :courseid ORDER BY section DESC LIMIT 1',
-                ['courseid' => $courseid]);
+        return $this->db->get_record_sql('
+            SELECT * 
+            FROM {course_sections} 
+            WHERE course = :courseid 
+            ORDER BY section DESC LIMIT 1', ['courseid' => $courseid]
+        );
     }
 
     /**
@@ -400,18 +414,19 @@ class database_api {
      */
     public function file_exists_in_draft($itemid) {
         return $this->db->record_exists_sql('
-        SELECT *
-        FROM {files}
-        WHERE component = :component
-            AND filearea = :filearea
-            AND filename <> :filename
-            AND itemid = :itemid
-        ', [
-                'component' => 'user',
-                'filearea'  => 'draft',
-                'filename'  => '.',
-                'itemid'    => $itemid
-        ]);
+            SELECT *
+            FROM {files}
+            WHERE component = :component
+                AND filearea = :filearea
+                AND filename <> :filename
+                AND itemid = :itemid
+            ', [
+                    'component' => 'user',
+                    'filearea'  => 'draft',
+                    'filename'  => '.',
+                    'itemid'    => $itemid
+            ]
+        );
     }
 }
 

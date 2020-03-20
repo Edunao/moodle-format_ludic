@@ -45,19 +45,40 @@ class select_form_element extends form_element {
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'select';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
+
+        // Select options.
+        // Options can be an array with values.
+        // Options can also be an associative array with keys :
+        // value => hidden value.
+        // name => visible name of option.
+        // description => an optional description to display at the top of the name.
         $options = isset($this->specific['options']) ? $this->specific['options'] : [];
         foreach ($options as $key => $value) {
+
+            // Always convert options to array.
             $options[$key] = [];
+
+            // Set value from value key or real value.
             if (is_array($value)) {
                 $options[$key]['value'] = isset($value['value']) ? $value['value'] : '';
             } else {
                 $options[$key]['value'] = $value;
             }
-            $options[$key]['name']  = isset($value['name']) ? $value['name'] : $options[$key]['value'];
-            $options[$key]['description']  = isset($value['description']) ? $value['description'] : null;
-            $options[$key]['selected'] = $this->value == $options[$key]['value'];
-            $this->hasdescription = $this->hasdescription || !empty($options[$key]['description']);
+
+            // Set name from name key, if empty use value instead.
+            $options[$key]['name']        = isset($value['name']) ? $value['name'] : $options[$key]['value'];
+
+            // Optional description.
+            $options[$key]['description'] = isset($value['description']) ? $value['description'] : null;
+
+            // Selected current value.
+            $options[$key]['selected']    = $this->value == $options[$key]['value'];
+
+            // Indicator to know easily if select has description.
+            $this->hasdescription         = $this->hasdescription || !empty($options[$key]['description']);
         }
+
+        // Set options.
         $this->options = $options;
     }
 

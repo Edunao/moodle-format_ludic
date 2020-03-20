@@ -1,3 +1,4 @@
+@import 'headerbar.less';
 @import 'loading.less';
 @import 'order.less';
 @import 'form.less';
@@ -8,8 +9,6 @@
 
 #ludic-main-container {
   width: 100%;
-  border: 1px solid black;
-  padding: 10px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
@@ -56,27 +55,9 @@
         .container-content {
           padding: 20px;
           margin-bottom: 40px;
-          //flex-wrap: wrap;
           flex-direction: column;
           border: 1px solid black;
-          .container-buttons {
-            border: 1px solid black;
-            height: 100px;
-            flex-wrap: wrap;
-            flex-direction: row;
-            button {
-              width: 50%;
-            }
-            .container-sub-buttons {
-              background-color: #0807076b;
-              padding: 10px;
-              border: 1px solid black;
-              position: absolute;
-              button {
-                width: 100%;
-              }
-            }
-          }
+
         }
 
         .container-help {

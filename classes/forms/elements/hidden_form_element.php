@@ -50,9 +50,9 @@ class hidden_form_element extends form_element {
      * @throws \coding_exception
      */
     public function validate_value($value) {
+        // Always success because hidden.
         $value = clean_param($value, PARAM_RAW);
-        return ['success' => 1,  'value' => (string) ($value)];
+        return ['success' => 1, 'value' => (string) ($value)];
     }
-
 
 }

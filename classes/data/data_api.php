@@ -16,7 +16,7 @@
 
 /**
  * Data interface.
- * All data must be retrieved in this class.
+ * All user data must be retrieved in this class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -27,7 +27,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class data_api {
 

@@ -34,32 +34,44 @@ class achievement extends \format_ludic\skin implements \format_ludic\coursemodu
         return 'activity achievement';
     }
 
+    /**
+     * Return best image.
+     *
+     * @return \stdClass
+     */
     public function get_edit_image() {
+        // TODO
+        $editimage = (object) [
+                'imgsrc' =>  '',
+                'imgalt' => 'zzdzz'
+        ];
+
         $images = $this->get_images();
         foreach ($images as $image) {
             if ($image->state === 'achieved') {
-                return (object) [
-                        'imgsrc' => $image->imgsrc,
-                        'imgalt' => $image->imgalt
-                ];
+                $editimage->imgsrc = $image->imgsrc;
+                $editimage->imgalt = $image->imgalt;
             }
         }
-        return $this->get_default_image();
+
+        return $editimage;
     }
 
+    /**
+     * Return all images.
+     *
+     * @return \stdClass[]
+     */
     public function get_images() {
         $properties = $this->get_properties();
         return isset($properties['images']) ? $properties['images'] : [];
     }
 
-    public function get_default_image() {
-        return (object) [
-                'imgsrc' => 'https://picsum.photos/id/66/80/80',
-                'imgalt' => 'achievement de course module'
-        ];
-    }
-
-
+    /**
+     * This skin does not require grade.
+     *
+     * @return false
+     */
     public function require_grade() {
         return false;
     }

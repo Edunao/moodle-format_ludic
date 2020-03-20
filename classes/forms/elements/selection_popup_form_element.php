@@ -35,6 +35,8 @@ class selection_popup_form_element extends form_element {
 
     /**
      * selection_popup_form_element constructor.
+     * When you click on this element, open a popup to select an item.
+     * Keep the item id in a hidden form element.
      *
      * @param $name
      * @param $id
@@ -46,9 +48,18 @@ class selection_popup_form_element extends form_element {
      */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type           = 'selection_popup';
+
+        // Popup content comes from an ajax call $controller->action().
+
+        // Controller to use for action.
         $this->itemcontroller = isset($specific['itemcontroller']) ? $specific['itemcontroller'] : null;
+
+        // Action, function name to execute.
         $this->itemaction     = isset($specific['itemaction']) ? $specific['itemaction'] : null;
-        $this->popuptitle     = isset($specific['popuptitle']) ? $specific['popuptitle'] : null;
+
+        // Define popup title here.
+        $this->popuptitle     = isset($specific['popuptitle']) ? $specific['popuptitle'] : '';
+
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 
@@ -59,9 +70,13 @@ class selection_popup_form_element extends form_element {
      */
     public function validate_value($value) {
         $value = clean_param($value, PARAM_RAW);
+
+        // Ensure user has selected one item.
         if ($this->required && $value === '') {
             return ['success' => 0, 'value' => get_string('error-required', 'format_ludic')];
         }
+
+        // Success.
         return ['success' => 1, 'value' => (string) ($value)];
     }
 

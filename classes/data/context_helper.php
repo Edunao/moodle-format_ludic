@@ -31,41 +31,177 @@ defined('MOODLE_INTERNAL') || die();
 // Skin inline id.
 define('FORMAT_LUDIC_CM_SKIN_INLINE_ID', 1);
 
-// Access.
+// Always accessible.
 define('FORMAT_LUDIC_ACCESS_ACCESSIBLE', 1);
+
+// An activity is visible but not accessible until the previous activity has been completed.
 define('FORMAT_LUDIC_ACCESS_CHAINED', 2);
+
+// An activity is not visible or accessible until the previous activity has been completed,
+// at which time it appears and becomes accessible.
 define('FORMAT_LUDIC_ACCESS_DISCOVERABLE', 3);
+
+// The activity is not visible or accessible unless and until the teacher manually open up access to selected students.
 define('FORMAT_LUDIC_ACCESS_CONTROLLED', 4);
+
+// The item will become visible and available at the same moment as it's predecessor.
+// (allowing one 'gateway' activity followed by freely available activity set, teacher control of access by activity group, ...)​.
 define('FORMAT_LUDIC_ACCESS_GROUPED', 5);
+
+// The item will become visible at the same moment as it's predecessor
+// but will only become available after the predecessor has been completed.
 define('FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED', 6);
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
+/**
+ * Class context_helper
+ *
+ * @package format_ludic
+ */
 class context_helper {
 
-    // Singleton.
+    /**
+     * Singleton.
+     *
+     * @var context_helper
+     */
     public static $instance;
 
-    // Environment properties.
-    private $page                = null;
-    private $user                = null;
-    private $dbapi               = null;
-    private $dataapi             = null;
-    private $contextcourse       = null;
-    private $ludicconfig         = null;
-    private $course              = null;
-    private $courseformat        = null;
+    /**
+     * Moodle $PAGE.
+     *
+     * @var \moodle_page
+     */
+    private $page = null;
+
+    /**
+     * Moodle $USER.
+     *
+     * @var \stdClass
+     */
+    private $user = null;
+
+    /**
+     * Moodle $COURSE.
+     *
+     * @var \stdClass
+     */
+    private $course = null;
+
+    /**
+     * Current course id.
+     *
+     * @var int
+     */
+    private $courseid = null;
+
+    /**
+     * Database access.
+     *
+     * @var database_api|null
+     */
+    private $dbapi = null;
+
+    /**
+     * Manipulate user data.
+     *
+     * @var data_api
+     */
+    private $dataapi = null;
+
+    /**
+     * Current course context.
+     *
+     * @var \context_course
+     */
+    private $context = null;
+
+    /**
+     * Return course format moodle config.
+     * Use {@link get_config()} with 'format_ludic'.
+     *
+     * @var \stdClass
+     */
+    private $config = null;
+
+    /**
+     * Current course format.
+     * Use {@link course_get_format()}
+     *
+     * @var \format_base
+     */
+    private $courseformat = null;
+
+    /**
+     * Current course format options.
+     *
+     * @var array
+     */
     private $courseformatoptions = null;
-    private $sections            = null;
-    private $section             = null;
-    private $sectionid           = null;
-    private $sectionidx          = null;
-    private $coursemodules       = null;
-    private $coursemodule        = null;
-    private $modinfo             = null;
-    private $modinfocms          = null;
-    private $config              = null;
-    private $weightoptions       = null;
+
+    /**
+     * One of current course format options ('ludic_config').
+     * In ludic_config you can find all the definitions of skins.
+     *
+     * @var array
+     */
+    private $ludicconfig = null;
+
+    /**
+     * Current course sections.
+     *
+     * @var section[]
+     */
+    private $sections = null;
+
+    /**
+     * Current course section.
+     *
+     * @var section
+     */
+    private $section = null;
+
+    /**
+     * Current section->id.
+     *
+     * @var int
+     */
+    private $sectionid = null;
+
+    /**
+     * Current section->section.
+     *
+     * @var int
+     */
+    private $sectionidx = null;
+
+    /**
+     * Current course modules.
+     *
+     * @var course_module[]
+     */
+    private $coursemodules = null;
+
+    /**
+     * Current course module.
+     *
+     * @var course_module[]
+     */
+    private $coursemodule = null;
+
+    /**
+     * This includes information about the course-modules and the sections on the course.
+     * It can also include dynamic data that has been updated for the current user.
+     *
+     * @var \course_modinfo
+     */
+    private $courseinfo = null;
+
+    /**
+     * Get array from course-module instance to cm_info object within this course, in order of appearance.
+     *
+     * @var \cm_info[]
+     */
+    private $coursemodulesinfo = null;
 
     /**
      * context_helper constructor.
@@ -74,10 +210,11 @@ class context_helper {
      */
     public function __construct(\moodle_page $page) {
         global $USER;
-        $this->page    = $page;
-        $this->user    = $USER;
-        $this->dbapi   = new database_api($this);
-        $this->dataapi = new data_api($this);
+        $this->page     = $page;
+        $this->user     = $USER;
+        $this->courseid = $page->course->id;
+        $this->dbapi    = new database_api($this);
+        $this->dataapi  = new data_api($this);
     }
 
     /**
@@ -131,12 +268,33 @@ class context_helper {
     }
 
     /**
+     * Return current course.
+     *
+     * @return course
+     */
+    public function get_course() {
+        if ($this->course === null) {
+            $this->course = new course($this->page->course);
+        }
+        return $this->course;
+    }
+
+    /**
+     * Return current course.
+     *
+     * @return \stdClass
+     */
+    public function get_moodle_course() {
+        return $this->page->course;
+    }
+
+    /**
      * Return current course id.
      *
      * @return int
      */
     public function get_course_id() {
-        return $this->page->course->id;
+        return $this->courseid;
     }
 
     /**
@@ -163,7 +321,7 @@ class context_helper {
 
             // We're on a course view page and the course-relative section number is provided
             // so lookup the real section id.
-            $courseid        = $this->get_course_id();
+            $courseid        = $this->courseid;
             $sectionid       = $this->dbapi->get_section_id_by_courseid_and_sectionidx($courseid, $sectionidx);
             $this->sectionid = $sectionid;
 
@@ -218,6 +376,7 @@ class context_helper {
      *
      * @return string
      * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function get_location() {
         $cmid       = $this->get_cm_id();
@@ -242,34 +401,24 @@ class context_helper {
     }
 
     /**
-     * Return context course by course id.
+     * Return current course context.
      *
      * @return \context_course
      */
-    public function get_context_course_by_courseid($courseid) {
-        return \context_course::instance($courseid);
-    }
-
-    /**
-     * Return current context course.
-     *
-     * @return \context_course
-     */
-    public function get_context_course() {
-        if ($this->contextcourse === null) {
-            $courseid            = $this->get_course_id();
-            $this->contextcourse = $this->get_context_course_by_courseid($courseid);
+    public function get_course_context() {
+        if ($this->context === null) {
+            $this->context = $this->get_course()->get_context();
         }
-        return $this->contextcourse;
+        return $this->context;
     }
 
     /**
-     * Return current context course id.
+     * Return current course context id.
      *
      * @return int
      */
-    public function get_context_course_id() {
-        return $this->get_context_course()->id;
+    public function get_context_id() {
+        return $this->get_course_context()->id;
     }
 
     /**
@@ -282,7 +431,7 @@ class context_helper {
     }
 
     /**
-     * Check if user has the role defined in shortname.
+     * Check if user has the role defined in short name.
      *
      * @param $roleshortname
      * @return bool
@@ -292,11 +441,11 @@ class context_helper {
         if (!$roleid = $this->dbapi->get_role_id_by_role_shortname($roleshortname)) {
             return false;
         }
-        return user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_course_id());
+        return user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_id());
     }
 
     /**
-     * Checks if the current user has one role in an array of role shortnames.
+     * Checks if the current user has one role in an array of role short names.
      *
      * @param $roleshortnames array
      * @return bool
@@ -309,7 +458,7 @@ class context_helper {
                 $hasrole = false;
                 continue;
             }
-            $hasrole = user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_course_id());
+            $hasrole = user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_id());
         }
         return $hasrole;
     }
@@ -330,76 +479,72 @@ class context_helper {
      * @return bool
      */
     public function is_page_type_in($pagetypes) {
+        // Get current type page.
         $currenttype = $this->page->pagetype;
-        foreach ($pagetypes as $type) {
-            if ($type === $currenttype) {
-                return true;
-            }
-        }
-        return false;
+
+        // Check if current type is in given array.
+        return in_array($currenttype, $pagetypes);
     }
 
     /**
-     * Get fast mod info of current course.
+     * Get course info of current course.
      *
      * @return \course_modinfo
      * @throws \moodle_exception
      */
-    public function get_fast_modinfo() {
-        if ($this->modinfo == null) {
-            $courseid      = $this->get_course_id();
-            $userid        = $this->get_user_id();
-            $this->modinfo = get_fast_modinfo($courseid, $userid);
+    public function get_course_info() {
+        if ($this->courseinfo == null) {
+            $this->courseinfo = $this->get_course()->get_course_info();
         }
-        return $this->modinfo;
+        return $this->courseinfo;
     }
 
     /**
-     * Rebuild fast mod info.
+     * Rebuild course info.
      *
      * @throws \moodle_exception
      */
-    public function rebuild_fast_modinfo() {
-        $courseid      = $this->get_course_id();
-        $userid        = $this->get_user_id();
-        $this->modinfo = get_fast_modinfo($courseid, $userid);
+    public function rebuild_course_info() {
+        $this->courseinfo = $this->get_course()->get_course_info();
     }
 
     /**
-     * Get mod info cms of current course.
+     * Return course format moodle config.
      *
-     * @return \cm_info[]|null
-     * @throws \moodle_exception
-     */
-    public function get_modinfo_cms() {
-        if ($this->modinfocms == null) {
-            $modinfo          = $this->get_fast_modinfo();
-            $this->modinfocms = $modinfo->get_cms();
-        }
-        return $this->modinfocms;
-    }
-
-    /**
-     * Get current course.
-     *
-     * @return course
+     * @return \stdClass
      * @throws \dml_exception
      */
-    public function get_course() {
-        if ($this->course == null) {
-            $this->course = $this->get_course_by_id($this->get_course_id());
+    public function get_course_format_config() {
+        if ($this->config == null) {
+            $this->config = get_config('format_ludic');
         }
-        return $this->course;
+        return $this->config;
+    }
+
+    /**
+     * Get array from course-module instance to cm_info object within this course, in order of appearance.
+     *
+     * @return \cm_info[]
+     * @throws \moodle_exception
+     */
+    public function get_course_modules_info() {
+        if ($this->coursemodulesinfo == null) {
+            $this->coursemodulesinfo = $this->get_course_info()->get_cms();
+        }
+        return $this->coursemodulesinfo;
     }
 
     /**
      * Get course by id.
      *
      * @param $courseid
-     * @return course|\stdClass
+     * @return course
      * @throws \dml_exception
      */
     public function get_course_by_id($courseid) {
+        if ($courseid === $this->courseid) {
+            return $this->get_course();
+        }
         $course = \get_course($courseid);
         $course = new course($course);
         return $course;
@@ -408,41 +553,14 @@ class context_helper {
     /**
      * Get all sections of current course.
      *
-     * @return section[]|null
+     * @return section[]
      * @throws \moodle_exception
      */
     public function get_sections() {
         if ($this->sections == null) {
-            $this->sections = $this->get_sections_by_course_id($this->get_course_id());
+            $this->sections = $this->get_course()->get_sections();
         }
         return $this->sections;
-    }
-
-    /**
-     * Return all course sections by course id.
-     *
-     * @return section[]
-     * @throws \moodle_exception
-     */
-    public function get_sections_by_course_id($courseid) {
-
-        // Get sections list.
-        $sectionrecords = $this->dbapi->get_course_sections_by_courseid($courseid);
-
-        // Return section object.
-        $sections = [];
-        foreach ($sectionrecords as $section) {
-
-            // Ignore section 0.
-            if ($section->section == 0) {
-                continue;
-            }
-
-            $section                     = new section($section);
-            $sections[$section->section] = $section;
-        }
-
-        return $sections;
     }
 
     /**
@@ -462,7 +580,7 @@ class context_helper {
     }
 
     /**
-     * Get section by id.
+     * Get section by id or false.
      *
      * @param $sectionid
      * @return section|false
@@ -475,6 +593,36 @@ class context_helper {
     }
 
     /**
+     * Get section 0
+     *
+     * @return false|section
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_global_section() {
+        // Get section 0 id.
+        $sectionid = $this->dbapi->get_section_id_by_courseid_and_sectionidx($this->courseid, 0);
+
+        // Return section 0.
+        return $this->get_section_by_id($sectionid);
+    }
+
+    /**
+     * Get section 0 description.
+     *
+     * @return string
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_global_description() {
+        // Get section 0.
+        $globalsection = $this->get_global_section();
+
+        // Return section 0 description.
+        return $globalsection->sectioninfo->summary;
+    }
+
+    /**
      * Get all course modules of current course.
      *
      * @return course_module[]
@@ -483,13 +631,21 @@ class context_helper {
      */
     public function get_course_modules() {
         if ($this->coursemodules == null) {
-            $modinfocms    = $this->get_modinfo_cms();
-            $coursemodules = [];
-            foreach ($modinfocms as $modinfocm) {
-                $coursemodules[] = new course_module($modinfocm);
+
+            // Get an array of cm_info[].
+            $coursemodulesinfo = $this->get_course_modules_info();
+
+            // Instantiate course modules.
+            $coursemodules     = [];
+            foreach ($coursemodulesinfo as $courseinfocm) {
+                $coursemodules[] = new course_module($courseinfocm);
             }
+
+            // Set coursemodules in cache.
             $this->coursemodules = $coursemodules;
         }
+
+        // Return an array of course_module[].
         return $this->coursemodules;
     }
 
@@ -517,9 +673,9 @@ class context_helper {
      * @throws \moodle_exception
      */
     public function get_course_module_by_id($cmid) {
-        $modinfo   = $this->get_fast_modinfo();
-        $modinfocm = $modinfo->get_cm($cmid);
-        return new course_module($modinfocm);
+        $courseinfo   = $this->get_course_info();
+        $courseinfocm = $courseinfo->get_cm($cmid);
+        return new course_module($courseinfocm);
     }
 
     /**
@@ -529,7 +685,7 @@ class context_helper {
      */
     public function get_course_format() {
         if ($this->courseformat == null) {
-            $this->courseformat = $this->get_course_format_by_course_id($this->get_course_id());
+            $this->courseformat = $this->get_course_format_by_course_id($this->courseid);
         }
         return $this->courseformat;
     }
@@ -551,7 +707,7 @@ class context_helper {
      */
     public function get_course_format_options() {
         if ($this->courseformatoptions == null) {
-            $this->courseformatoptions = $this->get_course_format_options_by_course_id($this->get_course_id());
+            $this->courseformatoptions = $this->get_course_format_options_by_course_id($this->courseid);
         }
         return $this->courseformatoptions;
     }
@@ -620,7 +776,10 @@ class context_helper {
      * @return array
      */
     public function get_skins_config() {
+        // Get ludic config.
         $ludicconfig = $this->get_ludic_config();
+
+        // Ensure to return an array.
         return isset($ludicconfig['skins']) ? get_object_vars($ludicconfig['skins']) : [];
     }
 
@@ -630,13 +789,20 @@ class context_helper {
      * @return skin[]
      */
     public function get_skins() {
-        $skins        = [];
+        // Skins that don't depend on the ludic config.
         $defaultskins = $this->get_default_skins();
-        $skinsconfig  = $this->get_skins_config();
-        $allskins     = array_merge($defaultskins, $skinsconfig);
+
+        // Skins from ludic config.
+        $skinsconfig = $this->get_skins_config();
+
+        // Merge and instance all skins.
+        $skins    = [];
+        $allskins = array_merge($defaultskins, $skinsconfig);
         foreach ($allskins as $skin) {
             $skins[$skin->id] = skin::get_by_instance($skin);
         }
+
+        // Return all skins.
         return $skins;
     }
 
@@ -658,13 +824,18 @@ class context_helper {
      * @return skin[]
      */
     public function get_section_skins() {
-        $skins        = $this->get_skins();
+        // Get all skins.
+        $skins = $this->get_skins();
+
+        // Keep only section skin.
         $sectionskins = [];
         foreach ($skins as $skin) {
             if ($skin->location === 'section') {
                 $sectionskins[$skin->id] = $skin;
             }
         }
+
+        // Return filtered skins.
         return $sectionskins;
     }
 
@@ -674,189 +845,19 @@ class context_helper {
      * @return skin[]
      */
     public function get_course_module_skins() {
-        $skins              = $this->get_skins();
+        // Get all skins.
+        $skins = $this->get_skins();
+
+        // Keep only course module skin.
         $coursemodulesskins = [];
         foreach ($skins as $skin) {
             if ($skin->location === 'coursemodule') {
                 $coursemodulesskins[$skin->id] = $skin;
             }
         }
+
+        // Return filtered skins.
         return $coursemodulesskins;
     }
 
-    /**
-     * Get available course module skins.
-     * Returns skins with grades only if the module course supports grades.
-     *
-     * @param $cmid
-     * @return array
-     * @throws \coding_exception
-     * @throws \dml_exception
-     */
-    public function get_available_course_module_skins($cmid) {
-        $skins   = $this->get_course_module_skins();
-        $modname = $this->dbapi->get_module_name_by_course_module_id($cmid);
-
-        // Label can use only inline skin.
-        if ($modname === 'label') {
-            return [coursemodule\inline::get_instance()];
-        }
-
-        $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
-
-        $coursemodulesskins = [];
-        foreach ($skins as $skin) {
-            if ($skin->require_grade() && !$isgraded) {
-                continue;
-            }
-            $coursemodulesskins[$skin->id] = $skin;
-        }
-        return $coursemodulesskins;
-    }
-
-    /**
-     * Create an section in the course defined in $courseid.
-     *
-     * @param $courseid
-     * @return false|section
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    public function create_section($courseid) {
-        $nbsections = $this->dbapi->count_course_sections($courseid);
-
-        if (!$this->dbapi->create_section($courseid, $nbsections)) {
-            return false;
-        }
-
-        if (!$newsection = $this->dbapi->get_course_last_section($courseid)) {
-            return false;
-        }
-
-        //rebuild_course_cache($courseid, true);
-
-        return $this->get_section_by_id($newsection->id);
-    }
-
-    /**
-     * Return course format moodle config.
-     *
-     * @return \stdClass
-     * @throws \dml_exception
-     */
-    public function get_course_format_config() {
-        if ($this->config == null) {
-            $this->config = get_config('format_ludic');
-        }
-
-        return $this->config;
-    }
-
-    /**
-     * Get weight options for select element.
-     *
-     * @return array
-     * @throws \dml_exception
-     */
-    public function get_course_module_weight_options() {
-        if ($this->weightoptions == null) {
-            $config              = $this->get_course_format_config();
-            $weightoptions       = isset($config->weight) ? $config->weight : format_ludic_get_default_weight_setting();
-            $weightoptions       = explode(',', $weightoptions);
-            $this->weightoptions = array_map('trim', $weightoptions);
-        }
-
-        return $this->weightoptions;
-    }
-
-    /**
-     * Get default weight (set by default after adding an activity)
-     *
-     * @return int
-     * @throws \dml_exception
-     */
-    public function get_default_weight() {
-        $weightoptions = $this->get_course_module_weight_options();
-        $defaultkey    = round(count($weightoptions) / 2, 0, PHP_ROUND_HALF_DOWN);
-        return isset($weightoptions[$defaultkey]) ? $weightoptions[$defaultkey] : 0;
-    }
-
-    /**
-     * Get format_ludic_cm db record.
-     * If exists return it, else create one.
-     *
-     * @param $courseid
-     * @param $cmid
-     * @return \stdClass
-     * @throws \dml_exception
-     * @throws \coding_exception
-     */
-    public function get_format_ludic_cm_by_cmid($courseid, $cmid) {
-        $dbrecord = $this->dbapi->get_format_ludic_cm_by_cmid($cmid);
-        if ($dbrecord) {
-            return $dbrecord;
-        }
-        $skin               = skin::get_default_course_module_skin($cmid);
-        $dbrecord           = new \stdClass();
-        $dbrecord->courseid = $courseid;
-        $dbrecord->cmid     = $cmid;
-        $dbrecord->skinid   = $skin->id;
-        $dbrecord->weight   = $this->get_default_weight();
-        $dbrecord->access   = 1;
-
-        $newid = $this->dbapi->add_format_ludic_cm_record($dbrecord);
-        return $dbrecord;
-    }
-
-    /**
-     * Get format_ludic_cm db record.
-     * If exists return it, else create one.
-     *
-     * @param $courseid
-     * @param $sectionid
-     * @return \stdClass
-     * @throws \dml_exception
-     */
-    public function get_format_ludic_cs_by_sectionid($courseid, $sectionid) {
-        $dbrecord = $this->dbapi->get_format_ludic_cs_by_sectionid($sectionid);
-        if ($dbrecord) {
-            return $dbrecord;
-        }
-        $skin                = skin::get_default_section_skin();
-        $dbrecord            = new \stdClass();
-        $dbrecord->courseid  = $courseid;
-        $dbrecord->sectionid = $sectionid;
-        $dbrecord->skinid    = $skin->id;
-
-        $newid = $this->dbapi->add_format_ludic_cs_record($dbrecord);
-        return $dbrecord;
-    }
-
-    /**
-     * Get access options for select element.
-     *
-     * @return array
-     * @throws \coding_exception
-     */
-    public function get_access_options() {
-        $access = [
-                FORMAT_LUDIC_ACCESS_ACCESSIBLE          => 'access-accessible',
-                FORMAT_LUDIC_ACCESS_CHAINED             => 'access-chained',
-                FORMAT_LUDIC_ACCESS_DISCOVERABLE        => 'access-discoverable',
-                FORMAT_LUDIC_ACCESS_CONTROLLED          => 'access-controlled',
-                FORMAT_LUDIC_ACCESS_GROUPED             => 'access-grouped',
-                FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED => 'access-chained-and-grouped',
-        ];
-
-        $options = [];
-        foreach ($access as $value => $identifier) {
-            $options[] = [
-                    'value'       => $value,
-                    'name'        => get_string($identifier, 'format_ludic'),
-                    'description' => get_string($identifier . '-desc', 'format_ludic')
-            ];
-        }
-
-        return $options;
-    }
 }

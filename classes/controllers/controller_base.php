@@ -121,6 +121,7 @@ abstract class controller_base {
 
     /**
      * Check that the parameter is of the requested type.
+     * Then convert value to ensure type.
      *
      * @param $paramname
      * @param $value

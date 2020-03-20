@@ -27,6 +27,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
     let courseId = null;
     let userId = null;
     let editMode = null;
+    let formChanged = false;
     let ludic = {
 
         /**
@@ -61,9 +62,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         initEvents: function () {
             console.log('initEvents');
 
-            // Save the element selector of the last clicked event.
-            ludic.initSaveLastItemClickedEvents();
-
             //
             // For each element with data-action attribute.
             //
@@ -91,12 +89,17 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * Else if there is only an action call javascript function defined in data-action with this on param and a callback.
          */
         initLudicActionEvent: function () {
+
+            //  Click on element with data-action attribute.
             $('body.format-ludic').on('click', '[data-action]', function () {
+
+                // Get data.
                 let item = $(this);
                 let action = item.data('action');
                 let callback = item.data('callback');
                 let controller = item.data('controller');
 
+                // Params for ajax call or javascript function.
                 let params = {
                     item: item,
                     id: item.data('id') ? item.data('id') : null,
@@ -107,12 +110,14 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                     callback: callback
                 };
 
-                params.itemSelectorId = params.itemType && params.itemId ? '.item.' + params.itemType + '[data-id="' + params.itemId + '"]' : null;
-                if (controller && action) {
-                    // Add a loading now if needed.
-                    ludic.addLoadingBeforeCallback(callback);
+                // Try to construct a selector id.
+                let hasItemSelectorId = params.itemType && params.itemId;
+                params.itemSelectorId = hasItemSelectorId ?  '.item.' + params.itemType + '[data-id="' + params.itemId + '"]' : null;
 
+                // Controller and action => Ajax call.
+                if (controller && action) {
                     console.log('click on ludic action callback => ', callback, ' controller => ', controller, ' action => ', action);
+
                     ludic.ajaxCall({
                         controller: controller,
                         action: action,
@@ -122,10 +127,10 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                                 // Ensures that response is an object.
                                 let isHtml = /<\/?[a-z][\s\S]*>/i.test(response);
-                                let responseParams = isHtml ? {html : response} : response;
+                                let responseParams = isHtml ? {html: response} : response;
                                 responseParams = typeof params === "object" ? responseParams : JSON.parse(responseParams);
 
-                                // Merge params.
+                                // Merge params (initial params + ajax response).
                                 params = Object.assign(params, responseParams);
 
                                 // Call function defined in callback (string : name of function).
@@ -134,7 +139,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                             }
                         }
                     });
+
                 } else if (action) {
+                    // Only an action => call javascript function dynamically.
                     ludic.callFunction(action, params);
                 }
             });
@@ -142,6 +149,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
         /**
          * This function allows you to call another function dynamically with parameters.
+         *
          * @param {string} name
          * @param  params
          * @returns {mixed}
@@ -161,52 +169,25 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let result = false;
             // Call the right function with the right parameters.
             switch (name) {
-                case 'closeClosestPopup' :
-                    result = ludic.closeClosestPopup(item);
+                case 'displayCourseModulesHtml':
+                case 'displayPopup':
+                case 'displaySections':
+                    result = eval('ludic.' + name + '(html, callback)');
                     break;
-                case 'getDataLinkAndRedirectTo' :
-                    result = ludic.getDataLinkAndRedirectTo(item);
+                case 'displayProperties':
+                    result = ludic.displayProperties(itemId);
                     break;
-                case 'displayCourseModulesHtml' :
-                    result = ludic.displayCourseModulesHtml(html);
-                    break;
-                case 'selectAndUpdateInput' :
-                    result = ludic.selectAndUpdateInput(item);
-                    break;
-                case 'updateInputAfterSelect' :
-                    result = ludic.updateInputAfterSelect();
-                    break;
-                case 'confirmAndDeleteSection' :
-                    result = ludic.confirmAndDeleteSection(item);
-                    break;
-                case 'deleteSection' :
-                    result = ludic.deleteSection(item);
-                    break;
-                case 'confirmAndDeleteCourseModule' :
-                    result = ludic.confirmAndDeleteCourseModule(item);
-                    break;
-                case 'deleteCourseModule' :
-                    result = ludic.deleteCourseModule(item);
-                    break;
-                case 'showSubButtons' :
-                    result = ludic.showSubButtons(item);
-                    break;
-                case 'hideSubButtons' :
-                    result = ludic.hideSubButtons(item);
-                    break;
-                case 'saveForm' :
+                case 'saveForm':
                     result = ludic.saveForm(itemType, itemId);
                     break;
-                case 'revertForm' :
+                case 'revertForm':
                     result = ludic.revertForm(itemSelectorId);
                     break;
-                case 'displaySections' :
-                    result = ludic.displaySections(html, callback);
-                    break;
-                case 'displayPopup':
-                    result = ludic.displayPopup(html);
+                case 'displayCourseModules':
+                    result = ludic.displayCourseModules(id, itemId, callback);
                     break;
                 default:
+                    result = eval('ludic.' + name + '(item)');
                     return result;
             }
 
@@ -233,6 +214,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let async = params.async ? params.async : true;
             let callback = params.callback ? params.callback : null;
             let callbackError = params.error ? params.error : null;
+            let loading = params.loading ? params.loading : null;
+
+            // You can add a loading before Ajax here.
+            if (loading) {
+                ludic.addLoading(loading);
+            }
 
             // Delete params to not send them in the request.
             delete params.dataType;
@@ -240,6 +227,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             delete params.url;
             delete params.async;
             delete params.callback;
+            delete params.loading;
 
             console.log('params ', params);
             // Execute ajax call with good params.
@@ -275,47 +263,82 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          */
         initItemGetPropertiesEvent: function () {
             $('body.format-ludic').on('click', '.container-items .container-parents .item', function () {
-                console.log('click on item, getProperties');
-                let item = $(this);
-                let container = item.closest('.container-items');
-                container.find('.item.selected').removeClass('selected');
-                item.addClass('selected');
-                let id = item.data('id');
-                let type = item.data('type');
-                if (!id || !type) {
-                    return false;
+
+                // Item is already selected, properties are already on screen.
+                if ($(this).hasClass('selected') && !ludic.formChanged) {
+                    return;
                 }
-                let content = container.find('.container-properties .container-content');
-                ludic.addLoading(content);
-                ludic.ajaxCall({
-                    id: id,
-                    controller: type,
-                    action: item.data('propertiesaction'),
-                    callback: function (html) {
-                        if (!html) {
-                            return false;
-                        }
-                        content.html(html);
-                        ludic.initFilepickerComponent(container);
+
+                // If the form has changed, the user must confirm his choice to exit and display the properties of another item.
+                let itemid = $(this).attr('id');
+                if ($(this).closest('.format-ludic.ludic-popup').length === 0 && ludic.formChanged) {
+                    ludic.displayChoicePopup('confirmation', 'displayProperties', {
+                        title: M.util.get_string('confirmation-form-exit-title', 'format_ludic'),
+                        content: M.util.get_string('confirmation-form-exit-content', 'format_ludic'),
+                        itemid: itemid
+                    });
+                } else {
+                    // Just display item properties.
+                    ludic.displayProperties(itemid);
+                }
+            });
+        },
+
+        /**
+         * Display properties of item.
+         *
+         * @param itemid
+         * @returns {boolean}
+         */
+        displayProperties: function (itemid) {
+            let item = $('#' + itemid);
+            let container = item.closest('.container-items');
+            container.find('.item.selected').removeClass('selected');
+            item.addClass('selected');
+            let id = item.data('id');
+            let type = item.data('type');
+            if (!id || !type) {
+                return false;
+            }
+            let content = container.find('.container-properties .container-content');
+            ludic.addLoading(content);
+            ludic.ajaxCall({
+                id: id,
+                controller: type,
+                action: item.data('propertiesaction'),
+                callback: function (html) {
+                    if (!html) {
+                        return false;
                     }
-                });
+                    content.html(html);
+                    ludic.initFilepickerComponent(container);
+                    ludic.formChanged = false;
+
+                    if (item.closest('.format-ludic.ludic-popup').length === 0) {
+                        ludic.closeClosestPopup();
+                    }
+                }
             });
         },
 
         /**
          * Update input value when clicking on confirm button.
          */
-        initConfirmInSelectionPopupEvent: function () {
-            $('body.format-ludic').on('click', '#selection-popup .item', function () {
+        initFormEvents: function () {
+            let body = $('body.format-ludic');
+
+            // Update input value when clicking on confirm button.
+            body.on('click', '#selection-popup .item', function () {
                 $('#selection-popup .confirmation-button.confirm').data('value', $(this).data('id'));
             });
-        },
 
-        /**
-         * Display description in select if exists.
-         */
-        initDisplayDescriptionInSelect: function () {
-            $('body.format-ludic').on('change', '.ludic-form-group[data-type="select"] select', function () {
+            // Track when form has been changed.
+            body.on('change', '.ludic-form :input', function (e) {
+                ludic.formChanged = true;
+            });
+
+            // Display description in select if exists.
+            body.on('change', '.ludic-form-group[data-type="select"] select', function () {
                 let descriptionContainer = $(this).parent().find('.select-description');
                 if (!descriptionContainer) {
                     return;
@@ -343,7 +366,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * @param itemSelectorId
          */
         revertForm(itemSelectorId) {
-            $(itemSelectorId).click();
+            ludic.displayProperties($(itemSelectorId).attr('id'));
         },
 
         /**
@@ -375,18 +398,44 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                     container.removeClass(unwantedClass);
                     container.addClass(newClass);
 
-                    // Refresh the updated elements - updateFunction ex : displaySections.
-                    let updateFunction = 'display' + itemType.charAt(0).toUpperCase() + itemType.slice(1) + 's';
+                    // Form is up to date.
+                    ludic.formChanged = false;
 
-                    // Callback definition.
-                    let params = {
-                        callback: function () {
+                    // Now refresh items.
+                    let updateFunction = false;
+                    let params = {};
+
+                    // Define updateFunction according to the item type.
+                    if (itemType === 'section') {
+
+                        // Display sections.
+                        updateFunction = 'displaySections';
+
+                        // Then select current section, then display course modules.
+                        params.callback = function () {
                             $('.item.' + itemType + '[data-id="' + itemId + '"]').addClass('selected');
-                        }
-                    };
+                            ludic.displayCourseModules(itemId);
+                        };
+
+                    } else if (itemType === 'coursemodule') {
+
+                        // Display course modules.
+                        updateFunction = 'displayCourseModules';
+
+                        // Then select current course module.
+                        params.callback = function () {
+                            $('.item.' + itemType + '[data-id="' + itemId + '"]').addClass('selected');
+                        };
+
+                        // Params required to display course modules.
+                        params.id = $('.item.' + itemType + '[data-id="' + itemId + '"]').data('parentid');
+                        params.itemId = itemId;
+                    }
 
                     // Display items with callback function to select current item.
-                    ludic.callFunction(updateFunction, params);
+                    if (updateFunction) {
+                        ludic.callFunction(updateFunction, params);
+                    }
                 }
             });
         },
@@ -491,8 +540,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let id = $(coursemodule).data('itemid');
             let link = $(coursemodule).data('link');
             if (!id || !link) {
-                console.log('id ', id)
-                console.log('link ', link)
                 return;
             }
             ludic.ajaxCall({
@@ -555,6 +602,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let newValue = selectedItem.data('id');
             $(inputSelectorId).val(newValue);
 
+            // Form has been changed.
+            ludic.formChanged = true;
+
             // Update image url with selected image url.
             let newImgUrl = selectedItem.find('.item-img-container').css('background-image');
             if (newImgUrl) {
@@ -579,24 +629,27 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.initItemGetPropertiesEvent();
 
             // Update input value when clicking on confirm button.
-            ludic.initConfirmInSelectionPopupEvent();
+            ludic.initFormEvents();
 
-            // Display description in select if exists.
-            ludic.initDisplayDescriptionInSelect();
+            // Save the element selector of the last clicked event.
+            ludic.initSaveLastItemClickedEvents();
 
             // When item is added with .selected class, click on it by default.
             ludic.initClickOnSelectedItemEvent();
+
 
         },
 
         /**
          * Close ludic popup.
-         *
-         * @param {jquery} item
          */
         closeClosestPopup: function (item) {
-            let popup = $(item).closest('.format-ludic.ludic-popup');
-            $(popup).remove();
+            if (item) {
+                let popup = $(item).closest('.format-ludic.ludic-popup');
+                $(popup).remove();
+            } else {
+                $('.format-ludic.ludic-popup').remove();
+            }
             if ($('.format-ludic.ludic-popup').length === 0) {
                 $('#ludic-background').hide();
             }
@@ -611,8 +664,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // Return the list of classes to select item.
             let getClassListSelector = function (classList) {
-                // Remove selected class because .selected can be added in javascript.
-                classList = classList !== undefined ? classList.replace(' selected', '') : '';
+                // Remove situational class because they can be added in javascript.
+                classList = classList !== undefined ? classList.replace(' is-not-visible', '') : '';
+                classList = classList.replace(' selected', '');
                 return classList ? "." + $.trim(classList).replace(/\s/gi, ".") : '';
             };
 
@@ -833,51 +887,81 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
         },
 
+        displayCourseModules: function (sectionId, courseModuleId, callback) {
+            console.log(' sectionId ', sectionId);
+            ludic.ajaxCall({
+                'controller': 'section',
+                'action': 'get_course_modules',
+                'id': sectionId,
+                'selectedid': courseModuleId,
+                'callback': function (html) {
+                    ludic.displayCourseModulesHtml(html, callback)
+                }
+            })
+
+        },
         /**
          * Display course modules html and init mod chooser component.
          *
          * @param html
+         * @param callback
          */
-        displayCourseModulesHtml(html) {
+        displayCourseModulesHtml: function (html, callback) {
             console.log('displayCourseModulesHtml');
+            // If the form has been updated, we ensure that the user has confirmed his choice to leave the edition
+            // before showing him the course modules
+            let userConfirmation = setInterval(function () {
 
-            // Find container and add a loading.
-            let container = $('.container-children.coursemodules');
-            ludic.addLoading(container);
-
-            // Search modchooser in container, if there is none, just show content and return.
-            let modChooser = $(html).closest('.ludic-modchooser');
-            if (modChooser.length === 0) {
-                container.html(html);
-                return;
-            }
-
-            // Adds the content in a non-visible way to give the modchooser time to initialize.
-            $(html).each(function () {
-                let hiddenDiv = $(this).addClass('hide-js');
-                container.append(hiddenDiv);
-            });
-
-            // Ensure that moodle function which init mod chooser is ready before using it.
-            let interval = setInterval(function () {
-                if (typeof M.course.init_chooser === 'function') {
-
-                    // Init mod chooser.
-                    M.course.init_chooser({
-                        courseid: ludic.courseId,
-                        closeButtonTitle: undefined
-                    });
-
-                    // Show content.
-                    container.children().each(function () {
-                        $(this).removeClass('hide-js');
-                    });
-
-                    // The job is done.
-                    ludic.removeLoading(container);
-                    clearInterval(interval);
+                // While ludic.formChanged is true, we are waiting user confirmation.
+                if (ludic.formChanged) {
+                    return;
                 }
-            }, 1000);
+
+                // Find container and add a loading.
+                let container = $('.container-children.coursemodules');
+                ludic.addLoading(container);
+
+                // Search modchooser in container, if there is none, just show content and return.
+                let modChooser = $(html).closest('.ludic-modchooser');
+                if (modChooser.length === 0) {
+                    container.html(html);
+                    return;
+                }
+
+                // Adds the content in a non-visible way to give the modchooser time to initialize.
+                $(html).each(function () {
+                    let hiddenDiv = $(this).addClass('hide-js');
+                    container.append(hiddenDiv);
+                });
+
+                // Ensure that moodle function which init mod chooser is ready before using it.
+                let interval = setInterval(function () {
+                    if (typeof M.course.init_chooser === 'function') {
+
+                        // Init mod chooser.
+                        M.course.init_chooser({
+                            courseid: ludic.courseId,
+                            closeButtonTitle: undefined
+                        });
+
+                        // Show content.
+                        container.children().each(function () {
+                            $(this).removeClass('hide-js');
+                        });
+
+                        if (typeof callback === 'function') {
+                            callback(container.html());
+                        }
+
+                        // The job is done.
+                        ludic.removeLoading(container);
+                        clearInterval(interval);
+                    }
+                }, 1000);
+
+                clearInterval(userConfirmation);
+
+            }, 100);
         },
 
         /**
@@ -895,6 +979,10 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             window.location.href = url;
         },
 
+        reload: function() {
+            window.location.reload()
+        },
+
         /**
          * Display popup.
          * @param {string} html - full html of the popup.
@@ -908,6 +996,36 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             $('#ludic-main-container').prepend(html);
         },
 
+        /**
+         * Display Error popup.
+         */
+        displayErrorPopup: function () {
+            console.log('displayErrorPopup');
+
+            let context = {
+                popupid: 'error',
+                action: 'reload',
+                title: M.util.get_string('error-popup-title', 'format_ludic'),
+                content: M.util.get_string('error-popup-content', 'format_ludic'),
+            };
+
+            templates.render('format_ludic/popup_confirm', context).then(
+                function (html, js) {
+                    ludic.displayPopup(html);
+                }).fail(function (ex) {
+                    ludic.reload();
+                }
+            );
+        },
+
+        /**
+         * Display a choice popup
+         * In this popup a javascript function (defined in action) is executed after user confirmation.
+         *
+         * @param popupid
+         * @param action
+         * @param params
+         */
         displayChoicePopup: function (popupid, action, params) {
             console.log('displayChoicePopup', popupid, action, params);
 
@@ -926,7 +1044,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 function (html, js) {
                     ludic.displayPopup(html);
                 }).fail(function (ex) {
-                    console.log('ConfirmationPopupError');
+                    ludic.displayErrorPopup();
                 }
             );
 
@@ -936,23 +1054,30 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * Display sections.
          *
          * @param html (if null, get html in ajax)
-         * @param callback (execute after loading)
+         * @param callback (execute after displaying sections)
          */
         displaySections: function (html, callback) {
             console.log('displaySections html => ', html, ' /// callback => ', callback);
 
+            // Display sections in this container.
             let container = $('.container-items .container-parents');
-            ludic.addLoading(container);
 
+            // If we have html just display it.
             if (html) {
+
+                ludic.addLoading(container);
                 container.html(html);
                 if (typeof callback === 'function') {
                     callback(html);
                 }
+
             } else {
+
+                // We don't have html, so get it and display it.
                 ludic.ajaxCall({
                     controller: 'section',
                     action: 'get_course_sections',
+                    loading: container,
                     callback: function (response) {
                         container.html(response);
                         if (typeof callback === 'function') {
@@ -960,6 +1085,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                         }
                     }
                 });
+
             }
         },
 
@@ -972,27 +1098,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         },
 
         /**
-         * Add a loading div before execute an ajax call.
-         *
-         * @param {string} callback js function.
-         */
-        addLoadingBeforeCallback: function (callback) {
-            switch (callback) {
-                case 'displaySections':
-                    ludic.addLoading($('.container-items .container-parents'));
-                    break;
-                default:
-                    return;
-            }
-        },
-
-        /**
          * Remove a loading div
          * @param {object} parent jquery object
          */
         removeLoading: function (parent) {
             parent.find('.loading').remove();
-        },
+        }
 
     };
     return ludic;

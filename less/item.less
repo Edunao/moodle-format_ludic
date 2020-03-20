@@ -56,12 +56,13 @@
         display: none;
       }
 
-      &:hover, &:focus {
+      &:hover:not(.selected), &:focus:not(.selected) {
         border: 2px #0a6aa1 dashed;
 
         .item-icon, &.is-not-visible:after {
           border: 2px #0a6aa1 dashed !important;
         }
+
       }
 
       &.is-not-visible {

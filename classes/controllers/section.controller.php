@@ -56,24 +56,10 @@ class section_controller extends controller_base {
                 $sectionidtomove = $this->get_param('idtomove', PARAM_INT);
                 $aftersectionid  = $this->get_param('toid', PARAM_INT);
                 return $this->move_section_to($sectionidtomove, $aftersectionid);
-            case 'duplicate_section' :
-                $sectionid = $this->get_param('id', PARAM_INT);
-                return $this->duplicate_section($sectionid);
-            case 'duplicate_course_module' :
-                $cmid = $this->get_param('id', PARAM_INT);
-                return $this->duplicate_course_module($cmid);
-            case 'get_properties' :
-                $sectionid = $this->get_param('id', PARAM_INT);
-                return $this->get_properties($sectionid);
-            case 'get_course_modules' :
-                $sectionid = $this->get_param('id', PARAM_INT);
-                return $this->get_course_modules($sectionid);
-            case 'delete_section_skin_id' :
-                $sectionid = $this->get_param('id', PARAM_INT);
-                return $this->delete_section_skin_id($sectionid);
-            // Default case if no parameter is necessary.
             default :
-                return $this->$action();
+                // Default case if the only parameter is id.
+                $id = $this->get_param('id', PARAM_INT);
+                return $this->$action($id);
         }
     }
 
@@ -114,14 +100,16 @@ class section_controller extends controller_base {
      */
     public function get_course_modules($sectionid, $selectedcmid = false) {
         global $PAGE;
-        $section    = $this->contexthelper->get_section_by_id($sectionid);
-        $course     = $section->get_course()->moodlecourse;
-        $sectionidx = $section->section;
 
+        // Get data.
+        $renderer      = $PAGE->get_renderer('format_ludic');
+        $section       = $this->contexthelper->get_section_by_id($sectionid);
+        $course        = $this->contexthelper->get_moodle_course();
+        $sectionidx    = $section->section;
         $coursemodules = $section->get_course_modules();
 
-        $output   = '';
-        $renderer = $PAGE->get_renderer('format_ludic');
+        // Render course modules.
+        $output = '';
         foreach ($coursemodules as $order => $coursemodule) {
             $coursemodule->order = $order;
             $coursemodule        = new \format_ludic_course_module($coursemodule);
@@ -134,8 +122,10 @@ class section_controller extends controller_base {
             $output .= $renderer->render($coursemodule);
         }
 
+        // Render mod chooser (add a new activity).
         $output .= $renderer->render_modchooser($course, $sectionidx, count($coursemodules));
 
+        // Return html.
         return $output;
     }
 
@@ -149,15 +139,17 @@ class section_controller extends controller_base {
      */
     public function get_properties($sectionid) {
         global $PAGE;
-        $renderer = $PAGE->get_renderer('format_ludic');
 
-        // Get edit buttons.
+        // Get data.
+        $renderer    = $PAGE->get_renderer('format_ludic');
         $section     = $this->contexthelper->get_section_by_id($sectionid);
         $editbuttons = $section->get_edit_buttons();
 
         // Render section form with edit buttons.
         $output = $renderer->render_section_form($sectionid);
         $output .= $renderer->render_buttons($editbuttons, $section->id, 'section');
+
+        // Return html.
         return $output;
     }
 
@@ -172,9 +164,16 @@ class section_controller extends controller_base {
      * @throws \moodle_exception
      */
     public function move_to_section($cmid, $sectionid) {
+        // Get course module.
         $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
+
+        // Keep old section id to render his course modules.
         $oldsectionid = $coursemodule->sectionid;
-        $isvisible    = $coursemodule->move_to_section($sectionid);
+
+        // Move a course module to another section.
+        $isvisible = $coursemodule->move_to_section($sectionid);
+
+        // Return course modules html.
         return $this->get_course_modules($oldsectionid);
     }
 
@@ -189,9 +188,16 @@ class section_controller extends controller_base {
      * @throws \moodle_exception
      */
     public function move_on_section($cmidtomove, $aftercmid) {
+        // Get course module.
         $coursemodule = $this->contexthelper->get_course_module_by_id($cmidtomove);
-        $sectionid    = $coursemodule->sectionid;
+
+        // Keep section id to render his course modules.
+        $sectionid = $coursemodule->sectionid;
+
+        // Move a course module after another course module.
         $coursemodule->move_on_section($cmidtomove, $aftercmid);
+
+        // Return course modules html.
         return $this->get_course_modules($sectionid);
     }
 
@@ -206,10 +212,17 @@ class section_controller extends controller_base {
      * @throws \moodle_exception
      */
     public function move_section_to($sectionidtomove, $aftersectionid) {
-        $sectiontomove   = $this->contexthelper->get_section_by_id($sectionidtomove);
-        $aftersection    = $this->contexthelper->get_section_by_id($aftersectionid);
-        $aftersectionidx = $aftersection->section;
+        // Get section to move.
+        $sectiontomove = $this->contexthelper->get_section_by_id($sectionidtomove);
+
+        // Get section idx to move after.
+        $dbapi           = $this->contexthelper->get_database_api();
+        $aftersectionidx = $dbapi->get_section_idx_by_id($aftersectionid);
+
+        // Move section after section.
         $sectiontomove->move_section_to($aftersectionidx);
+
+        // Return course section html.
         return $this->get_course_sections();
     }
 
@@ -224,13 +237,20 @@ class section_controller extends controller_base {
      * @throws \coding_exception
      */
     public function validate_form($sectionid, $data) {
-        $form    = new section_form($sectionid);
+        // Create form.
+        $form = new section_form($sectionid);
+
+        // Update successful or errors ?
         $success = $form->validate_and_update($data);
+
+        // Define return.
         if ($success) {
             $return = array('success' => 1, 'value' => $form->get_success_message());
         } else {
             $return = array('success' => 0, 'value' => $form->get_error_message());
         }
+
+        // Return a json encode array with success and message.
         return json_encode($return);
     }
 
@@ -246,18 +266,23 @@ class section_controller extends controller_base {
      * @throws \restore_controller_exception
      */
     public function duplicate_section($sectionid) {
+        // Get section.
         $section = $this->contexthelper->get_section_by_id($sectionid);
 
+        // Undefined section, return false.
         if (!$section) {
             return false;
         }
 
+        // Duplicate section.
         $newsection = $section->duplicate();
 
         // Trigger event update course.
-        $event = \core\event\course_updated::create(array('context' => $this->get_context(), 'objectid' => $newsection->courseid));
+        $data  = ['context' => $this->get_context(), 'objectid' => $newsection->courseid];
+        $event = \core\event\course_updated::create($data);
         $event->trigger();
 
+        // Return course sections html.
         return $this->get_course_sections();
     }
 
@@ -273,25 +298,27 @@ class section_controller extends controller_base {
      * @throws \restore_controller_exception
      */
     public function duplicate_course_module($cmid) {
+        // Get course module and $COURSE.
         $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
 
+        // Undefined course module, return false.
         if (!$coursemodule) {
             return false;
         }
 
-        $course          = $this->contexthelper->get_course_by_id($coursemodule->courseid)->moodlecourse;
-        $newcoursemodule = $coursemodule->duplicate($course, true);
+        // Duplicate course module.
+        $newcoursemodule = $coursemodule->duplicate(true);
 
         // Trigger event update course.
-        $event = \core\event\course_updated::create(array('context'  => $this->get_context(),
-                                                          'objectid' => $newcoursemodule->courseid
-        ));
+        $data  = ['context' => $this->get_context(), 'objectid' => $newcoursemodule->courseid];
+        $event = \core\event\course_updated::create($data);
         $event->trigger();
 
-        // Reset cache.
+        // Reset cache to add new course module in course info.
         rebuild_course_cache($this->get_course_id(), true);
-        $this->contexthelper->rebuild_fast_modinfo();
+        $this->contexthelper->rebuild_course_info();
 
+        // Return course modules html.
         return $this->get_course_modules($newcoursemodule->sectionid, $newcoursemodule->id);
     }
 

@@ -30,17 +30,18 @@ abstract class form_element {
 
     /**
      * Context helper
+     *
      * @var context_helper
      */
     protected $contexthelper;
-    public $type;
-    public $name;
-    public $id;
-    public $value;
-    public $defaultvalue;
-    public $label;
-    public $attributes;
-    public $specific;
+    public    $type;
+    public    $name;
+    public    $id;
+    public    $value;
+    public    $defaultvalue;
+    public    $label;
+    public    $attributes;
+    public    $specific;
 
     // Attributes which are common to all input types but have special behaviors when used on a given input type.
     public $autofocus;
@@ -62,17 +63,17 @@ abstract class form_element {
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         global $PAGE;
         $this->contexthelper = context_helper::get_instance($PAGE);
-        $this->name         = $name;
-        $this->id           = $id;
-        $this->value        = $value;
-        $this->defaultvalue = $defaultvalue;
-        $this->label        = $label;
-        $this->attributes   = $attributes;
-        $this->specific     = $specific;
-        $this->autofocus    = isset($this->attributes['autofocus']) ? $this->attributes['autofocus'] : null;
-        $this->disabled     = isset($this->attributes['disabled']) ? $this->attributes['disabled'] : null;
-        $this->required     = isset($this->attributes['required']) ? $this->attributes['required'] : null;
-        $this->readonly     = isset($this->attributes['readonly']) ? $this->attributes['readonly'] : null;
+        $this->name          = $name;
+        $this->id            = $id;
+        $this->value         = $value;
+        $this->defaultvalue  = $defaultvalue;
+        $this->label         = $label;
+        $this->attributes    = $attributes;
+        $this->specific      = $specific;
+        $this->autofocus     = isset($this->attributes['autofocus']) ? $this->attributes['autofocus'] : null;
+        $this->disabled      = isset($this->attributes['disabled']) ? $this->attributes['disabled'] : null;
+        $this->required      = isset($this->attributes['required']) ? $this->attributes['required'] : null;
+        $this->readonly      = isset($this->attributes['readonly']) ? $this->attributes['readonly'] : null;
     }
 
     /**

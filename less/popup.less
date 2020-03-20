@@ -34,8 +34,11 @@
       }
 
       .close-ludic-popup {
-        float: right;
+        position: absolute;
+        right: 30px;
+        top: 30px;
         cursor: pointer;
+        width: 32px;
 
         img.icon {
           margin-right: 0;
@@ -48,5 +51,14 @@
       padding: 10px;
     }
 
+    .confirmation-buttons {
+      margin-top: 20px;
+    }
+
+  }
+
+  #confirmation.format-ludic.ludic-popup {
+    width: 400px;
+    left: calc(~'50% - 200px');
   }
 }

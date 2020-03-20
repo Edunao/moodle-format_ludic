@@ -39,9 +39,6 @@ class skin_controller extends controller_base {
     public function execute() {
         $action = $this->get_param('action');
         switch ($action) {
-            case 'get_description' :
-                $skinid = $this->get_param('id', PARAM_INT);
-                return $this->get_description($skinid);
             case 'get_section_skin_selector' :
                 $selectedskinid = $this->get_param('selectedid');
                 return $this->get_section_skin_selector($selectedskinid);
@@ -49,9 +46,10 @@ class skin_controller extends controller_base {
                 $cmid           = $this->get_param('itemid', PARAM_INT);
                 $selectedskinid = $this->get_param('selectedid');
                 return $this->get_course_module_skin_selector($cmid, $selectedskinid);
-            // Default case if no parameter is necessary.
             default :
-                return $this->$action();
+                // Default case if the only parameter is id.
+                $id = $this->get_param('id', PARAM_INT);
+                return $this->$action($id);
         }
     }
 
@@ -63,12 +61,17 @@ class skin_controller extends controller_base {
      * @return mixed
      * @throws \coding_exception
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_course_module_skin_selector($cmid, $selectedskinid) {
         global $PAGE;
-        $renderer = $PAGE->get_renderer('format_ludic');
-        $skins    = $this->contexthelper->get_available_course_module_skins($cmid);
 
+        // Get data.
+        $renderer     = $PAGE->get_renderer('format_ludic');
+        $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
+        $skins        = $coursemodule->get_available_skins();
+
+        // Render skins.
         $content = '';
         foreach ($skins as $skin) {
             if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
@@ -79,6 +82,7 @@ class skin_controller extends controller_base {
             $content .= $renderer->render_skin($skin);
         }
 
+        // Return skins html in container.
         return $renderer->render_container_items('coursemodule-skin', $content);
     }
 
@@ -90,9 +94,12 @@ class skin_controller extends controller_base {
      */
     public function get_section_skin_selector($selectedskinid) {
         global $PAGE;
+
+        // Get data.
         $renderer = $PAGE->get_renderer('format_ludic');
         $skins    = $this->contexthelper->get_section_skins();
 
+        // Render skins.
         $content = '';
         foreach ($skins as $skin) {
             if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
@@ -102,6 +109,7 @@ class skin_controller extends controller_base {
             $content                .= $renderer->render_skin($skin);
         }
 
+        // Return skins html in container.
         return $renderer->render_container_items('section-skin', $content);
     }
 
@@ -112,7 +120,10 @@ class skin_controller extends controller_base {
      * @return string
      */
     public function get_description($skinid) {
+        // Get skin.
         $skin = skin::get_by_id($skinid);
+
+        // Return his description.
         return $skin->description;
     }
 

@@ -49,17 +49,20 @@ class course_module extends model {
      */
     public function __construct(\cm_info $cminfo) {
         parent::__construct($cminfo);
-        $this->courseid      = $cminfo->course;
-        $this->sectionid     = $cminfo->section;
-        $this->section       = $this->contexthelper->get_section_by_id($this->sectionid);
-        $this->name          = $cminfo->get_formatted_name();
-        $this->visible       = $cminfo->visible;
-        $this->cminfo        = $cminfo;
 
-        $dbrecord     = $this->contexthelper->get_format_ludic_cm_by_cmid($this->courseid, $this->id);
-        $this->skinid = $dbrecord->skinid;
-        $this->weight = $dbrecord->weight;
-        $this->access = $dbrecord->access;
+        // Course module properties.
+        $this->courseid  = $cminfo->course;
+        $this->sectionid = $cminfo->section;
+        $this->section   = $this->contexthelper->get_section_by_id($this->sectionid);
+        $this->name      = $cminfo->get_formatted_name();
+        $this->visible   = $cminfo->visible;
+        $this->cminfo    = $cminfo;
+
+        // Ludic properties.
+        $skinrelation = $this->get_skin_relation();
+        $this->skinid = $skinrelation->skinid;
+        $this->weight = $skinrelation->weight;
+        $this->access = $skinrelation->access;
         $this->skin   = skin::get_by_id($this->skinid);
     }
 
@@ -76,9 +79,9 @@ class course_module extends model {
         if ($sectionid == $this->sectionid) {
             return;
         }
-        $this->section    = $section;
-        $this->sectionid  = $sectionid;
-        $movetosection    = (object) [
+        $this->section   = $section;
+        $this->sectionid = $sectionid;
+        $movetosection   = (object) [
                 'id'      => $section->id,
                 'section' => $section->section,
                 'course'  => $section->courseid,
@@ -93,6 +96,7 @@ class course_module extends model {
      * @param $cmidtomove
      * @param $aftercmid
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function move_on_section($cmidtomove, $aftercmid) {
         $sequence    = $this->section->sequence;
@@ -111,7 +115,6 @@ class course_module extends model {
     /**
      * Duplicate the module
      *
-     * @param $course \stdClass
      * @param $movetoend bool
      * @return course_module
      * @throws \coding_exception
@@ -119,8 +122,10 @@ class course_module extends model {
      * @throws \moodle_exception
      * @throws \restore_controller_exception
      */
-    public function duplicate($course, $movetoend = false) {
-
+    public function duplicate($movetoend = false) {
+        // Required data.
+        $dbapi = $this->contexthelper->get_database_api();
+        $course       = $this->contexthelper->get_moodle_course();
         $coursemodule = (object) [
                 'id'      => $this->id,
                 'course'  => $this->courseid,
@@ -129,46 +134,60 @@ class course_module extends model {
                 'modname' => $this->cminfo->modname
         ];
 
+        // Duplicate course module.
         $newcm = duplicate_module($course, $coursemodule);
 
-        $dbapi = $this->contexthelper->get_database_api();
-
+        // Copy skin, weight and access from this course module.
         $dbapi->set_format_ludic_cm($this->courseid, $newcm->id, $this->skinid, $this->weight, $this->access);
 
+        // Move course module to end.
         if ($movetoend) {
             $sequence = $this->section->sequence;
             $lastcmid = end($sequence);
             $this->move_on_section($newcm->id, $lastcmid);
         }
 
+        // Rebuild cache to add new course module in it.
         rebuild_course_cache($this->courseid, true);
+        $this->contexthelper->rebuild_course_info();
 
         return new course_module($newcm);
     }
 
+    /**
+     * Edit buttons :
+     * Button 1 : Save form.
+     * Button 2 : Revert form.
+     * Button 3 : Edit (open sub buttons).
+     * Button 3 - 1 : Edit settings.
+     * Button 3 - 2 : Duplicate.
+     * Button 3 - 3 : Assign.
+     * Button 3 - 4 : Delete.
+     * Button 4 : Preview.
+     *
+     * @return array
+     */
     public function get_edit_buttons() {
         global $CFG;
 
+        // Defines url here.
         $editcmurl   = $CFG->wwwroot . '/course/modedit.php?update=' . $this->id . '&return=0';
-        $deletecmurl = $CFG->wwwroot . '/course/mod.php?sesskey=' . sesskey() . '&sr=' . $this->section->section . '&delete=' .
-                       $this->id . '&confirm=1';
+        $deletecmurl = $CFG->wwwroot . '/course/mod.php?sesskey=' . sesskey() . '&sr=' . $this->section->section
+                       . '&delete=' . $this->id . '&confirm=1';
         $assignurl   = $CFG->wwwroot . '/admin/roles/assign.php?contextid=' . $this->cminfo->context->id;
 
         return [
                 [
-                    // Submit form button.
                         'identifier' => 'form-save',
                         'action'     => 'saveForm',
                         'order'      => 1
                 ],
                 [
-                    // Revert form button.
                         'identifier' => 'form-revert',
                         'action'     => 'revertForm',
                         'order'      => 2
                 ],
                 [
-                    // Edit buttons : section settings, duplicate section, delete section.
                         'identifier'    => 'edit',
                         'order'         => 3,
                         'hassubbuttons' => true,
@@ -196,7 +215,6 @@ class course_module extends model {
                         ]
                 ],
                 [
-                    // Preview student section view button.
                         'identifier' => 'item-preview',
                         'order'      => 4
                 ]
@@ -204,21 +222,27 @@ class course_module extends model {
     }
 
     /**
+     * Update course module.
+     *
      * @param $data
      * @return bool
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function update($data) {
         $dbapi = $this->contexthelper->get_database_api();
 
+        // Check if data id is current id.
         if (!isset($data['id']) || $data['id'] !== $this->id) {
             return false;
         }
 
+        // Update name if required.
         if (isset($data['name']) && $data['name'] !== $this->name) {
             $dbapi->update_course_module_name($this->id, $data['name']);
         }
 
+        // Update skin id, weight or access if required.
         if (isset($data['skinid']) && $data['skinid'] !== $this->skinid ||
             isset($data['weight']) && $data['weight'] !== $this->weight ||
             isset($data['access']) && $data['access'] !== $this->access
@@ -226,6 +250,7 @@ class course_module extends model {
             $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['access']);
         }
 
+        // Rebuild cache after update.
         rebuild_course_cache($this->courseid, true);
 
         return true;
@@ -234,7 +259,7 @@ class course_module extends model {
     /**
      * Return course module icon.
      *
-     * @return object
+     * @return \stdClass
      */
     public function get_mod_icon() {
         return (object) [
@@ -243,4 +268,89 @@ class course_module extends model {
         ];
     }
 
+    /**
+     * Get available course module skins.
+     * Returns skins with grades only if the module course supports grades.
+     *
+     * @return array
+     * @throws \coding_exception
+     */
+    public function get_available_skins() {
+        $skins   = $this->contexthelper->get_course_module_skins();
+        $modname = $this->cminfo->modname;
+
+        // Label can use only inline skin.
+        if ($modname === 'label') {
+            return [coursemodule\inline::get_instance()];
+        }
+
+        // True if this course module supports grades.
+        $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
+
+        // Keep skins with grades only if the module course supports grades
+        $coursemodulesskins = [];
+        foreach ($skins as $skin) {
+            if ($skin->require_grade() && !$isgraded) {
+                continue;
+            }
+            $coursemodulesskins[$skin->id] = $skin;
+        }
+
+        // Return filtered skins.
+        return $coursemodulesskins;
+    }
+
+    /**
+     * Get the first available skin for a course module.
+     *
+     * @return mixed
+     * @throws \coding_exception
+     * @throws \dml_exception
+     */
+    public function get_default_skin() {
+        // Get available skins.
+        $skins = $this->get_available_skins();
+
+        // Search one skin available and return it.
+        foreach ($skins as $skin) {
+            if (!in_array($skin->id, [FORMAT_LUDIC_CM_SKIN_INLINE_ID])) {
+                return $skin;
+            }
+        }
+
+        // No skins found, return inline by default.
+        return coursemodule\inline::get_instance();
+    }
+
+    /**
+     * Get course module skin relation record ('format_ludic_cm').
+     * If exists return it, else create one.
+     *
+     * @return \stdClass
+     * @throws \dml_exception
+     * @throws \coding_exception
+     */
+    public function get_skin_relation() {
+        // Get data.
+        $dbapi    = $this->contexthelper->get_database_api();
+        $dbrecord = $dbapi->get_format_ludic_cm_by_cmid($this->id);
+
+        // If we found relation record, return it.
+        if ($dbrecord) {
+            return $dbrecord;
+        }
+
+        // Create one record with default values.
+        $skin               = $this->get_default_skin();
+        $dbrecord           = new \stdClass();
+        $dbrecord->courseid = $this->courseid;
+        $dbrecord->cmid     = $this->id;
+        $dbrecord->skinid   = $skin->id;
+        $dbrecord->weight   = format_ludic_get_default_weight();
+        $dbrecord->access   = 1;
+        $newid = $dbapi->add_format_ludic_cm_record($dbrecord);
+
+        // Return record.
+        return $dbrecord;
+    }
 }

@@ -69,6 +69,7 @@ abstract class form {
 
     /**
      * Validation of child specific form.
+     *
      * @return bool all is valid or not.
      */
     public abstract function validate_child();
@@ -87,11 +88,17 @@ abstract class form {
      */
     public function render() {
         global $PAGE;
+
+        // Get data.
+        $renderer = $PAGE->get_renderer('format_ludic');
         $elements = $this->elements;
+
+        // Fulfill form content from elements.
         foreach ($elements as $element) {
             $this->content .= $element->render();
         }
-        $renderer = $PAGE->get_renderer('format_ludic');
+
+        // Render form.
         return $renderer->render_form($this);
     }
 
@@ -104,13 +111,20 @@ abstract class form {
      * @throws \coding_exception
      */
     public function validate_and_update($data) {
+        // Set data.
         $this->set_form_values($data);
+
+        // Validate all the elements of the form one by one.
         if (!$this->validate_elements()) {
             return false;
         }
+
+        // More validation from form object.
         if (!$this->validate_child()) {
             return false;
         }
+
+        // Update object with form data.
         return $this->update_child();
     }
 
@@ -144,7 +158,7 @@ abstract class form {
         if (!$this->formvalues) {
             return false;
         }
-        $valid    = true;
+        $valid = true;
         foreach ($this->elements as $element) {
 
             // Javascript serializeArray function returns the checkbox elements only if they are checked.
@@ -163,13 +177,15 @@ abstract class form {
                 $this->formvalues[$element->name] = $elementvalidation['value'];
             } else {
                 // Add an error to the error list.
-                $defaulterror = get_string('default-error', 'format_ludic');
                 $this->errors[] = [
                         'id'    => $element->id,
                         'label' => $element->label,
                         'name'  => $element->name,
-                        'error' => isset($elementvalidation['value']) ? $elementvalidation['value'] : $defaulterror
+                        'error' => isset($elementvalidation['value']) ?
+                                $elementvalidation['value'] : get_string('default-error', 'format_ludic')
                 ];
+
+                // Form is not valid.
                 $valid = false;
             }
         }
@@ -178,6 +194,7 @@ abstract class form {
 
     /**
      * Add an element in form.
+     * For dynamic element.
      *
      * @param form_element $element
      */

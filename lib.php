@@ -24,70 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-// Course lib.
-require_once($CFG->dirroot . '/course/format/lib.php');
-
-// Data.
-require_once($CFG->dirroot . '/course/format/ludic/classes/data/context_helper.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/data/data_api.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/data/database_api.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/data/file_api.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/data/log_api.php');
-
-// Models.
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/model.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/course.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/section.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/course_module.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/header_bar.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/skin.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/coursemodule_skin_interface.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/inline.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/score.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/coursemodule_skins/achievement.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/section_skins/section_skin_interface.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/models/section_skins/score.php');
-
-// Renderable.
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/popup.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/item.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/skin.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/section.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/course_module.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/form.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/hidden_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/text_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/number_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/checkbox_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/textarea_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/select_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/filepicker_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/selection_popup_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/modchooser.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/renderers/renderable/buttons.php');
-
-// Controller.
-require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/front_controller_interface.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/front_controller.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/controller_base.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/section.controller.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/skin.controller.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/controllers/coursemodule.controller.php');
-
-// Form.
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/form.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/section_form.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/coursemodule_form.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/checkbox_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/filepicker_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/hidden_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/number_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/select_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/selection_popup_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/text_form_element.php');
-require_once($CFG->dirroot . '/course/format/ludic/classes/forms/elements/textarea_form_element.php');
+format_ludic_require_files();
 
 /**
  * Main class for the Ludic course format
@@ -151,11 +88,14 @@ class format_ludic extends \format_base {
 
         if ($courseformatoptions === false) {
             $courseformatoptions = [
-                    'ludic_config'         => [
-                            'type'         => PARAM_RAW, 'label' => get_string('ludicconfiglabel', 'format_ludic'),
+                    'ludic_config'      => [
+                            'type'         => PARAM_RAW,
+                            'label'        => get_string('ludicconfiglabel', 'format_ludic'),
                             'element_type' => 'hidden'
-                    ], 'ludic_sharing_key' => [
-                            'type'         => PARAM_RAW, 'label' => get_string('ludicsharingkeylabel', 'format_ludic'),
+                    ],
+                    'ludic_sharing_key' => [
+                            'type'         => PARAM_RAW,
+                            'label'        => get_string('ludicsharingkeylabel', 'format_ludic'),
                             'element_type' => 'hidden',
                     ],
             ];
@@ -181,6 +121,7 @@ class format_ludic extends \format_base {
 
     /**
      * Returns course section name.
+     * This function is used to display section name in drawer.
      *
      * @param int|stdClass $section Section object from database or just field course_sections.section
      * @return string section name;
@@ -195,7 +136,7 @@ class format_ludic extends \format_base {
         }
 
         $dbapi = $this->contexthelper->get_database_api();
-        $name = $dbapi->get_section_name_by_courseid_and_sectionidx($this->courseid, $sectionnum);
+        $name  = $dbapi->get_section_name_by_courseid_and_sectionidx($this->courseid, $sectionnum);
         return !empty($name) ? $name : get_string('default-section-title', 'format_ludic', $sectionnum);
     }
 
@@ -223,10 +164,10 @@ class format_ludic extends \format_base {
         // Check if there are callbacks to extend course navigation.
         parent::extend_course_navigation($navigation, $node);
 
-        // Remove Section 0 from drawer.
-        $dbapi = $this->contexthelper->get_database_api();
+        // Remove Section 0 from drawer (this section is not directly accessible in this format).
+        $dbapi            = $this->contexthelper->get_database_api();
         $generalsectionid = $dbapi->get_section_id_by_courseid_and_sectionidx($this->courseid, 0);
-        $generalsection = $node->get($generalsectionid, navigation_node::TYPE_SECTION);
+        $generalsection   = $node->get($generalsectionid, navigation_node::TYPE_SECTION);
         if ($generalsection) {
             $generalsection->remove();
         }
@@ -288,6 +229,7 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
 
 /**
  * Return weight setting by default.
+ *
  * @return string
  */
 function format_ludic_get_default_weight_setting() {
@@ -295,7 +237,68 @@ function format_ludic_get_default_weight_setting() {
 }
 
 /**
+ * Get weight options for select element.
+ *
+ * @return array
+ * @throws \dml_exception
+ */
+function format_ludic_get_weight_options() {
+    global $PAGE;
+    $config        = \format_ludic\context_helper::get_instance($PAGE)->get_course_format_config();
+    $weightoptions = isset($config->weight) ? $config->weight : format_ludic_get_default_weight_setting();
+    $weightoptions = explode(',', $weightoptions);
+    return array_map('trim', $weightoptions);
+
+}
+
+/**
+ * Get default weight (set by default after adding an activity)
+ *
+ * @return int
+ * @throws \dml_exception
+ */
+function format_ludic_get_default_weight() {
+    $weightoptions = format_ludic_get_weight_options();
+    $defaultkey    = round(count($weightoptions) / 2, 0, PHP_ROUND_HALF_DOWN);
+    return isset($weightoptions[$defaultkey]) ? $weightoptions[$defaultkey] : 0;
+}
+
+
+/**
+ * Get access options for select element.
+ *
+ * @return array
+ * @throws \coding_exception
+ */
+function format_ludic_get_access_options() {
+
+    // Definitions in start of file.
+    $access = [
+            FORMAT_LUDIC_ACCESS_ACCESSIBLE          => 'access-accessible',
+            FORMAT_LUDIC_ACCESS_CHAINED             => 'access-chained',
+            FORMAT_LUDIC_ACCESS_DISCOVERABLE        => 'access-discoverable',
+            FORMAT_LUDIC_ACCESS_CONTROLLED          => 'access-controlled',
+            FORMAT_LUDIC_ACCESS_GROUPED             => 'access-grouped',
+            FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED => 'access-chained-and-grouped',
+    ];
+
+    // Options for <select>.
+    $options = [];
+    foreach ($access as $value => $identifier) {
+        $options[] = [
+                'value'       => $value,
+                'name'        => get_string($identifier, 'format_ludic'),
+                'description' => get_string($identifier . '-desc', 'format_ludic')
+        ];
+    }
+
+    return $options;
+}
+
+
+/**
  * Requires javascript for filepicker and modchooser.
+ *
  * @param $context
  */
 function format_ludic_init_edit_mode($context) {
@@ -328,9 +331,66 @@ function format_ludic_init_edit_mode($context) {
  * @return array
  */
 function format_ludic_get_strings_for_js($editmode) {
+    $strings = [
+            'error-popup-title',
+            'error-popup-content'
+    ];
+
     if ($editmode) {
-        return ['confirmation-popup-title', 'confirmation-popup-content'];
-    } else {
-        return [];
+        $strings[] = 'confirmation-form-exit-title';
+        $strings[] = 'confirmation-form-exit-content';
+        $strings[] = 'confirmation-popup-title';
+        $strings[] = 'confirmation-popup-content';
     }
+
+    return $strings;
+}
+
+function format_ludic_require_files() {
+    global $CFG;
+    // Course lib.
+    require_once($CFG->dirroot . '/course/format/lib.php');
+
+
+    $classesdir = $CFG->dirroot . '/course/format/ludic/classes';
+    // Require parent files first to avoid errors later.
+    require_once($classesdir . '/models/model.php');
+    require_once($classesdir . '/forms/form.php');
+    require_once($classesdir . '/forms/elements/form_element.php');
+    require_once($classesdir . '/models/skin.php');
+    require_once($classesdir . '/models/coursemodule_skins/coursemodule_skin_interface.php');
+    require_once($classesdir . '/models/section_skins/section_skin_interface.php');
+    require_once($classesdir . '/renderers/renderable/form_element.php');
+    require_once($classesdir . '/renderers/renderable/item.php');
+
+    /**
+     * Recursively scan a folder and requires all files once.
+     *
+     * @param $dir
+     */
+    function require_files_recursively($dir) {
+        global $CFG;
+
+        // Get directory content, ignore dots.
+        $nodes = array_diff(scandir($dir), ['.', '..']);
+
+        // Browse the nodes.
+        foreach ($nodes as $node) {
+
+            // Complete path.
+            $nodepath = $dir . '/' . $node;
+
+            if (is_dir($nodepath)) {
+                // If node is a directory, browse it.
+                require_files_recursively($nodepath);
+            } else {
+                // If node is a file, require it.
+                require_once($nodepath);
+            }
+
+        }
+    }
+
+    // Require files recursively by browsing the class tree.
+    require_files_recursively($classesdir);
 }

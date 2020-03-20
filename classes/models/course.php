@@ -28,8 +28,6 @@ defined('MOODLE_INTERNAL') || die();
 
 class course extends model {
 
-    private $sections = null;
-
     public $moodlecourse;
     public $coursemodules;
 
@@ -50,12 +48,70 @@ class course extends model {
      * @throws \moodle_exception
      */
     public function get_sections() {
-        // Retrieve sections if attribute sections is empty.
-        if ($this->sections == null) {
-            $this->sections = $this->contexthelper->get_sections_by_course_id($this->id);
+
+        // Get sections.
+        $dbapi = $this->contexthelper->get_database_api();
+        $sectionrecords = $dbapi->get_course_sections_by_courseid($this->id);
+
+        // Return section object.
+        $sections = [];
+        foreach ($sectionrecords as $section) {
+
+            // Ignore section 0.
+            if ($section->section == 0) {
+                continue;
+            }
+
+            $section                     = new section($section);
+            $sections[$section->section] = $section;
         }
 
-        return $this->sections;
+        return $sections;
+    }
+
+    /**
+     * Get course context.
+     *
+     * @return \context_course
+     */
+    public function get_context() {
+        return \context_course::instance($this->id);
+    }
+
+    /**
+     * Create an section in the course defined in $courseid.
+     *
+     * @param
+     * @return false|section
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function create_section() {
+        $dbapi = $this->contexthelper->get_database_api();
+        $nbsections = $dbapi->count_course_sections($this->id);
+
+        if (!$dbapi->create_section($this->id, $nbsections)) {
+            return false;
+        }
+
+        if (!$newsection = $dbapi->get_course_last_section($this->id)) {
+            return false;
+        }
+
+        //rebuild_course_cache($courseid, true);
+
+        return $this->contexthelper->get_section_by_id($newsection->id);
+    }
+
+    /**
+     * This includes information about the course-modules and the sections on the course.
+     * It can also include dynamic data that has been updated for the current user.
+     *
+     * @return \course_modinfo
+     * @throws \moodle_exception
+     */
+    public function get_course_info() {
+        return get_fast_modinfo($this->id, $this->contexthelper->get_user_id());
     }
 
 }

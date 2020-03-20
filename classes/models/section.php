@@ -49,17 +49,20 @@ class section extends model {
      */
     public function __construct($section) {
         parent::__construct($section);
+
+        // Section properties.
         $this->dbrecord    = $section;
         $this->courseid    = $section->course;
         $this->section     = $section->section;
         $this->name        = $section->name;
         $this->sequence    = array_filter(explode(',', $section->sequence));
         $this->visible     = $section->visible;
-        $modinfo           = $this->contexthelper->get_fast_modinfo();
-        $this->sectioninfo = $modinfo->get_section_info($this->section);
+        $courseinfo        = $this->contexthelper->get_course_info();
+        $this->sectioninfo = $courseinfo->get_section_info($this->section);
 
-        $dbrecord     = $this->contexthelper->get_format_ludic_cs_by_sectionid($this->courseid, $this->id);
-        $this->skinid = $dbrecord->skinid;
+        // Ludic properties.
+        $skinrelation = $this->get_section_skin_relation();
+        $this->skinid = $skinrelation->skinid;
         $this->skin   = skin::get_by_id($this->skinid);
     }
 
@@ -87,6 +90,7 @@ class section extends model {
             return $this->coursemodules;
         }
 
+        // Take all course modules from sequence.
         foreach ($this->sequence as $order => $cmid) {
             foreach ($coursemodules as $coursemodule) {
                 if ($coursemodule->id == $cmid) {
@@ -119,6 +123,7 @@ class section extends model {
      *
      * @param $sectionidx
      * @return bool
+     * @throws \dml_exception
      */
     public function move_section_to($sectionidx) {
         $moodlecourse = $this->get_course()->moodlecourse;
@@ -129,6 +134,7 @@ class section extends model {
      * Get ludic course.
      *
      * @return course
+     * @throws \dml_exception
      */
     public function get_course() {
         if ($this->course == null) {
@@ -137,11 +143,20 @@ class section extends model {
         return $this->course;
     }
 
+    /**
+     * @return mixed
+     * @throws \dml_exception
+     */
     public function get_moodle_course() {
-        $course = $this->get_course();
-        return $course->moodlecourse;
+        return $this->get_course()->moodlecourse;
     }
 
+    /**
+     * @param $data
+     * @return bool
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function update($data) {
         $dbapi        = $this->contexthelper->get_database_api();
         $moodlecourse = $this->get_moodle_course();
@@ -162,22 +177,41 @@ class section extends model {
         return true;
     }
 
+    /**
+     * A section is can be deleted if she has no course modules.
+     *
+     * @return bool
+     */
     public function has_course_modules() {
         return count($this->sequence) > 0;
     }
 
+    /**
+     * Edit buttons :
+     * Button 1 : Save form.
+     * Button 2 : Revert form.
+     * Button 3 : Edit (open sub buttons).
+     * Button 3 - 1 : Edit settings.
+     * Button 3 - 2 : Duplicate.
+     * Button 3 - 3 : Delete.
+     * Button 4 : Preview.
+     *
+     * @return array
+     */
     public function get_edit_buttons() {
         global $CFG;
+        $baseurl        = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id;
+        $editsectionurl = $baseurl . '&sr=' . $this->section;
 
-        $editsectionurl = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id . '&sr=' . $this->section;
+        // Define delete button.
+        $deletebutton = ['identifier' => 'delete'];
 
         // Check if section can be deleted.
-        $deletebutton = ['identifier' => 'delete'];
         if (!$this->has_course_modules()) {
-            $deletebutton['link']   = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id . '&sr=1&delete=1&sesskey=' .
-                                      sesskey();
+            $deletebutton['link']   = $baseurl . '&sr=1&delete=1&sesskey=' . sesskey();
             $deletebutton['action'] = 'confirmAndDeleteSection';
         } else {
+            // Section can not be deleted, disable this button.
             $deletebutton['disabled'] = true;
         }
 
@@ -230,8 +264,10 @@ class section extends model {
      * @throws \restore_controller_exception
      */
     public function duplicate() {
+        // Get data.
         $dbapi      = $this->contexthelper->get_database_api();
-        $newsection = $this->contexthelper->create_section($this->courseid);
+        $course     = $this->contexthelper->get_course();
+        $newsection = $course->create_section();
 
         // Copy course section name.
         $newsection->name           = $this->get_title() . get_string('duplicate-suffix', 'format_ludic');
@@ -253,8 +289,48 @@ class section extends model {
             $newcm->move_to_section($newsection->id);
         }
 
+        // Rebuild cache to add new course section in it.
         rebuild_course_cache($this->courseid, true);
+        $this->contexthelper->rebuild_course_info();
+
         return $newsection;
     }
 
+    /**
+     * Get course section skin relation record ('format_ludic_cs').
+     * If exists return it, else create one.
+     *
+     * @return \stdClass
+     * @throws \dml_exception
+     */
+    public function get_section_skin_relation() {
+        // Get data.
+        $dbapi    = $this->contexthelper->get_database_api();
+        $dbrecord = $dbapi->get_format_ludic_cs_by_sectionid($this->id);
+
+        // If we found relation record, return it.
+        if ($dbrecord) {
+            return $dbrecord;
+        }
+
+        // Create one record with default values.
+        $skin                = $this->get_default_skin();
+        $dbrecord            = new \stdClass();
+        $dbrecord->courseid  = $this->courseid;
+        $dbrecord->sectionid = $this->id;
+        $dbrecord->skinid    = $skin->id;
+        $newid               = $dbapi->add_format_ludic_cs_record($dbrecord);
+
+        // Return record.
+        return $dbrecord;
+    }
+
+    /**
+     * Return the first section skin.
+     *
+     * @return skin
+     */
+    public function get_default_skin() {
+        return current($this->contexthelper->get_section_skins());
+    }
 }

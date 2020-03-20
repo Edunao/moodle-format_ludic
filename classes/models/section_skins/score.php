@@ -29,24 +29,41 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class score extends \format_ludic\skin implements \format_ludic\section_skin_interface {
+
+    /**
+     * @return string
+     */
     public function render_course_view() {
         return 'course score';
     }
+
+    /**
+     * @return string
+     */
     public function render_section_view() {
         return 'section score';
     }
 
+    /**
+     * @return \stdClass
+     */
     public function get_edit_image() {
-        $image = $this->get_default_image();
+        $image  = $this->get_default_image();
         $images = $this->get_images();
         return count($images) > 0 ? end($images) : $image;
     }
 
+    /**
+     * @return array
+     */
     public function get_images() {
         $properties = $this->get_properties();
         return isset($properties['images']) ? $properties['images'] : [];
     }
 
+    /**
+     * @return \stdClass
+     */
     public function get_default_image() {
         return (object) [
                 'imgsrc' => 'https://picsum.photos/id/55/80/80',

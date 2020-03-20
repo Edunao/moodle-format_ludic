@@ -34,17 +34,28 @@ class score extends \format_ludic\skin implements \format_ludic\coursemodule_ski
         return 'activity score';
     }
 
+    /**
+     * Get the best image.
+     *
+     * @return \stdClass
+     */
     public function get_edit_image() {
-        $image = $this->get_default_image();
+        $image  = $this->get_default_image();
         $images = $this->get_images();
         return count($images) > 0 ? end($images) : $image;
     }
 
+    /**
+     * @return array
+     */
     public function get_images() {
         $properties = $this->get_properties();
         return isset($properties['images']) ? $properties['images'] : [];
     }
 
+    /**
+     * @return object
+     */
     public function get_default_image() {
         return (object) [
                 'imgsrc' => 'https://picsum.photos/id/66/80/80',
@@ -52,6 +63,11 @@ class score extends \format_ludic\skin implements \format_ludic\coursemodule_ski
         ];
     }
 
+    /**
+     * This skin require grade.
+     *
+     * @return true
+     */
     public function require_grade() {
         return true;
     }

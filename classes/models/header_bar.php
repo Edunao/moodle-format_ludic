@@ -28,30 +28,4 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-class header_bar extends model {
-
-    public function render() {
-        global $PAGE;
-        $buttons = $this->get_buttons();
-
-        $renderer = $PAGE->get_renderer('format_ludic');
-        $output   = $renderer->render_from_template('format_ludic/headerbar', $buttons);
-        return $output;
-    }
-
-    public function get_buttons() {
-        // TODO.
-        return array(
-                'buttons' => array(
-                        0    => array(
-                                'name' => 'title', 'shortname' => 'title', 'link' => 'value', 'left' => false
-                        ), 1 => array(
-                                'name' => 'Course', 'shortname' => 'course', 'link' => '/course/view.php?id=2', 'left' => true
-                        ), 2 => array(
-                                'name' => 'Section', 'shortname' => 'section', 'link' => '/course/view.php?id=2&section=1',
-                                'left' => true
-                        ),
-                ),
-        );
-    }
-}
+class header_bar {}

@@ -264,7 +264,18 @@ if ($editmode) {
     format_ludic_init_edit_mode($context);
     echo $renderer->render_edit_page();
 } else {
-    echo $renderer->render_page();
+    if ($contexthelper->get_section_idx() > 0) {
+        // Section view.
+    } else {
+        // Course view.
+        $data = [
+                'globaldescription' => $contexthelper->get_global_description(),
+                'sectionscontent'   => 'sections ...',
+                'globalactivities'  => 'activités section 0...'
+        ];
+        echo $renderer->render_page($data);
+    }
+
 }
 
 // Requires format ludic javascript.

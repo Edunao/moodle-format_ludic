@@ -28,6 +28,14 @@ defined('MOODLE_INTERNAL') || die();
 
 class section_form extends form {
 
+    /**
+     * section_form constructor.
+     *
+     * @param $id
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     public function __construct($id) {
         parent::__construct('section', $id);
         $this->object   = $this->contexthelper->get_section_by_id($id);
@@ -44,27 +52,38 @@ class section_form extends form {
      * @throws \coding_exception
      */
     public function get_definition() {
+        $elements = [];
 
-        $id = $this->object->id;
-
-        $title        = $this->object->name;
-        $defaulttitle = get_string('default-section-title', 'format_ludic', $this->object->section);
-        $labeltitle   = get_string('label-section-title', 'format_ludic');
-
-        $elements   = [];
+        // Section id.
+        $id         = $this->object->id;
         $elements[] = new hidden_form_element('id', 'section-id', $id, 0);
 
-        $elements[] = new text_form_element('name', 'section-title', $title, $defaulttitle, $labeltitle, [
-                'required' => true, 'maxlength' => 30
-        ]);
+        // Section name.
+        $elements[] = new text_form_element(
+                'name',
+                'section-title',
+                $this->object->name,
+                get_string('default-section-title', 'format_ludic', $this->object->section),
+                get_string('label-section-title', 'format_ludic'),
+                ['required' => true, 'maxlength' => 30]
+        );
 
-        $visible        = $this->object->visible;
-        $defaultvisible = 1;
-        $labelvisible   = get_string('label-section-visible', 'format_ludic');
-        $elements[]     = new checkbox_form_element('visible', 'section-visible', $visible, $defaultvisible, $labelvisible,
-                ['required' => true]);
+        // Section visibility.
+        $elements[] = new checkbox_form_element(
+                'visible',
+                'section-visible',
+                $this->object->visible,
+                1,
+                get_string('label-section-visible', 'format_ludic'),
+                ['required' => true]
+        );
 
-        $elements[] = new selection_popup_form_element('skinid', 'section-skinid', $this->object->skinid, 0,
+        // Section skin id.
+        $elements[] = new selection_popup_form_element(
+                'skinid',
+                'section-skinid',
+                $this->object->skinid,
+                0,
                 get_string('label-skin-selection', 'format_ludic'),
                 ['required' => true, 'multiple' => false],
                 [
@@ -77,7 +96,6 @@ class section_form extends form {
         );
 
         // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
-
         //$elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
         //$elements[]    = new filepicker_form_element('image-2', 'section-image-2', null, null, 'section filepicker label');
         //$elements[]    = new number_form_element('weight', 'section-weight', null, 800, 'section number label',
@@ -88,11 +106,21 @@ class section_form extends form {
         return $elements;
     }
 
+    /**
+     * Update section.
+     *
+     * @return bool
+     */
     public function update_child() {
         $this->object->update($this->formvalues);
         return true;
     }
 
+    /**
+     * More section validation.
+     *
+     * @return bool
+     */
     public function validate_child() {
         return true;
     }

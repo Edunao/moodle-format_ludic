@@ -42,9 +42,8 @@ class format_ludic_section extends format_ludic_item {
 
         $this->title = $section->get_title();
 
-        $this->skinid = isset($section->skinid) && !empty($section->skinid) ? $section->skinid : null;
-        $imageobject  = !empty($section->skinid) ? $section->skin->get_edit_image() :
-                \format_ludic\skin::get_undefined_skin_image('section');
+        $this->skinid = $section->skinid;
+        $imageobject  = $section->skin->get_edit_image();
         $this->imgsrc = $imageobject->imgsrc;
         $this->imgalt = $imageobject->imgalt;
 
