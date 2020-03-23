@@ -35,15 +35,18 @@ class format_ludic_skin extends format_ludic_item {
      */
     public function __construct(\format_ludic\skin $skin) {
 
+        // General data.
         $this->selectorid = 'ludic-skin-' . $skin->id;
         $this->id         = $skin->id;
         $this->itemtype   = 'skin';
         $this->order      = $skin->id;
+        $this->selected   = $skin->selected;
+        $this->title      = $skin->title;
 
-        $this->selected         = $skin->selected;
-        $this->propertiesaction = $skin->propertiesaction;
-        $this->title            = $skin->title;
+        // Action.
+        $this->propertiesaction = 'get_description';
 
+        // Image.
         $imageobject  = $skin->get_edit_image();
         $this->imgsrc = $imageobject->imgsrc;
         $this->imgalt = $imageobject->imgalt;

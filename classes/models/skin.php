@@ -35,7 +35,6 @@ abstract class skin extends model {
     private $properties;
     public  $css;
     public  $selected;
-    public  $propertiesaction;
 
     /**
      * skin constructor.
@@ -68,6 +67,7 @@ abstract class skin extends model {
      *
      * @param $skinid
      * @return skin|null
+     * @throws \coding_exception
      */
     public static function get_by_id($skinid) {
         global $PAGE;
@@ -104,7 +104,7 @@ abstract class skin extends model {
     }
 
     /**
-     * Get child edit image.
+     * Get edit image.
      *
      * @return \stdClass
      */

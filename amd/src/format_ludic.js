@@ -25,6 +25,7 @@
 
 define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
     let courseId = null;
+    let sectionId = null;
     let userId = null;
     let editMode = null;
     let formChanged = false;
@@ -38,6 +39,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         init: function (params) {
             // Defines some useful variables.
             ludic.courseId = params.courseid;
+            ludic.sectionId = params.sectionid;
             ludic.userId = params.userid;
             ludic.editMode = params.editmode;
 
@@ -47,13 +49,15 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Initialize all required events.
             ludic.initEvents();
 
-            // If we are in edit mode, show sections after loading the page.
-            if (ludic.editMode) {
+            // If we are not in a section or edit mode, show sections after loading the page.
+            if (ludic.sectionId === 0 || ludic.editMode) {
                 ludic.displaySections();
             }
 
-            // Click on last item clicked in order to keep navigation.
-            ludic.clickOnLastItemClicked();
+            if (ludic.editMode) {
+                // Click on last item clicked in order to keep navigation.
+                ludic.clickOnLastItemClicked();
+            }
         },
 
         /**
@@ -112,7 +116,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                 // Try to construct a selector id.
                 let hasItemSelectorId = params.itemType && params.itemId;
-                params.itemSelectorId = hasItemSelectorId ?  '.item.' + params.itemType + '[data-id="' + params.itemId + '"]' : null;
+                params.itemSelectorId = hasItemSelectorId ? '.item.' + params.itemType + '[data-id="' + params.itemId + '"]' : null;
 
                 // Controller and action => Ajax call.
                 if (controller && action) {
@@ -636,8 +640,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // When item is added with .selected class, click on it by default.
             ludic.initClickOnSelectedItemEvent();
-
-
         },
 
         /**
@@ -908,6 +910,23 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          */
         displayCourseModulesHtml: function (html, callback) {
             console.log('displayCourseModulesHtml');
+
+            // Course modules container.
+            let container = $('.container-children.coursemodules');
+
+            // In student view just display course modules html.
+            if (!ludic.editMode) {
+                container.html(html);
+
+                // Execute callback if exists.
+                if (typeof callback === 'function') {
+                    callback(container.html());
+                }
+
+                return;
+            }
+
+            // In edit view, we have to check some parameters (user is editing, wait moodle mod chooser is ready).
             // If the form has been updated, we ensure that the user has confirmed his choice to leave the edition
             // before showing him the course modules
             let userConfirmation = setInterval(function () {
@@ -918,7 +937,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 }
 
                 // Find container and add a loading.
-                let container = $('.container-children.coursemodules');
                 ludic.addLoading(container);
 
                 // Search modchooser in container, if there is none, just show content and return.
@@ -979,7 +997,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             window.location.href = url;
         },
 
-        reload: function() {
+        reload: function () {
             window.location.reload()
         },
 

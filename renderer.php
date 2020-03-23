@@ -179,6 +179,15 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param $coursemodule
+     * @return string
+     */
+    public function render_course_module_inline($coursemodule) {
+        $coursemodule = new format_ludic_course_module_inline($coursemodule);
+        return $this->render($coursemodule);
+    }
+
+    /**
      * @param format_ludic_modchooser $popup
      * @return bool|string
      * @throws moodle_exception
@@ -230,6 +239,15 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     protected function render_format_ludic_course_module(format_ludic_course_module $coursemodule) {
         return $this->render_from_template('format_ludic/course_module', $coursemodule);
+    }
+
+    /**
+     * @param format_ludic_course_module_inline $coursemodule
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_course_module_inline(format_ludic_course_module_inline $coursemodule) {
+        return $this->render_from_template('format_ludic/course_module_inline', $coursemodule);
     }
 
     /**
@@ -286,11 +304,11 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_edit_page() {
-        return $this->render_from_template('format_ludic/editpage', []);
+        return $this->render_from_template('format_ludic/editpage', ['editmode' => true]);
     }
 
     /**
-     * @param $type array
+     * @param $data array
      * @return bool|string
      * @throws moodle_exception
      */
@@ -299,7 +317,16 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param $type string of children
+     * @param $data array
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_section_page($data) {
+        return $this->render_from_template('format_ludic/section_page', $data);
+    }
+
+    /**
+     * @param $childrentype string
      * @return bool|string
      * @throws moodle_exception
      */

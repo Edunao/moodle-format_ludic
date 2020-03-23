@@ -27,35 +27,62 @@ defined('MOODLE_INTERNAL') || die();
 class format_ludic_section extends format_ludic_item {
 
     /**
+     * Required because we add to need some html for a section.
+     *
+     * @var bool
+     */
+    public $requiresectionhtmlforjs;
+
+    /**
      * format_ludic_section constructor.
      *
      * @param \format_ludic\section $section
      * @throws coding_exception
+     * @throws dml_exception
      */
     public function __construct(\format_ludic\section $section) {
-        $this->selectorid = 'ludic-section-' . $section->section;
-        $this->id         = $section->id;
-        $this->itemtype   = 'section';
-        $this->issection  = true;
-        $this->parent     = true;
-        $this->order      = $section->section;
+        global $PAGE, $CFG;
 
-        $this->title = $section->get_title();
-
-        $this->skinid = $section->skinid;
-        $imageobject  = $section->skin->get_edit_image();
-        $this->imgsrc = $imageobject->imgsrc;
-        $this->imgalt = $imageobject->imgalt;
-
+        // General data.
+        $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+        $this->selectorid   = 'ludic-section-' . $section->section;
+        $this->itemtype     = 'section';
+        $this->id           = $section->id;
+        $this->title        = $section->get_title();
+        $this->order        = $section->section;
         $this->isnotvisible = !$section->visible;
+        $this->parent       = true;
+        $this->skinid       = $section->skinid;
 
-        $this->action           = 'get_course_modules';
-        $this->propertiesaction = 'get_properties';
-        $this->controller       = 'section';
-        $this->callback         = 'displayCourseModulesHtml';
+        // Action.
+        $location = $contexthelper->get_location();
+        if ($location === 'course') {
+            $this->action = 'getDataLinkAndRedirectTo';
+            $this->link   = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
+        }
 
-        $this->draggable = true;
-        $this->droppable = true;
+        // Edit mode.
+        if ($contexthelper->is_editing()) {
+
+            // Action.
+            $this->action           = 'get_course_modules';
+            $this->controller       = 'section';
+            $this->callback         = 'displayCourseModulesHtml';
+            $this->propertiesaction = 'get_properties';
+
+            // Enable drag and drop.
+            $this->requiresectionhtmlforjs = true;
+            $this->draggable               = true;
+            $this->droppable               = true;
+
+            // Image.
+            $imageobject  = $section->skin->get_edit_image();
+            $this->imgsrc = $imageobject->imgsrc;
+            $this->imgalt = $imageobject->imgalt;
+        } else {
+            $this->content = $section->skin->render_section_view();
+        }
+
     }
 
 }

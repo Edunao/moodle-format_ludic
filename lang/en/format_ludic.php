@@ -26,6 +26,7 @@
 $string['pluginname']     = 'Ludic';
 $string['hidefromothers'] = 'Hide section';
 $string['showfromothers'] = 'Show section';
+$string['sectionname']    = 'Section';
 
 // Privacy.
 $string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';

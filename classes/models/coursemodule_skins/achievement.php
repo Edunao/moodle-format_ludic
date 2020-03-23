@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 class achievement extends \format_ludic\skin implements \format_ludic\coursemodule_skin_interface {
 
-    public function render_coursemodule_view() {
+    public function render_course_module_view() {
         return 'activity achievement';
     }
 

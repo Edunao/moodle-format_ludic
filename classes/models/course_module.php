@@ -55,7 +55,7 @@ class course_module extends model {
         $this->sectionid = $cminfo->section;
         $this->section   = $this->contexthelper->get_section_by_id($this->sectionid);
         $this->name      = $cminfo->get_formatted_name();
-        $this->visible   = $cminfo->visible;
+        $this->visible   = $cminfo->uservisible && $cminfo->visible;
         $this->cminfo    = $cminfo;
 
         // Ludic properties.

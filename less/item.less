@@ -1,7 +1,4 @@
 #ludic-main-container {
-
-  .container-items {
-
     .item {
       display: inline-block;
       width: calc(~'25% - 40px');
@@ -9,10 +6,16 @@
       min-width: 130px;
       margin: 20px;
       border: 1px solid black;
-      cursor: pointer;
       position: relative;
 
       .item-img-container {
+        background-position: center;
+        background-size: contain;
+        background-repeat: no-repeat;
+        height: calc(~'100% - 30px');
+      }
+ 
+      .item-content-container {
         background-position: center;
         background-size: contain;
         background-repeat: no-repeat;
@@ -56,7 +59,7 @@
         display: none;
       }
 
-      &:hover:not(.selected), &:focus:not(.selected) {
+      &.ludic-drag:hover:not(.selected), &.ludic-drag:focus:not(.selected) {
         border: 2px #0a6aa1 dashed;
 
         .item-icon, &.is-not-visible:after {
@@ -89,6 +92,6 @@
 
     }
 
-  }
+
 
 }

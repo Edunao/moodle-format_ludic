@@ -44,21 +44,28 @@ class format_ludic_buttons implements renderable {
         $this->itemtype   = $itemtype;
         $this->selectorid = !empty($itemid) && !empty($itemtype) ? 'buttons-' . $itemtype . '-' . $itemid : null;
 
+        // Foreach button and sub button, set order and name.
         foreach ($buttons as $key => $button) {
-            $button['order'] = isset($button['order']) ? $button['order'] : $key + 1;
-            $button['name'] = get_string($button['identifier'], 'format_ludic');
 
+            // Button.
+            $button['order'] = isset($button['order']) ? $button['order'] : $key + 1;
+            $button['name']  = get_string($button['identifier'], 'format_ludic');
+
+            // Sub buttons.
             if (isset($button['subbuttons']) && !empty($button['subbuttons'])) {
                 foreach ($button['subbuttons'] as $subkey => $subbutton) {
-                    $subbutton['order'] = isset($subbutton['order']) ? $subbutton['order'] : $subkey + 1;
-                    $subbutton['name'] = get_string($subbutton['identifier'], 'format_ludic');
+                    $subbutton['order']            = isset($subbutton['order']) ? $subbutton['order'] : $subkey + 1;
+                    $subbutton['name']             = get_string($subbutton['identifier'], 'format_ludic');
                     $button['subbuttons'][$subkey] = $subbutton;
                 }
             }
 
+            // Set button and sub button with order and name.
             $buttons[$key] = $button;
+
         }
-        $this->buttons    = $buttons;
+
+        $this->buttons = $buttons;
     }
 
 }

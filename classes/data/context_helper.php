@@ -301,8 +301,6 @@ class context_helper {
      * Return current section id or 0.
      *
      * @return int|mixed|null
-     * @throws \coding_exception
-     * @throws \dml_exception
      */
     public function get_section_id() {
 
@@ -312,18 +310,33 @@ class context_helper {
         }
 
         // We haven't got a stored section id then try generating one.
-        $sectionidx = optional_param('section', 0, PARAM_INT);
+        try {
+            $sectionidx = optional_param('section', 0, PARAM_INT);
+        } catch (\coding_exception $e) {
+            $sectionidx = 0;
+        }
 
         // Replace the null with a 0 to avoid wasting times on trying to re-evaluate next time round.
         $this->sectionid = 0;
 
-        if ($this->page->pagetype == 'course-view-ludimoodle') {
+        // We are not in a section.
+        if ($sectionidx === 0) {
+            return $this->sectionid;
+        }
+
+
+        if ($this->page->pagetype == 'course-view-ludic') {
 
             // We're on a course view page and the course-relative section number is provided
             // so lookup the real section id.
             $courseid        = $this->courseid;
-            $sectionid       = $this->dbapi->get_section_id_by_courseid_and_sectionidx($courseid, $sectionidx);
-            $this->sectionid = $sectionid;
+            try {
+                $sectionid = $this->dbapi->get_section_id_by_courseid_and_sectionidx($courseid, $sectionidx);
+            } catch (\dml_exception $e) {
+                // Error - display course.
+                $sectionid = 0;
+            }
+            $this->sectionid = (int) $sectionid;
 
         } else if (isset($this->page->cm->section)) {
 
@@ -619,7 +632,7 @@ class context_helper {
         $globalsection = $this->get_global_section();
 
         // Return section 0 description.
-        return $globalsection->sectioninfo->summary;
+        return !empty($globalsection) ? $globalsection->sectioninfo->summary : '';
     }
 
     /**

@@ -39,10 +39,7 @@ class format_ludic_form implements renderable {
      * @param \format_ludic\form $form
      */
     public function __construct(\format_ludic\form $form) {
-        $this->id = 'ludic-form-' . $form->type;
-        if ($form->id) {
-            $this->id .= '-' . $form->id;
-        }
+        $this->id       = 'ludic-form-' . $form->type . '-' . $form->id;
         $this->action   = '';
         $this->method   = 'post';
         $this->itemid   = $form->id;

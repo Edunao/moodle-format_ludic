@@ -4,8 +4,10 @@
 @import 'form.less';
 @import 'popup.less';
 @import 'item.less';
+@import 'inline.less';
 @import 'modchooser.less';
 @import 'button.less';
+@import 'section.less';
 
 #ludic-main-container {
   width: 100%;
@@ -22,6 +24,11 @@
       display: none;
     }
 
+    &.general-activities {
+      border: 1px solid black;
+      padding: 20px;
+    }
+
     &.container-items {
       display: flex;
       flex-direction: row;
@@ -30,13 +37,13 @@
       .container-parents {
         flex-direction: row;
         border: 1px solid black;
-        margin-bottom: 20px;
-        width: calc(~'70% - 20px');
+        margin-bottom: 10px;
+        width: 100%;
         height: fit-content;
-        margin-right: 20px;
         padding: 10px;
 
         .container-children {
+          display: none;
           border: 1px solid black;
           margin-top: 35px;
           min-height: 100px;
@@ -68,9 +75,27 @@
         }
       }
     }
+
+    &#global-description {
+      border: 1px solid black;
+      padding: 20px;
+      margin-bottom: 10px;
+    }
+
   }
 
-  .ludic-action {
+  // In edit view you need to have properties in right, so reduce container width.
+  &.editmode .container-items .container-parents {
+    width: calc(~'70% - 20px');
+    margin-right: 20px;
+
+    // Display container children in edit mode only.
+    .container-children {
+      display: flex;
+    }
+  }
+
+  [data-action] {
     cursor: pointer;
   }
 

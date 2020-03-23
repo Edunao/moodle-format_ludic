@@ -24,8 +24,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-class format_ludic_course_module extends format_ludic_item {
+class format_ludic_course_module_inline extends format_ludic_item {
 
+    public $modname;
     public $iconsrc;
     public $iconalt;
     public $parentid;
@@ -36,45 +37,27 @@ class format_ludic_course_module extends format_ludic_item {
      * @param \format_ludic\course_module $coursemodule
      */
     public function __construct(\format_ludic\course_module $coursemodule) {
-        global $PAGE, $CFG;
+        global $CFG;
 
         // General data.
-        $this->selectorid       = 'ludic-coursemodule-' . $coursemodule->order;
-        $this->itemtype         = 'coursemodule';
-        $this->id               = $coursemodule->id;
-        $this->order            = $coursemodule->order;
-        $this->title            = $coursemodule->name;
-        $this->parentid         = $coursemodule->sectionid;
-        $this->isnotvisible     = !$coursemodule->visible;
-        $this->child            = true;
-        $this->skinid = $coursemodule->skinid;
+        $this->selectorid = 'ludic-coursemodule-' . $coursemodule->order;
+        $this->itemtype   = 'coursemodule';
+        $this->modname    = $coursemodule->cminfo->modname;
+        $this->id         = $coursemodule->id;
+        $this->order      = $coursemodule->order;
+        $this->title      = $coursemodule->name;
+        $this->parentid   = $coursemodule->sectionid;
+        $this->skinid     = $coursemodule->skinid;
+        $this->skintype   = $coursemodule->skin->type;
 
-        // Edit mode.
-        if ($PAGE->user_is_editing()) {
-            // Action.
-            $this->propertiesaction = 'get_properties';
-
-            // Image.
-            $imageobject  = $coursemodule->skin->get_edit_image();
-            $this->imgsrc = $imageobject->imgsrc;
-            $this->imgalt = $imageobject->imgalt;
-
-            // Enable drag and drop.
-            $this->draggable        = true;
-            $this->droppable        = true;
-        } else {
-            $this->link    = $CFG->wwwroot . '/mod/' . $coursemodule->cminfo->modname . '/view.php?id=' . $coursemodule->id;
-            $this->action  = 'getDataLinkAndRedirectTo';
-            $this->content = $coursemodule->skin->render_course_module_view();
-        }
-
-
-
-
-        // Icon.
         $icon          = $coursemodule->get_mod_icon();
         $this->iconsrc = $icon->imgsrc;
         $this->iconalt = $icon->imgalt;
+        $this->link    = $CFG->wwwroot . '/mod/' . $coursemodule->cminfo->modname . '/view.php?id=' . $coursemodule->id;
 
+        if ($this->modname === 'label') {
+            $this->link    = false;
+            $this->content = label_get_coursemodule_info($coursemodule->cminfo)->content;
+        }
     }
 }

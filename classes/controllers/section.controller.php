@@ -82,8 +82,10 @@ class section_controller extends controller_base {
             $output .= $renderer->render_section($section);
         }
 
-        // Add section button.
-        $output .= $renderer->render_add_section_button($course->id, count($sections) + 1);
+        // In edit view, render add new section button.
+        if ($this->contexthelper->is_editing()) {
+            $output .= $renderer->render_add_section_button($course->id, count($sections) + 1);
+        }
 
         // Render container for course modules.
         $output .= $renderer->render_container_children('coursemodules');
@@ -122,8 +124,10 @@ class section_controller extends controller_base {
             $output .= $renderer->render($coursemodule);
         }
 
-        // Render mod chooser (add a new activity).
-        $output .= $renderer->render_modchooser($course, $sectionidx, count($coursemodules));
+        // In edit view, render mod chooser (add a new activity).
+        if ($this->contexthelper->is_editing()) {
+            $output .= $renderer->render_modchooser($course, $sectionidx, count($coursemodules));
+        }
 
         // Return html.
         return $output;

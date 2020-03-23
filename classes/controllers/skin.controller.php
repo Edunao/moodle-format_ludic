@@ -77,7 +77,6 @@ class skin_controller extends controller_base {
             if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
                 $skin->selected = true;
             }
-            $skin->propertiesaction = 'get_description';
 
             $content .= $renderer->render_skin($skin);
         }
@@ -105,7 +104,6 @@ class skin_controller extends controller_base {
             if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
                 $skin->selected = true;
             }
-            $skin->propertiesaction = 'get_description';
             $content                .= $renderer->render_skin($skin);
         }
 

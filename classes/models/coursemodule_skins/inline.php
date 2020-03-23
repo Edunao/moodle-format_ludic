@@ -33,7 +33,7 @@ class inline extends \format_ludic\skin implements \format_ludic\coursemodule_sk
     /**
      * @return string
      */
-    public function render_coursemodule_view() {
+    public function render_course_module_view() {
         return 'activity inline';
     }
 

@@ -14,10 +14,19 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div class="ludic-container container-items">
-    {{> format_ludic/container_parents}}
+<div id="ludic-main-container" class="section-view">
+    {{> format_ludic/header_bar}}
 
-    {{#editmode}}
-        {{> format_ludic/container_properties}}
-    {{/editmode}}
+    <div class="section-container ludic-container">
+        <div id="section-block" class="ludic-container section-block">
+            {{{section}}}
+        </div>
+        <div id="section-description" class="ludic-container section-description">
+            {{{description}}}
+        </div>
+    </div>
+
+    <div class="coursemodules-container ludic-container">
+        {{{coursemodules}}}
+    </div>
 </div>

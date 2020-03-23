@@ -333,4 +333,8 @@ class section extends model {
     public function get_default_skin() {
         return current($this->contexthelper->get_section_skins());
     }
+
+    public function get_description() {
+        return $this->sectioninfo->summary;
+    }
 }

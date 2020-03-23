@@ -34,7 +34,7 @@ interface coursemodule_skin_interface {
      * Returns the html of the activity defined by the skin.
      * @return string
      */
-    public function render_coursemodule_view();
+    public function render_course_module_view();
 
     /**
      * This skin use and require grade.

@@ -15,26 +15,46 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <div id="{{selectorid}}"
-    class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}}
+    {{! Class. }}
+     class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}}
     is-not-visible{{/isnotvisible}}{{#parent}} parent{{/parent}}{{#child}} child{{/child}}{{#selected}} selected{{/selected}}{{#parentid}} parent-id-{{parentid}}{{/parentid}}"
+
     {{#draggable}} draggable="true"{{/draggable}}
     data-id="{{id}}"
     data-type="{{itemtype}}"
     data-order="{{order}}"
     {{#parentid}} data-parentid="{{parentid}}"{{/parentid}}
     {{#skinid}} data-skinid="{{skinid}}"{{/skinid}}
-    {{#controller}} data-controller="{{controller}}"{{/controller}}
-    {{#action}} data-action="{{action}}"{{/action}}
+    {{#skintype}} data-skintype="{{skintype}}"{{/skintype}}
+    {{#link}} data-link="{{link}}"{{/link}}
+
+    {{! Actions. }}
     {{#propertiesaction}} data-propertiesaction="{{propertiesaction}}"{{/propertiesaction}}
+    {{#action}} data-action="{{action}}"{{/action}}
+    {{#controller}} data-controller="{{controller}}"{{/controller}}
     {{#callback}} data-callback="{{callback}}"{{/callback}}
 >
-    {{#iconsrc}}<div class="item-icon" style="background-image: url('{{iconsrc}}')" aria-label="{{iconalt}}"></div>{{/iconsrc}}
+    {{! Required for moodle drag and drop javascript. }}
+    {{#requiresectionhtmlforjs}}<div class="content hide"><ul class="section"></ul></div>{{/requiresectionhtmlforjs}}
 
-    {{! For moodle drag and drop javascript. }}
-    {{#issection}}<div class="content hide"><ul class="section"></ul></div>{{/issection}}
+    {{! Icon to display on right top of item. }}
+    {{#iconsrc}}
+        <div class="item-icon" style="background-image: url('{{iconsrc}}')" aria-label="{{iconalt}}"></div>
+    {{/iconsrc}}
 
-    <div class="item-img-container" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
+    {{! Main image of item. }}
+    {{#imgsrc}}
+        <div class="item-img-container" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
+    {{/imgsrc}}
 
+    {{! Item content. }}
+    {{#content}}
+        <div class="item-content-container">
+            {{{content}}}
+        </div>
+    {{/content}}
+
+    {{! Item title. }}
     <div class="item-title">
         {{title}}
     </div>

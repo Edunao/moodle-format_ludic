@@ -24,11 +24,19 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$courseid = $COURSE->id;
-$context  = \context_course::instance($courseid);
-$renderer = $PAGE->get_renderer('format_ludic');
-$editmode = $PAGE->user_is_editing();
-$params   = ['courseid' => $courseid, 'userid' => $USER->id, 'editmode' => $editmode];
+$contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+
+$courseid  = $contexthelper->get_course_id();
+$context   = $contexthelper->get_course_context();
+$editmode  = $contexthelper->is_editing();
+$sectionid = $contexthelper->get_section_id();
+
+$params = [
+        'courseid'  => $courseid,
+        'userid'    => $USER->id,
+        'editmode'  => $editmode,
+        'sectionid' => $sectionid
+];
 
 $PAGE->set_context($context);
 
@@ -254,24 +262,45 @@ $staticconfig = [
                 ]
         ]
 ];
-
-$contexthelper = \format_ludic\context_helper::get_instance($PAGE);
-$staticconfig  = json_encode($staticconfig);
+$staticconfig = json_encode($staticconfig);
 $contexthelper->update_course_format_options(['ludic_config' => $staticconfig]);
 
 // Display course.
+$renderer = $PAGE->get_renderer('format_ludic');
 if ($editmode) {
     format_ludic_init_edit_mode($context);
     echo $renderer->render_edit_page();
 } else {
-    if ($contexthelper->get_section_idx() > 0) {
+    if ($sectionid) {
         // Section view.
+        $sectionobj = $contexthelper->get_section_by_id($sectionid);
+        $sectioncontent = $renderer->render_section($sectionobj);
+        $coursemodules = $sectionobj->get_course_modules();
+        $cmscontent = '';
+        foreach ($coursemodules as $order => $coursemodule) {
+            $coursemodule->order = $order;
+            if (!$coursemodule->visible) {
+                continue;
+            }
+            if ($coursemodule->skin->type === 'inline') {
+                $cmscontent .= $renderer->render_course_module_inline($coursemodule);
+            } else {
+                $cmscontent .= $renderer->render_course_module($coursemodule);
+            }
+        }
+        $data = [
+                'section' => $sectioncontent,
+                'coursemodules' => $cmscontent,
+                'description' => $sectionobj->get_description()
+        ];
+        echo $renderer->render_section_page($data);
     } else {
         // Course view.
         $data = [
                 'globaldescription' => $contexthelper->get_global_description(),
-                'sectionscontent'   => 'sections ...',
-                'globalactivities'  => 'activités section 0...'
+                'parentstype'       => 'section',
+                'parentscontent'    => '',
+                'globalactivities'  => '$renderer->render_global_activities()'
         ];
         echo $renderer->render_page($data);
     }

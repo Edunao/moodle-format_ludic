@@ -29,7 +29,8 @@ class format_ludic_popup implements renderable {
     public $popupid;
     public $title;
     public $content;
-    public $headericon;
+    public $headerimg;
+    public $headeralt;
 
     /**
      * format_ludic_popup constructor.
@@ -46,14 +47,16 @@ class format_ludic_popup implements renderable {
 
         // If the header icon is defined, we make sure that there is no missing data.
         if ($headericon) {
-            if (!isset($headericon['imgsrc'])) {
-                $headericon['imgsrc'] = 'https://picsum.photos/80';
+            if (!isset($headericon->imgsrc)) {
+                $headericon->imgsrc = 'https://picsum.photos/80';
             }
-            if (!isset($headericon['imgalt'])) {
-                $headericon['imgalt'] = '';
+            if (!isset($headericon->imgalt)) {
+                $headericon->imgalt = '';
             }
+
+            $this->headerimg = $headericon->imgsrc;
+            $this->headeralt = $headericon->imgalt;
         }
-        $this->headericon = $headericon;
     }
 
 }
