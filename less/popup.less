@@ -18,6 +18,7 @@
     top: 20%;
     left: 20%;
     width: 60%;
+    max-height: 80%;
     padding: 20px;
     background: #FFF;
     border: 1px solid black;
@@ -26,8 +27,10 @@
     .popup-header {
       border: 1px solid black;
       padding: 10px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       text-align: center;
+      height: 60px;
+      line-height: 40px;
 
       h2 {
         display: inline-block;
@@ -39,9 +42,13 @@
         top: 30px;
         cursor: pointer;
         width: 32px;
+        height: 32px;
+        border-radius: 16px;
+        padding: unset;
 
         img.icon {
           margin-right: 0;
+          margin-bottom: 12px;
         }
       }
     }
@@ -49,6 +56,8 @@
     .popup-content {
       border: 1px solid black;
       padding: 10px;
+      overflow-y: scroll;
+      max-height: 350px;
     }
 
     .confirmation-buttons {
@@ -60,5 +69,20 @@
   #confirmation.format-ludic.ludic-popup {
     width: 400px;
     left: calc(~'50% - 200px');
+
+    .popup-header h2 {
+      font-size: 1.25rem;
+      margin-right: 10px;
+    }
+  }
+
+  #selection-popup, #section-popup {
+    top: 100px;
+    max-height: 700px;
+    width: 90%;
+    left: 5%;
+    .popup-content {
+      max-height: 580px;
+    }
   }
 }

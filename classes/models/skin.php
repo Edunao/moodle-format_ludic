@@ -33,43 +33,56 @@ abstract class skin extends model {
     public  $title;
     public  $description;
     private $properties;
-    public  $css;
+    public  $maincss;
     public  $selected;
+
+    public $item;
+
+    public $weight;
+    public $results;
 
     /**
      * skin constructor.
      *
      * @param $skin
+     * @param course_module|section $item
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
-    public function __construct($skin) {
+    public function __construct($skin, $item = null) {
         parent::__construct($skin);
         $this->location    = isset($skin->location) ? $skin->location : null;
         $this->type        = isset($skin->type) ? $skin->type : null;
         $this->title       = isset($skin->title) ? $skin->title : null;
         $this->description = isset($skin->description) ? $skin->description : null;
         $this->properties  = isset($skin->properties) ? $skin->properties : null;
-        $this->css         = isset($skin->properties->css) ? $skin->properties->css : null;
+        $this->maincss     = isset($skin->properties->css) ? $skin->properties->css : null;
+        $this->item        = $item;
+
     }
 
     /**
      * Get a skin by instance.
      *
      * @param $skin
+     * @param null $item
      * @return skin|null
      */
-    public static function get_by_instance($skin) {
+    public static function get_by_instance($skin, $item = null) {
         $classname = '\format_ludic\\' . $skin->location . '\\' . $skin->type;
-        return class_exists($classname) ? new $classname($skin) : null;
+        return class_exists($classname) ? new $classname($skin, $item) : null;
     }
 
     /**
      * Get a skin by id.
      *
      * @param $skinid
+     * @param null $item
      * @return skin|null
      * @throws \coding_exception
      */
-    public static function get_by_id($skinid) {
+    public static function get_by_id($skinid, $item = null) {
         global $PAGE;
 
         // Skin id is not in config.
@@ -87,7 +100,7 @@ abstract class skin extends model {
         }
 
         // Return skin.
-        return self::get_by_instance($skins[$skinid]);
+        return self::get_by_instance($skins[$skinid], $item);
     }
 
     public function get_stylesheet($selectorid) {
@@ -98,7 +111,11 @@ abstract class skin extends model {
         return $output;
     }
 
-    // TODO.
+    /**
+     * Return skin properties.
+     *
+     * @return array
+     */
     public function get_properties() {
         return !empty($this->properties) ? get_object_vars($this->properties) : [];
     }
@@ -110,4 +127,36 @@ abstract class skin extends model {
      */
     public abstract function get_edit_image();
 
+    public function render_skinned_tile() {
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+        $this->apply_settings();
+        return $renderer->render_skinned_tile($this);
+    }
+
+    /**
+     * This skin use and require grade ?
+     *
+     * @return bool
+     */
+    public abstract function require_grade();
+
+    /**
+     * Return all images to render.
+     *
+     * @return array
+     */
+    public abstract function get_images_to_render();
+
+    /**
+     * Return all texts to render.
+     *
+     * @return array
+     */
+    public abstract function get_texts_to_render();
+
+    public function apply_settings() {
+        $this->weight  = $this->item->get_weight();
+        $this->results = $this->item->get_user_results();
+    }
 }

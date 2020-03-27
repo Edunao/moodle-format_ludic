@@ -82,7 +82,7 @@ class skin_controller extends controller_base {
         }
 
         // Return skins html in container.
-        return $renderer->render_container_items('coursemodule-skin', $content);
+        return $renderer->render_container_items('coursemodule-skin', $this->contexthelper->is_editing(), $content);
     }
 
     /**
@@ -108,7 +108,7 @@ class skin_controller extends controller_base {
         }
 
         // Return skins html in container.
-        return $renderer->render_container_items('section-skin', $content);
+        return $renderer->render_container_items('section-skin', $this->contexthelper->is_editing(), $content);
     }
 
     /**

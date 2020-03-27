@@ -26,39 +26,25 @@ namespace format_ludic\section;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
+class score extends \format_ludic\skin {
 
-class score extends \format_ludic\skin implements \format_ludic\section_skin_interface {
-
-    /**
-     * @return string
-     */
-    public function render_course_view() {
-        return 'course score';
-    }
-
-    /**
-     * @return string
-     */
-    public function render_section_view() {
-        return 'section score';
-    }
+    private $currentstep = null;
 
     /**
      * @return \stdClass
      */
     public function get_edit_image() {
         $image  = $this->get_default_image();
-        $images = $this->get_images();
+        $images = $this->get_steps();
         return count($images) > 0 ? end($images) : $image;
     }
 
     /**
      * @return array
      */
-    public function get_images() {
+    public function get_steps() {
         $properties = $this->get_properties();
-        return isset($properties['images']) ? $properties['images'] : [];
+        return isset($properties['steps']) ? $properties['steps'] : [];
     }
 
     /**
@@ -71,4 +57,95 @@ class score extends \format_ludic\skin implements \format_ludic\section_skin_int
         ];
     }
 
+    /**
+     * This skin use and require grade.
+     *
+     * @return bool
+     */
+    public function require_grade() {
+        return true;
+    }
+
+    public function get_current_step() {
+
+        if ($this->currentstep !== null) {
+            return $this->currentstep;
+        }
+
+        // Define default case.
+        $currentstep = (object) [
+                'threshold' => 0,
+                'text'      => '',
+                'imgsrc'    => '',
+                'imgalt'    => ''
+        ];
+
+        $score         = 0;
+        $totalscore    = 0;
+        $coursemodules = $this->item->get_course_modules();
+        foreach ($coursemodules as $coursemodule) {
+            if (!$coursemodule->skin->require_grade()) {
+                continue;
+            }
+            $coursemodule->skin->apply_settings();
+            $cmstep     = $coursemodule->skin->get_current_step();
+            $score      += isset($cmstep->score) ? $cmstep->score : 0;
+            $totalscore += $coursemodule->get_weight();
+        }
+
+        $threshold = $totalscore === 0 ? 0 : ($score / $totalscore) * 100;
+
+        $steps       = $this->get_steps();
+        $sortedsteps = [];
+        foreach ($steps as $step) {
+            $sortedsteps[$step->threshold] = $step;
+        }
+
+        // Sort the steps.
+        ksort($sortedsteps, SORT_NUMERIC);
+
+        // The threshold for the first item is clamped down to 0.​
+        if (!isset($sortedsteps[0])) {
+            $keys           = array_keys($sortedsteps);
+            $firstkey       = $keys[0];
+            $firststep      = $sortedsteps[$firstkey];
+            unset($sortedsteps[$firstkey]);
+
+            // Add first step to start of array.
+            $firststep->threshold = 0;
+            $sortedsteps = [0 => $firststep] + $sortedsteps;
+        }
+
+        foreach ($sortedsteps as $step) {
+            if ($threshold >= $step->threshold) {
+                $currentstep = $step;
+            }
+        }
+
+        $this->currentstep = $currentstep;
+        return $this->currentstep;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_images_to_render() {
+        $step = $this->get_current_step();
+        return [
+                [
+                        'imgsrc' => $step->imgsrc,
+                        'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
+                ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_texts_to_render() {
+        $step = $this->get_current_step();
+        return [
+                ['text' => isset($step->extratext) ? $step->extratext : '']
+        ];
+    }
 }

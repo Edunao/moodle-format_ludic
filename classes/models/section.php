@@ -30,16 +30,18 @@ class section extends model {
 
     private $course = null;
 
-    public $dbrecord;
-    public $courseid;
-    public $section;
-    public $sectioninfo;
-    public $name;
-    public $sequence;
-    public $visible;
-    public $coursemodules;
-    public $skinid;
-    public $skin;
+    public  $dbrecord;
+    public  $courseid;
+    public  $section;
+    public  $sectioninfo;
+    public  $name;
+    public  $sequence;
+    public  $visible;
+    public  $coursemodules;
+    public  $skinid;
+    public  $skin;
+    private $weight;
+    private $results;
 
     /**
      * section constructor.
@@ -63,7 +65,7 @@ class section extends model {
         // Ludic properties.
         $skinrelation = $this->get_section_skin_relation();
         $this->skinid = $skinrelation->skinid;
-        $this->skin   = skin::get_by_id($this->skinid);
+        $this->skin   = skin::get_by_id($this->skinid, $this);
     }
 
     /**
@@ -94,6 +96,7 @@ class section extends model {
         foreach ($this->sequence as $order => $cmid) {
             foreach ($coursemodules as $coursemodule) {
                 if ($coursemodule->id == $cmid) {
+                    $coursemodule->order   = $order;
                     $this->coursemodules[] = $coursemodule;
                 }
             }
@@ -161,16 +164,16 @@ class section extends model {
         $dbapi        = $this->contexthelper->get_database_api();
         $moodlecourse = $this->get_moodle_course();
 
-        if (!isset($data['id']) || $data['id'] !== $this->id) {
+        if (!isset($data['id']) || $data['id'] != $this->id) {
             return false;
         }
-        if (isset($data['name']) && $data['name'] !== $this->dbrecord->name
-            || isset($data['visible']) && $data['visible'] !== $this->dbrecord->visible
+        if (isset($data['name']) && $data['name'] != $this->dbrecord->name
+            || isset($data['visible']) && $data['visible'] != $this->dbrecord->visible
         ) {
             $dbapi->update_section($moodlecourse, $this->dbrecord, $data);
         }
 
-        if (isset($data['skinid']) && $data['skinid'] !== $this->skinid) {
+        if (isset($data['skinid']) && $data['skinid'] != $this->skinid) {
             $dbapi->set_section_skin_id($this->courseid, $this->id, $data['skinid']);
         }
 
@@ -249,6 +252,9 @@ class section extends model {
                 [
                     // Preview student section view button.
                         'identifier' => 'item-preview',
+                        'controller' => 'section',
+                        'action'     => 'get_section_view_of_student',
+                        'callback'   => 'displayPopup',
                         'order'      => 4
                 ]
         ];
@@ -334,7 +340,114 @@ class section extends model {
         return current($this->contexthelper->get_section_skins());
     }
 
+    /**
+     * Return section description.
+     *
+     * @return string
+     */
     public function get_description() {
         return $this->sectioninfo->summary;
     }
+
+    /**
+     * Return an array of stdClass with grade info and completion info.
+     *
+     * @return \stdClass[]
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_user_results() {
+
+        if ($this->results !== null) {
+            return $this->results;
+        }
+
+        // Completion default.
+        $hascompletion   = COMPLETION_DISABLED;
+        $state           = COMPLETION_DISABLED;
+        $completion      = 'completion-disabled';
+        $completionstr   = 'completion_none';
+        $allcompleted    = COMPLETION_COMPLETE;
+        $completedstates = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS];
+
+        // Grade default
+        $isgradable = 0;
+        $grade      = 0;
+        $grademax   = 100;
+
+        $coursemodules = $this->get_course_modules();
+        foreach ($coursemodules as $coursemodule) {
+            $results = $coursemodule->get_user_results();
+
+            $gradeinfo = $results['gradeinfo'];
+            if ($gradeinfo->isgradable) {
+                $isgradable++;
+                $grade += ($gradeinfo->grade / $gradeinfo->grademax) * $grademax * $gradeinfo->gradefactor;
+            }
+
+            $completioninfo = $results['completioninfo'];
+            if ($completioninfo->completion !== 'completion-disabled') {
+                $hascompletion = COMPLETION_ENABLED;
+                $allcompleted  = $allcompleted && in_array($completioninfo->state, $completedstates);
+            }
+
+        }
+
+        if ($hascompletion) {
+            if ($allcompleted) {
+                $state         = COMPLETION_COMPLETE;
+                $completion    = 'completion-complete';
+                $completionstr = 'completion-y';
+            } else {
+                $state         = COMPLETION_INCOMPLETE;
+                $completion    = 'completion-incomplete';
+                $completionstr = 'completion-n';
+            }
+        }
+
+        $grade = $isgradable ? $grade / $isgradable * $grademax : $grade;
+
+        // Return data.
+        $this->results = [
+                'gradeinfo'      => (object) [
+                        'isgradable'  => $isgradable !== 0,
+                        'grade'       => $grade,
+                        'grademax'    => $grademax,
+                        'grademin'    => 0,
+                        'gradefactor' => 1
+                ],
+                'completioninfo' => (object) [
+                        'state'         => $state,
+                        'completion'    => $completion,
+                        'completionstr' => $completionstr
+                ]
+        ];
+
+        return $this->results;
+    }
+
+    /**
+     * Get section weight (total of all course modules weight).
+     *
+     * @return int
+     * @throws \dml_exception
+     */
+    public function get_weight() {
+        $dbapi        = $this->contexthelper->get_database_api();
+        $sequencelist = $this->dbrecord->sequence;
+        $weight       = $dbapi->get_section_weight($sequencelist);
+        return $weight ? $weight : 0;
+    }
+
+    /**
+     * Get skin title.
+     *
+     * @return string
+     * @throws \coding_exception
+     */
+    public function get_skinned_tile_title() {
+        return $this->get_title();
+    }
+
 }

@@ -28,11 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-class achievement extends \format_ludic\skin implements \format_ludic\coursemodule_skin_interface {
-
-    public function render_course_module_view() {
-        return 'activity achievement';
-    }
+class achievement extends \format_ludic\skin {
 
     /**
      * Return best image.
@@ -40,17 +36,17 @@ class achievement extends \format_ludic\skin implements \format_ludic\coursemodu
      * @return \stdClass
      */
     public function get_edit_image() {
-        // TODO
+        // TODO default here
         $editimage = (object) [
-                'imgsrc' =>  '',
+                'imgsrc' => '',
                 'imgalt' => 'zzdzz'
         ];
 
-        $images = $this->get_images();
-        foreach ($images as $image) {
-            if ($image->state === 'achieved') {
-                $editimage->imgsrc = $image->imgsrc;
-                $editimage->imgalt = $image->imgalt;
+        $steps = $this->get_steps();
+        foreach ($steps as $step) {
+            if ($step->state === COMPLETION_COMPLETE_PASS) {
+                $editimage->imgsrc = $step->imgsrc;
+                $editimage->imgalt = $step->imgalt;
             }
         }
 
@@ -62,9 +58,21 @@ class achievement extends \format_ludic\skin implements \format_ludic\coursemodu
      *
      * @return \stdClass[]
      */
-    public function get_images() {
+    public function get_steps() {
         $properties = $this->get_properties();
-        return isset($properties['images']) ? $properties['images'] : [];
+        return isset($properties['steps']) ? $properties['steps'] : [];
+    }
+
+    public function get_current_step() {
+        $completioninfo = $this->results['completioninfo'];
+        $steps          = $this->get_steps();
+        $currentstep    = null;
+        foreach ($steps as $step) {
+            if ($currentstep === null || $step->state === $completioninfo->state) {
+                $currentstep = $step;
+            }
+        }
+        return $currentstep;
     }
 
     /**
@@ -75,5 +83,31 @@ class achievement extends \format_ludic\skin implements \format_ludic\coursemodu
     public function require_grade() {
         return false;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_images_to_render() {
+        $step = $this->get_current_step();
+        return [
+                [
+                        'imgsrc' => $step->imgsrc,
+                        'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
+                ]
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_texts_to_render() {
+        $completioninfo = $this->results['completioninfo'];
+        $step           = $this->get_current_step();
+        return [
+                ['text' => $completioninfo->completionstr, 'class' => 'completion'],
+                ['text' => isset($step->extratext) ? $step->extratext : '', 'class' => 'extratext']
+        ];
+    }
+
 }
 

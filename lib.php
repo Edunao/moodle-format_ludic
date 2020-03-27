@@ -358,8 +358,6 @@ function format_ludic_require_files() {
     require_once($classesdir . '/forms/form.php');
     require_once($classesdir . '/forms/elements/form_element.php');
     require_once($classesdir . '/models/skin.php');
-    require_once($classesdir . '/models/coursemodule_skins/coursemodule_skin_interface.php');
-    require_once($classesdir . '/models/section_skins/section_skin_interface.php');
     require_once($classesdir . '/renderers/renderable/form_element.php');
     require_once($classesdir . '/renderers/renderable/item.php');
 

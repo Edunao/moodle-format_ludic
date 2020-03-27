@@ -1,97 +1,100 @@
 #ludic-main-container {
-    .item {
-      display: inline-block;
-      width: calc(~'25% - 40px');
-      height: 130px;
-      min-width: 130px;
-      margin: 20px;
+  .item {
+    display: inline-block;
+    width: calc(~'25% - 40px');
+    height: 132px;
+    min-width: 132px;
+    margin: 20px;
+    border: 1px solid black;
+    position: relative;
+
+    &:not(.in-edition) {
+      height: 202px;
+      &.child {
+        height: 172px;
+      }
+    }
+
+    .item-img-container {
+      background-position: center;
+      background-size: contain;
+      background-repeat: no-repeat;
+      height: calc(~'100% - 30px');
+    }
+
+    .item-content-container {
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .item-title {
+      line-height: 30px;
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .item-icon {
+      position: absolute;
+      width: 40px;
+      height: 50px;
+      top: -20px;
+      right: -20px;
+      background-color: #FFF;
+      background-size: 30px;
+      background-repeat: no-repeat;
+      background-position: center center;
       border: 1px solid black;
-      position: relative;
 
-      .item-img-container {
-        background-position: center;
-        background-size: contain;
-        background-repeat: no-repeat;
-        height: calc(~'100% - 30px');
-      }
- 
-      .item-content-container {
-        background-position: center;
-        background-size: contain;
-        background-repeat: no-repeat;
-        height: calc(~'100% - 30px');
-      }
+    }
 
-      .item-title {
-        line-height: 30px;
-        text-align: center;
-        padding: 0 10px;
-      }
+    &.selected {
+      border: 3px solid red;
 
       .item-icon {
-        position: absolute;
-        width: 40px;
-        height: 50px;
-        top: -20px;
-        right: -20px;
-        background-color: #FFF;
-        background-size: 30px;
-        background-repeat: no-repeat;
-        background-position: center center;
-        border: 1px solid black;
-
+        border: 3px solid red !important;
       }
 
-      &.selected {
-        border: 3px solid red;
-
-        .item-icon {
-          border: 3px solid red !important;
-        }
-
-        &.is-not-visible:after {
-          border: 3px solid red !important;
-        }
-
-      }
-
-      &.hide, &.hide-js {
-        display: none;
-      }
-
-      &.ludic-drag:hover:not(.selected), &.ludic-drag:focus:not(.selected) {
-        border: 2px #0a6aa1 dashed;
-
-        .item-icon, &.is-not-visible:after {
-          border: 2px #0a6aa1 dashed !important;
-        }
-
-      }
-
-      &.is-not-visible {
-        background-color: #efefef;
-
-        &:after {
-          content: '';
-          display: inline-block;
-          width: 30px;
-          height: 30px;
-          position: absolute;
-          left: -15px;
-          top: calc(~'50% - 15px');
-          border: 1px solid #000;
-          border-radius: 15px;
-          background-color: white;
-          background-image: url("[[pix:moodle|i/show]]");
-          background-size: 18px;
-          background-repeat: no-repeat;
-          background-position: center center;
-
-        }
+      &.is-not-visible:after {
+        border: 3px solid red !important;
       }
 
     }
 
+    &.hide, &.hide-js {
+      display: none;
+    }
 
+    &.ludic-drag:hover:not(.selected), &.ludic-drag:focus:not(.selected) {
+      border: 2px #0a6aa1 dashed;
+
+      .item-icon, &.is-not-visible:after {
+        border: 2px #0a6aa1 dashed !important;
+      }
+
+    }
+
+    &.is-not-visible {
+      background-color: #efefef;
+
+      &:after {
+        content: '';
+        display: inline-block;
+        width: 30px;
+        height: 30px;
+        position: absolute;
+        left: -15px;
+        top: calc(~'50% - 15px');
+        border: 1px solid #000;
+        border-radius: 15px;
+        background-color: white;
+        background-image: url("[[pix:moodle|i/show]]");
+        background-size: 18px;
+        background-repeat: no-repeat;
+        background-position: center center;
+
+      }
+    }
+
+  }
 
 }

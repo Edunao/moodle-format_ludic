@@ -39,18 +39,23 @@ class format_ludic_course_module extends format_ludic_item {
         global $PAGE, $CFG;
 
         // General data.
-        $this->selectorid       = 'ludic-coursemodule-' . $coursemodule->order;
-        $this->itemtype         = 'coursemodule';
-        $this->id               = $coursemodule->id;
-        $this->order            = $coursemodule->order;
-        $this->title            = $coursemodule->name;
-        $this->parentid         = $coursemodule->sectionid;
-        $this->isnotvisible     = !$coursemodule->visible;
-        $this->child            = true;
-        $this->skinid = $coursemodule->skinid;
+        $this->selectorid   = 'ludic-coursemodule-' . $coursemodule->order;
+        $contexthelper      = \format_ludic\context_helper::get_instance($PAGE);
+        $this->itemtype     = 'coursemodule';
+        $this->id           = $coursemodule->id;
+        $this->order        = $coursemodule->order;
+        $this->tooltip      = $coursemodule->name;
+        $this->parentid     = $coursemodule->sectionid;
+        $this->isnotvisible = !$coursemodule->visible;
+        $this->child        = true;
+        $this->skinid       = $coursemodule->skinid;
 
         // Edit mode.
-        if ($PAGE->user_is_editing()) {
+        if ($contexthelper->is_editing()) {
+
+            // Add in-edition class.
+            $this->editmode = true;
+
             // Action.
             $this->propertiesaction = 'get_properties';
 
@@ -59,17 +64,25 @@ class format_ludic_course_module extends format_ludic_item {
             $this->imgsrc = $imageobject->imgsrc;
             $this->imgalt = $imageobject->imgalt;
 
+            // Title.
+            $this->title = $coursemodule->name;
+
             // Enable drag and drop.
-            $this->draggable        = true;
-            $this->droppable        = true;
+            $this->draggable = true;
+            $this->droppable = true;
+
         } else {
-            $this->link    = $CFG->wwwroot . '/mod/' . $coursemodule->cminfo->modname . '/view.php?id=' . $coursemodule->id;
-            $this->action  = 'getDataLinkAndRedirectTo';
-            $this->content = $coursemodule->skin->render_course_module_view();
+
+            // Redirect to course module on click.
+            if (!$contexthelper->is_student_view_forced()) {
+                $this->link   = $CFG->wwwroot . '/mod/' . $coursemodule->cminfo->modname . '/view.php?id=' . $coursemodule->id;
+                $this->action = 'getDataLinkAndRedirectTo';
+            }
+
+            // The skin will render all course module content.
+            $this->content = $coursemodule->skin->render_skinned_tile();
+
         }
-
-
-
 
         // Icon.
         $icon          = $coursemodule->get_mod_icon();

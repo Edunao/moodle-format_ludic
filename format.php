@@ -46,219 +46,243 @@ $staticconfig = [
                         'id'          => 11,
                         'location'    => 'section',
                         'type'        => 'score',
-                        'title'       => 'Coffre au trésor',
-                        'description' => 'Ce coffre stock des trésors',
+                        'title'       => 'Coffre de pièces',
+                        'description' => 'Ce coffre stock des pièces',
                         'properties'  => [
-                                'images' => [
+                                'steps' => [
                                         [
                                                 'threshold' => 0,
-                                                'imgsrc'    => 'https://picsum.photos/id/100/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'https://cdn1.iconfinder.com/data/icons/security-add-on-colored/48/JD-09-512.png', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 100,
+                                                'threshold' => 10,
                                                 'imgsrc'    => 'https://picsum.photos/id/101/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 200,
+                                                'threshold' => 20,
                                                 'imgsrc'    => 'https://picsum.photos/id/102/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 300,
+                                                'threshold' => 30,
                                                 'imgsrc'    => 'https://picsum.photos/id/103/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 400,
+                                                'threshold' => 40,
                                                 'imgsrc'    => 'https://picsum.photos/id/104/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 500,
-                                                'imgsrc'    => 'https://picsum.photos/id/105/80/80', 'imgalt' => ''
+                                                'threshold' => 50,
+                                                'imgsrc'    => 'https://picsum.photos/id/109/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 600,
+                                                'threshold' => 60,
                                                 'imgsrc'    => 'https://picsum.photos/id/106/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 700,
+                                                'threshold' => 80,
                                                 'imgsrc'    => 'https://picsum.photos/id/107/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 800,
-                                                'imgsrc'    => 'https://picsum.photos/id/108/80/80', 'imgalt' => ''
+                                                'threshold' => 100,
+                                                'imgsrc'    => 'https://www.clipartmax.com/png/middle/275-2750625_chest-icon-treasure-chest-icon-png.png', 'imgalt' => ''
                                         ]
                                 ],
-                                'css'    => '{background-color: #000;}'
+                                'css'   => '{background-color: #000;}'
                         ]
                 ],
                 12 => [
                         'id'          => 12,
                         'location'    => 'section',
                         'type'        => 'score',
-                        'title'       => 'Coffre de pièces',
-                        'description' => 'Ce coffre stock des pièces',
+                        'title'       => 'Coffre au trésor',
+                        'description' => 'Ce coffre stock des trésors',
                         'properties'  => [
-                                'images' => [
+                                'steps' => [
                                         [
                                                 'threshold' => 0,
-                                                'imgsrc'    => 'https://picsum.photos/id/200/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'https://i.pinimg.com/originals/6a/1d/f3/6a1df304403e15c9a4b499e8539853ec.jpg', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 100,
+                                                'threshold' => 10,
                                                 'imgsrc'    => 'https://picsum.photos/id/201/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 200,
+                                                'threshold' => 20,
                                                 'imgsrc'    => 'https://picsum.photos/id/202/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 300,
+                                                'threshold' => 30,
                                                 'imgsrc'    => 'https://picsum.photos/id/203/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 400,
+                                                'threshold' => 50,
                                                 'imgsrc'    => 'https://picsum.photos/id/204/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 500,
+                                                'threshold' => 60,
                                                 'imgsrc'    => 'https://picsum.photos/id/205/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 600,
+                                                'threshold' => 70,
                                                 'imgsrc'    => 'https://picsum.photos/id/206/80/80', 'imgalt' => ''
                                         ],
                                         [
-                                                'threshold' => 700,
-                                                'imgsrc'    => 'https://picsum.photos/id/207/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 800,
-                                                'imgsrc'    => 'https://picsum.photos/id/208/80/80', 'imgalt' => ''
-                                        ]
-                                ],
-                        ],
-                        'css'         => '{background-color: #efefef;}'
-                ],
-                13 => [
-                        'id'          => 13,
-                        'location'    => 'coursemodule',
-                        'type'        => 'score',
-                        'title'       => 'sac de bijoux',
-                        'description' => 'Ce sac contient quelques bijoux.',
-                        'properties'  => [
-                                'images' => [
-                                        [
-                                                'threshold' => 0,
-                                                'imgsrc'    => 'https://picsum.photos/id/120/80/80', 'imgalt' => ''
+                                                'threshold' => 80,
+                                                'imgsrc'    => 'https://picsum.photos/id/209/80/80', 'imgalt' => ''
                                         ],
                                         [
                                                 'threshold' => 100,
-                                                'imgsrc'    => 'https://picsum.photos/id/121/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 200,
-                                                'imgsrc'    => 'https://picsum.photos/id/122/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 300,
-                                                'imgsrc'    => 'https://picsum.photos/id/123/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 400,
-                                                'imgsrc'    => 'https://picsum.photos/id/124/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 500,
-                                                'imgsrc'    => 'https://picsum.photos/id/125/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 600,
-                                                'imgsrc'    => 'https://picsum.photos/id/126/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 700,
-                                                'imgsrc'    => 'https://picsum.photos/id/127/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 800,
-                                                'imgsrc'    => 'https://picsum.photos/id/128/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'https://visualpharm.com/assets/324/Treasure%20Chest-595b40b85ba036ed117dacb5.svg', 'imgalt' => ''
                                         ]
                                 ],
-                                'css'    => '{background-color: #000;}'
-                        ]
+                                'css'   => '{background-color: #efefef;}'
+                        ],
                 ],
                 14 => [
                         'id'          => 14,
                         'location'    => 'coursemodule',
                         'type'        => 'score',
-                        'title'       => 'Sac de pièces',
-                        'description' => 'Ce sac contient quelques pièces',
+                        'title'       => 'Pokémon feu',
+                        'description' => 'Petit Salamèche deviendra grand.',
                         'properties'  => [
-                                'images' => [
+                                'steps'           => [
                                         [
                                                 'threshold' => 0,
-                                                'imgsrc'    => 'https://picsum.photos/id/140/80/80', 'imgalt' => ''
+                                                'scorepart' => 0,
+                                                'extratext'      => 'tu as entre 0 et 9.99',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/4.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
-                                                'threshold' => 100,
-                                                'imgsrc'    => 'https://picsum.photos/id/141/80/80', 'imgalt' => ''
+                                                'threshold' => 10,
+                                                'scorepart' => 50,
+                                                'extratext'      => 'tu as entre 10 et 19.99',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/5.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
-                                                'threshold' => 200,
-                                                'imgsrc'    => 'https://picsum.photos/id/142/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 300,
-                                                'imgsrc'    => 'https://picsum.photos/id/143/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 400,
-                                                'imgsrc'    => 'https://picsum.photos/id/144/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 500,
-                                                'imgsrc'    => 'https://picsum.photos/id/145/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 600,
-                                                'imgsrc'    => 'https://picsum.photos/id/146/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 700,
-                                                'imgsrc'    => 'https://picsum.photos/id/147/80/80', 'imgalt' => ''
-                                        ],
-                                        [
-                                                'threshold' => 800,
-                                                'imgsrc'    => 'https://picsum.photos/id/158/80/80', 'imgalt' => ''
+                                                'threshold' => 20,
+                                                'scorepart' => 100,
+                                                'extratext'      => 'tu as 20, bravo',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/6.png',
+                                                'imgalt'    => ''
                                         ]
                                 ],
+                                'linearscorepart' => 0.5,
+                                'css'             => '{background-color: red;}'
+                        ]
+                ],
+                13 => [
+                        'id'          => 13,
+                        'location'    => 'coursemodule',
+                        'type'        => 'score',
+                        'title'       => 'Pokémon plante',
+                        'description' => 'Petit Bulbizarre deviendra grand.',
+                        'properties'  => [
+                                'steps'           => [
+                                        [
+                                                'threshold' => 5,
+                                                'scorepart' => 0,
+                                                'extratext'      => 'tu as entre 0 et 9.99',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/1.png',
+                                                'imgalt'    => ''
+                                        ],
+                                        [
+                                                'threshold' => 10,
+                                                'scorepart' => 50,
+                                                'extratext'      => 'tu as entre 10 et 19.99',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/2.png',
+                                                'imgalt'    => ''
+                                        ],
+                                        [
+                                                'threshold' => 20,
+                                                'scorepart' => 100,
+                                                'extratext'      => 'tu as 20, bravo',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/3.png',
+                                                'imgalt'    => ''
+                                        ]
+                                ],
+                                'linearscorepart' => 1,
+                                'css'             => '{background-color: green;}'
                         ],
-                        'css'         => '{background-color: #efefef;}'
+                ],
+                16 => [
+                        'id'          => 16,
+                        'location'    => 'coursemodule',
+                        'type'        => 'score',
+                        'title'       => 'Pokémon eau',
+                        'description' => 'Petit Carapuce deviendra grand.',
+                        'properties'  => [
+                                'steps'           => [
+                                        [
+                                                'threshold' => 0,
+                                                'scorepart' => 0,
+                                                'extratext'      => 'tu as entre 0 et 9.99',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/7.png',
+                                                'imgalt'    => ''
+                                        ],
+                                        [
+                                                'threshold' => 10,
+                                                'scorepart' => 50,
+                                                'extratext'      => 'tu as entre 10 et 19.99',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/8.png',
+                                                'imgalt'    => ''
+                                        ],
+                                        [
+                                                'threshold' => 20,
+                                                'scorepart' => 100,
+                                                'extratext'      => 'tu as 20, bravo',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/9.png',
+                                                'imgalt'    => ''
+                                        ]
+                                ],
+                                'linearscorepart' => 0.5,
+                                'css'             => '{background-color: red;}'
+                        ]
                 ],
                 15 => [
                         'id'          => 15,
                         'location'    => 'coursemodule',
                         'type'        => 'achievement',
-                        'title'       => 'chat ou chien ?',
-                        'description' => 'La réussite vous permet de voir un chat, l\'échec ne permet de voir qu\'un chien',
+                        'title'       => 'Évolution max',
+                        'description' => 'Plus tu réussis, plus tu évolues',
                         'properties'  => [
-                                'images' => [
+                                'steps' => [
                                         [
-                                                'state'     => 'achieved',
-                                                'imgsrc'    => 'https://picsum.photos/id/219/80/80',
-                                                'imgalt'    => '',
-                                                'scorepart' => 1,
-                                                'extratext' => 'chat signifie gagner'
-                                        ],
-                                        [
-                                                'state'     => 'unachieved',
-                                                'imgsrc'    => 'https://picsum.photos/id/237/80/80',
+                                                'state'     => COMPLETION_INCOMPLETE, //0
+                                                'statestr'  => 'completion-incomplete',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/63.png',
                                                 'imgalt'    => '',
                                                 'scorepart' => 0,
-                                                'extratext' => 'chien signifie perdre'
+                                                'extratext' => 'Abra'
+                                        ],
+                                        [
+                                                'state'     => COMPLETION_COMPLETE, //1
+                                                'statestr'  => 'completion-complete',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/65.png',
+                                                'imgalt'    => '',
+                                                'scorepart' => 0.75,
+                                                'extratext' => 'Alakazam'
+                                        ],
+                                        [
+                                                'state'     => COMPLETION_COMPLETE_PASS, //2
+                                                'statestr'  => 'completion-complete-pass',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/10037.png',
+                                                'imgalt'    => '',
+                                                'scorepart' => 1,
+                                                'extratext' => 'Méga-Alakazam'
+                                        ],
+                                        [
+                                                'state'     => COMPLETION_COMPLETE_FAIL, //3
+                                                'statestr'  => 'completion-complete-fail',
+                                                'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/64.png',
+                                                'imgalt'    => '',
+                                                'scorepart' => 0.25,
+                                                'extratext' => 'Kadabra'
                                         ]
                                 ],
-                        ],
-                        'css'         => '{background-color: #454545;}'
+                                'css'   => '{background-color: purple;}'
+                        ]
                 ]
         ]
 ];
@@ -273,38 +297,11 @@ if ($editmode) {
 } else {
     if ($sectionid) {
         // Section view.
-        $sectionobj = $contexthelper->get_section_by_id($sectionid);
-        $sectioncontent = $renderer->render_section($sectionobj);
-        $coursemodules = $sectionobj->get_course_modules();
-        $cmscontent = '';
-        foreach ($coursemodules as $order => $coursemodule) {
-            $coursemodule->order = $order;
-            if (!$coursemodule->visible) {
-                continue;
-            }
-            if ($coursemodule->skin->type === 'inline') {
-                $cmscontent .= $renderer->render_course_module_inline($coursemodule);
-            } else {
-                $cmscontent .= $renderer->render_course_module($coursemodule);
-            }
-        }
-        $data = [
-                'section' => $sectioncontent,
-                'coursemodules' => $cmscontent,
-                'description' => $sectionobj->get_description()
-        ];
-        echo $renderer->render_section_page($data);
+        echo $renderer->render_section_page($sectionid);
     } else {
         // Course view.
-        $data = [
-                'globaldescription' => $contexthelper->get_global_description(),
-                'parentstype'       => 'section',
-                'parentscontent'    => '',
-                'globalactivities'  => '$renderer->render_global_activities()'
-        ];
-        echo $renderer->render_page($data);
+        echo $renderer->render_page();
     }
-
 }
 
 // Requires format ludic javascript.

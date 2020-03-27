@@ -14,20 +14,26 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div id="ludic-main-container" class="course-view">
-    {{> format_ludic/header_bar}}
+<div id="{{skinid}}" class="full-tile skin skin-type-{{skintype}} {{completion}}">
 
-    {{#globaldescription}}
-        <div id="global-description" class="ludic-container global-description">
-            {{{globaldescription}}}
-        </div>
-    {{/globaldescription}}
+    <div class="sub-tile skin-tile">
+        {{#images}}
+            <div class="skin-img {{class}}" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
+        {{/images}}
+        {{#texts}}
+            <div class="skin-text {{class}}">{{text}}</div>
+        {{/texts}}
+        {{#emptydiv}}
+            <div class="skin-empty-div div-{{number}}"></div>
+        {{/emptydiv}}
+    </div>
 
-    {{> format_ludic/container_items}}
+    <div class="sub-tile title-tile">
+        <div class="skin-text">{{title}}</div>
+    </div>
 
-    {{#globalcoursemodules}}
-        <div class="ludic-container general-activities">
-            {{{globalcoursemodules}}}
-        </div>
-    {{/globalcoursemodules}}
 </div>
+
+<style type="text/css">
+
+</style>

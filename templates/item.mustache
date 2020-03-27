@@ -17,12 +17,13 @@
 <div id="{{selectorid}}"
     {{! Class. }}
      class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}}
-    is-not-visible{{/isnotvisible}}{{#parent}} parent{{/parent}}{{#child}} child{{/child}}{{#selected}} selected{{/selected}}{{#parentid}} parent-id-{{parentid}}{{/parentid}}"
-
+    is-not-visible{{/isnotvisible}}{{#parent}} parent{{/parent}}{{#child}} child{{/child}}{{#editmode}} in-edition{{/editmode}}{{#selected}} selected{{/selected}}{{#parentid}}
+    parent-id-{{parentid}}{{/parentid}}"
     {{#draggable}} draggable="true"{{/draggable}}
-    data-id="{{id}}"
-    data-type="{{itemtype}}"
-    data-order="{{order}}"
+     title="{{tooltip}}"
+     data-id="{{id}}"
+     data-type="{{itemtype}}"
+     data-order="{{order}}"
     {{#parentid}} data-parentid="{{parentid}}"{{/parentid}}
     {{#skinid}} data-skinid="{{skinid}}"{{/skinid}}
     {{#skintype}} data-skintype="{{skintype}}"{{/skintype}}
@@ -55,8 +56,10 @@
     {{/content}}
 
     {{! Item title. }}
-    <div class="item-title">
-        {{title}}
-    </div>
+    {{#title}}
+        <div class="item-title">
+            {{title}}
+        </div>
+    {{/title}}
 
 </div>

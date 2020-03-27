@@ -38,7 +38,8 @@ class course_module extends model {
     public $visible;
     public $skinid;
     public $skin;
-    public $weight;
+    private $weight;
+    private $results;
 
     /**
      * course_module constructor.
@@ -63,7 +64,8 @@ class course_module extends model {
         $this->skinid = $skinrelation->skinid;
         $this->weight = $skinrelation->weight;
         $this->access = $skinrelation->access;
-        $this->skin   = skin::get_by_id($this->skinid);
+        $this->skin   = skin::get_by_id($this->skinid, $this);
+
     }
 
     /**
@@ -124,7 +126,7 @@ class course_module extends model {
      */
     public function duplicate($movetoend = false) {
         // Required data.
-        $dbapi = $this->contexthelper->get_database_api();
+        $dbapi        = $this->contexthelper->get_database_api();
         $course       = $this->contexthelper->get_moodle_course();
         $coursemodule = (object) [
                 'id'      => $this->id,
@@ -233,7 +235,7 @@ class course_module extends model {
         $dbapi = $this->contexthelper->get_database_api();
 
         // Check if data id is current id.
-        if (!isset($data['id']) || $data['id'] !== $this->id) {
+        if (!isset($data['id']) || $data['id'] != $this->id) {
             return false;
         }
 
@@ -243,9 +245,9 @@ class course_module extends model {
         }
 
         // Update skin id, weight or access if required.
-        if (isset($data['skinid']) && $data['skinid'] !== $this->skinid ||
-            isset($data['weight']) && $data['weight'] !== $this->weight ||
-            isset($data['access']) && $data['access'] !== $this->access
+        if (isset($data['skinid']) && $data['skinid'] != $this->skinid ||
+            isset($data['weight']) && $data['weight'] != $this->weight ||
+            isset($data['access']) && $data['access'] != $this->access
         ) {
             $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['access']);
         }
@@ -348,9 +350,59 @@ class course_module extends model {
         $dbrecord->skinid   = $skin->id;
         $dbrecord->weight   = format_ludic_get_default_weight();
         $dbrecord->access   = 1;
-        $newid = $dbapi->add_format_ludic_cm_record($dbrecord);
+        $newid              = $dbapi->add_format_ludic_cm_record($dbrecord);
 
         // Return record.
         return $dbrecord;
+    }
+
+    /**
+     * Return an array of stdClass with grade and completion state.
+     *
+     * @return \stdClass[]
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_user_results() {
+
+        if ($this->results !== null) {
+            return $this->results;
+        }
+
+        // Get user data from data api.
+        $datapi = $this->contexthelper->get_data_api();
+
+        // Get grade.
+        $grade = $datapi->get_course_module_user_grade($this->cminfo);
+
+        // Get completion.
+        $state = $datapi->get_course_module_user_completion($this->cminfo);
+
+        // Return data.
+        $this->results = [
+                'gradeinfo'      => $grade,
+                'completioninfo' => $state
+        ];
+
+        return $this->results;
+    }
+
+    /**
+     * Get course module weight.
+     *
+     * @return int
+     */
+    public function get_weight() {
+        return (int) $this->weight;
+    }
+
+    /**
+     * Get skin title.
+     *
+     * @return string
+     */
+    public function get_skinned_tile_title() {
+        return $this->name;
     }
 }

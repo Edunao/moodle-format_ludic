@@ -41,6 +41,7 @@ $string['label-section-title']    = 'Title';
 $string['label-section-visible']  = 'Visible';
 $string['duplicate-suffix']       = ' (copy)';
 $string['section-skin-selection'] = 'Select a skin for the section';
+$string['section-preview']        = 'Section preview';
 
 // Course module edition.
 $string['course-module-skin-selection'] = 'Select a skin for the course module';

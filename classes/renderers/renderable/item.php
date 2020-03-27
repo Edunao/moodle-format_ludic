@@ -55,6 +55,13 @@ class format_ludic_item implements renderable {
     public $title;
 
     /**
+     * Tooltip of item.
+     *
+     * @var string
+     */
+    public $tooltip;
+
+    /**
      * Link if we want to redirect by clicking on the item.
      *
      * @var string
@@ -174,5 +181,12 @@ class format_ludic_item implements renderable {
      * @var bool
      */
     public $isnotvisible;
+
+    /**
+     * True if in edit mode.
+     *
+     * @var bool
+     */
+    public $editmode;
 
 }

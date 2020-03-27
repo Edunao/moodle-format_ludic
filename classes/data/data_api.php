@@ -27,7 +27,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-
 class data_api {
 
     protected $contexthelper;
@@ -41,7 +40,110 @@ class data_api {
         $this->contexthelper = $contexthelper;
     }
 
-    // TODO GET_user progression ect...
+    /**
+     * Return course module user grade, grade min to pass, grade max, and grade weight from gradebook.
+     *
+     * @param $cminfo \cm_info
+     * @return \stdClass
+     * @throws \dml_exception
+     */
+    public function get_course_module_user_grade($cminfo) {
+        // Initialize default object.
+        $return = (object) [
+                'isgradable'  => false,
+                'grade'       => 0,
+                'grademax'    => 1,
+                'grademin'    => 0,
+                'gradefactor' => 1
+        ];
+
+        // Get data for sql query.
+        $courseid = $this->contexthelper->get_course_id();
+        $modname  = $cminfo->modname;
+        $instance = $cminfo->instance;
+        $userid   = $this->contexthelper->get_user_id();
+
+        // Get grade from database.
+        $dbapi = $this->contexthelper->get_database_api();
+        $grade = $dbapi->get_course_module_user_grade($courseid, $modname, $instance, $userid);
+
+        // No record, return default object.
+        if (!$grade) {
+            return $return;
+        }
+
+        // Set data and return.
+        $return->isgradable  = true;
+        $return->grade       = $grade->grade !== null ? $grade->grade : $return->grade;
+        $return->grademax    = (float) $grade->grademax;
+        $return->grademin    = (float) $grade->grademin;
+        $return->gradefactor = $grade->usegradefactor === 'used' ? $grade->gradefactor : $return->gradefactor;
+
+        return $return;
+    }
+
+    /**
+     * Return user completion.
+     *
+     * @param $cminfo \cm_info
+     * @return \stdClass
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    public function get_course_module_user_completion($cminfo) {
+        // Initialize default object.
+        $return        = (object) [
+                'state'         => COMPLETION_TRACKING_NONE,
+                'completion'    => '',
+                'completionstr' => ''
+        ];
+        $completion    = 'completion-disabled';
+        $completionstr = 'completion_none';
+
+        // Initialize completion info object.
+        $course         = $this->contexthelper->get_moodle_course();
+        $completioninfo = new \completion_info($course);
+
+        // Check if completion is enabled on module.
+        $hascompletion = $completioninfo->is_enabled($cminfo);
+        if ($hascompletion == COMPLETION_DISABLED) {
+            // Completion is disabled return default object.
+            $return->completion    = $completion;
+            $return->completionstr = get_string($completionstr, 'completion');
+            return $return;
+        }
+
+        // Completion is enabled, get completion state.
+        $userid  = $this->contexthelper->get_user_id();
+        $modinfo = $this->contexthelper->get_course_info();
+        $data    = $completioninfo->get_data($cminfo, false, $userid, $modinfo);
+
+        // Define completion string from state.
+        switch ($data->completionstate) {
+            case COMPLETION_INCOMPLETE:
+                $completion    = 'completion-incomplete';
+                $completionstr = 'completion-n';
+                break;
+            case COMPLETION_COMPLETE:
+                $completion    = 'completion-complete';
+                $completionstr = 'completion-y';
+                break;
+            case COMPLETION_COMPLETE_PASS:
+                $completion    = 'completion-complete-pass';
+                $completionstr = 'completion-pass';
+                break;
+            case COMPLETION_COMPLETE_FAIL:
+                $completion    = 'completion-complete-fail';
+                $completionstr = 'completion-fail';
+                break;
+        }
+
+        // Set data and return.
+        $return->state         = $data->completionstate;
+        $return->completion    = $completion;
+        $return->completionstr = get_string($completionstr, 'completion');
+        return $return;
+    }
 
 }
 

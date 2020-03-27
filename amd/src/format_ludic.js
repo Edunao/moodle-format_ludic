@@ -49,12 +49,11 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Initialize all required events.
             ludic.initEvents();
 
-            // If we are not in a section or edit mode, show sections after loading the page.
-            if (ludic.sectionId === 0 || ludic.editMode) {
-                ludic.displaySections();
-            }
-
+            // If we are in edit mode.
             if (ludic.editMode) {
+                // Show sections after loading the page.
+                ludic.displaySections();
+
                 // Click on last item clicked in order to keep navigation.
                 ludic.clickOnLastItemClicked();
             }
@@ -268,11 +267,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         initItemGetPropertiesEvent: function () {
             $('body.format-ludic').on('click', '.container-items .container-parents .item', function () {
 
-                // Item is already selected, properties are already on screen.
-                if ($(this).hasClass('selected') && !ludic.formChanged) {
-                    return;
-                }
-
                 // If the form has changed, the user must confirm his choice to exit and display the properties of another item.
                 let itemid = $(this).attr('id');
                 if ($(this).closest('.format-ludic.ludic-popup').length === 0 && ludic.formChanged) {
@@ -357,8 +351,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          */
         initClickOnSelectedItemEvent: function () {
             $('body.format-ludic').on('DOMNodeInserted', function (e) {
-                let selectedItem = $(e.target).find('.item.selected');
+                let selectedItem = $(e.target).find('.item.selected').addBack('.item.selected');
                 if (selectedItem.length) {
+                    console.log('click on selected item added', selectedItem);
                     selectedItem.click();
                 }
             });
@@ -628,8 +623,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Always init drag and drop popup events in edit mode.
             ludic.initDragAndDropEvents();
 
-            // When you click on an item in .container-parents, call the getProperties() function on the controller of the same type.
-            // Then display the return in .container-properties.
+            // When you click on an item in .container-parents, display properties in .container-properties.
             ludic.initItemGetPropertiesEvent();
 
             // Update input value when clicking on confirm button.
@@ -732,7 +726,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          *  Click on the last item clicked.
          */
         clickOnLastItemClicked: function () {
-            console.log('clickOnLastItemClicked');
+            console.log('clickOnLastItemClicked', window.location);
 
             // If an anchor is specified click on it.
             let anchor = window.location.hash.substr(1);

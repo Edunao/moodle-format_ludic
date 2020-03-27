@@ -28,7 +28,7 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
-class inline extends \format_ludic\skin implements \format_ludic\coursemodule_skin_interface {
+class inline extends \format_ludic\skin {
 
     /**
      * @return string
@@ -52,6 +52,8 @@ class inline extends \format_ludic\skin implements \format_ludic\coursemodule_sk
      *
      * @return inline
      * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     static public function get_instance() {
         return new inline((object) [
@@ -70,6 +72,27 @@ class inline extends \format_ludic\skin implements \format_ludic\coursemodule_sk
      */
     public function require_grade() {
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_data_to_render() {
+        // TODO: Implement get_data_to_render() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_images_to_render() {
+        // TODO: Implement get_images_to_render() method.
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function get_texts_to_render() {
+        // TODO: Implement get_texts_to_render() method.
     }
 }
 

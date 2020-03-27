@@ -24,7 +24,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/format/renderer.php');
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 /**
  * Basic renderer for ludic format.
@@ -34,6 +33,13 @@ require_once($CFG->dirroot . '/course/format/ludic/lib.php');
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class format_ludic_renderer extends format_section_renderer_base {
+
+    private $contexthelper;
+
+    public function __construct(moodle_page $page, $target) {
+        $this->contexthelper = \format_ludic\context_helper::get_instance($page);
+        parent::__construct($page, $target);
+    }
 
     /**
      * Generate the starting container html for a list of sections
@@ -65,10 +71,14 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param format_ludic_popup $popup
+     * @param $id
+     * @param string $title
+     * @param string $content
+     * @param null $headericon
      * @return string
      */
-    public function render_popup(format_ludic_popup $popup) {
+    public function render_popup($id, $title = '', $content = '', $headericon = null) {
+        $popup = new format_ludic_popup($id, $title, $content, $headericon);
         return $this->render($popup);
     }
 
@@ -89,6 +99,8 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @param $sectionid
      * @return string
      * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function render_section_form($sectionid) {
         $form = new \format_ludic\section_form($sectionid);
@@ -161,6 +173,16 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param $skin
+     * @return string
+     * @throws coding_exception
+     */
+    public function render_skinned_tile($skin) {
+        $skinnedtile = new format_ludic_skinned_tile($skin);
+        return $this->render($skinnedtile);
+    }
+
+    /**
      * @param $form
      * @return string
      */
@@ -224,6 +246,15 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param format_ludic_skin $skin
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_skinned_tile(format_ludic_skinned_tile $skin) {
+        return $this->render_from_template('format_ludic/skinned_tile', $skin);
+    }
+
+    /**
      * @param format_ludic_section $section
      * @return bool|string
      * @throws moodle_exception
@@ -267,9 +298,10 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_container_items($type, $parentscontent = '', $propertiescontent = '', $helpcontent = '') {
+    public function render_container_items($type, $editmode, $parentscontent = '', $propertiescontent = '', $helpcontent = '') {
         return $this->render_from_template('format_ludic/container_items', [
                 'parentstype'       => $type,
+                'editmode'          => $editmode,
                 'parentscontent'    => $parentscontent,
                 'propertiescontent' => $propertiescontent,
                 'propertieshelp'    => $helpcontent,
@@ -283,8 +315,8 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     public function render_container_parents($type, $content = '') {
         return $this->render_from_template('format_ludic/container_parents', [
-                'parentstype' => $type, 'parentscontent' =>
-                        $content
+                'parentstype'    => $type,
+                'parentscontent' => $content
         ]);
     }
 
@@ -294,8 +326,8 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     public function render_container_properties($content = '', $helpcontent = '') {
         return $this->render_from_template('format_ludic/container_properties', [
-                'propertiescontent' => $content, 'propertieshelp'
-                                    => $helpcontent
+                'propertiescontent' => $content,
+                'propertieshelp'    => $helpcontent
         ]);
     }
 
@@ -308,21 +340,30 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * @param $data array
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_page($data) {
-        return $this->render_from_template('format_ludic/page', $data);
+    public function render_page() {
+        return $this->render_from_template('format_ludic/page', [
+                'globaldescription'   => $this->contexthelper->get_global_description(),
+                'parentstype'         => 'section',
+                'parentscontent'      => $this->render_course_sections(),
+                'globalcoursemodules' => $this->render_course_modules( $this->contexthelper->get_global_section_id())
+        ]);
     }
 
     /**
-     * @param $data array
+     * @param $sectionid int
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_section_page($data) {
-        return $this->render_from_template('format_ludic/section_page', $data);
+    public function render_section_page($sectionid) {
+        $sectionobj = $this->contexthelper->get_section_by_id($sectionid);
+        return $this->render_from_template('format_ludic/section_page', [
+                'section'       => $this->render_section($sectionobj),
+                'coursemodules' => $this->render_course_modules($sectionid),
+                'description'   => $sectionobj->get_description()
+        ]);
     }
 
     /**
@@ -413,5 +454,84 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     public function render_form_errors($errors) {
         return $this->render_from_template('format_ludic/form_errors', $errors);
+    }
+
+    /**
+     * Render course sections of current course.
+     *
+     * @return string
+     * @throws coding_exception
+     * @throws moodle_exception
+     */
+    public function render_course_sections() {
+        // Get data.
+        $course   = $this->contexthelper->get_course();
+        $sections = $course->get_sections();
+
+        // Render sections.
+        $output = '';
+        foreach ($sections as $section) {
+            $output .= $this->render_section($section);
+        }
+
+        // Add content in edit view.
+        if ($this->contexthelper->is_editing()) {
+            // Render add new section button.
+            $output .= $this->render_add_section_button($course->id, count($sections) + 1);
+
+            // Render container for course modules.
+            $output .= $this->render_container_children('coursemodules');
+        }
+
+        return $output;
+    }
+
+    /**
+     * Render course modules of given section id.
+     *
+     * @param $sectionid
+     * @param bool $selectedcmid , add a “selected” class for the course module with this id.
+     * @return string
+     * @throws dml_exception
+     * @throws moodle_exception
+     */
+    public function render_course_modules($sectionid, $selectedcmid = false) {
+        // Get data.
+        $section       = $this->contexthelper->get_section_by_id($sectionid);
+        $coursemodules = $section->get_course_modules();
+
+        // Render course modules.
+        $output = '';
+        foreach ($coursemodules as $order => $coursemodule) {
+            $renderable = null;
+
+            // In student view.
+            if (!$this->contexthelper->is_editing()) {
+
+                // Don't render hidden course module.
+                if (!$coursemodule->visible) {
+                    continue;
+                }
+
+                // In course module skin type is "inline", render it inline.
+                if ($coursemodule->skin->type === 'inline') {
+                    $renderable = new format_ludic_course_module_inline($coursemodule);
+                }
+
+            }
+
+            // In the edit view or if the skin is not online, render it normally.
+            $renderable = $renderable ? $renderable : new \format_ludic_course_module($coursemodule);
+
+            // Add class "selected" on selected course module.
+            if ($selectedcmid && $selectedcmid == $coursemodule->id) {
+                $renderable->selected = true;
+            }
+
+            // Render course module from renderable object.
+            $output .= $this->render($renderable);
+        }
+
+        return $output;
     }
 }

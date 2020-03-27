@@ -42,6 +42,7 @@ class format_ludic_skin extends format_ludic_item {
         $this->order      = $skin->id;
         $this->selected   = $skin->selected;
         $this->title      = $skin->title;
+        $this->tooltip    = $skin->title;
 
         // Action.
         $this->propertiesaction = 'get_description';

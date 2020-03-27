@@ -73,23 +73,7 @@ class section_controller extends controller_base {
     public function get_course_sections() {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
-        $course   = $this->contexthelper->get_course();
-        $sections = $course->get_sections();
-
-        // Render sections.
-        $output = '';
-        foreach ($sections as $section) {
-            $output .= $renderer->render_section($section);
-        }
-
-        // In edit view, render add new section button.
-        if ($this->contexthelper->is_editing()) {
-            $output .= $renderer->render_add_section_button($course->id, count($sections) + 1);
-        }
-
-        // Render container for course modules.
-        $output .= $renderer->render_container_children('coursemodules');
-        return $output;
+        return $renderer->render_course_sections();
     }
 
     /**
@@ -107,26 +91,12 @@ class section_controller extends controller_base {
         $renderer      = $PAGE->get_renderer('format_ludic');
         $section       = $this->contexthelper->get_section_by_id($sectionid);
         $course        = $this->contexthelper->get_moodle_course();
-        $sectionidx    = $section->section;
-        $coursemodules = $section->get_course_modules();
 
-        // Render course modules.
-        $output = '';
-        foreach ($coursemodules as $order => $coursemodule) {
-            $coursemodule->order = $order;
-            $coursemodule        = new \format_ludic_course_module($coursemodule);
-
-            // Selected course module.
-            if ($selectedcmid && $selectedcmid == $coursemodule->id) {
-                $coursemodule->selected = true;
-            }
-
-            $output .= $renderer->render($coursemodule);
-        }
+        $output = $renderer->render_course_modules($sectionid, $selectedcmid);
 
         // In edit view, render mod chooser (add a new activity).
         if ($this->contexthelper->is_editing()) {
-            $output .= $renderer->render_modchooser($course, $sectionidx, count($coursemodules));
+            $output .= $renderer->render_modchooser($course, $section->section, count($section->sequence));
         }
 
         // Return html.
@@ -338,4 +308,14 @@ class section_controller extends controller_base {
         return $dbapi->delete_section_skin_id($sectionid);
     }
 
+
+    public function get_section_view_of_student($sectionid){
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+        $this->contexthelper->enable_student_view();
+        $popupcontent = $renderer->render_section_page($sectionid);
+        $popup = $renderer->render_popup('section-popup', get_string('section-preview', 'format_ludic'), $popupcontent);
+        $this->contexthelper->disable_student_view();
+        return $popup;
+    }
 }

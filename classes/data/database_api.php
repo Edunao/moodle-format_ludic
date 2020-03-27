@@ -428,5 +428,58 @@ class database_api {
             ]
         );
     }
+
+    /**
+     * Return user grade for a course module.
+     *
+     * @param $courseid
+     * @param $modname
+     * @param $instance
+     * @param $userid
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_course_module_user_grade($courseid, $modname, $instance, $userid) {
+        $sql  = '
+            SELECT
+                gg.rawgrade as grade,
+                gg.rawgrademax as grademax,
+                gg.rawgrademin as grademin,
+                gg.aggregationstatus as usegradefactor,
+                gg.aggregationweight as gradefactor
+            FROM {grade_items} AS gi
+            JOIN {grade_grades} AS gg ON gi.id = gg.itemid
+            WHERE 
+                gi.courseid = :courseid
+                AND gi.itemtype = :itemtype
+                AND gi.itemmodule = :itemmodule
+                AND gi.iteminstance = :iteminstance
+                AND gg.userid = :userid
+                AND gi.itemnumber = 0
+        ';
+        $data = [
+                'courseid'     => $courseid,
+                'itemtype'     => 'mod',
+                'itemmodule'   => $modname,
+                'iteminstance' => $instance,
+                'userid'       => $userid
+        ];
+        return $this->db->get_record_sql($sql, $data);
+    }
+
+    /**
+     * Get section weight
+     *
+     * @param $sequence
+     * @return mixed
+     * @throws \dml_exception
+     */
+    public function get_section_weight($sequence) {
+        return $this->db->get_field_sql('
+            SELECT SUM(weight)
+            FROM {format_ludic_cm}
+            WHERE cmid IN (:sequence)
+        ', ['sequence' => $sequence]);
+    }
 }
 

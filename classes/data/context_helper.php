@@ -204,6 +204,13 @@ class context_helper {
     private $coursemodulesinfo = null;
 
     /**
+     * Force student view when true.
+     *
+     * @var bool
+     */
+    private $studentview = false;
+
+    /**
      * context_helper constructor.
      *
      * @param \moodle_page $page
@@ -324,13 +331,16 @@ class context_helper {
             return $this->sectionid;
         }
 
-
         if ($this->page->pagetype == 'course-view-ludic') {
 
             // We're on a course view page and the course-relative section number is provided
             // so lookup the real section id.
-            $courseid        = $this->courseid;
+            $courseid = $this->courseid;
             try {
+                // Set current section idx.
+                $this->sectionidx = $sectionidx;
+
+                // Retrive section id.
                 $sectionid = $this->dbapi->get_section_id_by_courseid_and_sectionidx($courseid, $sectionidx);
             } catch (\dml_exception $e) {
                 // Error - display course.
@@ -344,7 +354,6 @@ class context_helper {
             $this->sectionid = $this->page->cm->section;
 
         }
-
         // Return the stored result.
         return $this->sectionid;
     }
@@ -482,7 +491,22 @@ class context_helper {
      * @return bool
      */
     public function is_editing() {
+        if ($this->studentview) {
+            return false;
+        }
         return $this->page->user_is_editing();
+    }
+
+    public function is_student_view_forced() {
+        return $this->studentview;
+    }
+
+    public function enable_student_view() {
+        $this->studentview = true;
+    }
+
+    public function disable_student_view() {
+        $this->studentview = false;
     }
 
     /**
@@ -606,6 +630,16 @@ class context_helper {
     }
 
     /**
+     * Get section 0 id.
+     *
+     * @return int
+     * @throws \dml_exception
+     */
+    public function get_global_section_id() {
+        return $this->dbapi->get_section_id_by_courseid_and_sectionidx($this->courseid, 0);
+    }
+
+    /**
      * Get section 0
      *
      * @return false|section
@@ -613,11 +647,8 @@ class context_helper {
      * @throws \moodle_exception
      */
     public function get_global_section() {
-        // Get section 0 id.
-        $sectionid = $this->dbapi->get_section_id_by_courseid_and_sectionidx($this->courseid, 0);
-
         // Return section 0.
-        return $this->get_section_by_id($sectionid);
+        return $this->get_section_by_id($this->get_global_section_id());
     }
 
     /**
@@ -649,7 +680,7 @@ class context_helper {
             $coursemodulesinfo = $this->get_course_modules_info();
 
             // Instantiate course modules.
-            $coursemodules     = [];
+            $coursemodules = [];
             foreach ($coursemodulesinfo as $courseinfocm) {
                 $coursemodules[] = new course_module($courseinfocm);
             }

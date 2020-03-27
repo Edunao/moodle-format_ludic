@@ -90,7 +90,7 @@ class coursemodule_form extends form {
         $elements[] = new select_form_element(
                 'weight',
                 'coursemodule-weight',
-                $this->object->weight,
+                $this->object->get_weight(),
                 null,
                 get_string('label-select-weight', 'format_ludic'),
                 ['required' => true, 'multiple' => false],

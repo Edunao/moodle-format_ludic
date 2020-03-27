@@ -48,7 +48,7 @@ class format_ludic_section extends format_ludic_item {
         $this->selectorid   = 'ludic-section-' . $section->section;
         $this->itemtype     = 'section';
         $this->id           = $section->id;
-        $this->title        = $section->get_title();
+        $this->tooltip      = $section->get_title();
         $this->order        = $section->section;
         $this->isnotvisible = !$section->visible;
         $this->parent       = true;
@@ -56,7 +56,7 @@ class format_ludic_section extends format_ludic_item {
 
         // Action.
         $location = $contexthelper->get_location();
-        if ($location === 'course') {
+        if ($location === 'course' && !$contexthelper->is_student_view_forced()) {
             $this->action = 'getDataLinkAndRedirectTo';
             $this->link   = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
         }
@@ -64,23 +64,38 @@ class format_ludic_section extends format_ludic_item {
         // Edit mode.
         if ($contexthelper->is_editing()) {
 
+            // Add in-edition class.
+            $this->editmode = true;
+            
             // Action.
             $this->action           = 'get_course_modules';
             $this->controller       = 'section';
             $this->callback         = 'displayCourseModulesHtml';
             $this->propertiesaction = 'get_properties';
 
+            // Image.
+            $imageobject  = $section->skin->get_edit_image();
+            $this->imgsrc = $imageobject->imgsrc;
+            $this->imgalt = $imageobject->imgalt;
+
+            // Title
+            $this->title = $this->tooltip;
+
             // Enable drag and drop.
             $this->requiresectionhtmlforjs = true;
             $this->draggable               = true;
             $this->droppable               = true;
 
-            // Image.
-            $imageobject  = $section->skin->get_edit_image();
-            $this->imgsrc = $imageobject->imgsrc;
-            $this->imgalt = $imageobject->imgalt;
+            // Add selected class on current section or first.
+            $sectiontoselect = $contexthelper->get_section_id();
+            $sectiontoselect = $sectiontoselect > 0 ? $sectiontoselect : 1;
+            $this->selected = $section->section == $sectiontoselect;
+
         } else {
-            $this->content = $section->skin->render_section_view();
+
+            // The skin will render all section content.
+            $this->content = $section->skin->render_skinned_tile();
+
         }
 
     }
