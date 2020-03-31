@@ -30,53 +30,6 @@
       padding: 20px;
     }
 
-    &.container-items {
-      display: flex;
-      flex-direction: row;
-      width: 100%;
-
-      .container-parents {
-        flex-direction: row;
-        border: 1px solid black;
-        margin-bottom: 10px;
-        width: 100%;
-        height: fit-content;
-        padding: 10px;
-
-        .container-children {
-          display: none;
-          border: 1px solid black;
-          margin-top: 35px;
-          min-height: 100px;
-          padding: 20px;
-          order: 1000;
-        }
-
-      }
-
-
-      .container-properties {
-        display: flex;
-        flex-direction: column;
-        width: 30%;
-
-        .container-content {
-          padding: 20px;
-          margin-bottom: 40px;
-          flex-direction: column;
-          border: 1px solid black;
-
-        }
-
-        .container-help {
-          height: 100px;
-          padding: 20px;
-          text-align: center;
-          border: 1px solid black;
-        }
-      }
-    }
-
     &#global-description {
       border: 1px solid black;
       padding: 20px;
@@ -85,8 +38,60 @@
 
   }
 
+}
+
+#ludic-main-container, #selection-popup {
+  .container-items {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    .container-parents {
+      flex-direction: row;
+      border: 1px solid black;
+      margin-bottom: 10px;
+      width: 100%;
+      height: fit-content;
+      padding: 10px;
+
+      .container-children {
+        display: none;
+        border: 1px solid black;
+        margin-top: 35px;
+        min-height: 100px;
+        padding: 20px;
+        order: 1000;
+      }
+
+    }
+
+
+    .container-properties {
+      display: flex;
+      flex-direction: column;
+      width: 30%;
+
+      .container-content {
+        padding: 20px;
+        margin-bottom: 40px;
+        flex-direction: column;
+        border: 1px solid black;
+
+      }
+
+      .container-help {
+        height: 100px;
+        padding: 20px;
+        text-align: center;
+        border: 1px solid black;
+      }
+    }
+  }
+}
+
+#ludic-main-container.editmode, #selection-popup {
   // In edit view you need to have properties in right, so reduce container width.
-  &.editmode .container-items .container-parents {
+  .container-items .container-parents {
     width: calc(~'70% - 20px');
     margin-right: 20px;
 
@@ -95,8 +100,8 @@
       display: flex;
     }
   }
-
 }
+
 
 [data-action], [data-propertiesaction] {
   cursor: pointer;

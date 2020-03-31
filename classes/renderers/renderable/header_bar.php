@@ -169,6 +169,14 @@ class format_ludic_header_bar implements renderable {
 
     }
 
+    /**
+     * Get student options.
+     * - Option : Preview section in course module.
+     *
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     private function get_student_options_list() {
         global $CFG;
 
@@ -176,7 +184,7 @@ class format_ludic_header_bar implements renderable {
         $list = [];
 
         // Exit in different cases.
-        if (!$this->contexthelper->user_has_role_in_course('student') ||
+        if (!$this->contexthelper->user_has_student_role() ||
             $this->contexthelper->get_location() != 'coursemodule') {
 
             // If current user is not student, don't show options.
@@ -184,14 +192,12 @@ class format_ludic_header_bar implements renderable {
             return $list;
         }
 
-
-
         // Student in course module can preview his section.
-        $name = get_string('header-bar-preview-section', 'format_ludic');
+        $name   = get_string('header-bar-preview-section', 'format_ludic');
         $option = [
-                'iconsrc'    => $CFG->wwwroot . '/course/format/ludic/pix/view-section.png',
-                'iconalt'    => $name,
-                'name'       => $name,
+                'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/view-section.png',
+                'iconalt' => $name,
+                'name'    => $name,
         ];
 
         // Don't add action in preview student view.
@@ -209,10 +215,90 @@ class format_ludic_header_bar implements renderable {
 
     }
 
+    /**
+     * Get teacher options (different for editing teacher).
+     * - Option : Toggle to edit mode.
+     * - Option : Toggle to student mode.
+     *
+     * @return array
+     * @throws coding_exception
+     * @throws dml_exception
+     */
     private function get_teacher_options_list() {
-
+        global $OUTPUT, $CFG;
         // Initialize list.
         $list = [];
+
+        $isteacher        = $this->contexthelper->user_has_role_in_course('teacher');
+        $iseditingteacher = $this->contexthelper->user_has_role_in_course('editingteacher');
+        $isadmin          = $this->contexthelper->is_user_admin();
+        $courseid         = $this->contexthelper->get_course_id();
+        $isstudent        = $this->contexthelper->user_has_student_role();
+
+        // User must be admin or editing teacher or teacher.
+        if (!$isadmin && !$iseditingteacher && !$isteacher) {
+            return $list;
+        }
+
+        // Options for editing teacher.
+        if (!$isstudent && ($isadmin || $iseditingteacher)) {
+            $editmode = $this->contexthelper->is_editing();
+
+            // First option : edit mode.
+            $editname = $editmode ? get_string('turneditingoff') : get_string('turneditingon');
+            $editicon = $OUTPUT->image_url('i/edit')->out();
+
+            $editoption = [
+                    'iconsrc' => $editicon,
+                    'iconalt' => $editname,
+                    'name'    => $editname,
+            ];
+
+            // Don't add action in preview student view.
+            if (!$this->contexthelper->is_student_view_forced()) {
+                $editlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&sesskey=' . sesskey() . '&edit=';
+                $editlink .= $editmode ? 'off' : 'on';
+
+                // Add link and action to redirect.
+                $editoption['link']   = $editlink;
+                $editoption['action'] = 'getDataLinkAndRedirectTo';
+
+            }
+
+            $list[] = $editoption;
+
+        }
+
+        // Options for editing teacher and teacher.
+        if ($isadmin || $iseditingteacher || $isteacher) {
+
+            // Switch role for student view option.
+            $nameidentifier = $isstudent ? 'header-bar-teacher-view' : 'header-bar-student-view';
+            $name           = get_string($nameidentifier, 'format_ludic');
+
+            $switchoption = [
+                    'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/student-view.svg',
+                    'iconalt' => $name,
+                    'name'    => $name,
+            ];
+
+            // Don't add action in preview student view.
+            if (!$this->contexthelper->is_student_view_forced()) {
+
+                // To "unswitch" pass 0 as the roleid. To switch to student pass student role id.
+                $switchlink = $CFG->wwwroot . '/course/switchrole.php?id=' . $courseid . '&sesskey=' . sesskey() . '&switchrole=';
+                $switchlink .= $isstudent ? '0' :
+                        $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
+
+                // Add link and action to redirect.
+                $switchoption['link']   = $switchlink;
+                $switchoption['action'] = 'getDataLinkAndRedirectTo';
+
+            }
+
+            $list[] = $switchoption;
+
+        }
 
         // Return list.
         return $list;

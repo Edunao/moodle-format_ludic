@@ -39,6 +39,8 @@ $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and b
 
 // Header bar.
 $string['header-bar-preview-section']  = 'Preview section';
+$string['header-bar-student-view']     = 'Student view';
+$string['header-bar-teacher-view']     = 'Back to teacher view';
 
 // Section edition.
 $string['default-section-title']  = 'Section {$a}';

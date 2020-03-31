@@ -494,6 +494,16 @@ class context_helper {
     }
 
     /**
+     * Check if user is student (true even after changing the role)
+     *
+     * @return bool
+     * @throws \coding_exception
+     */
+    public function user_has_student_role() {
+        return !has_capability('moodle/course:manageactivities', $this->get_course_context());
+    }
+
+    /**
      * Checks if the current user has one role in an array of role short names.
      *
      * @param $roleshortnames array

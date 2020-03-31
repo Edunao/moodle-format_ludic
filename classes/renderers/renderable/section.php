@@ -93,11 +93,6 @@ class format_ludic_section extends format_ludic_item {
             $this->draggable               = $isnotglobalsection;
             $this->droppable               = $isnotglobalsection;
 
-            // Add selected class on current section or first.
-            $sectiontoselect = $contexthelper->get_section_id();
-            $sectiontoselect = $sectiontoselect > 0 ? $sectiontoselect : 0;
-            $this->selected = $section->section == $sectiontoselect;
-
         } else {
 
             // The skin will render all section content.
