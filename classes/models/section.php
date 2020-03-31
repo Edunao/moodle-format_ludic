@@ -40,7 +40,6 @@ class section extends model {
     public  $coursemodules;
     public  $skinid;
     public  $skin;
-    private $weight;
     private $results;
 
     /**
@@ -63,9 +62,13 @@ class section extends model {
         $this->sectioninfo = $courseinfo->get_section_info($this->section);
 
         // Ludic properties.
-        $skinrelation = $this->get_section_skin_relation();
-        $this->skinid = $skinrelation->skinid;
-        $this->skin   = skin::get_by_id($this->skinid, $this);
+        // Section 0 has no skin.
+        if ($section->section != 0) {
+            $skinrelation = $this->get_section_skin_relation();
+            $this->skinid = $skinrelation->skinid;
+            $this->skin   = skin::get_by_id($this->skinid, $this);
+        }
+
     }
 
     /**
@@ -73,6 +76,9 @@ class section extends model {
      * @throws \coding_exception
      */
     public function get_title() {
+        if ($this->section == 0) {
+            return get_string('section0name', 'format_ludic');
+        }
         $defaulttitle = get_string('default-section-title', 'format_ludic', $this->section);
         return !empty($this->name) ? $this->name : $defaulttitle;
     }
@@ -203,6 +209,12 @@ class section extends model {
      */
     public function get_edit_buttons() {
         global $CFG;
+
+        // There is no edit buttons for section 0.
+        if ($this->section == 0) {
+            return [];
+        }
+
         $baseurl        = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id;
         $editsectionurl = $baseurl . '&sr=' . $this->section;
 

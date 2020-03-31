@@ -26,8 +26,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
 class front_controller implements front_controller_interface {
 
     /**
@@ -85,7 +83,6 @@ class front_controller implements front_controller_interface {
         if (!file_exists($controllerurl)) {
             print_error('Controller file not found : ' . $controllerurl);
         }
-        require_once($controllerurl);
 
         $controller = strtolower($controller) . "_controller";
 

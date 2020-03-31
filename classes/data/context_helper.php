@@ -31,6 +31,13 @@ defined('MOODLE_INTERNAL') || die();
 // Skin inline id.
 define('FORMAT_LUDIC_CM_SKIN_INLINE_ID', 1);
 
+// Skin menubar id.
+define('FORMAT_LUDIC_CM_SKIN_MENUBAR_ID', 2);
+
+// Skin menubar id.
+define('FORMAT_LUDIC_CM_SKIN_STEALTH_ID', 3);
+
+
 // Always accessible.
 define('FORMAT_LUDIC_ACCESS_ACCESSIBLE', 1);
 
@@ -278,10 +285,12 @@ class context_helper {
      * Return current course.
      *
      * @return course
+     * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function get_course() {
         if ($this->course === null) {
-            $this->course = new course($this->page->course);
+            $this->course = new course($this->get_moodle_course());
         }
         return $this->course;
     }
@@ -290,8 +299,13 @@ class context_helper {
      * Return current course.
      *
      * @return \stdClass
+     * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function get_moodle_course() {
+        if ($this->page->course->id != $this->courseid) {
+            $this->page->set_course(get_course($this->courseid));
+        }
         return $this->page->course;
     }
 
@@ -301,6 +315,19 @@ class context_helper {
      * @return int
      */
     public function get_course_id() {
+        return $this->courseid;
+    }
+
+    /**
+     * Set course id if current course id is SITE, return current course id.
+     *
+     * @param $courseid
+     * @return int
+     */
+    public function set_course_id($courseid) {
+        if ($this->courseid == SITEID) {
+            $this->courseid = $courseid;
+        }
         return $this->courseid;
     }
 
@@ -326,12 +353,12 @@ class context_helper {
         // Replace the null with a 0 to avoid wasting times on trying to re-evaluate next time round.
         $this->sectionid = 0;
 
-        // We are not in a section.
-        if ($sectionidx === 0) {
-            return $this->sectionid;
-        }
-
         if ($this->page->pagetype == 'course-view-ludic') {
+
+            // We are not in a section.
+            if ($sectionidx === 0) {
+                return $this->sectionid;
+            }
 
             // We're on a course view page and the course-relative section number is provided
             // so lookup the real section id.
@@ -389,7 +416,7 @@ class context_helper {
      *
      * @return int
      */
-    public function get_cm_id() {
+    public function get_course_module_id() {
         return isset($this->page->cm->id) ? $this->page->cm->id : 0;
     }
 
@@ -401,7 +428,7 @@ class context_helper {
      * @throws \coding_exception
      */
     public function get_location() {
-        $cmid       = $this->get_cm_id();
+        $cmid       = $this->get_course_module_id();
         $sectionidx = $this->get_section_idx();
 
         // On course page by default.
@@ -410,7 +437,7 @@ class context_helper {
         if ($cmid > 0) {
 
             // We are in course module.
-            $location = 'mod';
+            $location = 'coursemodule';
 
         } else if ($sectionidx > 0) {
 
@@ -497,14 +524,24 @@ class context_helper {
         return $this->page->user_is_editing();
     }
 
+    /**
+     * True if student view is forced, else false.
+     * @return bool
+     */
     public function is_student_view_forced() {
         return $this->studentview;
     }
 
+    /**
+     * Force student view.
+     */
     public function enable_student_view() {
         $this->studentview = true;
     }
 
+    /**
+     * Disable force student view.
+     */
     public function disable_student_view() {
         $this->studentview = false;
     }
@@ -702,7 +739,7 @@ class context_helper {
      */
     public function get_course_module() {
         if ($this->coursemodule == null) {
-            $cmid               = $this->get_cm_id();
+            $cmid               = $this->get_course_module_id();
             $this->coursemodule = $cmid > 0 ? $this->get_course_module_by_id($cmid) : false;
         }
         return $this->coursemodule;
@@ -881,6 +918,22 @@ class context_helper {
 
         // Return filtered skins.
         return $sectionskins;
+    }
+
+    /**
+     * Get course modules skins for course modules in section 0 only.
+     *
+     * @return skin[]
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_global_section_skins() {
+        return [
+                coursemodule\menubar::get_instance(),
+                coursemodule\inline::get_instance(),
+                coursemodule\stealth::get_instance()
+        ];
     }
 
     /**

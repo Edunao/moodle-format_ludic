@@ -50,6 +50,18 @@ class format_ludic extends \format_base {
     }
 
     /**
+     * Add header bar on each course format page for student view.
+     *
+     * @return format_ludic_header_bar|null
+     * @throws moodle_exception
+     */
+    public function course_content_header() {
+        // Ensure that context helper course id is real course id and not site course id (1)
+        $this->contexthelper->set_course_id($this->courseid);
+        return new format_ludic_header_bar();
+    }
+
+    /**
      * Returns true if this course format uses sections
      *
      * @return bool
@@ -116,6 +128,15 @@ class format_ludic extends \format_base {
      * @return bool
      */
     public function can_delete_section($section) {
+        return true;
+    }
+
+    /**
+     * Indicates whether the course format supports the creation of a news forum.
+     *
+     * @return bool
+     */
+    public function supports_news() {
         return true;
     }
 
@@ -263,7 +284,6 @@ function format_ludic_get_default_weight() {
     return isset($weightoptions[$defaultkey]) ? $weightoptions[$defaultkey] : 0;
 }
 
-
 /**
  * Get access options for select element.
  *
@@ -294,7 +314,6 @@ function format_ludic_get_access_options() {
 
     return $options;
 }
-
 
 /**
  * Requires javascript for filepicker and modchooser.
@@ -350,7 +369,6 @@ function format_ludic_require_files() {
     global $CFG;
     // Course lib.
     require_once($CFG->dirroot . '/course/format/lib.php');
-
 
     $classesdir = $CFG->dirroot . '/course/format/ludic/classes';
     // Require parent files first to avoid errors later.

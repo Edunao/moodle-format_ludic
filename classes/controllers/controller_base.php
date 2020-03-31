@@ -26,8 +26,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
 abstract class controller_base {
 
     /**

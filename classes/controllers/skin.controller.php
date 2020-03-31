@@ -26,8 +26,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
 class skin_controller extends controller_base {
 
     /**
@@ -116,6 +114,7 @@ class skin_controller extends controller_base {
      *
      * @param $skinid
      * @return string
+     * @throws \coding_exception
      */
     public function get_description($skinid) {
         // Get skin.

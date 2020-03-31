@@ -96,9 +96,12 @@
     }
   }
 
-  [data-action], [data-propertiesaction] {
-    cursor: pointer;
+}
+
+[data-action], [data-propertiesaction] {
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
   }
-
-
 }

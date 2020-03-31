@@ -55,7 +55,7 @@ class format_ludic_course_module_inline extends format_ludic_item {
         $this->iconsrc = $icon->imgsrc;
         $this->iconalt = $icon->imgalt;
         if (!$contexthelper->is_student_view_forced()) {
-            $this->link    = $CFG->wwwroot . '/mod/' . $coursemodule->cminfo->modname . '/view.php?id=' . $coursemodule->id;
+            $this->link    = $coursemodule->get_link();
         }
 
         if ($this->modname === 'label') {

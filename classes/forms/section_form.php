@@ -54,6 +54,9 @@ class section_form extends form {
     public function get_definition() {
         $elements = [];
 
+        // Disabled some fiels for section 0.
+        $disabled = $this->object->section == 0;
+
         // Section id.
         $id         = $this->object->id;
         $elements[] = new hidden_form_element('id', 'section-id', $id, 0);
@@ -63,9 +66,9 @@ class section_form extends form {
                 'name',
                 'section-title',
                 $this->object->name,
-                get_string('default-section-title', 'format_ludic', $this->object->section),
+                $this->object->get_title(),
                 get_string('label-section-title', 'format_ludic'),
-                ['required' => true, 'maxlength' => 30]
+                ['required' => true, 'maxlength' => 30, 'disabled' => $disabled]
         );
 
         // Section visibility.
@@ -75,25 +78,29 @@ class section_form extends form {
                 $this->object->visible,
                 1,
                 get_string('label-section-visible', 'format_ludic'),
-                ['required' => true]
+                ['required' => true, 'disabled' => $disabled]
         );
 
-        // Section skin id.
-        $elements[] = new selection_popup_form_element(
-                'skinid',
-                'section-skinid',
-                $this->object->skinid,
-                0,
-                get_string('label-skin-selection', 'format_ludic'),
-                ['required' => true, 'multiple' => false],
-                [
-                        'icon'           => $this->object->skin->get_edit_image(),
-                        'itemid'         => $id,
-                        'itemcontroller' => 'skin',
-                        'itemaction'     => 'get_section_skin_selector',
-                        'popuptitle'     => get_string('section-skin-selection', 'format_ludic')
-                ]
-        );
+        // There is no skin for section 0.
+        if (!$disabled) {
+            // Section skin id.
+            $elements[] = new selection_popup_form_element(
+                    'skinid',
+                    'section-skinid',
+                    $this->object->skinid,
+                    0,
+                    get_string('label-skin-selection', 'format_ludic'),
+                    ['required' => true, 'multiple' => false],
+                    [
+                            'icon'           => $this->object->skin->get_edit_image(),
+                            'itemid'         => $id,
+                            'itemcontroller' => 'skin',
+                            'itemaction'     => 'get_section_skin_selector',
+                            'popuptitle'     => get_string('section-skin-selection', 'format_ludic')
+                    ]
+            );
+        }
+
 
         // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
         //$elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);

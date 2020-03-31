@@ -276,15 +276,21 @@ class course_module extends model {
      *
      * @return array
      * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_available_skins() {
-        $skins   = $this->contexthelper->get_course_module_skins();
-        $modname = $this->cminfo->modname;
+        if ($this->section->section == 0) {
+            return $this->contexthelper->get_global_section_skins();
+        }
 
         // Label can use only inline skin.
+        $modname = $this->cminfo->modname;
         if ($modname === 'label') {
             return [coursemodule\inline::get_instance()];
         }
+
+        $skins   = $this->contexthelper->get_course_module_skins();
 
         // True if this course module supports grades.
         $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
@@ -308,8 +314,17 @@ class course_module extends model {
      * @return mixed
      * @throws \coding_exception
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_default_skin() {
+
+        // Default skin for section 0 is inline for resources and menubar for activities.
+        if ($this->section->section == 0) {
+            $modname = $this->cminfo->modname;
+            $isresource = $modname ? plugin_supports('mod', $modname, FEATURE_MOD_ARCHETYPE, false) : false;
+            return $isresource ? coursemodule\inline::get_instance() : coursemodule\menubar::get_instance();
+        }
+
         // Get available skins.
         $skins = $this->get_available_skins();
 
@@ -331,6 +346,7 @@ class course_module extends model {
      * @return \stdClass
      * @throws \dml_exception
      * @throws \coding_exception
+     * @throws \moodle_exception
      */
     public function get_skin_relation() {
         // Get data.
@@ -404,5 +420,15 @@ class course_module extends model {
      */
     public function get_skinned_tile_title() {
         return $this->name;
+    }
+
+    /**
+     * Get course module link.
+     *
+     * @return string
+     */
+    public function get_link() {
+        global $CFG;
+        return $CFG->wwwroot . '/mod/' . $this->cminfo->modname . '/view.php?id=' . $this->id;
     }
 }

@@ -64,6 +64,9 @@ class format_ludic_section extends format_ludic_item {
         // Edit mode.
         if ($contexthelper->is_editing()) {
 
+            // Section 0 has a little different display.
+            $isnotglobalsection = $section->section != 0;
+
             // Add in-edition class.
             $this->editmode = true;
             
@@ -73,22 +76,26 @@ class format_ludic_section extends format_ludic_item {
             $this->callback         = 'displayCourseModulesHtml';
             $this->propertiesaction = 'get_properties';
 
-            // Image.
-            $imageobject  = $section->skin->get_edit_image();
-            $this->imgsrc = $imageobject->imgsrc;
-            $this->imgalt = $imageobject->imgalt;
+            // Section 0 has no image.
+            if ($isnotglobalsection) {
+                // Image.
+                $imageobject  = $section->skin->get_edit_image();
+                $this->imgsrc = $imageobject->imgsrc;
+                $this->imgalt = $imageobject->imgalt;
+
+            }
 
             // Title
             $this->title = $this->tooltip;
 
-            // Enable drag and drop.
+            // Enable drag and drop (except for section 0).
             $this->requiresectionhtmlforjs = true;
-            $this->draggable               = true;
-            $this->droppable               = true;
+            $this->draggable               = $isnotglobalsection;
+            $this->droppable               = $isnotglobalsection;
 
             // Add selected class on current section or first.
             $sectiontoselect = $contexthelper->get_section_id();
-            $sectiontoselect = $sectiontoselect > 0 ? $sectiontoselect : 1;
+            $sectiontoselect = $sectiontoselect > 0 ? $sectiontoselect : 0;
             $this->selected = $section->section == $sectiontoselect;
 
         } else {

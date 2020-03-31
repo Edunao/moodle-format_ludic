@@ -26,7 +26,7 @@ namespace format_ludic\coursemodule;
 
 defined('MOODLE_INTERNAL') || die();
 
-class inline extends \format_ludic\skin {
+class menubar extends \format_ludic\skin {
 
     /**
      * @return \stdClass
@@ -34,26 +34,26 @@ class inline extends \format_ludic\skin {
     public function get_edit_image() {
         global $CFG;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/inline.png",
-                'imgalt' => 'In page'
+                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/menubar.png",
+                'imgalt' => 'Menu bar'
         ];
     }
 
     /**
      * Return an instance of this class.
      *
-     * @return inline
+     * @return menubar
      * @throws \coding_exception
      * @throws \dml_exception
      * @throws \moodle_exception
      */
     static public function get_instance() {
         return new self((object) [
-                'id'          => FORMAT_LUDIC_CM_SKIN_INLINE_ID,
+                'id'          => FORMAT_LUDIC_CM_SKIN_MENUBAR_ID,
                 'location'    => 'coursemodule',
-                'type'        => 'inline',
-                'title'       => get_string('cm-skin-inline-title', 'format_ludic'),
-                'description' => get_string('cm-skin-inline-description', 'format_ludic')
+                'type'        => 'menubar',
+                'title'       => get_string('cm-skin-menubar-title', 'format_ludic'),
+                'description' => get_string('cm-skin-menubar-description', 'format_ludic')
         ]);
     }
 
@@ -66,19 +66,12 @@ class inline extends \format_ludic\skin {
         return false;
     }
 
-
-    /**
-     * @inheritDoc
-     */
     public function get_images_to_render() {
-        // TODO: Implement get_images_to_render() method.
+        return [];
     }
 
-    /**
-     * @inheritDoc
-     */
     public function get_texts_to_render() {
-        // TODO: Implement get_texts_to_render() method.
+        return [];
     }
 }
 

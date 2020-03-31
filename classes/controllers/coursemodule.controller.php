@@ -26,8 +26,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
 class coursemodule_controller extends controller_base {
 
     /**
@@ -114,4 +112,30 @@ class coursemodule_controller extends controller_base {
         return $dbapi->delete_format_ludic_cm($cmid);
     }
 
+    /**
+     * Return html to displaying a popup with label content.
+     *
+     * @param $cmid
+     * @return string
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_label_popup($cmid) {
+        global $PAGE;
+        // Get coursemodule.
+        $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
+
+        // Check course module is a label.
+        if ($coursemodule->cminfo->modname !== 'label') {
+            print_error('course module must be a label');
+        }
+
+        // Render popup.
+        $renderer     = $PAGE->get_renderer('format_ludic');
+        $popupcontent = label_get_coursemodule_info($coursemodule->cminfo)->content;
+        $popup        = $renderer->render_popup('label-popup', $coursemodule->name, $popupcontent);
+
+        // Return popup html.
+        return $popup;
+    }
 }

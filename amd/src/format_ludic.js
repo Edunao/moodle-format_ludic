@@ -295,7 +295,8 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             item.addClass('selected');
             let id = item.data('id');
             let type = item.data('type');
-            if (!id || !type) {
+            let action = item.data('propertiesaction');
+            if (!id || !type || !action) {
                 return false;
             }
             let content = container.find('.container-properties .container-content');
@@ -303,14 +304,11 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.ajaxCall({
                 id: id,
                 controller: type,
-                action: item.data('propertiesaction'),
+                action: action,
                 callback: function (html) {
-                    if (!html) {
-                        return false;
-                    }
                     content.html(html);
                     ludic.initFilepickerComponent(container);
-                    ludic.formChanged = false;
+                    ludic.setFormChanged(false);
 
                     if (item.closest('.format-ludic.ludic-popup').length === 0) {
                         ludic.closeClosestPopup();
@@ -332,7 +330,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // Track when form has been changed.
             body.on('change', '.ludic-form :input', function (e) {
-                ludic.formChanged = true;
+                if (!ludic.formChanged) {
+                    ludic.setFormChanged(true);
+                }
             });
 
             // Display description in select if exists.
@@ -398,7 +398,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                     container.addClass(newClass);
 
                     // Form is up to date.
-                    ludic.formChanged = false;
+                    ludic.setFormChanged(false);
 
                     // Now refresh items.
                     let updateFunction = false;
@@ -602,7 +602,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             $(inputSelectorId).val(newValue);
 
             // Form has been changed.
-            ludic.formChanged = true;
+            ludic.setFormChanged(true);
 
             // Update image url with selected image url.
             let newImgUrl = selectedItem.find('.item-img-container').css('background-image');
@@ -1005,7 +1005,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             console.log(selectorId);
 
             $('#ludic-background').show();
-            $('#ludic-main-container').prepend(html);
+            $('.course-content-header').after(html);
         },
 
         /**
@@ -1102,7 +1102,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         },
 
         /**
-         * Add a loading div
+         * Add a loading div.
          * @param {object} parent jquery object
          */
         addLoading: function (parent) {
@@ -1110,13 +1110,27 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         },
 
         /**
-         * Remove a loading div
+         * Remove a loading div.
          * @param {object} parent jquery object
          */
         removeLoading: function (parent) {
             parent.find('.loading').remove();
-        }
+        },
 
+        /**
+         * set Form Changed.
+         * @param {boolean} value
+         */
+        setFormChanged: function (value) {
+            ludic.formChanged = value;
+
+            // When form is changed, disable buttons except Save and Revert.
+            // When form is not changes, enable buttons.
+            let buttons = $('.container-buttons button:not(.form-save):not(.form-revert)');
+            buttons.each(function (id, button) {
+                $(button).attr('disabled', value);
+            })
+        }
     };
     return ludic;
 });

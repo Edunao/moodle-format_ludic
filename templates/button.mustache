@@ -15,7 +15,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 <button type="button" class="ludic-button{{#hassubbuttons}}
-show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass}}"
+show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass}} {{identifier}}"
     data-identifier="{{identifier}}"
     {{#buttonid}}id="{{buttonid}}"{{/buttonid}}
     {{#itemtype}}data-itemtype="{{itemtype}}"{{/itemtype}}
@@ -33,7 +33,7 @@ show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass
 {{#hassubbuttons}}
     <div class="container-sub-buttons hide" for="{{identifier}}">
         {{#subbuttons}}
-            <button type="button" class="ludic-button sub-buttons" data-identifier="{{identifier}}"
+            <button type="button" class="ludic-button sub-button {{identifier}}" data-identifier="{{identifier}}"
                 {{#buttonid}}id="{{buttonid}}"{{/buttonid}}
                 {{#itemtype}}data-itemtype="{{itemtype}}"{{/itemtype}}
                 {{#itemid}}data-itemid="{{itemid}}"{{/itemid}}

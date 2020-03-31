@@ -26,8 +26,6 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
 class section_controller extends controller_base {
 
     /**
@@ -73,7 +71,7 @@ class section_controller extends controller_base {
     public function get_course_sections() {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
-        return $renderer->render_course_sections();
+        return $renderer->render_course_sections(true);
     }
 
     /**
@@ -88,9 +86,9 @@ class section_controller extends controller_base {
         global $PAGE;
 
         // Get data.
-        $renderer      = $PAGE->get_renderer('format_ludic');
-        $section       = $this->contexthelper->get_section_by_id($sectionid);
-        $course        = $this->contexthelper->get_moodle_course();
+        $renderer = $PAGE->get_renderer('format_ludic');
+        $section  = $this->contexthelper->get_section_by_id($sectionid);
+        $course   = $this->contexthelper->get_moodle_course();
 
         $output = $renderer->render_course_modules($sectionid, $selectedcmid);
 
@@ -115,8 +113,15 @@ class section_controller extends controller_base {
         global $PAGE;
 
         // Get data.
-        $renderer    = $PAGE->get_renderer('format_ludic');
-        $section     = $this->contexthelper->get_section_by_id($sectionid);
+        $renderer = $PAGE->get_renderer('format_ludic');
+        $section  = $this->contexthelper->get_section_by_id($sectionid);
+
+        // There is no properties to edit for section 0.
+        if ($section->section == 0) {
+            return '';
+        }
+
+        // Get edit buttons.
         $editbuttons = $section->get_edit_buttons();
 
         // Render section form with edit buttons.
@@ -144,8 +149,13 @@ class section_controller extends controller_base {
         // Keep old section id to render his course modules.
         $oldsectionid = $coursemodule->sectionid;
 
-        // Move a course module to another section.
-        $isvisible = $coursemodule->move_to_section($sectionid);
+        // Can't move a course module from section 0.
+        if ($coursemodule->section->section > 0) {
+
+            // Move a course module to another section.
+            $isvisible = $coursemodule->move_to_section($sectionid);
+
+        }
 
         // Return course modules html.
         return $this->get_course_modules($oldsectionid);
@@ -189,12 +199,15 @@ class section_controller extends controller_base {
         // Get section to move.
         $sectiontomove = $this->contexthelper->get_section_by_id($sectionidtomove);
 
-        // Get section idx to move after.
-        $dbapi           = $this->contexthelper->get_database_api();
-        $aftersectionidx = $dbapi->get_section_idx_by_id($aftersectionid);
+        // Can't move section 0.
+        if ($sectiontomove->section > 0) {
+            // Get section idx to move after.
+            $dbapi           = $this->contexthelper->get_database_api();
+            $aftersectionidx = $dbapi->get_section_idx_by_id($aftersectionid);
 
-        // Move section after section.
-        $sectiontomove->move_section_to($aftersectionidx);
+            // Move section after section.
+            $sectiontomove->move_section_to($aftersectionidx);
+        }
 
         // Return course section html.
         return $this->get_course_sections();
@@ -209,6 +222,8 @@ class section_controller extends controller_base {
      * @param $data
      * @return false|string
      * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function validate_form($sectionid, $data) {
         // Create form.
@@ -243,8 +258,8 @@ class section_controller extends controller_base {
         // Get section.
         $section = $this->contexthelper->get_section_by_id($sectionid);
 
-        // Undefined section, return false.
-        if (!$section) {
+        // Undefined section or section 0, return false.
+        if (!$section || $section->section == 0) {
             return false;
         }
 
@@ -308,14 +323,29 @@ class section_controller extends controller_base {
         return $dbapi->delete_section_skin_id($sectionid);
     }
 
-
-    public function get_section_view_of_student($sectionid){
+    /**
+     * Render student section view in a popup.
+     *
+     * @param $sectionid
+     * @return mixed
+     * @throws \coding_exception
+     */
+    public function get_section_view_of_student($sectionid) {
         global $PAGE;
-        $renderer = $PAGE->get_renderer('format_ludic');
+
+        // Force student view.
         $this->contexthelper->enable_student_view();
-        $popupcontent = $renderer->render_section_page($sectionid);
-        $popup = $renderer->render_popup('section-popup', get_string('section-preview', 'format_ludic'), $popupcontent);
+
+        // Render section in popup.
+        $renderer     = $PAGE->get_renderer('format_ludic');
+        $popupcontent = $renderer->render_header_bar();
+        $popupcontent .= $renderer->render_section_page($sectionid);
+        $popup        = $renderer->render_popup('section-popup', get_string('section-preview', 'format_ludic'), $popupcontent);
+
+        // Disable force student view.
         $this->contexthelper->disable_student_view();
+
+        // Return section in popup.
         return $popup;
     }
 }

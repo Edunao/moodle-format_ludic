@@ -26,17 +26,10 @@ defined('MOODLE_INTERNAL') || die();
 
 $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
 
-$courseid  = $contexthelper->get_course_id();
 $context   = $contexthelper->get_course_context();
 $editmode  = $contexthelper->is_editing();
 $sectionid = $contexthelper->get_section_id();
 
-$params = [
-        'courseid'  => $courseid,
-        'userid'    => $USER->id,
-        'editmode'  => $editmode,
-        'sectionid' => $sectionid
-];
 
 $PAGE->set_context($context);
 
@@ -303,8 +296,3 @@ if ($editmode) {
         echo $renderer->render_page();
     }
 }
-
-// Requires format ludic javascript.
-$PAGE->requires->strings_for_js(format_ludic_get_strings_for_js($editmode), 'format_ludic');
-$PAGE->requires->js('/course/format/ludic/format.js');
-$PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init', ['params' => $params]);

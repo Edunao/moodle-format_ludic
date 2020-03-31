@@ -31,5 +31,26 @@
         ]
     }
 }}
+{{#display}}
+    <div id="ludic-header-bar" class="format-ludic header-bar">
+        {{#hasoptions}}
+             <div class="sub-buttons show-sub-buttons" data-action="showSubButtons" data-identifier="ludic-buttons">
+                <span class="title">L</span>
+            </div>
 
-<div class="format-ludic header-bar"></div>
+        {{/hasoptions}}
+    </div>
+
+    {{#hasoptions}}
+        <div class="container-sub-buttons hide" for="ludic-buttons">
+            {{#optionslist}}
+                <div class="sub-button" data-action="{{action}}"{{#link}} data-link="{{link}}"{{/link}}{{#controller}}
+                     data-controller="{{controller}}"{{/controller}}{{#callback}} data-callback="{{callback}}"{{/callback}}{{#id}} data-id="{{id}}"{{/id}}>
+                    <span class="sub-icon" style="background-image: url('{{iconsrc}}')" aria-label="{{iconsrc}}"></span>
+                    <span class="sub-title">{{name}}</span>
+                </div>
+            {{/optionslist}}
+        </div>
+    {{/hasoptions}}
+
+{{/display}}

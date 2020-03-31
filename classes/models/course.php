@@ -44,10 +44,12 @@ class course extends model {
     /**
      * Return array of course sections.
      *
+     * @param bool $globalsection
      * @return section[]
+     * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function get_sections() {
+    public function get_sections($globalsection = false) {
 
         // Get sections.
         $dbapi = $this->contexthelper->get_database_api();
@@ -58,7 +60,7 @@ class course extends model {
         foreach ($sectionrecords as $section) {
 
             // Ignore section 0.
-            if ($section->section == 0) {
+            if (!$globalsection && $section->section == 0) {
                 continue;
             }
 

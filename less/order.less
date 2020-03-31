@@ -2,8 +2,8 @@
   @iterations: 100;
   .data-order-loop (@i) when (@i > 0) {
     [data-order="@{i}"] {
-        order: ~"@{i}";
-      }
+      order: ~"@{i}";
+    }
     .data-order-loop(@i - 1);
   }
   .data-order-loop (@iterations);

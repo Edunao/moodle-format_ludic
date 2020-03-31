@@ -23,6 +23,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
+
 require_once($CFG->dirroot . '/course/format/renderer.php');
 
 /**
@@ -60,14 +61,14 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
-     * Generate the title for this section page
+     * Generate the title for this section page.
+     * No longer used kept for legacy versions.
      *
      * @return string the page title
+     * @throws coding_exception
      */
     protected function page_title() {
-        // TODO !
-        // Old : get_string('topicoutline'); .
-        return 'page title';
+        return get_string('topicoutline', 'format_ludic');
     }
 
     /**
@@ -348,7 +349,7 @@ class format_ludic_renderer extends format_section_renderer_base {
                 'globaldescription'   => $this->contexthelper->get_global_description(),
                 'parentstype'         => 'section',
                 'parentscontent'      => $this->render_course_sections(),
-                'globalcoursemodules' => $this->render_course_modules( $this->contexthelper->get_global_section_id())
+                'globalcoursemodules' => $this->render_course_modules($this->contexthelper->get_global_section_id())
         ]);
     }
 
@@ -364,6 +365,20 @@ class format_ludic_renderer extends format_section_renderer_base {
                 'coursemodules' => $this->render_course_modules($sectionid),
                 'description'   => $sectionobj->get_description()
         ]);
+    }
+
+    public function render_header_bar() {
+        $headerbar = new format_ludic_header_bar();
+        return $this->render($headerbar);
+    }
+
+    /**
+     * @param format_ludic_header_bar $element
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_header_bar(format_ludic_header_bar $element) {
+        return $this->render_from_template('format_ludic/header_bar', $element);
     }
 
     /**
@@ -459,14 +474,16 @@ class format_ludic_renderer extends format_section_renderer_base {
     /**
      * Render course sections of current course.
      *
+     * @param bool $globalsection
      * @return string
      * @throws coding_exception
+     * @throws dml_exception
      * @throws moodle_exception
      */
-    public function render_course_sections() {
+    public function render_course_sections($globalsection = false) {
         // Get data.
         $course   = $this->contexthelper->get_course();
-        $sections = $course->get_sections();
+        $sections = $course->get_sections($globalsection);
 
         // Render sections.
         $output = '';
@@ -514,8 +531,14 @@ class format_ludic_renderer extends format_section_renderer_base {
                 }
 
                 // In course module skin type is "inline", render it inline.
-                if ($coursemodule->skin->type === 'inline') {
+                if ($coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
                     $renderable = new format_ludic_course_module_inline($coursemodule);
+                }
+
+                // Skins menubar and stealth are render differently.
+                if ($coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_MENUBAR_ID ||
+                    $coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_STEALTH_ID) {
+                    continue;
                 }
 
             }

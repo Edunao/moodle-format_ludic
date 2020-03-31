@@ -75,7 +75,7 @@ class format_ludic_course_module extends format_ludic_item {
 
             // Redirect to course module on click.
             if (!$contexthelper->is_student_view_forced()) {
-                $this->link   = $CFG->wwwroot . '/mod/' . $coursemodule->cminfo->modname . '/view.php?id=' . $coursemodule->id;
+                $this->link   = $coursemodule->get_link();
                 $this->action = 'getDataLinkAndRedirectTo';
             }
 

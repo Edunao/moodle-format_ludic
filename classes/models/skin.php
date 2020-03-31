@@ -88,6 +88,10 @@ abstract class skin extends model {
         // Skin id is not in config.
         if ($skinid == FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
             return coursemodule\inline::get_instance();
+        } else if ($skinid == FORMAT_LUDIC_CM_SKIN_MENUBAR_ID) {
+            return coursemodule\menubar::get_instance();
+        } else if ($skinid == FORMAT_LUDIC_CM_SKIN_STEALTH_ID) {
+            return coursemodule\stealth::get_instance();
         }
 
         // Skin id is in config.

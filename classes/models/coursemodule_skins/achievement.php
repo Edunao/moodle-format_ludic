@@ -26,8 +26,6 @@ namespace format_ludic\coursemodule;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
-
 class achievement extends \format_ludic\skin {
 
     /**

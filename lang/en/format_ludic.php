@@ -27,6 +27,8 @@ $string['pluginname']     = 'Ludic';
 $string['hidefromothers'] = 'Hide section';
 $string['showfromothers'] = 'Show section';
 $string['sectionname']    = 'Section';
+$string['section0name']   = 'Menu bar​ &​ Course Overview​';
+$string['topicoutline']   = 'Section';
 
 // Privacy.
 $string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
@@ -34,6 +36,9 @@ $string['privacy:metadata'] = 'The Ludic format plugin does not store any person
 // Course format options.
 $string['ludicconfiglabel']     = 'Ludic course configuration data';
 $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
+
+// Header bar.
+$string['header-bar-preview-section']  = 'Preview section';
 
 // Section edition.
 $string['default-section-title']  = 'Section {$a}';
@@ -72,6 +77,10 @@ $string['access-chained-and-grouped-desc'] = 'The item will become visible at th
 // Skin.
 $string['cm-skin-inline-title']       = 'In page';
 $string['cm-skin-inline-description'] = 'Allows labels and other such activities to be displayed inline';
+$string['cm-skin-menubar-title']       = 'Menu bar';
+$string['cm-skin-menubar-description'] = 'Allows labels and other such activities to be displayed in menu bar';
+$string['cm-skin-stealth-title']       = 'Stealth';
+$string['cm-skin-stealth-description'] = 'Allows labels and other such activities to be stealth in course';
 $string['label-skin-selection']       = 'Appearance';
 
 // Settings.

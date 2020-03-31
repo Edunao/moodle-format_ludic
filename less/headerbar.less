@@ -1,8 +1,52 @@
-#ludic-main-container {
-  .header-bar {
-    min-height: 50px;
-    width: 100%;
-    border: 1px solid black;
-    margin-bottom: 10px;
+#ludic-header-bar {
+  min-height: 50px;
+  width: 100%;
+  border: 1px solid black;
+  margin-bottom: 10px;
+
+  .sub-buttons {
+    .title {
+      line-height: 50px;
+      margin-left: 20px;
+      border: 2px solid purple;
+      padding: 6px 12px;
+      border-radius: 30px;
+      font-weight: bolder;
+      color: purple;
+      font-size: 24px;
+    }
+  }
+}
+
+.container-sub-buttons[for="ludic-buttons"] {
+  border: 1px solid black;
+  border-top: none;
+  border-bottom: none;
+  max-width: 300px;
+  margin-top: -10px;
+  margin-bottom: 10px;
+
+  .sub-button {
+    display: flex;
+    padding: 5px 5px 5px 15px;
+    border-bottom: 1px solid black;
+    text-decoration: none;
+    background-color: transparent;
+    height: 35px;
+    line-height: 25px;
+
+    .sub-icon {
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      margin: 2.5px 15px 2.5px 0;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
