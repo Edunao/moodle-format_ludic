@@ -30,9 +30,9 @@ $context   = $contexthelper->get_course_context();
 $editmode  = $contexthelper->is_editing();
 $sectionid = $contexthelper->get_section_id();
 
-
 $PAGE->set_context($context);
 
+$defaultimage = $CFG->wwwroot . '/course/format/ludic/pix/default.svg';
 $staticconfig = [
         'skins' => [
                 11 => [
@@ -45,7 +45,8 @@ $staticconfig = [
                                 'steps' => [
                                         [
                                                 'threshold' => 0,
-                                                'imgsrc'    => 'https://cdn1.iconfinder.com/data/icons/security-add-on-colored/48/JD-09-512.png', 'imgalt' => ''
+                                                'imgsrc'    => 'https://cdn1.iconfinder.com/data/icons/security-add-on-colored/48/JD-09-512.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 10,
@@ -77,10 +78,13 @@ $staticconfig = [
                                         ],
                                         [
                                                 'threshold' => 100,
-                                                'imgsrc'    => 'https://www.clipartmax.com/png/middle/275-2750625_chest-icon-treasure-chest-icon-png.png', 'imgalt' => ''
+                                                'imgsrc'    => 'https://www.clipartmax.com/png/middle/275-2750625_chest-icon-treasure-chest-icon-png.png',
+                                                'imgalt'    => ''
                                         ]
                                 ],
-                                'css'   => '{background-color: #000;}'
+                                'css'   => '
+                                {background-color: aliceblue;} .sub-tile.skin-tile {background-color: beige;}
+                                .sub-tile.title-tile .skin-text {font-size:30px;}'
                         ]
                 ],
                 12 => [
@@ -88,47 +92,63 @@ $staticconfig = [
                         'location'    => 'section',
                         'type'        => 'score',
                         'title'       => 'Coffre au trésor',
-                        'description' => 'Ce coffre stock des trésors',
+                        'description' => 'Ce coffre stock des trésors. 
+                        Commence avec un coffre vide, gagne un numéro tous les 10%.
+                        Termine avec un grand coffre !',
                         'properties'  => [
                                 'steps' => [
                                         [
                                                 'threshold' => 0,
-                                                'imgsrc'    => 'https://i.pinimg.com/originals/6a/1d/f3/6a1df304403e15c9a4b499e8539853ec.jpg', 'imgalt' => ''
+                                                'imgsrc'    => 'https://i.pinimg.com/originals/6a/1d/f3/6a1df304403e15c9a4b499e8539853ec.jpg',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 10,
-                                                'imgsrc'    => 'https://picsum.photos/id/201/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/1-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 20,
-                                                'imgsrc'    => 'https://picsum.photos/id/202/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/2-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 30,
-                                                'imgsrc'    => 'https://picsum.photos/id/203/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/3-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 50,
-                                                'imgsrc'    => 'https://picsum.photos/id/204/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/4-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 60,
-                                                'imgsrc'    => 'https://picsum.photos/id/205/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/5-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 70,
-                                                'imgsrc'    => 'https://picsum.photos/id/206/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/6-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 80,
-                                                'imgsrc'    => 'https://picsum.photos/id/209/80/80', 'imgalt' => ''
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/7-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
+                                        ],
+                                        [
+                                                'threshold' => 90,
+                                                'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/8-Number-PNG-Pic.png',
+                                                'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 100,
-                                                'imgsrc'    => 'https://visualpharm.com/assets/324/Treasure%20Chest-595b40b85ba036ed117dacb5.svg', 'imgalt' => ''
+                                                'imgsrc'    => 'https://visualpharm.com/assets/324/Treasure%20Chest-595b40b85ba036ed117dacb5.svg',
+                                                'imgalt'    => ''
                                         ]
                                 ],
-                                'css'   => '{background-color: #efefef;}'
+                                'css'   => '{background-color: yellow;}'
                         ],
                 ],
                 14 => [
@@ -142,27 +162,29 @@ $staticconfig = [
                                         [
                                                 'threshold' => 0,
                                                 'scorepart' => 0,
-                                                'extratext'      => 'tu as entre 0 et 9.99',
+                                                'extratext' => 'tu as entre 0 et 9.99',
+                                                'extracss'  => '{background-color: black;}',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/4.png',
                                                 'imgalt'    => ''
                                         ],
                                         [
-                                                'threshold' => 10,
-                                                'scorepart' => 50,
-                                                'extratext'      => 'tu as entre 10 et 19.99',
+                                                'threshold' => 50,
+                                                'scorepart' => 1,
+                                                'extratext' => 'tu as entre 10 et 19.99',
+                                                'extracss'  => '{background-color: blue;}',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/5.png',
                                                 'imgalt'    => ''
                                         ],
                                         [
-                                                'threshold' => 20,
-                                                'scorepart' => 100,
-                                                'extratext'      => 'tu as 20, bravo',
+                                                'threshold' => 100,
+                                                'scorepart' => 1,
+                                                'extratext' => 'tu as 20, bravo',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/6.png',
                                                 'imgalt'    => ''
                                         ]
                                 ],
-                                'linearscorepart' => 0.5,
-                                'css'             => '{background-color: red;}'
+                                'linearscorepart' => 1,
+                                'css'             => '{background-color: red;} .skin-img {    background-size: 20%;} .skin-text {color: black;}.title-tile {border-top: 1px solid blue;}'
                         ]
                 ],
                 13 => [
@@ -174,29 +196,31 @@ $staticconfig = [
                         'properties'  => [
                                 'steps'           => [
                                         [
-                                                'threshold' => 5,
+                                                'threshold' => 0,
                                                 'scorepart' => 0,
-                                                'extratext'      => 'tu as entre 0 et 9.99',
+                                                'extratext' => 'tu as entre 0 et 9.99',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/1.png',
                                                 'imgalt'    => ''
                                         ],
                                         [
-                                                'threshold' => 10,
-                                                'scorepart' => 50,
-                                                'extratext'      => 'tu as entre 10 et 19.99',
+                                                'threshold' => 70,
+                                                'scorepart' => 1,
+                                                'extratext' => 'tu as entre 10 et 19.99',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/2.png',
                                                 'imgalt'    => ''
                                         ],
                                         [
-                                                'threshold' => 20,
-                                                'scorepart' => 100,
-                                                'extratext'      => 'tu as 20, bravo',
+                                                'threshold' => 100,
+                                                'scorepart' => 1,
+                                                'extratext' => 'tu as 20, bravo',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/3.png',
                                                 'imgalt'    => ''
                                         ]
                                 ],
-                                'linearscorepart' => 1,
-                                'css'             => '{background-color: green;}'
+                                'linearscorepart' => 2,
+                                'css'             => '{background-color: green;}
+                                  .skin-img {    background-size: 110%;}
+                                 .skin-text {color: yellow;} .title-tile {border-top: 4px solid red;}'
                         ],
                 ],
                 16 => [
@@ -210,27 +234,27 @@ $staticconfig = [
                                         [
                                                 'threshold' => 0,
                                                 'scorepart' => 0,
-                                                'extratext'      => 'tu as entre 0 et 9.99',
+                                                'extratext' => 'tu as entre 0 et 9.99',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/7.png',
                                                 'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 10,
-                                                'scorepart' => 50,
-                                                'extratext'      => 'tu as entre 10 et 19.99',
+                                                'scorepart' => 1,
+                                                'extratext' => 'tu as entre 10 et 19.99',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/8.png',
                                                 'imgalt'    => ''
                                         ],
                                         [
                                                 'threshold' => 20,
-                                                'scorepart' => 100,
-                                                'extratext'      => 'tu as 20, bravo',
+                                                'scorepart' => 1,
+                                                'extratext' => 'tu as 20, bravo',
                                                 'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/9.png',
                                                 'imgalt'    => ''
                                         ]
                                 ],
-                                'linearscorepart' => 0.5,
-                                'css'             => '{background-color: red;}'
+                                'linearscorepart' => 4,
+                                'css'             => '{background-color: blue;} .skin-text {color: white;} .title-tile {border-top: 2px solid yellow;}'
                         ]
                 ],
                 15 => [
@@ -274,7 +298,79 @@ $staticconfig = [
                                                 'extratext' => 'Kadabra'
                                         ]
                                 ],
-                                'css'   => '{background-color: purple;}'
+                                'css'   => '{background-color: purple;} .skin-text {color: white;}'
+                        ]
+                ],
+                17 => [
+                        'id'          => 17,
+                        'location'    => 'section',
+                        'type'        => 'collection',
+                        'title'       => 'Chaque pokémon évolue',
+                        'description' => 'Collectionne et fais évoluer les pokémons.',
+                        'properties'  => [
+                                'baseimage'   => ['imgsrc' => 'https://i.ytimg.com/vi/XSPntFQODQQ/maxresdefault.jpg', 'imgalt' => ''],
+                                'finalimage'  => ['imgsrc' => 'https://images-na.ssl-images-amazon.com/images/I/71xp01I1uML.jpg', 'imgalt' => ''],
+                                'stampimages' => [
+                                        [
+                                                'index'                    => 1,
+                                                'completion-incomplete'    => ['imgsrc' => $defaultimage, 'imgalt' => ''],
+                                                'completion-complete'      => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/2.png',
+                                                        'imgalt' => ''
+                                                ],
+                                                'completion-complete-pass' => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/3.png',
+                                                        'imgalt' => ''
+                                                ],
+                                                'completion-complete-fail' => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/1.png',
+                                                        'imgalt' => ''
+                                                ],
+                                        ],
+                                        [
+                                                'index'                    => 2,
+                                                'completion-incomplete'    => ['imgsrc' => $defaultimage, 'imgalt' => ''],
+                                                'completion-complete'      => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/5.png',
+                                                        'imgalt' => ''
+                                                ],
+                                                'completion-complete-pass' => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/6.png',
+                                                        'imgalt' => ''
+                                                ],
+                                                'completion-complete-fail' => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/4.png',
+                                                        'imgalt' => ''
+                                                ],
+                                        ],
+                                        [
+                                                'index'                    => 3,
+                                                'completion-incomplete'    => ['imgsrc' => $defaultimage, 'imgalt' => ''],
+                                                'completion-complete'      => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/8.png',
+                                                        'imgalt' => ''
+                                                ],
+                                                'completion-complete-pass' => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/9.png',
+                                                        'imgalt' => ''
+                                                ],
+                                                'completion-complete-fail' => [
+                                                        'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/7.png',
+                                                        'imgalt' => ''
+                                                ],
+                                        ],
+                                ],
+                                'stampcss'    => [
+                                        ['number' => 1, 'css' => '{background-color: green;}'],
+                                        ['number' => 2, 'css' => '{background-color: blue;}'],
+                                        ['number' => 3, 'css' => '{background-color: red;}'],
+                                        ['number' => 4, 'css' => '{background-color: black;}'],
+                                        ['number' => 5, 'css' => '{background-color: beige;}'],
+                                        ['number' => 6, 'css' => '{background-color: aliceblue;}'],
+                                ],
+                                'css'         => '{background-color: purple;} .skin-text {color: white;} 
+                                .skin-img.img-0 {filter: grayscale(1);}
+                                .skin-img.img-1 {width:33%;left:0;}.skin-img.img-2 {width:33%;right:0;}'
                         ]
                 ]
         ]

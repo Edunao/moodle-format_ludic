@@ -40,6 +40,7 @@ class format_ludic_header_bar implements renderable {
      */
     private $coursemodules = null;
 
+    public $notstudentview;
     public $optionslist;
     public $hasoptions;
     public $display;
@@ -52,14 +53,16 @@ class format_ludic_header_bar implements renderable {
     public function __construct() {
         global $PAGE, $USER;
 
-        $this->contexthelper = \format_ludic\context_helper::get_instance($PAGE);
-        $this->optionslist   = $this->get_options_list();
-        $this->hasoptions    = count($this->optionslist) > 0;
-        $editmode            = $this->contexthelper->is_editing();
+        $this->contexthelper  = \format_ludic\context_helper::get_instance($PAGE);
+        $this->optionslist    = $this->get_options_list();
+        $this->hasoptions     = count($this->optionslist) > 0;
+        $this->notstudentview = !$this->contexthelper->is_student_view_forced();
+        $editmode             = $this->contexthelper->is_editing();
 
         // Don't display header bar in edit mode or if empty.
-        $this->display = !$editmode && $this->hasoptions;
+        $this->display = $this->hasoptions;
 
+        // Javascript parameters.
         $params = [
                 'courseid'  => $this->contexthelper->get_course_id(),
                 'userid'    => $USER->id,
@@ -82,12 +85,15 @@ class format_ludic_header_bar implements renderable {
      */
     public function get_options_list() {
 
+        // Get all options.
         $coursemoduleslist = $this->get_course_modules_list();
         $studentlist       = $this->get_student_options_list();
         $teacherlist       = $this->get_teacher_options_list();
 
+        // Merge options.
         $list = array_merge($studentlist, $teacherlist, $coursemoduleslist);
 
+        // Return options.
         return $list;
     }
 
@@ -185,7 +191,8 @@ class format_ludic_header_bar implements renderable {
 
         // Exit in different cases.
         if (!$this->contexthelper->user_has_student_role() ||
-            $this->contexthelper->get_location() != 'coursemodule') {
+            $this->contexthelper->get_location() != 'coursemodule' ||
+            $this->contexthelper->get_section_idx() <= 0) {
 
             // If current user is not student, don't show options.
             // Add an option only in course module.
@@ -223,6 +230,7 @@ class format_ludic_header_bar implements renderable {
      * @return array
      * @throws coding_exception
      * @throws dml_exception
+     * @throws moodle_exception
      */
     private function get_teacher_options_list() {
         global $OUTPUT, $CFG;
@@ -284,9 +292,11 @@ class format_ludic_header_bar implements renderable {
 
             // Don't add action in preview student view.
             if (!$this->contexthelper->is_student_view_forced()) {
+                $returnurl = urlencode($this->contexthelper->get_current_url());
 
                 // To "unswitch" pass 0 as the roleid. To switch to student pass student role id.
-                $switchlink = $CFG->wwwroot . '/course/switchrole.php?id=' . $courseid . '&sesskey=' . sesskey() . '&switchrole=';
+                $switchlink = $CFG->wwwroot . '/course/switchrole.php?id=' . $courseid . '&sesskey=' . sesskey();
+                $switchlink .= '&returnurl=' . $returnurl . '&switchrole=';
                 $switchlink .= $isstudent ? '0' :
                         $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
 

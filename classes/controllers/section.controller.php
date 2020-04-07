@@ -116,11 +116,6 @@ class section_controller extends controller_base {
         $renderer = $PAGE->get_renderer('format_ludic');
         $section  = $this->contexthelper->get_section_by_id($sectionid);
 
-        // There is no properties to edit for section 0.
-        if ($section->section == 0) {
-            return '';
-        }
-
         // Get edit buttons.
         $editbuttons = $section->get_edit_buttons();
 
@@ -154,7 +149,6 @@ class section_controller extends controller_base {
 
             // Move a course module to another section.
             $isvisible = $coursemodule->move_to_section($sectionid);
-
         }
 
         // Return course modules html.

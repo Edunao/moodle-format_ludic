@@ -65,15 +65,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         initEvents: function () {
             console.log('initEvents');
 
-            //
-            // For each element with data-action attribute.
-            //
-            // If there is a controller and an action makes an ajax call to the controller defined in data-controller
-            // with the action defined in data-action.
-            // Then call a callback function defined in data-callback.
-            //
-            // Else if there is only an action call javascript function defined in data-action.
-            //
             ludic.initLudicActionEvent();
 
             // If we are in edit mode, initialize related events.
@@ -93,8 +84,8 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          */
         initLudicActionEvent: function () {
 
-            //  Click on element with data-action attribute.
-            $('body.format-ludic').on('click', '[data-action]', function () {
+            // Click on element with data-action attribute.
+            $('body.format-ludic').on('click', '[data-action]', function (e) {
 
                 // Get data.
                 let item = $(this);
@@ -130,7 +121,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                                 // Ensures that response is an object.
                                 let isHtml = /<\/?[a-z][\s\S]*>/i.test(response);
-                                let responseParams = isHtml ? {html: response} : response;
+                                let responseParams = isHtml ? {html : response} : response;
                                 responseParams = typeof params === "object" ? responseParams : JSON.parse(responseParams);
 
                                 // Merge params (initial params + ajax response).
@@ -292,11 +283,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let item = $('#' + itemid);
             let container = item.closest('.container-items');
             container.find('.item.selected').removeClass('selected');
+            container.find('.item.pre-selected').removeClass('pre-selected');
             item.addClass('selected');
             let id = item.data('id');
             let type = item.data('type');
             let action = item.data('propertiesaction');
-            if (!id || !type || !action) {
+            if (!id || !type || !action) {
                 return false;
             }
             let content = container.find('.container-properties .container-content');
@@ -347,16 +339,29 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         },
 
         /**
-         * When item is added with selected class, click on it by default.
+         * Events for selected class.
          */
-        initClickOnSelectedItemEvent: function () {
-            $('body.format-ludic').on('DOMNodeInserted', function (e) {
+        initSelectedEvents: function () {
+
+            let body = $('body.format-ludic');
+
+            // When item is added with selected class, click on it by default.
+            body.on('DOMNodeInserted', function (e) {
                 let selectedItem = $(e.target).find('.item.selected').addBack('.item.selected');
                 if (selectedItem.length) {
                     console.log('click on selected item added', selectedItem);
                     selectedItem.click();
                 }
             });
+
+            // When you click on a child item, add a pre-selected class to his parent.
+            body.on('click', '.container-children .item.child', function (e) {
+                let parentId = $(this).data('parentid');
+                let parent = $('.container-parents .item.parent[data-id="' + parentId + '"]');
+                $('.container-parents .item').removeClass('pre-selected');
+                parent.addClass('pre-selected');
+            });
+
         },
 
         /**
@@ -445,15 +450,29 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * @param {jquery} button
          */
         showSubButtons: function (button) {
-            let identifier = $(button).data('identifier');
+
+            // Update class and action.
             $(button).removeClass('show-sub-buttons');
             $(button).addClass('hide-sub-buttons');
+            $(button).data('action', 'hideSubButtons');
+
+            // Update the icon (if there is one).
+            let icon = $(button).find('i');
+            if (icon.length) {
+                icon.addClass('fa-minus-square');
+                icon.removeClass('fa-plus-square');
+            }
+
+            // Find sub buttons.
+            let identifier = $(button).data('identifier');
             let subButtons = $('.container-sub-buttons[for="' + identifier + '"]');
+
+            // Resize sub buttons.
             subButtons.outerWidth($(button).outerWidth());
             subButtons.css('top', $(button).position().top + $(button).outerHeight());
-            subButtons.css('left', $(button).position().left);
+
+            // Show sub button.
             subButtons.removeClass('hide');
-            $(button).data('action', 'hideSubButtons');
         },
 
         /**
@@ -462,12 +481,25 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * @param {jquery} button
          */
         hideSubButtons: function (button) {
-            let identifier = $(button).data('identifier');
+
+            // Update class and action.
             $(button).removeClass('hide-sub-buttons');
             $(button).addClass('show-sub-buttons');
-            let subButtons = $('.container-sub-buttons[for="' + identifier + '"]');
-            subButtons.addClass('hide');
             $(button).data('action', 'showSubButtons');
+
+            // Update the icon (if there is one).
+            let icon = $(button).find('i');
+            if (icon.length) {
+                icon.removeClass('fa-minus-square');
+                icon.addClass('fa-plus-square');
+            }
+
+            // Find sub buttons.
+            let identifier = $(button).data('identifier');
+            let subButtons = $('.container-sub-buttons[for="' + identifier + '"]');
+
+            // Hide sub buttons.
+            subButtons.addClass('hide');
         },
 
         /**
@@ -633,7 +665,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.initSaveLastItemClickedEvents();
 
             // When item is added with .selected class, click on it by default.
-            ludic.initClickOnSelectedItemEvent();
+            ludic.initSelectedEvents();
         },
 
         /**
@@ -728,8 +760,13 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         clickOnLastItemClicked: function () {
             console.log('clickOnLastItemClicked', window.location);
 
-            // If an anchor is specified click on it.
+            // If an anchor or section is specified click on it.
             let anchor = window.location.hash.substr(1);
+            let section = ludic.get_url_param('section', window.location.href);
+            // Section parameter has priority over anchor.
+            if (section !== null) {
+                anchor = 'section-' + section;
+            }
             let lastCLick = '#ludic-' + anchor;
 
             // Course Module is added.
@@ -860,6 +897,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
         /**
          * Initialize the filepicker component.
+         *
          * @param {object} container jQuery element - where are filepickers
          */
         initFilepickerComponent: function (container) {
@@ -922,7 +960,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // In edit view, we have to check some parameters (user is editing, wait moodle mod chooser is ready).
             // If the form has been updated, we ensure that the user has confirmed his choice to leave the edition
-            // before showing him the course modules
+            // before showing him the course modules.
             let userConfirmation = setInterval(function () {
 
                 // While ludic.formChanged is true, we are waiting user confirmation.
@@ -991,6 +1029,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             window.location.href = url;
         },
 
+        /**
+         * Reload current page.
+         */
         reload: function () {
             window.location.reload()
         },
@@ -1005,7 +1046,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             console.log(selectorId);
 
             $('#ludic-background').show();
-            $('.course-content-header').after(html);
+            $('#ludic-background').after(html);
         },
 
         /**
@@ -1128,8 +1169,29 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // When form is not changes, enable buttons.
             let buttons = $('.container-buttons button:not(.form-save):not(.form-revert)');
             buttons.each(function (id, button) {
-                $(button).attr('disabled', value);
+                let hasDataAction = $(button).data('action') !== undefined;
+                console.log('has data action ? ', hasDataAction);
+                let disabled = ludic.formChanged;
+                if (!hasDataAction) {
+                    disabled = true;
+                }
+                $(button).attr('disabled', disabled);
             })
+        },
+
+        /**
+         * Return value of url param
+         *
+         * @param name
+         * @param url
+         * @return string | null | number
+         */
+        get_url_param: function (name, url) {
+            var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
+            if (results === null) {
+                return null;
+            }
+            return decodeURI(results[1]) || 0;
         }
     };
     return ludic;

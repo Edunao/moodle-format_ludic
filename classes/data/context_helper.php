@@ -37,6 +37,9 @@ define('FORMAT_LUDIC_CM_SKIN_MENUBAR_ID', 2);
 // Skin menubar id.
 define('FORMAT_LUDIC_CM_SKIN_STEALTH_ID', 3);
 
+// Skin inline id.
+define('FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID', 10);
+
 
 // Always accessible.
 define('FORMAT_LUDIC_ACCESS_ACCESSIBLE', 1);
@@ -443,16 +446,43 @@ class context_helper {
 
             // We are in course section.
             $location = 'section';
-
         }
 
         return $location;
     }
 
     /**
+     * Get current url.
+     *
+     * @return string
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_current_url() {
+        $location = $this->get_location();
+        switch ($location) {
+            case 'section':
+                $url = new \moodle_url('/course/view.php', array('id' => $this->get_course_id(), 'section' => $this->get_section_idx()));
+                break;
+            case 'coursemodule':
+                $cmid    = $this->get_course_module_id();
+                $modname = $this->dbapi->get_module_name_by_course_module_id($cmid);
+                $url = new \moodle_url('/mod/'.$modname.'/view.php', array('id' => $cmid));
+                break;
+            default:
+                $url = new \moodle_url('/course/view.php', array('id' => $this->get_course_id()));
+        }
+
+        return $url->out();
+    }
+
+    /**
      * Return current course context.
      *
      * @return \context_course
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     public function get_course_context() {
         if ($this->context === null) {
@@ -465,6 +495,8 @@ class context_helper {
      * Return current course context id.
      *
      * @return int
+     * @throws \coding_exception
+     * @throws \dml_exception
      */
     public function get_context_id() {
         return $this->get_course_context()->id;
@@ -485,6 +517,7 @@ class context_helper {
      * @param $roleshortname
      * @return bool
      * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function user_has_role_in_course($roleshortname) {
         if (!$roleid = $this->dbapi->get_role_id_by_role_shortname($roleshortname)) {
@@ -498,6 +531,7 @@ class context_helper {
      *
      * @return bool
      * @throws \coding_exception
+     * @throws \dml_exception
      */
     public function user_has_student_role() {
         return !has_capability('moodle/course:manageactivities', $this->get_course_context());
@@ -509,6 +543,7 @@ class context_helper {
      * @param $roleshortnames array
      * @return bool
      * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function user_has_one_role_in_course($roleshortnames) {
         $hasrole = false;
@@ -535,7 +570,18 @@ class context_helper {
     }
 
     /**
+     * Return count of real sections (ignore section 0).
+     *
+     * @return bool
+     * @throws \moodle_exception
+     */
+    public function count_sections() {
+        return count($this->get_sections());
+    }
+
+    /**
      * True if student view is forced, else false.
+     *
      * @return bool
      */
     public function is_student_view_forced() {
@@ -624,6 +670,7 @@ class context_helper {
      * @param $courseid
      * @return course
      * @throws \dml_exception
+     * @throws \coding_exception
      */
     public function get_course_by_id($courseid) {
         if ($courseid === $this->courseid) {
@@ -651,7 +698,6 @@ class context_helper {
      * Get current course section or false.
      *
      * @return bool|section
-     * @throws \coding_exception
      * @throws \dml_exception
      * @throws \moodle_exception
      */
@@ -848,10 +894,11 @@ class context_helper {
 
             // Get ludic config (json).
             $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
+            $ludicconfig = json_decode($ludicconfig);
 
             // Always return an array.
             if (!empty($ludicconfig)) {
-                $this->ludicconfig = get_object_vars(json_decode($ludicconfig));
+                $this->ludicconfig = get_object_vars($ludicconfig);
             } else {
                 $this->ludicconfig = [];
             }
@@ -878,6 +925,9 @@ class context_helper {
      * Get all skins.
      *
      * @return skin[]
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_skins() {
         // Skins that don't depend on the ludic config.
@@ -900,12 +950,17 @@ class context_helper {
     /**
      * Get default skins.
      * They don't depend on the ludic config !
+     * Ignore skin specific to global section.
      *
      * @return skin[]
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_default_skins() {
         return [
-                coursemodule\inline::get_instance()
+                coursemodule\inline::get_instance(),
+                section\noludic::get_instance()
         ];
     }
 
@@ -921,7 +976,7 @@ class context_helper {
         // Keep only section skin.
         $sectionskins = [];
         foreach ($skins as $skin) {
-            if ($skin->location === 'section') {
+            if ($skin->location == 'section') {
                 $sectionskins[$skin->id] = $skin;
             }
         }

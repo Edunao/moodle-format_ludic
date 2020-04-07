@@ -34,14 +34,15 @@ abstract class form_element {
      * @var context_helper
      */
     protected $contexthelper;
-    public    $type;
-    public    $name;
-    public    $id;
-    public    $value;
-    public    $defaultvalue;
-    public    $label;
-    public    $attributes;
-    public    $specific;
+
+    public $type;
+    public $name;
+    public $id;
+    public $value;
+    public $defaultvalue;
+    public $label;
+    public $attributes;
+    public $specific;
 
     // Attributes which are common to all input types but have special behaviors when used on a given input type.
     public $autofocus;

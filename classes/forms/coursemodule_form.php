@@ -116,6 +116,7 @@ class coursemodule_form extends form {
      *
      * @return bool
      * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function update_child() {
         $this->object->update($this->formvalues);

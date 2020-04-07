@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 class inline extends \format_ludic\skin {
 
     /**
+     * Return inline image for course edition.
+     *
      * @return \stdClass
      */
     public function get_edit_image() {
@@ -44,7 +46,6 @@ class inline extends \format_ludic\skin {
      *
      * @return inline
      * @throws \coding_exception
-     * @throws \dml_exception
      * @throws \moodle_exception
      */
     static public function get_instance() {
@@ -66,19 +67,5 @@ class inline extends \format_ludic\skin {
         return false;
     }
 
-
-    /**
-     * @inheritDoc
-     */
-    public function get_images_to_render() {
-        // TODO: Implement get_images_to_render() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function get_texts_to_render() {
-        // TODO: Implement get_texts_to_render() method.
-    }
 }
 

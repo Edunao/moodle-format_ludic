@@ -27,6 +27,9 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->libdir . '/gradelib.php');
+require_once($CFG->libdir . '/completionlib.php');
+
 class data_api {
 
     protected $contexthelper;
@@ -50,34 +53,37 @@ class data_api {
     public function get_course_module_user_grade($cminfo) {
         // Initialize default object.
         $return = (object) [
-                'isgradable'  => false,
-                'grade'       => 0,
-                'grademax'    => 1,
-                'grademin'    => 0,
-                'gradefactor' => 1
+                'grade'      => 0,
+                'grademax'   => 1,
+                'proportion' => 0
         ];
 
-        // Get data for sql query.
+        // Get data for grade api.
         $courseid = $this->contexthelper->get_course_id();
         $modname  = $cminfo->modname;
         $instance = $cminfo->instance;
         $userid   = $this->contexthelper->get_user_id();
 
-        // Get grade from database.
-        $dbapi = $this->contexthelper->get_database_api();
-        $grade = $dbapi->get_course_module_user_grade($courseid, $modname, $instance, $userid);
+        // Get grades.
+        $grades = grade_get_grades($courseid, 'mod', $modname, $instance, $userid);
+        $grades = $grades->items;
 
         // No record, return default object.
-        if (!$grade) {
+        if (count($grades) == 0) {
             return $return;
         }
 
         // Set data and return.
-        $return->isgradable  = true;
-        $return->grade       = $grade->grade !== null ? $grade->grade : $return->grade;
-        $return->grademax    = (float) $grade->grademax;
-        $return->grademin    = (float) $grade->grademin;
-        $return->gradefactor = $grade->usegradefactor === 'used' ? $grade->gradefactor : $return->gradefactor;
+        $grade            = $grades[0];
+        $return->grademax = (float) $grade->grademax;
+        $return->grademax = $return->grademax > 0 ? $return->grademax : 1;
+
+        // Grade is in first item of this array.
+        if (count($grade->grades) > 0) {
+            $grade         = reset($grade->grades);
+            $return->grade = $grade->grade !== null ? $grade->grade : $return->grade;
+            $return->proportion = ($return->grade / $return->grademax);
+        }
 
         return $return;
     }
@@ -93,6 +99,7 @@ class data_api {
     public function get_course_module_user_completion($cminfo) {
         // Initialize default object.
         $return        = (object) [
+                'type'          => COMPLETION_DISABLED,
                 'state'         => COMPLETION_TRACKING_NONE,
                 'completion'    => '',
                 'completionstr' => ''
@@ -140,6 +147,7 @@ class data_api {
 
         // Set data and return.
         $return->state         = $data->completionstate;
+        $return->type          = $hascompletion;
         $return->completion    = $completion;
         $return->completionstr = get_string($completionstr, 'completion');
         return $return;

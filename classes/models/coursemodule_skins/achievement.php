@@ -29,19 +29,19 @@ defined('MOODLE_INTERNAL') || die();
 class achievement extends \format_ludic\skin {
 
     /**
-     * Return best image.
+     * Return best image for course edition.
      *
      * @return \stdClass
      */
     public function get_edit_image() {
-        // TODO default here
+        global $CFG;
         $editimage = (object) [
-                'imgsrc' => '',
-                'imgalt' => 'zzdzz'
+                'imgsrc' => $CFG->wwwroot . '/course/format/ludic/pix/default.svg',
+                'imgalt' => 'Default image.'
         ];
 
-        $steps = $this->get_steps();
-        foreach ($steps as $step) {
+        // Select image for best completion step.
+        foreach ($this->steps as $step) {
             if ($step->state === COMPLETION_COMPLETE_PASS) {
                 $editimage->imgsrc = $step->imgsrc;
                 $editimage->imgalt = $step->imgalt;
@@ -52,24 +52,29 @@ class achievement extends \format_ludic\skin {
     }
 
     /**
-     * Return all images.
+     * Return current completion step.
      *
-     * @return \stdClass[]
+     * @return \stdClass
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
-    public function get_steps() {
-        $properties = $this->get_properties();
-        return isset($properties['steps']) ? $properties['steps'] : [];
-    }
-
     public function get_current_step() {
-        $completioninfo = $this->results['completioninfo'];
-        $steps          = $this->get_steps();
+
+        // Object with state property.
+        $completioninfo = $this->get_completion_info();
+
+        // Current step is step with same completion state.
         $currentstep    = null;
-        foreach ($steps as $step) {
-            if ($currentstep === null || $step->state === $completioninfo->state) {
+        foreach ($this->steps as $step) {
+
+            //  Ensure to have a step.
+            if ($currentstep === null || $step->state == $completioninfo->state) {
                 $currentstep = $step;
             }
+
         }
+
         return $currentstep;
     }
 
@@ -83,7 +88,12 @@ class achievement extends \format_ludic\skin {
     }
 
     /**
-     * @inheritDoc
+     * This skin return only current step image.
+     *
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_images_to_render() {
         $step = $this->get_current_step();
@@ -96,10 +106,15 @@ class achievement extends \format_ludic\skin {
     }
 
     /**
-     * @inheritDoc
+     * Return all skin texts to render, each text with a class to select it in css.
+     *
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public function get_texts_to_render() {
-        $completioninfo = $this->results['completioninfo'];
+        $completioninfo = $this->get_completion_info();
         $step           = $this->get_current_step();
         return [
                 ['text' => $completioninfo->completionstr, 'class' => 'completion'],

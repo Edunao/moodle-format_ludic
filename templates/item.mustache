@@ -17,8 +17,7 @@
 <div id="{{selectorid}}"
     {{! Class. }}
      class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}}
-    is-not-visible{{/isnotvisible}}{{#parent}} parent{{/parent}}{{#child}} child{{/child}}{{#editmode}} in-edition{{/editmode}}{{#selected}} selected{{/selected}}{{#parentid}}
-    parent-id-{{parentid}}{{/parentid}}"
+    is-not-visible{{/isnotvisible}}{{#parent}} parent{{/parent}}{{#child}} child{{/child}}{{#editmode}} in-edition{{/editmode}}{{#selected}} selected{{/selected}}{{#parentid}} parent-id-{{parentid}}{{/parentid}}{{#icons}} has-icon-{{position}}{{/icons}}"
     {{#draggable}} draggable="true"{{/draggable}}
      title="{{tooltip}}"
      data-id="{{id}}"
@@ -38,10 +37,13 @@
     {{! Required for moodle drag and drop javascript. }}
     {{#requiresectionhtmlforjs}}<div class="content hide"><ul class="section"></ul></div>{{/requiresectionhtmlforjs}}
 
-    {{! Icon to display on right top of item. }}
-    {{#iconsrc}}
-        <div class="item-icon" style="background-image: url('{{iconsrc}}')" aria-label="{{iconalt}}"></div>
-    {{/iconsrc}}
+    {{! Icons - 4 icons maximum }}
+    {{#icons}}
+        <div class="item-icon position-{{position}}" title="{{imgalt}}" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}">
+            {{#link}}<a href="{{link}}"></a>{{/link}}
+        </div>
+    {{/icons}}
+
 
     {{! Main image of item. }}
     {{#imgsrc}}

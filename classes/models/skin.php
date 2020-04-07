@@ -28,27 +28,24 @@ defined('MOODLE_INTERNAL') || die();
 
 abstract class skin extends model {
 
-    public  $location;
-    public  $type;
-    public  $title;
-    public  $description;
-    private $properties;
-    public  $maincss;
-    public  $selected;
-
+    public $location;
+    public $type;
+    public $title;
+    public $description;
+    public $steps;
+    public $selected;
     public $item;
 
-    public $weight;
-    public $results;
+    private $weight  = null;
+    private $results = null;
+    private $properties;
+    private $maincss;
 
     /**
      * skin constructor.
      *
      * @param $skin
      * @param course_module|section $item
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
      */
     public function __construct($skin, $item = null) {
         parent::__construct($skin);
@@ -58,8 +55,8 @@ abstract class skin extends model {
         $this->description = isset($skin->description) ? $skin->description : null;
         $this->properties  = isset($skin->properties) ? $skin->properties : null;
         $this->maincss     = isset($skin->properties->css) ? $skin->properties->css : null;
+        $this->steps       = isset($skin->properties->steps) ? $skin->properties->steps : [];
         $this->item        = $item;
-
     }
 
     /**
@@ -81,20 +78,24 @@ abstract class skin extends model {
      * @param null $item
      * @return skin|null
      * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
      */
     public static function get_by_id($skinid, $item = null) {
         global $PAGE;
 
-        // Skin id is not in config.
+        // Skin is not in config.
         if ($skinid == FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
             return coursemodule\inline::get_instance();
         } else if ($skinid == FORMAT_LUDIC_CM_SKIN_MENUBAR_ID) {
             return coursemodule\menubar::get_instance();
         } else if ($skinid == FORMAT_LUDIC_CM_SKIN_STEALTH_ID) {
             return coursemodule\stealth::get_instance();
+        } else if ($skinid == FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID) {
+            return self::get_by_instance(section\noludic::get_instance(), $item);
         }
 
-        // Skin id is in config.
+        // Skin is in config.
         $contexthelper = context_helper::get_instance($PAGE);
         $skins         = $contexthelper->get_skins_config();
 
@@ -107,21 +108,98 @@ abstract class skin extends model {
         return self::get_by_instance($skins[$skinid], $item);
     }
 
-    public function get_stylesheet($selectorid) {
-        // TODO.
-        $output = '<style>';
-        $output .= '#' . $selectorid . ' ' . $this->css;
-        $output .= '</style>';
+    /**
+     * Return skin properties, or one property if name is defined.
+     *
+     * @param null $name
+     * @return array|mixed|false
+     */
+    public function get_properties($name = null) {
+
+        // Ensure properties is array.
+        $properties = !empty($this->properties) ? get_object_vars($this->properties) : [];
+
+        // Name is defined : return property only.
+        if ($name != null) {
+            return isset($properties[$name]) ? $properties[$name] : false;
+        }
+
+        // Name is null : return all properties.
+        return $properties;
+    }
+
+    /**
+     * Return skinned tile css content prefixed by skin selector id.
+     *
+     * @param $selectorid
+     * @return string
+     */
+    public function get_css($selectorid) {
+        $output   = '';
+        $css      = $this->maincss . $this->get_additional_css();
+        $cssarray = [];
+        $success  = preg_match_all('/.*?{.*?}/', $css, $cssarray);
+        if (!$success) {
+            return $output;
+        }
+        foreach ($cssarray[0] as $cssline) {
+            $output .= ' #' . $selectorid . ' ' . $cssline;
+        }
         return $output;
     }
 
     /**
-     * Return skin properties.
+     * Delegate to skin to render skinned tile.
      *
-     * @return array
+     * @return string
      */
-    public function get_properties() {
-        return !empty($this->properties) ? get_object_vars($this->properties) : [];
+    public function render_skinned_tile() {
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+        return $renderer->render_skinned_tile($this);
+    }
+
+    /**
+     * Get weight from item and return it.
+     *
+     * @return int
+     * @throws \dml_exception
+     */
+    public function get_weight() {
+        if ($this->item !== null && $this->weight === null) {
+            $this->weight = $this->item->get_weight();
+        }
+        return $this->weight;
+    }
+
+    /**
+     * Get completion info from item and return it.
+     *
+     * @return \stdClass|null
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_completion_info() {
+        if ($this->item !== null && $this->results === null) {
+            $this->results = $this->item->get_user_results();
+        }
+        return isset($this->results['completioninfo']) ? $this->results['completioninfo'] : null;
+    }
+
+    /**
+     * Get score info from item and return it.
+     *
+     * @return \stdClass|null
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_grade_info() {
+        if ($this->item !== null && $this->results === null) {
+            $this->results = $this->item->get_user_results();
+        }
+        return isset($this->results['gradeinfo']) ? $this->results['gradeinfo'] : null;
     }
 
     /**
@@ -131,13 +209,6 @@ abstract class skin extends model {
      */
     public abstract function get_edit_image();
 
-    public function render_skinned_tile() {
-        global $PAGE;
-        $renderer = $PAGE->get_renderer('format_ludic');
-        $this->apply_settings();
-        return $renderer->render_skinned_tile($this);
-    }
-
     /**
      * This skin use and require grade ?
      *
@@ -146,21 +217,39 @@ abstract class skin extends model {
     public abstract function require_grade();
 
     /**
+     * Return all classes to add to the root of skinned tile.
+     *
+     * @return array
+     */
+    public function get_classes() {
+        return [];
+    }
+
+    /**
      * Return all images to render.
      *
      * @return array
      */
-    public abstract function get_images_to_render();
+    public function get_images_to_render() {
+        return [];
+    }
 
     /**
-     * Return all texts to render.
+     * Return all skin texts to render, each text with a class to select it in css.
      *
      * @return array
      */
-    public abstract function get_texts_to_render();
-
-    public function apply_settings() {
-        $this->weight  = $this->item->get_weight();
-        $this->results = $this->item->get_user_results();
+    public function get_texts_to_render() {
+        return [];
     }
+
+    /**
+     * Allows a child to add css depending on a situation for example.
+     *
+     * @return string
+     */
+    public function get_additional_css() {
+        return '';
+    }
+
 }

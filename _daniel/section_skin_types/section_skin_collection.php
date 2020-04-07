@@ -62,7 +62,7 @@ class activity_skin_achievement implements activity_skin{
         // add text relating to advancement
         $tile->add_skin_text(
             '<span class="current-value">' . $value . '</span>' .
-            '<span class="value-seaparator">/</span>' . 
+            '<span class="value-separator">/</span>' .
             '<span class="max-value">' . $this->weight . '</span>',
             "full-value");
         $tile->add_skin_text($value, "current-value");

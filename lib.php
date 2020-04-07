@@ -56,7 +56,7 @@ class format_ludic extends \format_base {
      * @throws moodle_exception
      */
     public function course_content_header() {
-        // Ensure that context helper course id is real course id and not site course id (1)
+        // Ensure that context helper course id is real course id and not site course id (1).
         $this->contexthelper->set_course_id($this->courseid);
         return new format_ludic_header_bar();
     }
@@ -193,6 +193,41 @@ class format_ludic extends \format_base {
             $generalsection->remove();
         }
 
+    }
+
+    /**
+     * The URL to use for the specified course (with section)
+     *
+     * Please note that course view page /course/view.php?id=COURSEID is hardcoded in many
+     * places in core and contributed modules. If course format wants to change the location
+     * of the view script, it is not enough to change just this function. Do not forget
+     * to add proper redirection.
+     *
+     * @param int|stdClass $section Section object from database or just field course_sections.section
+     *     if null the course view page is returned
+     * @param array $options options for view URL. At the moment core uses:
+     *     'navigation' (bool) if true and section has no separate page, the function returns null
+     *     'sr' (int) used by multipage formats to specify to which section to return
+     * @return null|moodle_url
+     */
+    public function get_view_url($section, $options = array()) {
+        $courseid = $this->courseid;
+
+        if (array_key_exists('sr', $options)) {
+            $sectionno = $options['sr'];
+        } else if (is_object($section)) {
+            $sectionno = $section->section;
+        } else {
+            $sectionno = $section;
+        }
+
+        if ($sectionno) {
+            $url = new moodle_url('/course/view.php', array('id' => $courseid, 'section' => $sectionno));
+        } else {
+            $url = new moodle_url('/course/view.php', array('id' => $courseid));
+        }
+
+        return $url;
     }
 }
 
@@ -375,6 +410,7 @@ function format_ludic_require_files() {
     require_once($classesdir . '/models/model.php');
     require_once($classesdir . '/forms/form.php');
     require_once($classesdir . '/forms/elements/form_element.php');
+    require_once($classesdir . '/models/skinnable_interface.php');
     require_once($classesdir . '/models/skin.php');
     require_once($classesdir . '/renderers/renderable/form_element.php');
     require_once($classesdir . '/renderers/renderable/item.php');

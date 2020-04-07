@@ -142,7 +142,7 @@ class format_ludic_renderer extends format_section_renderer_base {
         global $CFG;
 
         $addsectionurl = $CFG->wwwroot . '/course/changenumsections.php?courseid=' . $courseid . '&insertsection=0&sesskey=' .
-                         sesskey() . '&sectionreturn=' . $order . '&numsections=1';
+                         sesskey() . '&sectionreturn=' . ($order - 1) . '&numsections=1';
 
         $button = [
                 'buttonclass' => 'ludic-add-button',
@@ -158,6 +158,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @param $section
      * @return string
      * @throws coding_exception
+     * @throws dml_exception
      */
     public function render_section($section) {
         $section = new format_ludic_section($section);
@@ -177,6 +178,8 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @param $skin
      * @return string
      * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function render_skinned_tile($skin) {
         $skinnedtile = new format_ludic_skinned_tile($skin);
@@ -367,6 +370,13 @@ class format_ludic_renderer extends format_section_renderer_base {
         ]);
     }
 
+    /**
+     * Render header bar.
+     * The header bar is present in all pages of course.
+     *
+     * @return string
+     * @throws moodle_exception
+     */
     public function render_header_bar() {
         $headerbar = new format_ludic_header_bar();
         return $this->render($headerbar);
@@ -498,6 +508,10 @@ class format_ludic_renderer extends format_section_renderer_base {
 
             // Render container for course modules.
             $output .= $this->render_container_children('coursemodules');
+        }
+
+        if (count($sections) == 0 && !$this->contexthelper->is_editing()) {
+            $output .= '<div class="help-message">' . get_string('no-section', 'format_ludic') . '</div>';
         }
 
         return $output;

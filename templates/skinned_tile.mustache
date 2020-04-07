@@ -14,14 +14,14 @@
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div id="{{skinid}}" class="full-tile skin skin-type-{{skintype}} {{completion}}">
+<div id="{{skinid}}" class="full-tile skin skin-type-{{skintype}}{{#classes}} {{class}}{{/classes}}">
 
     <div class="sub-tile skin-tile">
         {{#images}}
-            <div class="skin-img {{class}}" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
+            <div class="skin-img{{#class}} {{class}}{{/class}}" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
         {{/images}}
         {{#texts}}
-            <div class="skin-text {{class}}">{{text}}</div>
+            <div class="skin-text{{#class}} {{class}}{{/class}}">{{text}}</div>
         {{/texts}}
         {{#emptydiv}}
             <div class="skin-empty-div div-{{number}}"></div>
@@ -33,7 +33,4 @@
     </div>
 
 </div>
-
-<style type="text/css">
-
-</style>
+{{#css}}<style type="text/css">{{css}}</style>{{/css}}

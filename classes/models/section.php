@@ -26,21 +26,21 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-class section extends model {
+class section extends model implements skinnable_interface {
 
     private $course = null;
-
-    public  $dbrecord;
-    public  $courseid;
-    public  $section;
-    public  $sectioninfo;
-    public  $name;
-    public  $sequence;
-    public  $visible;
-    public  $coursemodules;
-    public  $skinid;
-    public  $skin;
     private $results;
+
+    public $dbrecord;
+    public $courseid;
+    public $section;
+    public $sectioninfo;
+    public $name;
+    public $sequence;
+    public $visible;
+    public $coursemodules;
+    public $skinid;
+    public $skin;
 
     /**
      * section constructor.
@@ -68,7 +68,6 @@ class section extends model {
             $this->skinid = $skinrelation->skinid;
             $this->skin   = skin::get_by_id($this->skinid, $this);
         }
-
     }
 
     /**
@@ -210,66 +209,72 @@ class section extends model {
     public function get_edit_buttons() {
         global $CFG;
 
-        // There is no edit buttons for section 0.
-        if ($this->section == 0) {
-            return [];
-        }
+        // Disabled all buttons for section 0.
+        $disabled = $this->section == 0;
 
         $baseurl        = $CFG->wwwroot . '/course/editsection.php?id=' . $this->id;
         $editsectionurl = $baseurl . '&sr=' . $this->section;
 
-        // Define delete button.
-        $deletebutton = ['identifier' => 'delete'];
+        // Submit form button.
+        $savebutton = [
+                'identifier' => 'form-save',
+                'action'     => !$disabled ? 'saveForm' : '',
+                'order'      => 1,
+                'disabled'   => $disabled
+        ];
 
-        // Check if section can be deleted.
-        if (!$this->has_course_modules()) {
-            $deletebutton['link']   = $baseurl . '&sr=1&delete=1&sesskey=' . sesskey();
-            $deletebutton['action'] = 'confirmAndDeleteSection';
+        // Revert form button.
+        $revertbutton = [
+                'identifier' => 'form-revert',
+                'action'     => !$disabled ? 'revertForm' : '',
+                'order'      => 2,
+                'disabled'   => $disabled
+        ];
+
+        if ($disabled) {
+            $editbuttons = [
+                    'identifier' => 'edit-settings',
+                    'action' => 'getDataLinkAndRedirectTo',
+                    'link'       => $editsectionurl,
+                    'order'         => 3,
+            ];
         } else {
-            // Section can not be deleted, disable this button.
-            $deletebutton['disabled'] = true;
+            // Edit buttons : section settings, duplicate section, delete section.
+            $editbuttons               = [
+                    'identifier'    => 'edit',
+                    'order'         => 3,
+                    'hassubbuttons' => true,
+                    'action'        => 'showSubButtons'
+            ];
+            $editbuttons['subbuttons'] = [
+                    [
+                            'identifier' => 'edit-settings', 'action' => 'getDataLinkAndRedirectTo',
+                            'link'       => $editsectionurl,
+                    ],
+                    [
+                            'identifier' => 'duplicate', 'controller' => 'section', 'action' => 'duplicate_section',
+                            'callback'   => 'displaySections', 'itemid' => $this->id, 'disabled' => $disabled,
+                    ],
+                    [
+                            'identifier' => 'delete', 'action' => 'confirmAndDeleteSection',
+                            'link'       => $baseurl . '&sr=1&delete=1&sesskey=' . sesskey(),
+                            'disabled'   => $this->has_course_modules() || $disabled
+                    ]
+            ];
         }
 
-        return [
-                [
-                    // Submit form button.
-                        'identifier' => 'form-save',
-                        'action'     => 'saveForm',
-                        'order'      => 1
-                ],
-                [
-                    // Revert form button.
-                        'identifier' => 'form-revert',
-                        'action'     => 'revertForm',
-                        'order'      => 2
-                ],
-                [
-                    // Edit buttons : section settings, duplicate section, delete section.
-                        'identifier'    => 'edit',
-                        'order'         => 3,
-                        'hassubbuttons' => true,
-                        'action'        => 'showSubButtons',
-                        'subbuttons'    => [
-                                [
-                                        'identifier' => 'edit-settings', 'action' => 'getDataLinkAndRedirectTo',
-                                        'link'       => $editsectionurl
-                                ],
-                                [
-                                        'identifier' => 'duplicate', 'controller' => 'section', 'action' => 'duplicate_section',
-                                        'callback'   => 'displaySections', 'itemid' => $this->id
-                                ],
-                                $deletebutton
-                        ]
-                ],
-                [
-                    // Preview student section view button.
-                        'identifier' => 'item-preview',
-                        'controller' => 'section',
-                        'action'     => 'get_section_view_of_student',
-                        'callback'   => 'displayPopup',
-                        'order'      => 4
-                ]
+        // Preview student section view button.
+        $previewbutton = [
+                'identifier' => 'item-preview',
+                'controller' => !$disabled ? 'section' : '',
+                'action'     => !$disabled ? 'get_section_view_of_student' : '',
+                'callback'   => !$disabled ? 'displayPopup' : '',
+                'order'      => 4,
+                'disabled'   => $disabled
         ];
+
+        return [$savebutton, $revertbutton, $editbuttons, $previewbutton];
+
     }
 
     /**
@@ -371,69 +376,67 @@ class section extends model {
      */
     public function get_user_results() {
 
+        // Results already calculated, return them.
         if ($this->results !== null) {
             return $this->results;
         }
 
-        // Completion default.
-        $hascompletion   = COMPLETION_DISABLED;
-        $state           = COMPLETION_DISABLED;
-        $completion      = 'completion-disabled';
-        $completionstr   = 'completion_none';
-        $allcompleted    = COMPLETION_COMPLETE;
-        $completedstates = [COMPLETION_COMPLETE, COMPLETION_COMPLETE_PASS];
-
-        // Grade default
-        $isgradable = 0;
-        $grade      = 0;
-        $grademax   = 100;
-
+        // The section completion is a summary of all these course modules.
         $coursemodules = $this->get_course_modules();
+
+        // Initialize completion info.
+        $completioninfo = [
+                'completion-incomplete'    => [
+                        'state'    => COMPLETION_INCOMPLETE,
+                        'count'    => 0,
+                        'sequence' => []
+                ],
+                'completion-complete'      => [
+                        'state'    => COMPLETION_COMPLETE,
+                        'count'    => 0,
+                        'sequence' => []
+                ],
+                'completion-complete-pass' => [
+                        'state'    => COMPLETION_COMPLETE_PASS,
+                        'count'    => 0,
+                        'sequence' => []
+                ],
+                'completion-complete-fail' => [
+                        'state'    => COMPLETION_COMPLETE_FAIL,
+                        'count'    => 0,
+                        'sequence' => []
+                ],
+                'perfect'                  => count($coursemodules) > 0
+        ];
+
+        $score    = 0;
+        $scoremax = 0;
         foreach ($coursemodules as $coursemodule) {
+            if (method_exists($coursemodule->skin, 'get_score')) {
+                $score    += $coursemodule->skin->get_score();
+                $scoremax += $coursemodule->skin->get_weight();
+            }
+
+            // Update completion info.
             $results = $coursemodule->get_user_results();
-
-            $gradeinfo = $results['gradeinfo'];
-            if ($gradeinfo->isgradable) {
-                $isgradable++;
-                $grade += ($gradeinfo->grade / $gradeinfo->grademax) * $grademax * $gradeinfo->gradefactor;
+            $data    = $results['completioninfo'];
+            if (!isset($completioninfo[$data->completion])) {
+                continue;
             }
-
-            $completioninfo = $results['completioninfo'];
-            if ($completioninfo->completion !== 'completion-disabled') {
-                $hascompletion = COMPLETION_ENABLED;
-                $allcompleted  = $allcompleted && in_array($completioninfo->state, $completedstates);
-            }
-
+            $completioninfo['perfect'] = $completioninfo['perfect'] &&
+                                         $completioninfo[$data->completion]['state'] == COMPLETION_COMPLETE_PASS;
+            $completioninfo[$data->completion]['count']++;
+            $completioninfo[$data->completion]['sequence'][] = $coursemodule->id;
         }
-
-        if ($hascompletion) {
-            if ($allcompleted) {
-                $state         = COMPLETION_COMPLETE;
-                $completion    = 'completion-complete';
-                $completionstr = 'completion-y';
-            } else {
-                $state         = COMPLETION_INCOMPLETE;
-                $completion    = 'completion-incomplete';
-                $completionstr = 'completion-n';
-            }
-        }
-
-        $grade = $isgradable ? $grade / $isgradable * $grademax : $grade;
 
         // Return data.
         $this->results = [
                 'gradeinfo'      => (object) [
-                        'isgradable'  => $isgradable !== 0,
-                        'grade'       => $grade,
-                        'grademax'    => $grademax,
-                        'grademin'    => 0,
-                        'gradefactor' => 1
+                        'score'      => $score,
+                        'scoremax'   => $scoremax,
+                        'proportion' => $scoremax > 0 ? ($score / $scoremax) : 0
                 ],
-                'completioninfo' => (object) [
-                        'state'         => $state,
-                        'completion'    => $completion,
-                        'completionstr' => $completionstr
-                ]
+                'completioninfo' => $completioninfo
         ];
 
         return $this->results;
@@ -447,9 +450,9 @@ class section extends model {
      */
     public function get_weight() {
         $dbapi        = $this->contexthelper->get_database_api();
-        $sequencelist = $this->dbrecord->sequence;
+        $sequencelist = "'" . join("','", $this->sequence) . "'";
         $weight       = $dbapi->get_section_weight($sequencelist);
-        return $weight ? $weight : 0;
+        return $weight ? $weight : format_ludic_get_default_weight();
     }
 
     /**
@@ -460,6 +463,21 @@ class section extends model {
      */
     public function get_skinned_tile_title() {
         return $this->get_title();
+    }
+
+    /**
+     * Get sequence for collection skin.
+     * Array of index => id.
+     * Index must begin by 1.
+     *
+     * @return array
+     */
+    public function get_collection_sequence() {
+        $sequence = [];
+        foreach ($this->sequence as $key => $id) {
+            $sequence[$key + 1] = $id;
+        }
+        return $sequence;
     }
 
 }

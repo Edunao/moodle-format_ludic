@@ -112,6 +112,14 @@ class format_ludic_item implements renderable {
     public $content;
 
     /**
+     * Icons array
+     * require iconsrc, iconalt, position (top, bottom)
+     *
+     * @var array
+     */
+    public $icons;
+
+    /**
      * Image alt of item.
      *
      * @var string

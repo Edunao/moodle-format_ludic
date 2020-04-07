@@ -22,6 +22,28 @@ class activity_skin_score implements activity_skin{
         ];
     }
 
+    //2000 pts
+    //1000 points linéaires
+    //500 pts 70%
+    //500 pts 100%
+
+    // linear-value-part => 2
+
+    // steps
+
+    // 1 :
+    // -- threshold : 0
+    // -- fixed-value-part : 0
+
+    // 2 :
+    // -- threshold : 70
+    // -- fixed-value-part : 1
+
+    // 3 :
+    // -- threshold : 100
+    // -- fixed-value-part : 1
+
+
     function apply_settings($settings, $weight){
         // copy out static settings
         $this->maincss = $settings["settings"]["main-css"];
@@ -35,16 +57,23 @@ class activity_skin_score implements activity_skin{
             $threshold = $step["score-threshold"];
             $steps[$threshold] = $step;
         }
+        // $total => 4
         
         // derive the normalised proportion value for linear score calculation
         $this->linearproportion = $this->settings["settings"]["linear-value-part"] / $total;
-        
+
+        // $this->linearproportion =>  0.5
+
         // sort the steps and derive each of their proportion values for discrete score calculation
         $this->steps = asort($steps);
         $sum = 0;
         foreach($this->steps as &$step){
             $sum += $step["fixed-value-part"];
             $step["proportion"] = $sum / $total;
+            // step 1 : proportion = 0 / 4 = 0
+            // step 2 : proportion = 1 / 4 = 0.25
+            // step 3 : proportion = 2 / 4 = 0.5
+
         }
     }
     
@@ -97,9 +126,20 @@ class activity_skin_score implements activity_skin{
         }
         
         // derive the proportion value for the score
+        $scorefactor = $score / $scoremax;
+        // proportion note. note / note max
+        // step 1 : $scorefactor >= 0.0 && < 0.7 : proportionfinale = ($scorefactor * 0.5) + 0
+        // step 2 : $scorefactor >= 0.7 && < 1.0 : proportionfinale = ($scorefactor * 0.5) + 0.25
+        // step 3 : $scorefactor >= 1.0 : proportionfinale = ($scorefactor * 0.5) + 0.5
         $proportion = $scorefactor * $this->linearproportion + $beststep["proportion"];
-        
+
+
         // return the result
         return [$beststep, $proportion];
     }
+
+
+    // score de section
+    // recupère le score direct de toutes les activités
+    // le tout / sur le poids max.
 }

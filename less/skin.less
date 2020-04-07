@@ -23,4 +23,19 @@
     text-align: center;
     padding: 0 10px;
   }
+
+  &.skin-type-collection {
+    .skin-img {
+      position: absolute;
+      width: 100%;
+      @iterations: 20;
+      .img-loop (@i) when (@i > 0) {
+        &.img-@{i} {
+          z-index: ~"@{i}";
+        }
+        .img-loop(@i - 1);
+      }
+      .img-loop (@iterations);
+    }
+  }
 }

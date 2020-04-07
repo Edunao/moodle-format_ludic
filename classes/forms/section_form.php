@@ -101,7 +101,7 @@ class section_form extends form {
             );
         }
 
-
+        // TODO : Supprimer après usage dans skin edition.
         // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
         //$elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
         //$elements[]    = new filepicker_form_element('image-2', 'section-image-2', null, null, 'section filepicker label');

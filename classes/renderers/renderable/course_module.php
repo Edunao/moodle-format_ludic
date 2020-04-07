@@ -26,8 +26,6 @@ defined('MOODLE_INTERNAL') || die();
 
 class format_ludic_course_module extends format_ludic_item {
 
-    public $iconsrc;
-    public $iconalt;
     public $parentid;
 
     /**
@@ -82,12 +80,39 @@ class format_ludic_course_module extends format_ludic_item {
             // The skin will render all course module content.
             $this->content = $coursemodule->skin->render_skinned_tile();
 
+            // If completion is manual add an icon for completion.
+            $completioninfo = $coursemodule->get_user_results()['completioninfo'];
+            if ($completioninfo->type == COMPLETION_TRACKING_MANUAL) {
+                $completion     = $completioninfo->state == COMPLETION_INCOMPLETE ? 'completion-n' : 'completion-y';
+                $targetstate    = $completioninfo->state ? 0 : 1;
+                $completionlink = $CFG->wwwroot . '/course/togglecompletion.php?id=' . $coursemodule->id;
+                $completionlink .= '&sesskey=' . sesskey() . '&completionstate=' . $targetstate;
+
+                $completionicon = [
+                        'imgsrc'   => $CFG->wwwroot . '/course/format/ludic/pix/' . $completion . '.svg',
+                        'imgalt'   => $completioninfo->completionstr,
+                        'position' => 'bottom',
+                ];
+
+                // Toggle completion on click.
+                if (!$contexthelper->is_student_view_forced()) {
+                    $completionicon['link'] = $completionlink;
+                }
+
+                $this->icons[] = $completionicon;
+
+            }
+
         }
 
-        // Icon.
-        $icon          = $coursemodule->get_mod_icon();
-        $this->iconsrc = $icon->imgsrc;
-        $this->iconalt = $icon->imgalt;
+        // Mod icon for edition or teacher.
+        if ($contexthelper->is_editing() || !$contexthelper->user_has_student_role()) {
+            $modicon           = $coursemodule->get_mod_icon();
+            $modicon->position = 'top';
+            $modicon->link     = false;
+
+            $this->icons[] = $modicon;
+        }
 
     }
 }

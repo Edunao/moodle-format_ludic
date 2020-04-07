@@ -29,6 +29,7 @@ $string['showfromothers'] = 'Show section';
 $string['sectionname']    = 'Section';
 $string['section0name']   = 'Menu bar​ &​ Course Overview​';
 $string['topicoutline']   = 'Section';
+$string['no-section']   = 'Commencer par ajouter une section en passant en mode édition.';
 
 // Privacy.
 $string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
@@ -83,6 +84,8 @@ $string['cm-skin-menubar-title']       = 'Menu bar';
 $string['cm-skin-menubar-description'] = 'Allows labels and other such activities to be displayed in menu bar';
 $string['cm-skin-stealth-title']       = 'Stealth';
 $string['cm-skin-stealth-description'] = 'Allows labels and other such activities to be stealth in course';
+$string['cs-skin-noludic-title']       = 'No ludic';
+$string['cs-skin-noludic-description'] = 'No ludification.';
 $string['label-skin-selection']       = 'Appearance';
 
 // Settings.
@@ -104,11 +107,13 @@ $string['error-int-step']       = 'The value must be a multiple of {$a}.';
 $string['form-save']     = 'Save';
 $string['form-revert']   = 'Revert';
 $string['item-preview']  = 'Preview';
+$string['item-open']     = 'Open';
 $string['edit']          = 'Edit';
 $string['edit-settings'] = 'Settings';
 $string['duplicate']     = 'Duplicate';
 $string['delete']        = 'Delete';
 $string['assign']        = 'Assign roles';
+$string['collapsed-alt'] = 'Collapsed';
 
 // Popups.
 $string['confirmation-popup-title']   = 'Confirmation';

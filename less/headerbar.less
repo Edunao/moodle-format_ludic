@@ -3,8 +3,9 @@
   width: 100%;
   border: 1px solid black;
   margin-bottom: 10px;
-
+  background: linear-gradient(45deg, rgba(224, 176, 224, 0.25) 0%, rgba(247, 249, 99, 0.5) 100%);
   .sub-buttons {
+    max-width: 300px;
     .title {
       line-height: 50px;
       margin-left: 20px;
@@ -19,21 +20,22 @@
 }
 
 .container-sub-buttons[for="ludic-buttons"] {
+  position: absolute;
+  background: #fff;
+  z-index: 10;
   border: 1px solid black;
-  border-top: none;
+  border-top: 1px dashed black;
   border-bottom: none;
-  max-width: 300px;
-  margin-top: -10px;
-  margin-bottom: 10px;
+  max-width: 100%;
 
   .sub-button {
     display: flex;
     padding: 5px 5px 5px 15px;
     border-bottom: 1px solid black;
     text-decoration: none;
-    background-color: transparent;
     height: 35px;
     line-height: 25px;
+    background: linear-gradient(45deg, rgba(247, 249, 99, 0.25) 0%, rgba(224, 176, 224, 0.5) 100%);
 
     .sub-icon {
       width: 20px;
@@ -43,6 +45,11 @@
       background-position: center;
       background-size: contain;
       margin: 2.5px 15px 2.5px 0;
+    }
+    .sub-title {
+      @media (max-width: 768px) {
+        font-size: 80%;
+      }
     }
 
     &:hover {

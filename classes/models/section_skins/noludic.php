@@ -22,39 +22,39 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace format_ludic\coursemodule;
+namespace format_ludic\section;
 
 defined('MOODLE_INTERNAL') || die();
 
-class stealth extends \format_ludic\skin {
+class noludic extends \format_ludic\skin {
 
     /**
-     * Return stealth image for course edition.
+     * Return inline image for course edition.
      *
      * @return \stdClass
      */
     public function get_edit_image() {
         global $CFG;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/stealth.png",
-                'imgalt' => 'Stealth'
+                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/default.svg",
+                'imgalt' => 'No ludic'
         ];
     }
 
     /**
      * Return an instance of this class.
      *
-     * @return stealth
+     * @return noludic
      * @throws \coding_exception
      * @throws \moodle_exception
      */
     static public function get_instance() {
         return new self((object) [
-                'id'          => FORMAT_LUDIC_CM_SKIN_STEALTH_ID,
-                'location'    => 'coursemodule',
-                'type'        => 'stealth',
-                'title'       => get_string('cm-skin-stealth-title', 'format_ludic'),
-                'description' => get_string('cm-skin-stealth-description', 'format_ludic')
+                'id'          => FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID,
+                'location'    => 'section',
+                'type'        => 'noludic',
+                'title'       => get_string('cs-skin-noludic-title', 'format_ludic'),
+                'description' => get_string('cs-skin-noludic-description', 'format_ludic')
         ]);
     }
 
@@ -65,6 +65,15 @@ class stealth extends \format_ludic\skin {
      */
     public function require_grade() {
         return false;
+    }
+
+    /**
+     * Return all images to render.
+     *
+     * @return array
+     */
+    public function get_images_to_render() {
+        return [$this->get_edit_image()];
     }
 
 }

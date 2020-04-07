@@ -17,26 +17,26 @@
 <button type="button" class="ludic-button{{#hassubbuttons}}
 show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass}} {{identifier}}"
     data-identifier="{{identifier}}"
-    {{#buttonid}}id="{{buttonid}}"{{/buttonid}}
-    {{#itemtype}}data-itemtype="{{itemtype}}"{{/itemtype}}
-    {{#itemid}}data-itemid="{{itemid}}"{{/itemid}}
+    {{#buttonid}} id="{{buttonid}}"{{/buttonid}}
+    {{#itemtype}} data-itemtype="{{itemtype}}"{{/itemtype}}
+    {{#itemid}} data-itemid="{{itemid}}"{{/itemid}}
     {{#link}} data-link="{{link}}"{{/link}}
-    {{#disabled}} disabled{{/disabled}}
     {{#controller}} data-controller="{{controller}}"{{/controller}}
     {{#action}} data-action="{{action}}"{{/action}}
     {{#callback}} data-callback="{{callback}}"{{/callback}}
     {{#order}} data-order="{{order}}"{{/order}}
+    {{#disabled}} disabled{{/disabled}}
 >
-    {{#name}}{{name}}{{/name}}{{#hassubbuttons}}<span> <b>Ʉ</b></span>{{/hassubbuttons}}
+    {{#name}}{{name}}{{/name}}{{#hassubbuttons}}{{#pix}}t/collapsed, core, {{#str}}collapsed-alt, format_ludic{{/str}}{{/pix}}{{/hassubbuttons}}
 </button>
 
 {{#hassubbuttons}}
     <div class="container-sub-buttons hide" for="{{identifier}}">
         {{#subbuttons}}
             <button type="button" class="ludic-button sub-button {{identifier}}" data-identifier="{{identifier}}"
-                {{#buttonid}}id="{{buttonid}}"{{/buttonid}}
-                {{#itemtype}}data-itemtype="{{itemtype}}"{{/itemtype}}
-                {{#itemid}}data-itemid="{{itemid}}"{{/itemid}}
+                {{#buttonid}} id="{{buttonid}}"{{/buttonid}}
+                {{#itemtype}} data-itemtype="{{itemtype}}"{{/itemtype}}
+                {{#itemid}} data-itemid="{{itemid}}"{{/itemid}}
                 {{#link}} data-link="{{link}}"{{/link}}
                 {{#disabled}} disabled{{/disabled}}
                 {{#controller}} data-controller="{{controller}}"{{/controller}}

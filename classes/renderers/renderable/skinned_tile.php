@@ -29,10 +29,11 @@ class format_ludic_skinned_tile implements renderable {
     public $skinid;
     public $skintype;
     public $weight;
+    public $classes;
     public $images;
     public $texts;
     public $title;
-    public $completion;
+    public $css;
     public $emptydiv;
 
     /**
@@ -40,15 +41,18 @@ class format_ludic_skinned_tile implements renderable {
      *
      * @param \format_ludic\skin $skin
      * @throws coding_exception
+     * @throws dml_exception
+     * @throws moodle_exception
      */
     public function __construct(\format_ludic\skin $skin) {
         $this->skinid     = 'skin-' . $skin->location . '-' . $skin->item->id;
         $this->skintype   = $skin->type;
         $this->title      = $skin->item->get_skinned_tile_title();
-        $this->weight     = $skin->weight;
-        $this->completion = $skin->results['completioninfo']->completion;
+        $this->weight     = $skin->get_weight();
+        $this->classes    = $skin->get_classes();
         $this->images     = $skin->get_images_to_render();
         $this->texts      = $skin->get_texts_to_render();
+        $this->css        = $skin->get_css($this->skinid);
         $this->emptydiv   = [
                 ['number' => 1],
                 ['number' => 2],
@@ -59,7 +63,7 @@ class format_ludic_skinned_tile implements renderable {
                 ['number' => 7],
                 ['number' => 8],
                 ['number' => 9],
-                ['number' => 10],
+                ['number' => 10]
         ];
     }
 

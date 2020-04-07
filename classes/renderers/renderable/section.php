@@ -39,6 +39,7 @@ class format_ludic_section extends format_ludic_item {
      * @param \format_ludic\section $section
      * @throws coding_exception
      * @throws dml_exception
+     * @throws moodle_exception
      */
     public function __construct(\format_ludic\section $section) {
         global $PAGE, $CFG;
@@ -83,9 +84,13 @@ class format_ludic_section extends format_ludic_item {
                 $this->imgsrc = $imageobject->imgsrc;
                 $this->imgalt = $imageobject->imgalt;
 
+            } else if ($contexthelper->count_sections() == 0){
+
+                // Select section 0 if there is no other section in course.
+                $this->selected = true;
             }
 
-            // Title
+            // Title.
             $this->title = $this->tooltip;
 
             // Enable drag and drop (except for section 0).

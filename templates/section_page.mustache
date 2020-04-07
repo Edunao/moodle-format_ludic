@@ -17,13 +17,15 @@
 <div id="ludic-main-container" class="section-view">
     {{{headerbar}}}
 
-    <div class="section-container ludic-container">
+    <div class="section-container ludic-container{{#description}} has-description{{/description}}">
         <div id="section-block" class="ludic-container section-block">
             {{{section}}}
         </div>
-        <div id="section-description" class="ludic-container section-description">
-            {{{description}}}
-        </div>
+        {{#description}}
+            <div id="section-description" class="ludic-container section-description">
+                {{{description}}}
+            </div>
+        {{/description}}
     </div>
 
     <div class="coursemodules-container ludic-container">

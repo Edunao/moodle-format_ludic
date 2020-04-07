@@ -29,6 +29,8 @@ defined('MOODLE_INTERNAL') || die();
 class menubar extends \format_ludic\skin {
 
     /**
+     * Return menubar image for course edition.
+     *
      * @return \stdClass
      */
     public function get_edit_image() {
@@ -44,7 +46,6 @@ class menubar extends \format_ludic\skin {
      *
      * @return menubar
      * @throws \coding_exception
-     * @throws \dml_exception
      * @throws \moodle_exception
      */
     static public function get_instance() {
@@ -66,12 +67,5 @@ class menubar extends \format_ludic\skin {
         return false;
     }
 
-    public function get_images_to_render() {
-        return [];
-    }
-
-    public function get_texts_to_render() {
-        return [];
-    }
 }
 

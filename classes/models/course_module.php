@@ -26,7 +26,7 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-class course_module extends model {
+class course_module extends model implements skinnable_interface {
 
     public $name;
     public $order;
@@ -217,7 +217,9 @@ class course_module extends model {
                         ]
                 ],
                 [
-                        'identifier' => 'item-preview',
+                        'identifier' => 'item-open',
+                        'link'       => $this->get_link(),
+                        'action'     => 'getDataLinkAndRedirectTo',
                         'order'      => 4
                 ]
         ];
@@ -295,7 +297,7 @@ class course_module extends model {
         // True if this course module supports grades.
         $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
 
-        // Keep skins with grades only if the module course supports grades
+        // Keep skins with grades only if the module course supports grades.
         $coursemodulesskins = [];
         foreach ($skins as $skin) {
             if ($skin->require_grade() && !$isgraded) {
@@ -382,6 +384,7 @@ class course_module extends model {
      */
     public function get_user_results() {
 
+        // Results already calculated, return them.
         if ($this->results !== null) {
             return $this->results;
         }
@@ -431,4 +434,14 @@ class course_module extends model {
         global $CFG;
         return $CFG->wwwroot . '/mod/' . $this->cminfo->modname . '/view.php?id=' . $this->id;
     }
+
+    /**
+     * Get sequence for collection skin.
+     *
+     * @return array
+     */
+    public function get_collection_sequence() {
+        return [];
+    }
+
 }
