@@ -28,7 +28,29 @@ defined('MOODLE_INTERNAL') || die();
 
 class score extends \format_ludic\skin {
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+                "linear-value-part"     => "int",
+            ],
+            "steps" => [
+                "score-threshold"       => "number",
+                "fixed-value-part"      => "int",
+                "step-image"            => "image",
+                "step-text"             => "string",
+                "step-css"              => "css"
+            ]
+        ];
+    }
+
+    public static function get_unique_name(){
+        return 'section-score';
+    }
+
     private $currentstep = null;
+
+
 
     /**
      * Get the best image.

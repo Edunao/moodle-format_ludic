@@ -31,28 +31,35 @@
         ]
     }
 }}
-{{#display}}
-    <div id="ludic-header-bar" class="format-ludic header-bar">
-        {{#hasoptions}}
-            <div class="sub-buttons show-sub-buttons"
-                {{#notstudentview}} data-action="showSubButtons"{{/notstudentview}} data-identifier="ludic-buttons">
-                <span class="title">L</span>
-            </div>
-        {{/hasoptions}}
-    </div>
+<div id="ludic-header-bar" class="format-ludic header-bar navbar navbar-light bg-light">
+    <a class="btn btn-primary" data-toggle="collapse" href="#ludic-navbar-content" role="button" aria-expanded="false" aria-controls="ludic-navbar-content">
+        L
+    </a>
+</div>
 
-    {{#hasoptions}}
-        {{#notstudentview}}
-            <div class="container-sub-buttons hide" for="ludic-buttons">
+
+<div class="collapse" id="ludic-navbar-content">
+    <div class="card card-body">
+        {{#hasoptions}}
+            {{#notstudentview}}
                 {{#optionslist}}
-                    <div class="sub-button" data-action="{{action}}"{{#link}} data-link="{{link}}"{{/link}}{{#controller}}
-                         data-controller="{{controller}}"{{/controller}}{{#callback}} data-callback="{{callback}}"{{/callback}}{{#id}} data-id="{{id}}"{{/id}}>
-                        <span class="sub-icon" style="background-image: url('{{iconsrc}}')" aria-label="{{iconsrc}}"></span>
-                        <span class="sub-title">{{name}}</span>
+                    <div class="collapse-item {{#link}}link{{/link}}" data-action="{{action}}"{{#link}} data-link="{{link}}"{{/link}}{{#controller}}
+                        data-controller="{{controller}}"{{/controller}}{{#callback}} data-callback="{{callback}}"{{/callback}}{{#id}} data-id="{{id}}"{{/id}}>
+                        <img class="activityicon" src="{{iconsrc}}" aria-label="{{iconsrc}}">
+                        <span class="text">{{name}}</span>
                     </div>
                 {{/optionslist}}
-            </div>
-        {{/notstudentview}}
-    {{/hasoptions}}
+            {{/notstudentview}}
+        {{/hasoptions}}
 
-{{/display}}
+        {{^hasoptions}}
+            {{#str}}header-no-content, format_ludic{{/str}}
+        {{/hasoptions}}
+
+
+    </div>
+</div>
+
+
+
+

@@ -28,6 +28,19 @@ defined('MOODLE_INTERNAL') || die();
 
 class menubar extends \format_ludic\skin {
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+                "background"                 => "image"
+            ]
+        ];
+    }
+
+    public static function get_unique_name(){
+        return 'cm-menubar';
+    }
+
     /**
      * Return menubar image for course edition.
      *
@@ -48,7 +61,7 @@ class menubar extends \format_ludic\skin {
      * @throws \coding_exception
      * @throws \moodle_exception
      */
-    static public function get_instance() {
+    public static function get_instance() {
         return new self((object) [
                 'id'          => FORMAT_LUDIC_CM_SKIN_MENUBAR_ID,
                 'location'    => 'coursemodule',

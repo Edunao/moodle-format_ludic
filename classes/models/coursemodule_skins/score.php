@@ -30,6 +30,44 @@ class score extends \format_ludic\skin {
 
     private $currentstep = null;
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+                "linear-value-part"     => "int",
+            ],
+            "steps" => [
+                "score-threshold"       => "number",
+                "fixed-value-part"      => "int",
+                "step-image"            => "image",
+                "step-text"             => "string",
+                "step-css"              => "css"
+            ]
+        ];
+    }
+
+    public static function get_unique_name(){
+        return 'cm-score';
+    }
+
+    /**
+     * Return an instance of this class.
+     *
+     * @return menubar
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    public static function get_instance() {
+        return (object)[
+            'id'          => self::get_unique_name(),
+            'location'    => 'coursemodule',
+            'type'        => 'score',
+            'title'       => 'Score de base',
+            'description' => 'des points et puis voilà',
+            'settings'    => self::get_editor_config(),
+        ];
+    }
+
     /**
      * Return user current score step.
      *

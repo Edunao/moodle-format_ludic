@@ -59,15 +59,12 @@ class format_ludic_header_bar implements renderable {
         $this->notstudentview = !$this->contexthelper->is_student_view_forced();
         $editmode             = $this->contexthelper->is_editing();
 
-        // Don't display header bar in edit mode or if empty.
-        $this->display = $this->hasoptions;
-
         // Javascript parameters.
         $params = [
-                'courseid'  => $this->contexthelper->get_course_id(),
-                'userid'    => $USER->id,
-                'editmode'  => $editmode,
-                'sectionid' => $this->contexthelper->get_section_id()
+            'courseid'  => $this->contexthelper->get_course_id(),
+            'userid'    => $USER->id,
+            'editmode'  => $editmode,
+            'sectionid' => $this->contexthelper->get_section_id()
         ];
 
         // Requires format ludic javascript here because header bar is present in all pages.
@@ -144,9 +141,9 @@ class format_ludic_header_bar implements renderable {
             $islabel = $coursemodule->cminfo->modname === 'label';
 
             $option = [
-                    'iconsrc' => $modicon->imgsrc,
-                    'iconalt' => $modicon->imgalt,
-                    'name'    => $coursemodule->name,
+                'iconsrc' => $modicon->imgsrc,
+                'iconalt' => $modicon->imgalt,
+                'name'    => $coursemodule->name,
             ];
 
             // Don't add action in preview student view.
@@ -190,9 +187,7 @@ class format_ludic_header_bar implements renderable {
         $list = [];
 
         // Exit in different cases.
-        if (!$this->contexthelper->user_has_student_role() ||
-            $this->contexthelper->get_location() != 'coursemodule' ||
-            $this->contexthelper->get_section_idx() <= 0) {
+        if (!$this->contexthelper->user_has_student_role() || $this->contexthelper->get_location() != 'coursemodule' || $this->contexthelper->get_section_idx() <= 0) {
 
             // If current user is not student, don't show options.
             // Add an option only in course module.
@@ -202,9 +197,9 @@ class format_ludic_header_bar implements renderable {
         // Student in course module can preview his section.
         $name   = get_string('header-bar-preview-section', 'format_ludic');
         $option = [
-                'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/view-section.png',
-                'iconalt' => $name,
-                'name'    => $name,
+            'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/view-section.png',
+            'iconalt' => $name,
+            'name'    => $name,
         ];
 
         // Don't add action in preview student view.
@@ -257,9 +252,9 @@ class format_ludic_header_bar implements renderable {
             $editicon = $OUTPUT->image_url('i/edit')->out();
 
             $editoption = [
-                    'iconsrc' => $editicon,
-                    'iconalt' => $editname,
-                    'name'    => $editname,
+                'iconsrc' => $editicon,
+                'iconalt' => $editname,
+                'name'    => $editname,
             ];
 
             // Don't add action in preview student view.
@@ -274,7 +269,6 @@ class format_ludic_header_bar implements renderable {
             }
 
             $list[] = $editoption;
-
         }
 
         // Options for editing teacher and teacher.
@@ -285,9 +279,9 @@ class format_ludic_header_bar implements renderable {
             $name           = get_string($nameidentifier, 'format_ludic');
 
             $switchoption = [
-                    'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/student-view.svg',
-                    'iconalt' => $name,
-                    'name'    => $name,
+                'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/student-view.svg',
+                'iconalt' => $name,
+                'name'    => $name,
             ];
 
             // Don't add action in preview student view.
@@ -297,8 +291,7 @@ class format_ludic_header_bar implements renderable {
                 // To "unswitch" pass 0 as the roleid. To switch to student pass student role id.
                 $switchlink = $CFG->wwwroot . '/course/switchrole.php?id=' . $courseid . '&sesskey=' . sesskey();
                 $switchlink .= '&returnurl=' . $returnurl . '&switchrole=';
-                $switchlink .= $isstudent ? '0' :
-                        $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
+                $switchlink .= $isstudent ? '0' : $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
 
                 // Add link and action to redirect.
                 $switchoption['link']   = $switchlink;
@@ -308,6 +301,19 @@ class format_ludic_header_bar implements renderable {
 
             $list[] = $switchoption;
 
+            // Edit skins
+            $editname   = 'Edit skins';
+            $editicon   = $OUTPUT->image_url('i/settings')->out();
+            $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
+            $editoption = [
+                'action'  => 'getDataLinkAndRedirectTo',
+                'link'    => $editlink,
+                'iconsrc' => $editicon,
+                'iconalt' => $editname,
+                'name'    => $editname,
+            ];
+
+            $list[] = $editoption;
         }
 
         // Return list.

@@ -28,6 +28,19 @@ defined('MOODLE_INTERNAL') || die();
 
 class inline extends \format_ludic\skin {
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+                "background"                 => "image"
+            ]
+        ];
+    }
+
+    public static function get_unique_name(){
+        return 'cm-inline';
+    }
+
     /**
      * Return inline image for course edition.
      *

@@ -28,6 +28,18 @@ defined('MOODLE_INTERNAL') || die();
 
 class stealth extends \format_ludic\skin {
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+            ]
+        ];
+    }
+
+    public static function get_unique_name(){
+        return 'cm-stealth';
+    }
+
     /**
      * Return stealth image for course edition.
      *

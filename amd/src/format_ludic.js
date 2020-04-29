@@ -37,11 +37,13 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * @param {object} params
          */
         init: function (params) {
+            console.log('js params ', params);
             // Defines some useful variables.
             ludic.courseId = params.courseid;
             ludic.sectionId = params.sectionid;
             ludic.userId = params.userid;
             ludic.editMode = params.editmode;
+            ludic.editSkins = window.location.href.indexOf("ludic/edit_skins.php") > -1;
 
             // Add a background for the display of popup.
             $('body.format-ludic').prepend('<div id="ludic-background"></div>');
@@ -49,8 +51,13 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Initialize all required events.
             ludic.initEvents();
 
+            // Edit skins mode
+            if(ludic.editSkins){
+                ludic.displaySkinsList();
+            }
+
             // If we are in edit mode.
-            if (ludic.editMode) {
+            if (!ludic.editSkins && ludic.editMode) {
                 // Show sections after loading the page.
                 ludic.displaySections();
 
@@ -519,7 +526,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          */
         confirmAndDeleteSection: function (section) {
             // Add confirmation before delete.
-            console.log('confirmation', section);
+            console.log('confirmation popup', section);
             let context = {
                 itemid: $(section).data('itemid') ? $(section).data('itemid') : null,
                 link: $(section).data('link') ? $(section).data('link') : null
@@ -672,6 +679,8 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * Close ludic popup.
          */
         closeClosestPopup: function (item) {
+
+            console.log('close popup ', item);
             if (item) {
                 let popup = $(item).closest('.format-ludic.ludic-popup');
                 $(popup).remove();
@@ -1042,11 +1051,11 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          */
         displayPopup: function (html) {
             let selectorId = '#' + $(html).attr('id');
+            console.log('display popup new ', selectorId );
             $(selectorId).remove();
+            $('body').append(html);
             console.log(selectorId);
-
-            $('#ludic-background').show();
-            $('#ludic-background').after(html);
+            $(selectorId).modal('show')
         },
 
         /**
@@ -1080,7 +1089,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * @param params
          */
         displayChoicePopup: function (popupid, action, params) {
-            console.log('displayChoicePopup', popupid, action, params);
+            console.log('displayChoicePopup 2', popupid, action, params);
 
             let context = {
                 popupid: popupid,
@@ -1140,6 +1149,38 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 });
 
             }
+        },
+
+        displaySkinsList: function (html, callback){
+            console.log('displaySkinsList html => ', html, ' /// callback => ', callback);
+
+            // Skins list
+            let container = $('.edit-skins-view > .container-parents');
+            if (html) {
+
+                ludic.addLoading(container);
+                container.html(html);
+                if (typeof callback === 'function') {
+                    callback(html);
+                }
+
+            } else {
+                // We don't have html, so get it and display it.
+                ludic.ajaxCall({
+                    controller: 'skin',
+                    action: 'get_course_skins_list',
+                    loading: container,
+                    callback: function (response) {
+                        container.html(response);
+                        if (typeof callback === 'function') {
+                            callback(response);
+                        }
+                    }
+                });
+
+            }
+
+
         },
 
         /**

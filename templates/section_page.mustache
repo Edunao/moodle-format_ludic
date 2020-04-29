@@ -30,5 +30,11 @@
 
     <div class="coursemodules-container ludic-container">
         {{{coursemodules}}}
+
+        {{^coursemodules}}
+            {{#str}}section-no-cm, format_ludic{{/str}}
+        {{/coursemodules}}
     </div>
+
+
 </div>

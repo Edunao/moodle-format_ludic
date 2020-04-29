@@ -28,6 +28,19 @@ defined('MOODLE_INTERNAL') || die();
 
 class noludic extends \format_ludic\skin {
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+                "background"                 => "image"
+            ]
+        ];
+    }
+
+    public static function get_unique_name(){
+        return 'section-noludic';
+    }
+
     /**
      * Return inline image for course edition.
      *

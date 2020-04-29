@@ -28,6 +28,31 @@ defined('MOODLE_INTERNAL') || die();
 
 class collection extends \format_ludic\skin {
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+            ],
+            "steps" => [
+                "achievement-name"      => "text",
+                "value-part"            => "int",
+                "step-image"            => "image",
+                "step-text"             => "string",
+                "step-css"              => "css"
+            ]
+        ];
+    }
+
+
+    public static function get_unique_name(){
+        return 'section-collection';
+    }
+
+    public static function get_instance(){
+
+    }
+
+
     /**
      * Get the best image.
      *

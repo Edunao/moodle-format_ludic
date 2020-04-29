@@ -24,6 +24,8 @@
 
 namespace format_ludic;
 
+use format_ludic\section\score;
+
 defined('MOODLE_INTERNAL') || die();
 
 // Define all format globals here.
@@ -570,6 +572,15 @@ class context_helper {
     }
 
     /**
+     * Return true if user can use edition mode
+     *
+     * @return bool
+     */
+    public function can_edit(){
+        return $this->page->user_allowed_editing();
+    }
+
+    /**
      * Return count of real sections (ignore section 0).
      *
      * @return bool
@@ -659,7 +670,12 @@ class context_helper {
      */
     public function get_course_modules_info() {
         if ($this->coursemodulesinfo == null) {
-            $this->coursemodulesinfo = $this->get_course_info()->get_cms();
+            $cms = $this->get_course_info()->get_cms();
+            foreach ($cms as $cmid => $cm){
+                if($cm->deletioninprogress == 0){
+                    $this->coursemodulesinfo[$cmid] = $cm;
+                }
+            }
         }
         return $this->coursemodulesinfo;
     }
@@ -944,6 +960,57 @@ class context_helper {
         }
 
         // Return all skins.
+        return $skins;
+    }
+
+    /**
+     * Return all skins that can be applied
+     *
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function get_skins_format(){
+        global $CFG;
+
+        //$defaultskins = $this->get_default_skins();
+        $defaultskins = [];
+        //$sectionskins = $this->get_section_skins();
+        //$globalsection = $this->get_global_section_skins();
+        //$cmskins = $this->get_course_module_skins();
+
+        $sectionskins = [];
+        $cmskins = [];
+
+        //$sectionskinspath = $CFG->dirroot . '/course/format/ludic/classes/models/section_skins';
+        //$sectionskinsdir = scandir($sectionskinspath);
+        //$sectionskins = [];
+        //foreach ($sectionskinsdir as $key => $file) {
+        //    if (in_array($file, array(".", ".."))) {
+        //        continue;
+        //    }
+        //    if(!is_file($sectionskinspath .'/' .$file)){
+        //        continue;
+        //    }
+        //    require_once $sectionskinspath .'/' .$file;
+        //    $classname = 'format_ludic\section\\' .pathinfo($sectionskinspath .'/' .$file)['filename'];
+        //    $sectionskins = $classname::get_instance();
+        //}
+
+
+        //$tempskins = array_merge($defaultskins, $sectionskins, $globalsection, $cmskins);
+        //$skins = [];
+        //foreach ($tempskins as $skin){
+        //    $uniquename = $skin->get_unique_name();
+        //    $skins[$uniquename] = $skin;
+        //}
+
+        $score = \format_ludic\coursemodule\score::get_instance();
+        $skins[\format_ludic\coursemodule\score::get_unique_name()] = $score;
+        $achievements = \format_ludic\coursemodule\achievement::get_instance();
+        $skins[\format_ludic\coursemodule\achievement::get_unique_name()] = $achievements;
+
         return $skins;
     }
 

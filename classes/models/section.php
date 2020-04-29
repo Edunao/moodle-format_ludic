@@ -243,7 +243,7 @@ class section extends model implements skinnable_interface {
             $editbuttons               = [
                     'identifier'    => 'edit',
                     'order'         => 3,
-                    'hassubbuttons' => true,
+                    'isdropdown' => true,
                     'action'        => 'showSubButtons'
             ];
             $editbuttons['subbuttons'] = [

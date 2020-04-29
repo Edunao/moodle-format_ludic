@@ -44,6 +44,11 @@ class skin_controller extends controller_base {
                 $cmid           = $this->get_param('itemid', PARAM_INT);
                 $selectedskinid = $this->get_param('selectedid');
                 return $this->get_course_module_skin_selector($cmid, $selectedskinid);
+            case 'get_course_skins_list':
+                return $this->get_course_skins_list();
+            case 'get_skin_properties':
+                $skinid = $this->get_param('id');
+                return $this->get_skin_properties($skinid);
             default :
                 // Default case if the only parameter is id.
                 $id = $this->get_param('id', PARAM_INT);
@@ -121,6 +126,38 @@ class skin_controller extends controller_base {
         $skin = skin::get_by_id($skinid);
 
         // Return his description.
+        return $skin->description;
+    }
+
+    public function get_course_skins_list($selectedskinid = false){
+        global $PAGE;
+
+        // Get data.
+        $renderer = $PAGE->get_renderer('format_ludic');
+        $skins = $this->contexthelper->get_skins_format();
+
+        $content = '';
+        //foreach($skins as $skin){
+        //    if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
+        //        $skin->selected = true;
+        //    }
+        //    $content                .= $renderer->render_skin($skin);
+        //}
+        return $renderer->render_skins_list($skins);
+
+        //return $renderer->render_container_items('skins-list', $this->contexthelper->is_editing(), $content);
+    }
+
+    public function get_skin_properties($skinid){
+        global $PAGE;
+
+        $skins = $this->contexthelper->get_skins_format();
+        if(!array_key_exists($skinid, $skins)){
+            return false;
+        }
+
+        $skin = $skins[$skinid];
+
         return $skin->description;
     }
 

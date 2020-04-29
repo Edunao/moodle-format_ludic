@@ -12,28 +12,47 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+    along with Moodle.  If not, see
+<http: xmlns="http://www.w3.org/1999/html"/>//www.gnu.org/licenses/>.
 }}
-<button type="button" class="ludic-button{{#hassubbuttons}}
-show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass}} {{identifier}}"
-    data-identifier="{{identifier}}"
-    {{#buttonid}} id="{{buttonid}}"{{/buttonid}}
-    {{#itemtype}} data-itemtype="{{itemtype}}"{{/itemtype}}
-    {{#itemid}} data-itemid="{{itemid}}"{{/itemid}}
-    {{#link}} data-link="{{link}}"{{/link}}
-    {{#controller}} data-controller="{{controller}}"{{/controller}}
-    {{#action}} data-action="{{action}}"{{/action}}
-    {{#callback}} data-callback="{{callback}}"{{/callback}}
-    {{#order}} data-order="{{order}}"{{/order}}
-    {{#disabled}} disabled{{/disabled}}
->
-    {{#name}}{{name}}{{/name}}{{#hassubbuttons}}{{#pix}}t/collapsed, core, {{#str}}collapsed-alt, format_ludic{{/str}}{{/pix}}{{/hassubbuttons}}
-</button>
 
-{{#hassubbuttons}}
-    <div class="container-sub-buttons hide" for="{{identifier}}">
+{{^isdropdown}}
+    <button type="button" class="btn btn-default {{#buttonclass}}{{buttonclass}}{{/buttonclass}} {{identifier}}"
+        data-identifier="{{identifier}}"
+        {{#buttonid}} id="{{buttonid}}"{{/buttonid}}
+        {{#itemtype}} data-itemtype="{{itemtype}}"{{/itemtype}}
+        {{#itemid}} data-itemid="{{itemid}}"{{/itemid}}
+        {{#link}} data-link="{{link}}"{{/link}}
+        {{#controller}} data-controller="{{controller}}"{{/controller}}
+        {{#action}} data-action="{{action}}"{{/action}}
+        {{#callback}} data-callback="{{callback}}"{{/callback}}
+        {{#order}} data-order="{{order}}"{{/order}}
+        {{#disabled}} disabled{{/disabled}}
+        >
+    {{#name}}{{name}}{{/name}}
+    </button>
+{{/isdropdown}}
+
+{{#isdropdown}}
+    <div class="dropdown" {{#order}} data-order="{{order}}"{{/order}}>
+        <button type="button" class="btn btn-default dropdown-toggle {{#buttonclass}}{{buttonclass}}{{/buttonclass}} {{identifier}}"
+            data-identifier="{{identifier}}"
+            {{#buttonid}} id="{{buttonid}}"{{/buttonid}}
+            {{#itemtype}} data-itemtype="{{itemtype}}"{{/itemtype}}
+            {{#itemid}} data-itemid="{{itemid}}"{{/itemid}}
+            {{#link}} data-link="{{link}}"{{/link}}
+            {{#controller}} data-controller="{{controller}}"{{/controller}}
+            {{#action}} data-action="{{action}}"{{/action}}
+            {{#callback}} data-callback="{{callback}}"{{/callback}}
+            {{#disabled}} disabled{{/disabled}}
+            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+        >
+            {{#name}}{{name}}{{/name}}
+        </button>
+
+    <div class="dropdown-menu">
         {{#subbuttons}}
-            <button type="button" class="ludic-button sub-button {{identifier}}" data-identifier="{{identifier}}"
+            <a class="dropdown-item {{identifier}}" data-identifier="{{identifier}}"
                 {{#buttonid}} id="{{buttonid}}"{{/buttonid}}
                 {{#itemtype}} data-itemtype="{{itemtype}}"{{/itemtype}}
                 {{#itemid}} data-itemid="{{itemid}}"{{/itemid}}
@@ -45,7 +64,8 @@ show-sub-buttons{{/hassubbuttons}}{{#buttonclass}} {{buttonclass}}{{/buttonclass
                 {{#order}} data-order="{{order}}"{{/order}}
             >
                 {{#name}}{{name}}{{/name}}
-            </button>
+            </a>
         {{/subbuttons}}
     </div>
-{{/hassubbuttons}}
+</div>
+{{/isdropdown}}

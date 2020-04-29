@@ -23,13 +23,14 @@
  */
 
 // General.
-$string['pluginname']     = 'Ludic';
-$string['hidefromothers'] = 'Hide section';
-$string['showfromothers'] = 'Show section';
-$string['sectionname']    = 'Section';
-$string['section0name']   = 'Menu bar​ &​ Course Overview​';
-$string['topicoutline']   = 'Section';
-$string['no-section']   = 'Commencer par ajouter une section en passant en mode édition.';
+$string['pluginname']      = 'Ludic';
+$string['hidefromothers']  = 'Hide section';
+$string['showfromothers']  = 'Show section';
+$string['sectionname']     = 'Section';
+$string['section0name']    = 'Menu bar​ &​ Course Overview​';
+$string['topicoutline']    = 'Section';
+$string['no-section']      = 'Aucune section disponible';
+$string['no-section-help'] = 'Aucune section disponible. Passez en mode édition pour en ajouter.';
 
 // Privacy.
 $string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
@@ -38,10 +39,14 @@ $string['privacy:metadata'] = 'The Ludic format plugin does not store any person
 $string['ludicconfiglabel']     = 'Ludic course configuration data';
 $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
 
+// Skins edition
+$string['edit-skins-title'] = 'Edition des skins';
+
 // Header bar.
-$string['header-bar-preview-section']  = 'Preview section';
-$string['header-bar-student-view']     = 'Student view';
-$string['header-bar-teacher-view']     = 'Back to teacher view';
+$string['header-bar-preview-section'] = 'Preview section';
+$string['header-bar-student-view']    = 'Student view';
+$string['header-bar-teacher-view']    = 'Back to teacher view';
+$string['header-no-content']          = 'Aucun contenu disponible';
 
 // Section edition.
 $string['default-section-title']  = 'Section {$a}';
@@ -50,6 +55,7 @@ $string['label-section-visible']  = 'Visible';
 $string['duplicate-suffix']       = ' (copy)';
 $string['section-skin-selection'] = 'Select a skin for the section';
 $string['section-preview']        = 'Section preview';
+$string['section-no-cm']          = 'Aucune activité disponible';
 
 // Course module edition.
 $string['course-module-skin-selection'] = 'Select a skin for the course module';
@@ -78,15 +84,15 @@ $string['access-chained-and-grouped']      = 'Chained and grouped with predecess
 $string['access-chained-and-grouped-desc'] = 'The item will become visible at the same moment as it\'s predecessor but will only become available after the predecessor has been completed.​';
 
 // Skin.
-$string['cm-skin-inline-title']       = 'In page';
-$string['cm-skin-inline-description'] = 'Allows labels and other such activities to be displayed inline';
+$string['cm-skin-inline-title']        = 'In page';
+$string['cm-skin-inline-description']  = 'Allows labels and other such activities to be displayed inline';
 $string['cm-skin-menubar-title']       = 'Menu bar';
 $string['cm-skin-menubar-description'] = 'Allows labels and other such activities to be displayed in menu bar';
 $string['cm-skin-stealth-title']       = 'Stealth';
 $string['cm-skin-stealth-description'] = 'Allows labels and other such activities to be stealth in course';
 $string['cs-skin-noludic-title']       = 'No ludic';
 $string['cs-skin-noludic-description'] = 'No ludification.';
-$string['label-skin-selection']       = 'Appearance';
+$string['label-skin-selection']        = 'Appearance';
 
 // Settings.
 $string['setting-weight-title']       = 'Poids des activités.';

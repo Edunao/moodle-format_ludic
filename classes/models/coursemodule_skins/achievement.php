@@ -28,6 +28,44 @@ defined('MOODLE_INTERNAL') || die();
 
 class achievement extends \format_ludic\skin {
 
+    public static function get_editor_config(){
+        return [
+            "settings" => [
+                "main-css"              => "css",
+            ],
+            "steps" => [
+                "achievement-name"      => "text",
+                "value-part"            => "int",
+                "step-image"            => "image",
+                "step-text"             => "string",
+                "step-css"              => "css"
+            ]
+        ];
+    }
+
+    public static function get_unique_name(){
+        return 'cm-achievement';
+    }
+
+    /**
+     * Return an instance of this class.
+     *
+     * @return menubar
+     * @throws \coding_exception
+     * @throws \moodle_exception
+     */
+    public static function get_instance() {
+        return (object)[
+            'id'          => self::get_unique_name(),
+            'location'    => 'coursemodule',
+            'type'        => 'achievement',
+            'title'       => 'Achievement de base',
+            'description' => 'des passages de steps à l\'autre et puis voilà',
+            'settings'    => self::get_editor_config(),
+        ];
+    }
+
+
     /**
      * Return best image for course edition.
      *

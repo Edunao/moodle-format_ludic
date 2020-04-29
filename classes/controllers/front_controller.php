@@ -26,6 +26,8 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once $CFG->dirroot . '/course/format/ludic/classes/controllers/front_controller_interface.php';
+
 class front_controller implements front_controller_interface {
 
     /**

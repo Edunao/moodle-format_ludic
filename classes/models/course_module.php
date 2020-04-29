@@ -192,7 +192,7 @@ class course_module extends model implements skinnable_interface {
                 [
                         'identifier'    => 'edit',
                         'order'         => 3,
-                        'hassubbuttons' => true,
+                        'isdropdown' => true,
                         'action'        => 'showSubButtons',
                         'subbuttons'    => [
                                 [
