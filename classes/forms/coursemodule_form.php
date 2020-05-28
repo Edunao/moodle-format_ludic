@@ -66,7 +66,7 @@ class coursemodule_form extends form {
                 $this->object->name,
                 '',
                 get_string('label-course-module-title', 'format_ludic'),
-                ['required' => true, 'maxlength' => 30]
+                ['required' => true]
         );
 
         // Course module skin id.

@@ -31,6 +31,7 @@ class menubar extends \format_ludic\skin {
     public static function get_editor_config(){
         return [
             "settings" => [
+                "name"                  => "text",
                 "main-css"              => "css",
                 "background"                 => "image"
             ]

@@ -54,7 +54,6 @@ class edit_skins_form extends form {
 
         // Skin settings
         $settings = $this->skin->get_editor_config();
-        print_object($settings);
 
         foreach($settings as $section => $options){
 
@@ -65,17 +64,16 @@ class edit_skins_form extends form {
             foreach($options as $elementname => $type){
                 switch ($type){
                     case 'int':
-                        $elements[] = new number_form_element($elementname, $elementname, '', '');
+                        $elements[] = new number_form_element($elementname, $elementname, '', '', $elementname);
                         break;
                     case 'css':
-                        $elements[] = new filepicker_form_element($elementname, $elementname,'','');
+                        $elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname);
                         break;
                     case 'image':
-                        $elements[] = new filepicker_form_element($elementname, $elementname,'','');
+                        //$elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname);
                         break;
                     default:
                         break;
-
                 }
             }
 

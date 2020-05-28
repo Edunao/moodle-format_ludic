@@ -8,6 +8,7 @@ class activity_skin_achievement implements activity_skin{
     static function get_editor_config(){
         return [
             "settings" => [
+                "name"                  => "text",
                 "main-css"              => "css",
             ],
             "steps" => [

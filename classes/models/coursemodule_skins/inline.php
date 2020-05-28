@@ -31,6 +31,7 @@ class inline extends \format_ludic\skin {
     public static function get_editor_config(){
         return [
             "settings" => [
+                "name"                  => "text",
                 "main-css"              => "css",
                 "background"                 => "image"
             ]
@@ -47,9 +48,9 @@ class inline extends \format_ludic\skin {
      * @return \stdClass
      */
     public function get_edit_image() {
-        global $CFG;
+        global $OUTPUT;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/inline.png",
+                'imgsrc' => $OUTPUT->image_url('default-cm', 'format_ludic')->out(),
                 'imgalt' => 'In page'
         ];
     }

@@ -159,7 +159,8 @@ class format_ludic_renderer extends format_section_renderer_base {
             'buttonclass' => 'ludic-add-button',
             'action'      => 'getDataLinkAndRedirectTo',
             'order'       => $order,
-            'link'        => $addsectionurl
+            'link'        => $addsectionurl,
+            'name'        => get_string('addsection-button', 'format_ludic')
         ];
 
         return $this->render_from_template('format_ludic/button', $button);
@@ -168,6 +169,11 @@ class format_ludic_renderer extends format_section_renderer_base {
     public function render_skins_list($skinsinfo) {
         $skinslist = new format_ludic_skins_list($skinsinfo);
         return $this->render($skinslist);
+    }
+
+    public function render_skin_skin_types_list($skintypes){
+        $skintypeslist = new format_ludic_skins_types_list($skintypes);
+        return $this->render($skintypeslist);
     }
 
     /**
@@ -269,6 +275,10 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render_from_template('format_ludic/skins_list', $skinsinfo);
     }
 
+    protected function render_format_ludic_skins_types_list(format_ludic_skins_types_list $skintypes) {
+        return $this->render_from_template('format_ludic/skins_types_list', $skintypes);
+    }
+
     /**
      * @param format_ludic_skin $skin
      * @return bool|string
@@ -322,9 +332,10 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_container_items($type, $editmode, $parentscontent = '', $propertiescontent = '', $helpcontent = '') {
+    public function render_container_items($type, $editmode, $parentscontent = '', $propertiescontent = '', $helpcontent = '',  $parenttitle = '') {
         return $this->render_from_template('format_ludic/container_items', [
             'parentstype'       => $type,
+            'parenttitle'       => $parenttitle,
             'editmode'          => $editmode,
             'parentscontent'    => $parentscontent,
             'propertiescontent' => $propertiescontent,
@@ -337,8 +348,9 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_container_parents($type, $content = '') {
+    public function render_container_parents($type, $content = '', $title = '') {
         return $this->render_from_template('format_ludic/container_parents', [
+            'title'          => $title,
             'parentstype'    => $type,
             'parentscontent' => $content
         ]);
@@ -375,6 +387,7 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render_from_template('format_ludic/page', [
             'globaldescription'   => $this->contexthelper->get_global_description(),
             'parentstype'         => 'section',
+            'parenttitle'         => get_string('edit-title-section', 'format_ludic'),
             'parentscontent'      => $this->render_course_sections(),
             'globalcoursemodules' => $this->render_course_modules($this->contexthelper->get_global_section_id())
         ]);
@@ -420,8 +433,8 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_container_children($childrentype) {
-        return $this->render_from_template('format_ludic/container_children', ['childrentype' => $childrentype]);
+    public function render_container_children($childrentype, $childrentitle = '') {
+        return $this->render_from_template('format_ludic/container_children', ['childrentype' => $childrentype, 'childrentitle' => $childrentitle]);
     }
 
     /**
@@ -531,7 +544,7 @@ class format_ludic_renderer extends format_section_renderer_base {
             $output .= $this->render_add_section_button($course->id, count($sections) + 1);
 
             // Render container for course modules.
-            $output .= $this->render_container_children('coursemodules');
+            $output .= $this->render_container_children('coursemodules', get_string('edit-title-coursemodule', 'format_ludic'));
         }
 
         if (count($sections) == 0 && !$this->contexthelper->is_editing()) {
@@ -541,6 +554,19 @@ class format_ludic_renderer extends format_section_renderer_base {
                 $output .= '<div class="help-message">' . get_string('no-section', 'format_ludic') . '</div>';
             }
 
+        }
+        $output .= '</div>';
+
+        return $output;
+    }
+
+    public function render_header_course_sections(){
+        // Get data.
+        $course   = $this->contexthelper->get_course();
+        $sections = $course->get_sections();
+        $output = '';
+        foreach ($sections as $section) {
+            $output .= $this->render_section($section);
         }
 
         return $output;

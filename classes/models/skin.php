@@ -57,6 +57,11 @@ abstract class skin extends model {
         $this->maincss     = isset($skin->properties->css) ? $skin->properties->css : null;
         $this->steps       = isset($skin->properties->steps) ? $skin->properties->steps : [];
         $this->item        = $item;
+        $this->skinid      = $this->get_unique_name();
+    }
+
+    public static function get_unique_name(){
+        return self::class;
     }
 
     /**
@@ -97,7 +102,7 @@ abstract class skin extends model {
 
         // Skin is in config.
         $contexthelper = context_helper::get_instance($PAGE);
-        $skins         = $contexthelper->get_skins_config();
+        $skins         = $contexthelper->get_skins();
 
         // Skin not found.
         if (!isset($skins[$skinid]) || empty($skins[$skinid])) {
@@ -145,6 +150,7 @@ abstract class skin extends model {
         foreach ($cssarray[0] as $cssline) {
             $output .= ' #' . $selectorid . ' ' . $cssline;
         }
+
         return $output;
     }
 

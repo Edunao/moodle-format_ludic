@@ -49,6 +49,12 @@ class skin_controller extends controller_base {
             case 'get_skin_properties':
                 $skinid = $this->get_param('id');
                 return $this->get_skin_properties($skinid);
+            case 'get_skin_types':
+                $skinid = $this->get_param('id');
+                return $this->get_skin_types($skinid);
+            case 'get_skin_types_form':
+                $skintypeid = $this->get_param('id');
+                return $this->get_skin_types_form($skintypeid);
             default :
                 // Default case if the only parameter is id.
                 $id = $this->get_param('id', PARAM_INT);
@@ -73,6 +79,7 @@ class skin_controller extends controller_base {
         $renderer     = $PAGE->get_renderer('format_ludic');
         $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
         $skins        = $coursemodule->get_available_skins();
+        $title = 'Skins';
 
         // Render skins.
         $content = '';
@@ -85,7 +92,7 @@ class skin_controller extends controller_base {
         }
 
         // Return skins html in container.
-        return $renderer->render_container_items('coursemodule-skin', $this->contexthelper->is_editing(), $content);
+        return $renderer->render_container_items('coursemodule-skin', $this->contexthelper->is_editing(), $content, '', '', $title);
     }
 
     /**
@@ -129,27 +136,17 @@ class skin_controller extends controller_base {
         return $skin->description;
     }
 
-    public function get_course_skins_list($selectedskinid = false){
+    public function get_course_skins_list(){
         global $PAGE;
 
         // Get data.
         $renderer = $PAGE->get_renderer('format_ludic');
         $skins = $this->contexthelper->get_skins_format();
 
-        $content = '';
-        //foreach($skins as $skin){
-        //    if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
-        //        $skin->selected = true;
-        //    }
-        //    $content                .= $renderer->render_skin($skin);
-        //}
         return $renderer->render_skins_list($skins);
-
-        //return $renderer->render_container_items('skins-list', $this->contexthelper->is_editing(), $content);
     }
 
     public function get_skin_properties($skinid){
-        global $PAGE;
 
         $skins = $this->contexthelper->get_skins_format();
         if(!array_key_exists($skinid, $skins)){
@@ -161,4 +158,28 @@ class skin_controller extends controller_base {
         return $skin->description;
     }
 
+    public function get_skin_types($skinid){
+        global $PAGE;
+
+        $allskinstypes = $this->contexthelper->get_skins();
+        $skintypes = [];
+        foreach($allskinstypes as $skintype){
+            if($skintype->skinid == $skinid){
+                $skintypes[] = $skintype;
+            }
+        }
+
+        $renderer = $PAGE->get_renderer('format_ludic');
+
+        return $renderer->render_skin_skin_types_list($skintypes);
+    }
+
+    public function get_skin_types_form($skintypeid){
+        global $PAGE, $COURSE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+
+        $skintype = $this->contexthelper->get_skin_type_by_id($skintypeid);
+
+        return $renderer->render_edit_skins_form($COURSE->id, $skintype);
+    }
 }

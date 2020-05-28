@@ -173,6 +173,8 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 case 'displayCourseModulesHtml':
                 case 'displayPopup':
                 case 'displaySections':
+                case 'displaySkinTypesForm':
+                case 'displaySkinTypesHtml':
                     result = eval('ludic.' + name + '(html, callback)');
                     break;
                 case 'displayProperties':
@@ -644,9 +646,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.setFormChanged(true);
 
             // Update image url with selected image url.
-            let newImgUrl = selectedItem.find('.item-img-container').css('background-image');
+            let newImgUrl = selectedItem.find('.item-img-container').attr('src');
             if (newImgUrl) {
-                $(inputSelectorId + '-overview .overview-img-container').css('background-image', newImgUrl);
+                $(inputSelectorId + '-overview .overview-img-container').attr('src', newImgUrl);
             }
 
             // Close popup.
@@ -659,8 +661,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         initEditModeEvents: function () {
             console.log('initEditmode');
 
-            // Always init drag and drop popup events in edit mode.
-            ludic.initDragAndDropEvents();
+
 
             // When you click on an item in .container-parents, display properties in .container-properties.
             ludic.initItemGetPropertiesEvent();
@@ -673,6 +674,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // When item is added with .selected class, click on it by default.
             ludic.initSelectedEvents();
+
+            // Always init drag and drop popup events in edit mode.
+            ludic.initDragAndDropEvents();
         },
 
         /**
@@ -839,25 +843,34 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         },
 
         /**
+         * TODO : fix all drag and drop using jquery ui
          * Initialize all drag and drop specific events to monitor.
          */
         initDragAndDropEvents: function () {
             let body = $('body.format-ludic');
 
-            // Save the selector id of the drag object.
-            body.on('dragstart', '.ludic-drag', function (e) {
-                console.log('dragstart');
-                console.log(e.currentTarget.id);
-                e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.id);
+            console.log('init drag and drop ? 2');
+            $( ".container-children.coursemodules .children-elements" ).sortable({
+                items: ".ludic-drag",
+                change: function( event, ui ) {
+                    console.log('change drag and drop ', event);
+                }
             });
+
+            // Save the selector id of the drag object.
+            // body.on('dragstart', '.ludic-drag', function (e) {
+            //     console.log('dragstart');
+            //     console.log(e.currentTarget.id);
+            //     e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.id);
+            // });
 
             // Required to allow drop.
-            body.on('dragover', '.ludic-drop', function (e) {
-                console.log('dragover');
-                e.preventDefault();
-            });
+            // body.on('dragover', '.ludic-drop', function (e) {
+            //     console.log('dragover');
+            //     e.preventDefault();
+            // });
 
-            // Management of drop sections and course modules.
+           /* // Management of drop sections and course modules.
             body.on('drop', '.section.ludic-drop, .coursemodule.ludic-drop', function (e) {
                 console.log('drop');
                 console.log(e.currentTarget.id);
@@ -901,7 +914,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                         callback: callbackFunction
                     });
                 }
-            });
+            });*/
         },
 
         /**
@@ -953,7 +966,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             console.log('displayCourseModulesHtml');
 
             // Course modules container.
-            let container = $('.container-children.coursemodules');
+            let container = $('.container-children.coursemodules .children-elements');
 
             // In student view just display course modules html.
             if (!ludic.editMode) {
@@ -1112,6 +1125,34 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
         },
 
+        displaySkinTypesHtml: function(html, callback){
+            console.log('displaySkinTypesHtml html => ', html, ' /// callback => ', callback);
+
+            // Skins list
+            let container = $('.edit-skins-view > .container-items > .container-parents .skin-types-list');
+            if (html) {
+                ludic.addLoading(container);
+                container.html(html);
+                if (typeof callback === 'function') {
+                    callback(html);
+                }
+            }
+        },
+
+        displaySkinTypesForm: function(html, callback){
+            console.log('displaySkinTypesForm html => ', html, ' /// callback => ', callback);
+
+            // Skins list
+            let container = $('.edit-skins-view .container-properties .container-content');
+            if (html) {
+                ludic.addLoading(container);
+                container.html(html);
+                if (typeof callback === 'function') {
+                    callback(html);
+                }
+            }
+        },
+
         /**
          * Display sections.
          *
@@ -1155,7 +1196,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             console.log('displaySkinsList html => ', html, ' /// callback => ', callback);
 
             // Skins list
-            let container = $('.edit-skins-view > .container-parents');
+            let container = $('.edit-skins-view > .container-items > .container-parents');
             if (html) {
 
                 ludic.addLoading(container);

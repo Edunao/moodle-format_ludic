@@ -65,7 +65,6 @@ class course_module extends model implements skinnable_interface {
         $this->weight = $skinrelation->weight;
         $this->access = $skinrelation->access;
         $this->skin   = skin::get_by_id($this->skinid, $this);
-
     }
 
     /**

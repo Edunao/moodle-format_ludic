@@ -24,6 +24,7 @@
 
 namespace format_ludic;
 
+use format_ludic\section\noludic;
 use format_ludic\section\score;
 
 defined('MOODLE_INTERNAL') || die();
@@ -911,16 +912,14 @@ class context_helper {
             // Get ludic config (json).
             $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
             $ludicconfig = json_decode($ludicconfig);
-
-            // Always return an array.
-            if (!empty($ludicconfig)) {
-                $this->ludicconfig = get_object_vars($ludicconfig);
-            } else {
-                $this->ludicconfig = [];
+            if(!$ludicconfig){
+                $defaultconfig = format_ludic_get_default_skins_settings();
+                $this->update_course_format_options(['ludic_config' => json_encode($defaultconfig)]);
+                $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
+                $ludicconfig = json_decode($ludicconfig);
             }
-
+            $this->ludicconfig = (array) $ludicconfig;
         }
-
         return $this->ludicconfig;
     }
 
@@ -934,7 +933,7 @@ class context_helper {
         $ludicconfig = $this->get_ludic_config();
 
         // Ensure to return an array.
-        return isset($ludicconfig['skins']) ? get_object_vars($ludicconfig['skins']) : [];
+        return isset($ludicconfig['skins']) ? $ludicconfig['skins'] : [];
     }
 
     /**
@@ -956,11 +955,23 @@ class context_helper {
         $skins    = [];
         $allskins = array_merge($defaultskins, $skinsconfig);
         foreach ($allskins as $skin) {
+            $skin = (object) $skin;
             $skins[$skin->id] = skin::get_by_instance($skin);
         }
 
         // Return all skins.
         return $skins;
+    }
+
+    public function get_skin_type_by_id($skintypeid){
+        $allskinstypes = $this->get_skins();
+        foreach($allskinstypes as $skintype){
+            if($skintype->id == $skintypeid){
+                return $skintype;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1006,10 +1017,14 @@ class context_helper {
         //    $skins[$uniquename] = $skin;
         //}
 
+        $noludic = \format_ludic\section\noludic::get_instance();
+        $skins[\format_ludic\section\noludic::get_unique_name()] = $noludic;
         $score = \format_ludic\coursemodule\score::get_instance();
         $skins[\format_ludic\coursemodule\score::get_unique_name()] = $score;
         $achievements = \format_ludic\coursemodule\achievement::get_instance();
         $skins[\format_ludic\coursemodule\achievement::get_unique_name()] = $achievements;
+        $sectionscore = \format_ludic\section\score::get_instance();
+        $skins[\format_ludic\section\score::get_unique_name()] = $sectionscore;
 
         return $skins;
     }
@@ -1042,7 +1057,7 @@ class context_helper {
 
         // Keep only section skin.
         $sectionskins = [];
-        foreach ($skins as $skin) {
+        foreach ($skins as $skinid => $skin) {
             if ($skin->location == 'section') {
                 $sectionskins[$skin->id] = $skin;
             }
@@ -1063,7 +1078,6 @@ class context_helper {
     public function get_global_section_skins() {
         return [
                 coursemodule\menubar::get_instance(),
-                coursemodule\inline::get_instance(),
                 coursemodule\stealth::get_instance()
         ];
     }
@@ -1088,5 +1102,4 @@ class context_helper {
         // Return filtered skins.
         return $coursemodulesskins;
     }
-
 }

@@ -18,19 +18,22 @@
 
     <div class="sub-tile skin-tile">
         {{#images}}
-            <div class="skin-img{{#class}} {{class}}{{/class}}" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
+            <img class="skin-img{{#class}} {{class}}{{/class}}" src="{{imgsrc}}" aria-label="{{imgalt}}"></img>
         {{/images}}
         {{#texts}}
-            <div class="skin-text{{#class}} {{class}}{{/class}}">{{text}}</div>
+            <div class="skin-text{{#class}} {{class}}{{/class}}">{{{text}}}</div>
         {{/texts}}
+        {{#hiddentexts}}
+        <div class="skin-text skin-hidden-text {{#class}} {{class}}{{/class}}">{{{text}}}</div>
+        {{/hiddentexts}}
         {{#emptydiv}}
             <div class="skin-empty-div div-{{number}}"></div>
         {{/emptydiv}}
     </div>
 
     <div class="sub-tile title-tile">
-        <div class="skin-text">{{title}}</div>
+        <div class="skin-text" title="{{title}}">{{title}}</div>
     </div>
 
 </div>
-{{#css}}<style type="text/css">{{css}}</style>{{/css}}
+{{#css}}<style type="text/css">{{{css}}}</style>{{/css}}

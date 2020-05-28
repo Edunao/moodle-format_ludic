@@ -51,7 +51,7 @@ class format_ludic_skinned_tile implements renderable {
         $this->weight     = $skin->get_weight();
         $this->classes    = $skin->get_classes();
         $this->images     = $skin->get_images_to_render();
-        $this->texts      = $skin->get_texts_to_render();
+        $this->hiddentexts      = $skin->get_texts_to_render();
         $this->css        = $skin->get_css($this->skinid);
         $this->emptydiv   = [
                 ['number' => 1],

@@ -56,6 +56,8 @@ $string['duplicate-suffix']       = ' (copy)';
 $string['section-skin-selection'] = 'Select a skin for the section';
 $string['section-preview']        = 'Section preview';
 $string['section-no-cm']          = 'Aucune activité disponible';
+$string['edit-title-section']     = 'Sections :';
+$string['addsection-button']      = 'Add section';
 
 // Course module edition.
 $string['course-module-skin-selection'] = 'Select a skin for the course module';
@@ -63,6 +65,7 @@ $string['label-course-module-title']    = 'Title';
 $string['label-course-module-visible']  = 'Visible';
 $string['label-select-weight']          = 'Weight';
 $string['label-select-access']          = 'Accessibility';
+$string['edit-title-coursemodule']      = 'Activités :';
 
 // Access.
 $string['access-accessible']      = 'Always accessible';

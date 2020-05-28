@@ -100,16 +100,16 @@ class format_ludic extends \format_base {
 
         if ($courseformatoptions === false) {
             $courseformatoptions = [
-                    'ludic_config'      => [
-                            'type'         => PARAM_RAW,
-                            'label'        => get_string('ludicconfiglabel', 'format_ludic'),
-                            'element_type' => 'hidden'
-                    ],
-                    'ludic_sharing_key' => [
-                            'type'         => PARAM_RAW,
-                            'label'        => get_string('ludicsharingkeylabel', 'format_ludic'),
-                            'element_type' => 'hidden',
-                    ],
+                'ludic_config'      => [
+                    'type'         => PARAM_RAW,
+                    'label'        => get_string('ludicconfiglabel', 'format_ludic'),
+                    'element_type' => 'hidden'
+                ],
+                'ludic_sharing_key' => [
+                    'type'         => PARAM_RAW,
+                    'label'        => get_string('ludicsharingkeylabel', 'format_ludic'),
+                    'element_type' => 'hidden',
+                ],
             ];
         }
 
@@ -176,8 +176,7 @@ class format_ludic extends \format_base {
         // If section is specified in course/view.php, make sure it is expanded in navigation.
         if ($navigation->includesectionnum === false) {
             $selectedsection = $this->contexthelper->get_section_id();
-            if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') &&
-                $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
+            if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') && $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
                 $navigation->includesectionnum = $selectedsection;
             }
         }
@@ -222,7 +221,10 @@ class format_ludic extends \format_base {
         }
 
         if ($sectionno) {
-            $url = new moodle_url('/course/view.php', array('id' => $courseid, 'section' => $sectionno));
+            $url = new moodle_url('/course/view.php', array(
+                'id'      => $courseid,
+                'section' => $sectionno
+            ));
         } else {
             $url = new moodle_url('/course/view.php', array('id' => $courseid));
         }
@@ -329,21 +331,21 @@ function format_ludic_get_access_options() {
 
     // Definitions in start of file.
     $access = [
-            FORMAT_LUDIC_ACCESS_ACCESSIBLE          => 'access-accessible',
-            FORMAT_LUDIC_ACCESS_CHAINED             => 'access-chained',
-            FORMAT_LUDIC_ACCESS_DISCOVERABLE        => 'access-discoverable',
-            FORMAT_LUDIC_ACCESS_CONTROLLED          => 'access-controlled',
-            FORMAT_LUDIC_ACCESS_GROUPED             => 'access-grouped',
-            FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED => 'access-chained-and-grouped',
+        FORMAT_LUDIC_ACCESS_ACCESSIBLE          => 'access-accessible',
+        FORMAT_LUDIC_ACCESS_CHAINED             => 'access-chained',
+        FORMAT_LUDIC_ACCESS_DISCOVERABLE        => 'access-discoverable',
+        FORMAT_LUDIC_ACCESS_CONTROLLED          => 'access-controlled',
+        FORMAT_LUDIC_ACCESS_GROUPED             => 'access-grouped',
+        FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED => 'access-chained-and-grouped',
     ];
 
     // Options for <select>.
     $options = [];
     foreach ($access as $value => $identifier) {
         $options[] = [
-                'value'       => $value,
-                'name'        => get_string($identifier, 'format_ludic'),
-                'description' => get_string($identifier . '-desc', 'format_ludic')
+            'value'       => $value,
+            'name'        => get_string($identifier, 'format_ludic'),
+            'description' => get_string($identifier . '-desc', 'format_ludic')
         ];
     }
 
@@ -371,10 +373,10 @@ function format_ludic_init_edit_mode($context) {
 
     // Require modchooser js.
     $PAGE->requires->yui_module('moodle-course-modchooser', 'M.course.init_chooser', array(
-            array(
-                    'courseid'         => $context->instanceid,
-                    'closeButtonTitle' => null
-            )
+        array(
+            'courseid'         => $context->instanceid,
+            'closeButtonTitle' => null
+        )
     ));
 }
 
@@ -386,8 +388,8 @@ function format_ludic_init_edit_mode($context) {
  */
 function format_ludic_get_strings_for_js($editmode) {
     $strings = [
-            'error-popup-title',
-            'error-popup-content'
+        'error-popup-title',
+        'error-popup-content'
     ];
 
     if ($editmode) {
@@ -424,7 +426,10 @@ function format_ludic_require_files() {
         global $CFG;
 
         // Get directory content, ignore dots.
-        $nodes = array_diff(scandir($dir), ['.', '..']);
+        $nodes = array_diff(scandir($dir), [
+            '.',
+            '..'
+        ]);
 
         // Browse the nodes.
         foreach ($nodes as $node) {
@@ -447,8 +452,198 @@ function format_ludic_require_files() {
     require_files_recursively($classesdir);
 }
 
+function format_ludic_get_default_skins_settings() {
+    global $OUTPUT;
 
-function format_ludic_get_default_skins_settings(){
+    $scoreskinstypes = [
+        [
+            'id'          => 11,
+            'skinid'      => 'section-score',
+            'location'    => 'section',
+            'type'        => 'score',
+            'title'       => 'Médaille',
+            'description' => 'Des points avec une médaille à la fin !',
+            'properties'  => [
+                'steps' => [
+                    [
+                        'threshold' => 0,
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step1', 'format_ludic')->out(),
+                        'imgalt'    => 'Aucune récompense'
+                    ],
+                    [
+                        'threshold' => 20,
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step2', 'format_ludic')->out(),
+                        'imgalt'    => 'Moitié des points obtenus !'
+                    ],
+                    [
+                        'threshold' => 30,
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step3', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaille obtenue !'
+                    ],
+                    [
+                        'threshold' => 50,
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step4', 'format_ludic')->out(),
+                        'imgalt'    => 'Premier trophée obtenu !'
+                    ],
+                    [
+                        'threshold' => 80,
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step5', 'format_ludic')->out(),
+                        'imgalt'    => 'Couronne obtenue !'
+                    ],
+                    [
+                        'threshold' => 100,
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step6', 'format_ludic')->out(),
+                        'imgalt'    => 'Trophée obtenu !'
+                    ]
+                ],
+                'css'   => ' 
+                .skin-text.score{display: block;position: absolute;bottom: 0px;width: 100%;text-align: center;} 
+                
+                '
+            ]
+        ],
+        [
+            'id'          => 12,
+            'skinid'      => 'cm-score',
+            'location'    => 'coursemodule',
+            'type'        => 'score',
+            'title'       => 'Trophée',
+            'description' => 'Un trophée en fonction de votre réussite.',
+            'properties'  => [
+                'steps' => [
+                    [
+                        'threshold' => 0,
+                        'scorepart' => 0,
+                        'extratext' => '',
+                        'extracss'  => '',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step1', 'format_ludic')->out(),
+                        'imgalt'    => 'Pas de trophée'
+                    ],
+                    [
+                        'threshold' => 50,
+                        'scorepart' => 1,
+                        'extratext' => '',
+                        'extracss'  => '',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step2', 'format_ludic')->out(),
+                        'imgalt'    => 'Trophée d\'argent'
+                    ],
+                    [
+                        'threshold' => 100,
+                        'scorepart' => 2,
+                        'extratext' => '',
+                        'extracss'  => '',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step3', 'format_ludic')->out(),
+                        'imgalt'    => 'Trophée d\'or'
+                    ]
+                ],
+                'linearscorepart' => 1,
+                'css'   => '.sub-tile.skin-tile .skin-text {font-size:30px;} 
+                            .skin-text.score{display: block;position: absolute;left: 59%;bottom: 49%;font-size:1.5rem;font-weight:bold;} 
+                            .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}'
+
+            ]
+        ],
+        [
+            'id'          => 13,
+            'skinid'      => 'cm-achievement',
+            'location'    => 'coursemodule',
+            'type'        => 'achievement',
+            'title'       => 'Achivement',
+            'description' => 'Plus l\'activité est réussie, plus le personnage monte.',
+            'properties'  => [
+                'steps' => [
+                    [
+                        'state'     => COMPLETION_INCOMPLETE,
+                        //0
+                        'statestr'  => 'completion-incomplete',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step1', 'format_ludic')->out(),
+                        'imgalt'    => '',
+                        'scorepart' => 0,
+                        'extratext' => 'En bas'
+                    ],
+                    [
+                        'state'     => COMPLETION_COMPLETE,
+                        //1
+                        'statestr'  => 'completion-complete',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step3', 'format_ludic')->out(),
+                        'imgalt'    => '',
+                        'scorepart' => 0.75,
+                        'extratext' => 'En haut !'
+                    ],
+                    [
+                        'state'     => COMPLETION_COMPLETE_PASS,
+                        //2
+                        'statestr'  => 'completion-complete-pass',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step3', 'format_ludic')->out(),
+                        'imgalt'    => '',
+                        'scorepart' => 1,
+                        'extratext' => 'En haut mais en mieux'
+                    ],
+                    [
+                        'state'     => COMPLETION_COMPLETE_FAIL,
+                        //3
+                        'statestr'  => 'completion-complete-fail',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step1', 'format_ludic')->out(),
+                        'imgalt'    => '',
+                        'scorepart' => 0.25,
+                        'extratext' => 'En bas mais en moins bien'
+                    ]
+                ],
+                'css'   => ''
+            ],
+        ],
+        [
+            'id'          => 14,
+            'skinid'      => 'cm-progression',
+            'location'    => 'coursemodule',
+            'type'        => 'progression',
+            'title'       => 'Progression ',
+            'description' => 'Plus l\'activité est réussie, plus le personnage monte.',
+            'properties'  => [
+                'steps' => [
+                    [
+                        'threshold'  => 0,
+                        'proportion' => 0,
+                        'score'      => 0,
+                        'scoremax'   => 0,
+                        'scorepart'  => 0,
+                        'extratext'  => '',
+                        'extracss'   => '',
+                        'imgsrc'     => $OUTPUT->image_url('default-skins/cm-achievement-step1', 'format_ludic')->out(),
+                        'imgalt'     => 'En bas'
+                    ],
+                    [
+                        'threshold'  => 1,
+                        'proportion' => 1,
+                        'score'      => 1,
+                        'scoremax'   => 99,
+                        'scorepart'  => 1,
+                        'extratext'  => '',
+                        'extracss'   => '',
+                        'imgsrc'     => $OUTPUT->image_url('default-skins/cm-achievement-step2', 'format_ludic')->out(),
+                        'imgalt'     => 'On monte !'
+                    ],
+                    [
+                        'threshold'  => 2,
+                        'proportion' => 100,
+                        'score'      => 100,
+                        'scoremax'   => 100,
+                        'scorepart'  => 100,
+                        'extratext'  => '',
+                        'extracss'   => '',
+                        'imgsrc'     => $OUTPUT->image_url('default-skins/cm-achievement-step3', 'format_ludic')->out(),
+                        'imgalt'     => 'Ascension réussie !'
+                    ],
+                ],
+                'css'   => ''
+            ],
+        ]
+    ];
+
+    return ['skins' => $scoreskinstypes];
+}
+
+function format_ludic_get_default_skins_settings_old() {
     global $CFG;
     $defaultimage = $CFG->wwwroot . '/course/format/ludic/pix/default.svg';
 
@@ -469,31 +664,38 @@ function format_ludic_get_default_skins_settings(){
                         ],
                         [
                             'threshold' => 10,
-                            'imgsrc'    => 'https://picsum.photos/id/101/80/80', 'imgalt' => ''
+                            'imgsrc'    => 'https://picsum.photos/id/101/80/80',
+                            'imgalt'    => ''
                         ],
                         [
                             'threshold' => 20,
-                            'imgsrc'    => 'https://picsum.photos/id/102/80/80', 'imgalt' => ''
+                            'imgsrc'    => 'https://picsum.photos/id/102/80/80',
+                            'imgalt'    => ''
                         ],
                         [
                             'threshold' => 30,
-                            'imgsrc'    => 'https://picsum.photos/id/103/80/80', 'imgalt' => ''
+                            'imgsrc'    => 'https://picsum.photos/id/103/80/80',
+                            'imgalt'    => ''
                         ],
                         [
                             'threshold' => 40,
-                            'imgsrc'    => 'https://picsum.photos/id/104/80/80', 'imgalt' => ''
+                            'imgsrc'    => 'https://picsum.photos/id/104/80/80',
+                            'imgalt'    => ''
                         ],
                         [
                             'threshold' => 50,
-                            'imgsrc'    => 'https://picsum.photos/id/109/80/80', 'imgalt' => ''
+                            'imgsrc'    => 'https://picsum.photos/id/109/80/80',
+                            'imgalt'    => ''
                         ],
                         [
                             'threshold' => 60,
-                            'imgsrc'    => 'https://picsum.photos/id/106/80/80', 'imgalt' => ''
+                            'imgsrc'    => 'https://picsum.photos/id/106/80/80',
+                            'imgalt'    => ''
                         ],
                         [
                             'threshold' => 80,
-                            'imgsrc'    => 'https://picsum.photos/id/107/80/80', 'imgalt' => ''
+                            'imgsrc'    => 'https://picsum.photos/id/107/80/80',
+                            'imgalt'    => ''
                         ],
                         [
                             'threshold' => 100,
@@ -503,7 +705,7 @@ function format_ludic_get_default_skins_settings(){
                     ],
                     'css'   => '
                                 {background-color: aliceblue;} .sub-tile.skin-tile {background-color: beige;}
-                                .sub-tile.title-tile .skin-text {font-size:30px;}'
+                                .sub-tile.skin-tile .skin-text {font-size:30px;}'
                 ]
             ],
             12 => [
@@ -685,7 +887,8 @@ function format_ludic_get_default_skins_settings(){
                 'properties'  => [
                     'steps' => [
                         [
-                            'state'     => COMPLETION_INCOMPLETE, //0
+                            'state'     => COMPLETION_INCOMPLETE,
+                            //0
                             'statestr'  => 'completion-incomplete',
                             'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/63.png',
                             'imgalt'    => '',
@@ -693,7 +896,8 @@ function format_ludic_get_default_skins_settings(){
                             'extratext' => 'Abra'
                         ],
                         [
-                            'state'     => COMPLETION_COMPLETE, //1
+                            'state'     => COMPLETION_COMPLETE,
+                            //1
                             'statestr'  => 'completion-complete',
                             'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/65.png',
                             'imgalt'    => '',
@@ -701,7 +905,8 @@ function format_ludic_get_default_skins_settings(){
                             'extratext' => 'Alakazam'
                         ],
                         [
-                            'state'     => COMPLETION_COMPLETE_PASS, //2
+                            'state'     => COMPLETION_COMPLETE_PASS,
+                            //2
                             'statestr'  => 'completion-complete-pass',
                             'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/10037.png',
                             'imgalt'    => '',
@@ -709,7 +914,8 @@ function format_ludic_get_default_skins_settings(){
                             'extratext' => 'Méga-Alakazam'
                         ],
                         [
-                            'state'     => COMPLETION_COMPLETE_FAIL, //3
+                            'state'     => COMPLETION_COMPLETE_FAIL,
+                            //3
                             'statestr'  => 'completion-complete-fail',
                             'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/64.png',
                             'imgalt'    => '',
@@ -727,12 +933,21 @@ function format_ludic_get_default_skins_settings(){
                 'title'       => 'Chaque pokémon évolue',
                 'description' => 'Collectionne et fais évoluer les pokémons.',
                 'properties'  => [
-                    'baseimage'   => ['imgsrc' => 'https://i.ytimg.com/vi/XSPntFQODQQ/maxresdefault.jpg', 'imgalt' => ''],
-                    'finalimage'  => ['imgsrc' => 'https://images-na.ssl-images-amazon.com/images/I/71xp01I1uML.jpg', 'imgalt' => ''],
+                    'baseimage'   => [
+                        'imgsrc' => 'https://i.ytimg.com/vi/XSPntFQODQQ/maxresdefault.jpg',
+                        'imgalt' => ''
+                    ],
+                    'finalimage'  => [
+                        'imgsrc' => 'https://images-na.ssl-images-amazon.com/images/I/71xp01I1uML.jpg',
+                        'imgalt' => ''
+                    ],
                     'stampimages' => [
                         [
                             'index'                    => 1,
-                            'completion-incomplete'    => ['imgsrc' => $defaultimage, 'imgalt' => ''],
+                            'completion-incomplete'    => [
+                                'imgsrc' => $defaultimage,
+                                'imgalt' => ''
+                            ],
                             'completion-complete'      => [
                                 'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/2.png',
                                 'imgalt' => ''
@@ -748,7 +963,10 @@ function format_ludic_get_default_skins_settings(){
                         ],
                         [
                             'index'                    => 2,
-                            'completion-incomplete'    => ['imgsrc' => $defaultimage, 'imgalt' => ''],
+                            'completion-incomplete'    => [
+                                'imgsrc' => $defaultimage,
+                                'imgalt' => ''
+                            ],
                             'completion-complete'      => [
                                 'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/5.png',
                                 'imgalt' => ''
@@ -764,7 +982,10 @@ function format_ludic_get_default_skins_settings(){
                         ],
                         [
                             'index'                    => 3,
-                            'completion-incomplete'    => ['imgsrc' => $defaultimage, 'imgalt' => ''],
+                            'completion-incomplete'    => [
+                                'imgsrc' => $defaultimage,
+                                'imgalt' => ''
+                            ],
                             'completion-complete'      => [
                                 'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/8.png',
                                 'imgalt' => ''
@@ -780,12 +1001,30 @@ function format_ludic_get_default_skins_settings(){
                         ],
                     ],
                     'stampcss'    => [
-                        ['number' => 1, 'css' => '{background-color: green;}'],
-                        ['number' => 2, 'css' => '{background-color: blue;}'],
-                        ['number' => 3, 'css' => '{background-color: red;}'],
-                        ['number' => 4, 'css' => '{background-color: black;}'],
-                        ['number' => 5, 'css' => '{background-color: beige;}'],
-                        ['number' => 6, 'css' => '{background-color: aliceblue;}'],
+                        [
+                            'number' => 1,
+                            'css'    => '{background-color: green;}'
+                        ],
+                        [
+                            'number' => 2,
+                            'css'    => '{background-color: blue;}'
+                        ],
+                        [
+                            'number' => 3,
+                            'css'    => '{background-color: red;}'
+                        ],
+                        [
+                            'number' => 4,
+                            'css'    => '{background-color: black;}'
+                        ],
+                        [
+                            'number' => 5,
+                            'css'    => '{background-color: beige;}'
+                        ],
+                        [
+                            'number' => 6,
+                            'css'    => '{background-color: aliceblue;}'
+                        ],
                     ],
                     'css'         => '{background-color: purple;} .skin-text {color: white;} 
                                 .skin-img.img-0 {filter: grayscale(1);}

@@ -57,7 +57,7 @@ class format_ludic_section extends format_ludic_item {
 
         // Action.
         $location = $contexthelper->get_location();
-        if ($location === 'course' && !$contexthelper->is_student_view_forced()) {
+        if (($location === 'course' || $location === 'section') && !$contexthelper->is_student_view_forced()) {
             $this->action = 'getDataLinkAndRedirectTo';
             $this->link   = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
         }
@@ -102,6 +102,10 @@ class format_ludic_section extends format_ludic_item {
 
             // The skin will render all section content.
             $this->content = $section->skin->render_skinned_tile();
+
+            if($contexthelper->get_section_id() == $section->id){
+                $this->selected = true;
+            }
 
         }
 

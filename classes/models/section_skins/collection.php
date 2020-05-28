@@ -31,6 +31,7 @@ class collection extends \format_ludic\skin {
     public static function get_editor_config(){
         return [
             "settings" => [
+                "name"                  => "text",
                 "main-css"              => "css",
             ],
             "steps" => [
@@ -69,9 +70,9 @@ class collection extends \format_ludic\skin {
      * @return object
      */
     public function get_default_image() {
-        global $CFG;
+        global $OUTPUT;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . '/course/format/ludic/pix/default.svg',
+                'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
                 'imgalt' => 'Default image.'
         ];
     }

@@ -9,6 +9,7 @@ class activity_skin_score implements activity_skin{
     static function get_editor_config(){
         return [
             "settings" => [
+                "name"                  => "text",
                 "main-css"              => "css",
                 "linear-value-part"     => "int",
             ],

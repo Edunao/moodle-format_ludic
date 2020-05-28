@@ -57,12 +57,8 @@ $renderer = $PAGE->get_renderer('format_ludic');
 
 echo $OUTPUT->header();
 
-echo 'coucou';
 $skins = $contexthelper->get_skins_format();
 
-
-//print_object($skins);
-//print_object('coucou');
 echo $renderer->render_edit_skins_page();
 
 echo $OUTPUT->footer();

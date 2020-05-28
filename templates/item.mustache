@@ -16,7 +16,7 @@
 }}
 <div id="{{selectorid}}"
     {{! Class. }}
-     class="item {{itemtype}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}}
+     class="item {{itemtype}} {{#link}}has-link{{/link}} {{itemtype}}-{{order}}{{#draggable}} ludic-drag{{/draggable}}{{#droppable}} ludic-drop{{/droppable}}{{#isnotvisible}}
     is-not-visible{{/isnotvisible}}{{#parent}} parent{{/parent}}{{#child}} child{{/child}}{{#editmode}} in-edition{{/editmode}}{{#selected}} selected{{/selected}}{{#parentid}} parent-id-{{parentid}}{{/parentid}}{{#icons}} has-icon-{{position}}{{/icons}}"
     {{#draggable}} draggable="true"{{/draggable}}
      title="{{tooltip}}"
@@ -47,7 +47,7 @@
 
     {{! Main image of item. }}
     {{#imgsrc}}
-        <div class="item-img-container" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}"></div>
+        <img class="item-img-container" src="{{imgsrc}}" aria-label="{{imgalt}}">
     {{/imgsrc}}
 
     {{! Item content. }}

@@ -95,6 +95,7 @@ class score extends \format_ludic\skin {
                 'imgsrc'     => '',
                 'imgalt'     => ''
         ];
+        $nextstep = null;
 
         // Copy steps into an associative array, indexed by threshold and calculate the total value parts score.
         $sortedsteps = [];
@@ -123,6 +124,7 @@ class score extends \format_ludic\skin {
         $gradeinfo       = $this->get_grade_info();
         $gradeproportion = $gradeinfo->proportion;
         $sum             = 0;
+        $currentstepfinded = false;
         foreach ($sortedsteps as $step) {
             // Prevent division by 0.
             if ($total === 0) {
@@ -135,6 +137,11 @@ class score extends \format_ludic\skin {
             $step->proportion = $sum / $total;
             if (($gradeproportion * 100) >= $step->threshold) {
                 $currentstep = $step;
+                $currentstepfinded = true;
+            }
+
+            if($currentstepfinded && !$nextstep){
+                $nextstep = $step;
             }
         }
 
@@ -189,9 +196,9 @@ class score extends \format_ludic\skin {
      * @return object
      */
     public function get_default_image() {
-        global $CFG;
+        global $OUTPUT;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . '/course/format/ludic/pix/default.svg',
+                'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
                 'imgalt' => 'Default image.'
         ];
     }

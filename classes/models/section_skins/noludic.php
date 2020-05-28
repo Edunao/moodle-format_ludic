@@ -31,8 +31,9 @@ class noludic extends \format_ludic\skin {
     public static function get_editor_config(){
         return [
             "settings" => [
+                "name"                  => "text",
                 "main-css"              => "css",
-                "background"                 => "image"
+                "background"            => "image"
             ]
         ];
     }
@@ -47,9 +48,9 @@ class noludic extends \format_ludic\skin {
      * @return \stdClass
      */
     public function get_edit_image() {
-        global $CFG;
+        global $OUTPUT;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/default.svg",
+                'imgsrc' => $OUTPUT->image_url('default-section', 'format_ludic')->out(),
                 'imgalt' => 'No ludic'
         ];
     }

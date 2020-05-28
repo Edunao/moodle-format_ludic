@@ -68,7 +68,7 @@ class section_form extends form {
                 $this->object->name,
                 $this->object->get_title(),
                 get_string('label-section-title', 'format_ludic'),
-                ['required' => true, 'maxlength' => 30, 'disabled' => $disabled]
+                ['required' => true, 'disabled' => $disabled]
         );
 
         // Section visibility.

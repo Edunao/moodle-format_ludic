@@ -44,6 +44,7 @@ class format_ludic_header_bar implements renderable {
     public $optionslist;
     public $hasoptions;
     public $display;
+    public $sectionscontent;
 
     /**
      * model constructor.
@@ -58,6 +59,13 @@ class format_ludic_header_bar implements renderable {
         $this->hasoptions     = count($this->optionslist) > 0;
         $this->notstudentview = !$this->contexthelper->is_student_view_forced();
         $editmode             = $this->contexthelper->is_editing();
+
+        if(!$editmode && $this->contexthelper->get_section_idx() > 0){
+            $renderer = $PAGE->get_renderer('format_ludic');
+            //$sectionscontent = $renderer->render_course_sections();
+            $sectionscontent = $renderer->render_header_course_sections();
+            $this->sectionscontent = $sectionscontent;
+        }
 
         // Javascript parameters.
         $params = [
@@ -243,40 +251,22 @@ class format_ludic_header_bar implements renderable {
             return $list;
         }
 
-        // Options for editing teacher.
-        if (!$isstudent && ($isadmin || $iseditingteacher)) {
-            $editmode = $this->contexthelper->is_editing();
-
-            // First option : edit mode.
-            $editname = $editmode ? get_string('turneditingoff') : get_string('turneditingon');
-            $editicon = $OUTPUT->image_url('i/edit')->out();
-
-            $editoption = [
-                'iconsrc' => $editicon,
-                'iconalt' => $editname,
-                'name'    => $editname,
-            ];
-
-            // Don't add action in preview student view.
-            if (!$this->contexthelper->is_student_view_forced()) {
-                $editlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&sesskey=' . sesskey() . '&edit=';
-                $editlink .= $editmode ? 'off' : 'on';
-
-                // Add link and action to redirect.
-                $editoption['link']   = $editlink;
-                $editoption['action'] = 'getDataLinkAndRedirectTo';
-
-            }
-
-            $list[] = $editoption;
-        }
-
         // Options for editing teacher and teacher.
         if ($isadmin || $iseditingteacher || $isteacher) {
 
-            // Switch role for student view option.
-            $nameidentifier = $isstudent ? 'header-bar-teacher-view' : 'header-bar-student-view';
-            $name           = get_string($nameidentifier, 'format_ludic');
+            // To student interface
+            if(!$isstudent){
+                $name           = get_string('header-bar-student-view', 'format_ludic');
+                $roleid = $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
+                $switchlink = $CFG->wwwroot . '/course/view.php?id='.$courseid.'&switchrole='.$roleid.'&sesskey=' . sesskey() . '&edit=on';
+            }
+
+            // To edition interface
+            if($isstudent){
+                $name           = get_string('header-bar-teacher-view', 'format_ludic');
+                $roleid = 0;
+                $switchlink = $CFG->wwwroot . '/course/view.php?id='.$courseid.'&switchrole='.$roleid.'&sesskey=' . sesskey() . '&edit=on';
+            }
 
             $switchoption = [
                 'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/student-view.svg',
@@ -286,34 +276,28 @@ class format_ludic_header_bar implements renderable {
 
             // Don't add action in preview student view.
             if (!$this->contexthelper->is_student_view_forced()) {
-                $returnurl = urlencode($this->contexthelper->get_current_url());
-
-                // To "unswitch" pass 0 as the roleid. To switch to student pass student role id.
-                $switchlink = $CFG->wwwroot . '/course/switchrole.php?id=' . $courseid . '&sesskey=' . sesskey();
-                $switchlink .= '&returnurl=' . $returnurl . '&switchrole=';
-                $switchlink .= $isstudent ? '0' : $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
-
-                // Add link and action to redirect.
                 $switchoption['link']   = $switchlink;
                 $switchoption['action'] = 'getDataLinkAndRedirectTo';
-
             }
 
             $list[] = $switchoption;
 
             // Edit skins
-            $editname   = 'Edit skins';
-            $editicon   = $OUTPUT->image_url('i/settings')->out();
-            $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
-            $editoption = [
-                'action'  => 'getDataLinkAndRedirectTo',
-                'link'    => $editlink,
-                'iconsrc' => $editicon,
-                'iconalt' => $editname,
-                'name'    => $editname,
-            ];
+            if(!$isstudent){
+                $editname   = 'Edit skins';
+                $editicon   = $OUTPUT->image_url('i/settings')->out();
+                $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
+                $editoption = [
+                    'action'  => 'getDataLinkAndRedirectTo',
+                    'link'    => $editlink,
+                    'iconsrc' => $editicon,
+                    'iconalt' => $editname,
+                    'name'    => $editname,
+                ];
 
-            $list[] = $editoption;
+                $list[] = $editoption;
+            }
+
         }
 
         // Return list.
