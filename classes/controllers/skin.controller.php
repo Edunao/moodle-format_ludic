@@ -171,7 +171,7 @@ class skin_controller extends controller_base {
 
         $renderer = $PAGE->get_renderer('format_ludic');
 
-        return $renderer->render_skin_skin_types_list($skintypes);
+        return $renderer->render_skin_skin_types_list($skinid, $skintypes);
     }
 
     public function get_skin_types_form($skintypeid){

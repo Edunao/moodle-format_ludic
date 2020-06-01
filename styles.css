@@ -150,6 +150,12 @@
     font-size: 40px;
 }
 
+/* For stacked images */
+.format-ludic .item .skin-tile .skin-img.img-step{
+    position: absolute;
+    left: 0;
+}
+
 /* Inline "skin" activity */
 .format-ludic .item.inline.coursemodule {
     width: 100%;
@@ -181,6 +187,7 @@
     display: none;
 }
 
+
 /* -----------------------------------------
     Section list page
  */
@@ -195,7 +202,7 @@
 }
 
 #ludic-main-container.course-view .item.section {
-    flex-basis: 47%;
+    flex-basis: 31%;
     margin-right: 10px;
     min-width: 350px;
     max-width: 600px;
@@ -298,6 +305,20 @@
     background-color: #FFF;
 }
 
+#ludic-main-container.editmode .container-children.coursemodules{
+    padding: 10px;
+    border-top: 1px solid rgba(0,0,0,.125);
+}
+
+#ludic-main-container.editmode .container-children.coursemodules .children-elements{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#ludic-main-container.editmode .container-children.coursemodules .visibleifjs.addresourcemodchooser{
+    display: none;
+}
+
 /* -----------------------------------------
     Form
  */
@@ -318,6 +339,21 @@
 
 #ludic-main-container .container-form .ludic-form .ludic-form-group .select-description .option-description.visible {
     display: inline-block
+}
+
+#ludic-main-container .container-properties .container-buttons{
+    text-align: center;
+}
+
+#ludic-main-container .container-properties .container-buttons > .dropdown,
+#ludic-main-container .container-properties .container-buttons > .btn{
+    width: 40%;
+    display: inline-block;
+    margin: 5px;
+}
+
+#ludic-main-container .container-properties .container-buttons > .dropdown button{
+    width: 100%;
 }
 
 /* -----------------------------------------

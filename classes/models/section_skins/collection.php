@@ -99,17 +99,14 @@ class collection extends \format_ludic\skin {
     public function get_images_to_render() {
         $images         = [];
         $completioninfo = $this->get_completion_info();
+        $sequence    = $this->get_collection_sequence();
 
-        // TODO : Finir implémentation collection.
-        $completioninfo['perfect'] = true; // TODO : supprimer cette ligne quand tout sera ok,
-        // c'est juste pour sortir au prochain if et ne pas que la suite bug.
-
-
+        // TODO Vérifier comment gérer le "perfect"
         // ​​If the activities have all been completed, then the final image is displayed.
-        if ($completioninfo['perfect']) {
-            $images[] = $this->get_properties('finalimage');
-            return $images;
-        }
+        //if ($completioninfo['perfect']) {
+        //    $images[] = $this->get_properties('finalimage');
+        //    return $images;
+        //}
 
         // From now this indicator is useless.
         unset($completioninfo['perfect']);
@@ -126,14 +123,12 @@ class collection extends \format_ludic\skin {
             $stampimages[$stamp->index] = $stamp;
         }
 
-        // Reverse sequence to have itemid => index.
-        $sequence    = array_flip($this->get_collection_sequence());
-        // Todo : shuffle stamps by section. use         srand(); shuffle();
-        // Todo : repeat sequence when count stamp > count sequence
+        // Randomize stamp order
+        srand($this->item->dbrecord->id);
+        shuffle($stampimages);
 
         // For each state of completion.
         foreach ($completioninfo as $completionkey => $completion) {
-
             // For each item in sequence.
             foreach ($completion['sequence'] as $id) {
                 // Find index.
@@ -146,17 +141,44 @@ class collection extends \format_ludic\skin {
                 $image = $stamp->$completionkey;
 
                 // Add image with class.
-                $image->class = 'img-' . $index;
+                $image->class = 'img-step img-step-' . $index;
                 $images[$index] = $image;
             }
 
         }
+        ksort($images);
 
-        return $images;
+        return array_values($images);
     }
 
+    /**
+     * Get cm order excluding cm without completion
+     * @return array
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
     private function get_collection_sequence() {
-        return $this->item->get_collection_sequence();
+        $sectionsequence = array_flip($this->item->get_collection_sequence());
+        $completioninfo = $this->get_completion_info();
+        unset($completioninfo['perfect']);
+
+        $tempseq = [];
+        foreach ($completioninfo as $completionkey => $completion) {
+            foreach ($completion['sequence'] as $cmid) {
+                $tempseq[$sectionsequence[$cmid]] = $cmid;
+            }
+        }
+        ksort($tempseq);
+
+        $sequence = [];
+        $i = 1;
+        foreach ($tempseq as $index => $cmid){
+            $sequence[$cmid] = $i;
+            $i ++;
+        }
+
+        return $sequence;
     }
 
     /**

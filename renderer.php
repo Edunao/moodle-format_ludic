@@ -171,8 +171,8 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render($skinslist);
     }
 
-    public function render_skin_skin_types_list($skintypes){
-        $skintypeslist = new format_ludic_skins_types_list($skintypes);
+    public function render_skin_skin_types_list($skinid, $skintypes){
+        $skintypeslist = new format_ludic_skins_types_list($skinid, $skintypes);
         return $this->render($skintypeslist);
     }
 

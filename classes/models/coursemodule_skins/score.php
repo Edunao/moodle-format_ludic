@@ -29,6 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 class score extends \format_ludic\skin {
 
     private $currentstep = null;
+    private $nextstep = null;
 
     public static function get_editor_config(){
         return [
@@ -124,7 +125,6 @@ class score extends \format_ludic\skin {
         $gradeinfo       = $this->get_grade_info();
         $gradeproportion = $gradeinfo->proportion;
         $sum             = 0;
-        $currentstepfinded = false;
         foreach ($sortedsteps as $step) {
             // Prevent division by 0.
             if ($total === 0) {
@@ -137,12 +137,10 @@ class score extends \format_ludic\skin {
             $step->proportion = $sum / $total;
             if (($gradeproportion * 100) >= $step->threshold) {
                 $currentstep = $step;
-                $currentstepfinded = true;
-            }
-
-            if($currentstepfinded && !$nextstep){
+            }else if( is_null($nextstep)){
                 $nextstep = $step;
             }
+
         }
 
         // If the sum of score parts is 0 then the linear_score_part value is clamped to 1.
@@ -177,6 +175,7 @@ class score extends \format_ludic\skin {
 
         // Return current step.
         $this->currentstep = $currentstep;
+        $this->nextstep = $nextstep;
         return $this->currentstep;
     }
 
@@ -251,7 +250,8 @@ class score extends \format_ludic\skin {
                 ['text' => $step->score . '/' . $weight, 'class' => 'fullscore'],
                 ['text' => (int) $step->grade . '/' . $step->grademax, 'class' => 'fullgrade'],
                 ['text' => $step->proportion . '%', 'class' => 'percentage'],
-                ['text' => isset($step->extratext) ? $step->extratext : '', 'class' => 'extratext']
+                ['text' => isset($step->extratext) ? $step->extratext : '', 'class' => 'extratext'],
+                ['text' => isset($this->nextstep->score) ? $this->nextstep->score : '', 'class' => 'threshold' ],
         ];
     }
 

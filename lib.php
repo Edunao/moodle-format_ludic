@@ -531,7 +531,8 @@ function format_ludic_get_default_skins_settings() {
                         'threshold' => 100,
                         'scorepart' => 2,
                         'extratext' => '',
-                        'extracss'  => '',
+                        'extracss'  => '.skin-text.threshold{display:none;}
+                                        .skin-text.score{bottom: 39%}',
                         'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step3', 'format_ludic')->out(),
                         'imgalt'    => 'Trophée d\'or'
                     ]
@@ -539,7 +540,10 @@ function format_ludic_get_default_skins_settings() {
                 'linearscorepart' => 1,
                 'css'   => '.sub-tile.skin-tile .skin-text {font-size:30px;} 
                             .skin-text.score{display: block;position: absolute;left: 59%;bottom: 49%;font-size:1.5rem;font-weight:bold;} 
-                            .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}'
+                            .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}
+                            .skin-text.threshold{display: inline-block;position: absolute;left: 43%;bottom: 17%;font-size:20px !important;font-weight:bold;}
+                            .skin-text.threshold::before{content: "SEUIL : ";font-size:20px;font-weight:normal;}
+                            .skin-text.threshold::after{content: "pts ";font-size:20px;font-weight:normal;}'
 
             ]
         ],
@@ -637,6 +641,247 @@ function format_ludic_get_default_skins_settings() {
                 ],
                 'css'   => ''
             ],
+
+        ],
+        [
+            'id'          => 15,
+            'skinid'      => 'section-collection',
+            'location'    => 'section',
+            'type'        => 'collection',
+            'title'       => 'Collection d\'animaux',
+            'description' => 'La progression fait gagner des tampons animaux.',
+            'properties'  => [
+                'baseimage'   => [
+                    'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
+                    'imgalt' => 'Fond collection'
+                ],
+                'finalimage'  => [
+                    'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
+                    'imgalt' => 'Fond collection'
+                ],
+                'stampimages' => [
+                    [
+                        'index'                    => 1,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-whale', 'format_ludic')->out(),
+                            'imgalt' => 'Whale'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-whale', 'format_ludic')->out(),
+                            'imgalt' => 'Whale'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 2,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-frog', 'format_ludic')->out(),
+                            'imgalt' => 'Frog'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-frog', 'format_ludic')->out(),
+                            'imgalt' => 'Frog'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 3,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-walrus', 'format_ludic')->out(),
+                            'imgalt' => 'Walrus'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-walrus', 'format_ludic')->out(),
+                            'imgalt' => 'Walrus'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 4,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collecton-owl', 'format_ludic')->out(),
+                            'imgalt' => 'Owl'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collecton-owls', 'format_ludic')->out(),
+                            'imgalt' => 'Owl'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 5,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-pigeon', 'format_ludic')->out(),
+                            'imgalt' => 'Pigeon'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-pigeon', 'format_ludic')->out(),
+                            'imgalt' => 'Pigeon'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 6,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-snake', 'format_ludic')->out(),
+                            'imgalt' => 'Snake'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-snake', 'format_ludic')->out(),
+                            'imgalt' => 'Snake'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 7,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-cow', 'format_ludic')->out(),
+                            'imgalt' => 'Cow'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-cow', 'format_ludic')->out(),
+                            'imgalt' => 'Cow'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 8,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bear', 'format_ludic')->out(),
+                            'imgalt' => 'Bear'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bear', 'format_ludic')->out(),
+                            'imgalt' => 'Bear'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                    [
+                        'index'                    => 9,
+                        'completion-incomplete'    => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                        'completion-complete'      => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-mouse', 'format_ludic')->out(),
+                            'imgalt' => 'Mouse'
+                        ],
+                        'completion-complete-pass' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-mouse', 'format_ludic')->out(),
+                            'imgalt' => 'Mouse'
+                        ],
+                        'completion-complete-fail' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                            'imgalt' => 'Empty'
+                        ],
+                    ],
+                ],
+                'stampcss'    => [
+                    [
+                        'number' => 1,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 2,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 3,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 4,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 5,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 6,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 7,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 8,
+                        'css'    => ''
+                    ],
+                    [
+                        'number' => 9,
+                        'css'    => ''
+                    ],
+                ],
+                'css'         => '
+                    .img-step{top:2%; width:33% !important;}
+                    
+                    .img-step-2{left:33%;}
+                    .img-step-3{left:64%;}
+                    .img-step-4{top:32%;}
+                    .img-step-5{top:32%;left:33%;}
+                    .img-step-6{top:32%;left:64%;}
+                    .img-step-7{top:62%;}
+                    .img-step-8{top:62%;left:33%;}
+                    .img-step-9{top:62%;left:64%;}'
+            ]
         ]
     ];
 

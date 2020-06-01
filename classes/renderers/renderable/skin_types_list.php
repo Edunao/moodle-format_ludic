@@ -32,13 +32,16 @@ class format_ludic_skins_types_list extends format_ludic_item {
 
     public $selected;
     public $skintypes = [];
+    public $skinid = '';
 
     /**
      * format_ludic_skin constructor.
      *
      * @param \format_ludic\skin $skin
      */
-    public function __construct($skintypes) {
+    public function __construct($skinid, $skintypes) {
+
+        $this->skinid = $skinid;
 
         foreach($skintypes as $skintype) {
             $this->skintypes[] = [

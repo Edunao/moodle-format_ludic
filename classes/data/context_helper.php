@@ -959,6 +959,7 @@ class context_helper {
             $skins[$skin->id] = skin::get_by_instance($skin);
         }
 
+
         // Return all skins.
         return $skins;
     }
@@ -1025,6 +1026,8 @@ class context_helper {
         $skins[\format_ludic\coursemodule\achievement::get_unique_name()] = $achievements;
         $sectionscore = \format_ludic\section\score::get_instance();
         $skins[\format_ludic\section\score::get_unique_name()] = $sectionscore;
+        $sectioncollection = \format_ludic\section\collection::get_instance();
+        $skins[\format_ludic\section\collection::get_unique_name()] = $sectioncollection;
 
         return $skins;
     }

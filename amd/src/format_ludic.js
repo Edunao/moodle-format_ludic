@@ -52,7 +52,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.initEvents();
 
             // Edit skins mode
-            if(ludic.editSkins){
+            if (ludic.editSkins) {
                 ludic.displaySkinsList();
             }
 
@@ -128,7 +128,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                                 // Ensures that response is an object.
                                 let isHtml = /<\/?[a-z][\s\S]*>/i.test(response);
-                                let responseParams = isHtml ? {html : response} : response;
+                                let responseParams = isHtml ? {html: response} : response;
                                 responseParams = typeof params === "object" ? responseParams : JSON.parse(responseParams);
 
                                 // Merge params (initial params + ajax response).
@@ -662,7 +662,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             console.log('initEditmode');
 
 
-
             // When you click on an item in .container-parents, display properties in .container-properties.
             ludic.initItemGetPropertiesEvent();
 
@@ -850,9 +849,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let body = $('body.format-ludic');
 
             console.log('init drag and drop ? 2');
-            $( ".container-children.coursemodules .children-elements" ).sortable({
+            $(".container-children.coursemodules .children-elements").sortable({
                 items: ".ludic-drag",
-                change: function( event, ui ) {
+                change: function (event, ui) {
                     console.log('change drag and drop ', event);
                 }
             });
@@ -870,51 +869,51 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             //     e.preventDefault();
             // });
 
-           /* // Management of drop sections and course modules.
-            body.on('drop', '.section.ludic-drop, .coursemodule.ludic-drop', function (e) {
-                console.log('drop');
-                console.log(e.currentTarget.id);
+            /* // Management of drop sections and course modules.
+             body.on('drop', '.section.ludic-drop, .coursemodule.ludic-drop', function (e) {
+                 console.log('drop');
+                 console.log(e.currentTarget.id);
 
-                // Get drag item data.
-                let dragItem = $('#' + e.originalEvent.dataTransfer.getData('text/plain'));
-                let dragId = dragItem.data('id');
-                let dragType = dragItem.data('type');
+                 // Get drag item data.
+                 let dragItem = $('#' + e.originalEvent.dataTransfer.getData('text/plain'));
+                 let dragId = dragItem.data('id');
+                 let dragType = dragItem.data('type');
 
-                // Get drop item data.
-                let dropItem = $('#' + e.currentTarget.id);
-                let dropId = dropItem.data('id');
-                let dropType = dropItem.data('type');
+                 // Get drop item data.
+                 let dropItem = $('#' + e.currentTarget.id);
+                 let dropId = dropItem.data('id');
+                 let dropType = dropItem.data('type');
 
-                if (dragItem.is(dropItem)) {
-                    console.log('drop on same item, nothing to do');
-                    return false;
-                }
+                 if (dragItem.is(dropItem)) {
+                     console.log('drop on same item, nothing to do');
+                     return false;
+                 }
 
-                // Define the action here.
-                let action = false;
-                if (dragType === 'section' && dropType === 'section') {
-                    action = 'move_section_to';
-                } else if (dragType === 'coursemodule' && dropType === 'section') {
-                    action = 'move_to_section';
-                } else if (dragType === 'coursemodule' && dropType === 'coursemodule') {
-                    action = 'move_on_section';
-                }
+                 // Define the action here.
+                 let action = false;
+                 if (dragType === 'section' && dropType === 'section') {
+                     action = 'move_section_to';
+                 } else if (dragType === 'coursemodule' && dropType === 'section') {
+                     action = 'move_to_section';
+                 } else if (dragType === 'coursemodule' && dropType === 'coursemodule') {
+                     action = 'move_on_section';
+                 }
 
-                // If an action has been found, make an ajax call to the section controller.
-                // Then set the html on the parent of the dragged object.
-                if (action) {
-                    let callbackFunction = action === 'move_section_to' ? ludic.displaySections : ludic.displayCourseModulesHtml;
-                    console.log('execute ', action, callbackFunction);
+                 // If an action has been found, make an ajax call to the section controller.
+                 // Then set the html on the parent of the dragged object.
+                 if (action) {
+                     let callbackFunction = action === 'move_section_to' ? ludic.displaySections : ludic.displayCourseModulesHtml;
+                     console.log('execute ', action, callbackFunction);
 
-                    ludic.ajaxCall({
-                        idtomove: dragId,
-                        toid: dropId,
-                        controller: 'section',
-                        action: action,
-                        callback: callbackFunction
-                    });
-                }
-            });*/
+                     ludic.ajaxCall({
+                         idtomove: dragId,
+                         toid: dropId,
+                         controller: 'section',
+                         action: action,
+                         callback: callbackFunction
+                     });
+                 }
+             });*/
         },
 
         /**
@@ -1064,7 +1063,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          */
         displayPopup: function (html) {
             let selectorId = '#' + $(html).attr('id');
-            console.log('display popup new ', selectorId );
+            console.log('display popup new ', selectorId);
             $(selectorId).remove();
             $('body').append(html);
             console.log(selectorId);
@@ -1125,7 +1124,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
         },
 
-        displaySkinTypesHtml: function(html, callback){
+        displaySkinTypesHtml: function (html, callback) {
             console.log('displaySkinTypesHtml html => ', html, ' /// callback => ', callback);
 
             // Skins list
@@ -1139,7 +1138,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             }
         },
 
-        displaySkinTypesForm: function(html, callback){
+        displaySkinTypesForm: function (html, callback) {
             console.log('displaySkinTypesForm html => ', html, ' /// callback => ', callback);
 
             // Skins list
@@ -1192,7 +1191,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             }
         },
 
-        displaySkinsList: function (html, callback){
+        displaySkinsList: function (html, callback) {
             console.log('displaySkinsList html => ', html, ' /// callback => ', callback);
 
             // Skins list
@@ -1221,7 +1220,11 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             }
 
+        },
 
+        openModChooser: function (element) {
+            let sectionid = element.data('section');
+            $('#section-' + sectionid + '.ludic-modchooser .section-modchooser-link .section-modchooser-text').trigger('click');
         },
 
         /**
