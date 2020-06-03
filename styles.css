@@ -112,7 +112,7 @@
 .format-ludic .item.section .title-tile {
     font-size: 2.9em;
     line-height: normal;
-    height: 120px;
+    min-height: 120px;
     width: 100%;
 }
 
@@ -196,7 +196,7 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    align-items: center;
+    align-items: first baseline;
     flex-wrap: wrap;
     justify-content: center;
 }
@@ -238,7 +238,11 @@
     flex-basis: 50%;
     flex-grow: 1;
     min-width: 350px;
-    max-width: 600px;
+    max-width: 500px;
+}
+
+#section-block > .section{
+    max-width: 500px;
 }
 
 #ludic-main-container .coursemodules-container{

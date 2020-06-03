@@ -54,7 +54,7 @@ class data_api {
         // Initialize default object.
         $return = (object) [
                 'grade'      => 0,
-                'grademax'   => 1,
+                'grademax'   => 0,
                 'proportion' => 0
         ];
 
@@ -86,6 +86,18 @@ class data_api {
         }
 
         return $return;
+    }
+
+    public function cm_is_graded($cminfo){
+        // Get data for grade api.
+        $courseid = $this->contexthelper->get_course_id();
+        $modname  = $cminfo->modname;
+        $instance = $cminfo->instance;
+        $userid   = $this->contexthelper->get_user_id();
+
+        // Get grades.
+        $grades = grade_get_grades($courseid, 'mod', $modname, $instance, $userid);
+        return count($grades->items) > 0;
     }
 
     /**
@@ -132,9 +144,12 @@ class data_api {
                 $completionstr = 'completion-n';
                 break;
             case COMPLETION_COMPLETE:
-                $completion    = 'completion-complete';
-                $completionstr = 'completion-y';
-                break;
+                // If cm is not graded, activity is considered as complete and pass
+                if($this->cm_is_graded($cminfo)){
+                    $completion    = 'completion-complete';
+                    $completionstr = 'completion-y';
+                    break;
+                }
             case COMPLETION_COMPLETE_PASS:
                 $completion    = 'completion-complete-pass';
                 $completionstr = 'completion-pass';

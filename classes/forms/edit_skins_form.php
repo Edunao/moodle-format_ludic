@@ -58,7 +58,7 @@ class edit_skins_form extends form {
         foreach($settings as $section => $options){
 
             if($section == 'steps'){
-
+                continue;
             }
 
             foreach($options as $elementname => $type){
@@ -78,6 +78,9 @@ class edit_skins_form extends form {
             }
 
         }
+
+        $elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
+
 
         return $elements;
 

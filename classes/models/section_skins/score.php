@@ -32,12 +32,11 @@ class score extends \format_ludic\skin {
         return [
             "settings" => [
                 "name"                  => "text",
+                "description"           => "text",
                 "main-css"              => "css",
-                "linear-value-part"     => "int",
             ],
             "steps" => [
-                "score-threshold"       => "number",
-                "fixed-value-part"      => "int",
+                "threshold"       => "number",
                 "step-image"            => "image",
                 "step-text"             => "string",
                 "step-css"              => "css"

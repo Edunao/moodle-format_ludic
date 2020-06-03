@@ -1028,6 +1028,8 @@ class context_helper {
         $skins[\format_ludic\section\score::get_unique_name()] = $sectionscore;
         $sectioncollection = \format_ludic\section\collection::get_instance();
         $skins[\format_ludic\section\collection::get_unique_name()] = $sectioncollection;
+        $sectionachievement = \format_ludic\section\achievement::get_instance();
+        $skins[\format_ludic\section\achievement::get_unique_name()] = $sectionachievement;
 
         return $skins;
     }

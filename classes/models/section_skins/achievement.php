@@ -1,4 +1,6 @@
 <?php
+
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,7 +17,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Section skin collection class.
+ * Section skin achievement class.
  *
  * @package   format_ludic
  * @copyright 2020 Edunao SAS (contact@edunao.com)
@@ -24,9 +26,11 @@
 
 namespace format_ludic\section;
 
+use format_ludic\form_element;
+
 defined('MOODLE_INTERNAL') || die();
 
-class collection extends \format_ludic\skin {
+class achievement extends \format_ludic\skin {
 
     public static function get_editor_config() {
         return [
@@ -36,7 +40,7 @@ class collection extends \format_ludic\skin {
                 "description" => "text",
             ],
             "properties" => [
-                "base-image"  => "image",
+                "background-image"  => "image",
                 "final-image" => "image"
             ],
             "steps"      => [
@@ -52,16 +56,16 @@ class collection extends \format_ludic\skin {
     }
 
     public static function get_unique_name() {
-        return 'section-collection';
+        return 'section-achievement';
     }
 
     public static function get_instance() {
         return (object) [
             'id'          => self::get_unique_name(),
             'location'    => 'section',
-            'type'        => 'collection',
-            'title'       => 'Collection de tampons',
-            'description' => 'Chaque activité fait gagner des tampons',
+            'type'        => 'achievement',
+            'title'       => 'Récompenses d\'activités',
+            'description' => 'Chaque activité niveau de réussite des activités change l\'état.',
             'settings'    => self::get_editor_config(),
         ];
     }
@@ -72,7 +76,7 @@ class collection extends \format_ludic\skin {
      * @return \stdClass
      */
     public function get_edit_image() {
-        $image = $this->get_properties('finalimage');
+        $image = $this->get_properties('final-image');
         return count($image) > 0 ? $image : $this->get_default_image();
     }
 
@@ -99,115 +103,78 @@ class collection extends \format_ludic\skin {
     }
 
     /**
-     * ​​If the activities have all been completed, then the final image is displayed.
-     * If not, then the base image is displayed with a set of stamp images on top of it.
-     * Each activities display an image relating its state.
+     * Hidden : id.
+     * Text : name.
+     * Checkbox : visible.
+     * Selection popup : skin id.
      *
-     * @return array
+     * @return form_element[]
      * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
      */
     public function get_images_to_render() {
         $images         = [];
-        $completioninfo = $this->get_completion_info();
-        $sequence       = $this->get_collection_sequence();
 
-        // TODO Vérifier comment gérer le "perfect"
+        $completioninfo = $this->get_completion_info();
+
         // ​​If the activities have all been completed, then the final image is displayed.
-        //if ($completioninfo['perfect']) {
-        //    $images[] = $this->get_properties('finalimage');
-        //    return $images;
-        //}
+        if ($completioninfo['perfect']) {
+            $images[] = $this->get_properties('final-image');
+            return $images;
+        }
 
         // From now this indicator is useless.
         unset($completioninfo['perfect']);
 
-        // If not, then the base image is displayed with a set of stamp images on top of it.
-        $baseimage        = $this->get_properties('baseimage');
+        // Background (optional)
+        $baseimage        = $this->get_properties('background-image');
         $baseimage->class = 'img-0';
         $images[]         = $baseimage;
 
-        // Ensure to order stamps by index.
-        $stamps      = $this->get_properties('stampimages');
-        $stampimages = [];
-        foreach ($stamps as $stamp) {
-            $stampimages[$stamp->index] = $stamp;
-        }
-
-        // Randomize stamp order
-        srand($this->item->dbrecord->id);
-        shuffle($stampimages);
-
-        // For each state of completion.
+        // Image for completion state
+        $steps      = $this->get_properties('steps');
         foreach ($completioninfo as $completionkey => $completion) {
-            // For each item in sequence.
-            foreach ($completion['sequence'] as $id) {
-                // Find index.
-                $index = $sequence[$id];
+            if($completion['count'] > 0){
+                foreach ($steps as $stepinfo){
+                    if($stepinfo->state == $completion['state']){
+                        $image = $stepinfo;
 
-                // Find config related to this index.
-                $stamp = $stampimages[$index];
-
-                // Take image with current item state.
-                $image = $stamp->$completionkey;
-
-                // Add image with class.
-                $image->class   = 'img-step img-step-' . $index;
-                $images[$index] = $image;
+                        if(isset($image->imgsrc) && $image->imgsrc != ''){
+                            $image->class   = 'img-step img-step-' . $completionkey;
+                            $images[$completionkey] = $image;
+                            break;
+                        }
+                    }
+                }
             }
-
         }
-        ksort($images);
 
         return array_values($images);
     }
 
-    /**
-     * Get cm order excluding cm without completion
-     *
-     * @return array
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    private function get_collection_sequence() {
-        $sectionsequence = array_flip($this->item->get_collection_sequence());
-        $completioninfo  = $this->get_completion_info();
+    public function get_texts_to_render() {
+        $texts = [];
+
+        $completioninfo = $this->get_completion_info();
+        $isperfect = $completioninfo['perfect'];
         unset($completioninfo['perfect']);
-
-        $tempseq = [];
+        $steps      = $this->get_properties('steps');
         foreach ($completioninfo as $completionkey => $completion) {
-            foreach ($completion['sequence'] as $cmid) {
-                $tempseq[$sectionsequence[$cmid]] = $cmid;
+            foreach ($steps as $stepinfo){
+                if($stepinfo->state == $completion['state']){
+                    $classes = ' number completion-count ' . $completionkey;
+                    if($completion['count'] > 0){
+                        $classes .= ' sup-zero ';
+                    }
+                    if($isperfect){
+                        $classes .= ' perfect ';
+                    }
+                    $texts[] = ['text' => $completion['count'], 'class' => $classes];
+                    break;
+                }
             }
         }
-        ksort($tempseq);
 
-        $sequence = [];
-        $i        = 1;
-        foreach ($tempseq as $index => $cmid) {
-            $sequence[$cmid] = $i;
-            $i++;
-        }
 
-        return $sequence;
+        return $texts;
     }
-
-    /**
-     * Add additional css if required.
-     *
-     * @return string
-     */
-    public function get_additional_css() {
-        $stampscss = $this->get_properties('stampcss');
-        $number    = count($this->get_collection_sequence());
-        foreach ($stampscss as $stampcss) {
-            if ($stampcss->number == $number) {
-                return $stampcss->css;
-            }
-        }
-        return '';
-    }
-
 }

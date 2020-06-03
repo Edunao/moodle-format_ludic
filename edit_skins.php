@@ -57,6 +57,7 @@ $renderer = $PAGE->get_renderer('format_ludic');
 
 echo $OUTPUT->header();
 
+format_ludic_init_edit_mode($context);
 $skins = $contexthelper->get_skins_format();
 
 echo $renderer->render_edit_skins_page();

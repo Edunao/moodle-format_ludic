@@ -389,13 +389,13 @@ class course_module extends model implements skinnable_interface {
         }
 
         // Get user data from data api.
-        $datapi = $this->contexthelper->get_data_api();
+        $dataapi = $this->contexthelper->get_data_api();
 
         // Get grade.
-        $grade = $datapi->get_course_module_user_grade($this->cminfo);
+        $grade = $dataapi->get_course_module_user_grade($this->cminfo);
 
         // Get completion.
-        $state = $datapi->get_course_module_user_completion($this->cminfo);
+        $state = $dataapi->get_course_module_user_completion($this->cminfo);
 
         // Return data.
         $this->results = [

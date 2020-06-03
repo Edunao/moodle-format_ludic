@@ -882,7 +882,90 @@ function format_ludic_get_default_skins_settings() {
                     .img-step-8{top:62%;left:33%;}
                     .img-step-9{top:62%;left:64%;}'
             ]
-        ]
+        ],
+
+        [
+            'id'          => 16,
+            'location'    => 'section',
+            'type'        => 'achievement',
+            'title'       => 'Médaille',
+            'description' => 'Des médailles en fonction des réussites des activités !',
+            'properties'  => [
+                'background-image'   => [
+                    'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-bg', 'format_ludic')->out(),
+                    'imgalt' => 'Fond de base'
+                ],
+                'final-image'  => [
+                    'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-final', 'format_ludic')->out(),
+                    'imgalt' => '100% de réussite !'
+                ],
+                'steps' => [
+                    [
+                        'state'     => COMPLETION_INCOMPLETE,
+                        'statestr'  => 'completion-incomplete',
+                        'imgsrc'    => '',
+                        'imgalt'    => '',
+                        'scorepart' => 0,
+                    ],
+                    [
+                        'state'     => COMPLETION_COMPLETE_FAIL,
+                        'statestr'  => 'completion-complete-fail',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-fail', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaillé ratée',
+                        'scorepart' => 0.25,
+                    ],
+                    [
+                        'state'     => COMPLETION_COMPLETE,
+                        'statestr'  => 'completion-complete',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-complete', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaille bien',
+                        'scorepart' => 0.75,
+                    ],
+                    [
+                        'state'     => COMPLETION_COMPLETE_PASS,
+                        'statestr'  => 'completion-complete-pass',
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-completepass', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaille très bien !',
+                        'scorepart' => 1,
+                    ],
+                ],
+                'css'   => '
+                    .skin-text.completion-count.sup-zero{    
+                                display: block !important;
+                                background: #1d1061;
+                                color: white !important;
+                                border-radius: 100%;
+                                position: absolute;
+                                font-size: 27px !important;
+                                width: 47px;
+                                padding: 2px 2px;
+                                text-align: center;
+                     } 
+                    .completion-incomplete{
+                        top: 31%;
+                        left: 55%;
+                    }
+                    .completion-complete{
+                        bottom: 13%;
+                        left: 55%;
+                    }
+                    .completion-complete-fail{
+                        bottom: 14%;
+                        left: 25%;
+                    }
+                    .completion-complete-pass{
+                        right: 6%;
+                        bottom: 14%;
+                    }
+                    .skin-text.completion-count.sup-zero.perfect{
+                        right: 24%;
+                        font-size: 40px !important;
+                        width: 65px;
+                     }
+                 
+                '
+            ]
+        ],
     ];
 
     return ['skins' => $scoreskinstypes];

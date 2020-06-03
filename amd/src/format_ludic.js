@@ -922,17 +922,18 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * @param {object} container jQuery element - where are filepickers
          */
         initFilepickerComponent: function (container) {
-            console.log('initFilepickerComponent');
+            console.log('initFilepickerComponent', container);
 
             // Search filepicker in container, if there is none, there is nothing to do.
-            let filepickers = container.find('.container-properties .ludic-filepicker-container');
+            let filepickers = container.find('.ludic-filepicker-container');
             if (filepickers.length === 0) {
+                console.log('no file picker founded')
                 return;
             }
 
             // Initialize each filepicker, with his options.
             filepickers.each(function () {
-                console.log('init_filepicker');
+                console.log('init_filepicker', M.form_filepicker);
                 let options = $(this).data('options');
                 M.form_filepicker.init(Y, options);
 
@@ -1125,15 +1126,17 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         },
 
         displaySkinTypesHtml: function (html, callback) {
-            console.log('displaySkinTypesHtml html => ', html, ' /// callback => ', callback);
+            console.log('displaySkinTypesHtml ', ' /// callback => ', callback);
 
             // Skins list
             let container = $('.edit-skins-view > .container-items > .container-parents .skin-types-list');
             if (html) {
                 ludic.addLoading(container);
                 container.html(html);
+
                 if (typeof callback === 'function') {
                     callback(html);
+
                 }
             }
         },
@@ -1146,6 +1149,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             if (html) {
                 ludic.addLoading(container);
                 container.html(html);
+                ludic.initFilepickerComponent(container);
                 if (typeof callback === 'function') {
                     callback(html);
                 }
