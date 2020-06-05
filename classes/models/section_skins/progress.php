@@ -27,6 +27,8 @@
 
 namespace format_ludic\section;
 
+use Horde\Socket\Client\Exception;
+
 defined('MOODLE_INTERNAL') || die();
 
 class progress extends \format_ludic\skin {

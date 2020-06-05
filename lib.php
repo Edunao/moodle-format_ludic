@@ -952,10 +952,10 @@ function format_ludic_get_default_skins_settings() {
                         ],
                         "css"       => '
                         .img-step-1{
-                             left: calc( 19% + ( [percent] * 0,434 )% );
-                             top : calc( 64% - ( [percent] * 0,596 )% );
-                             width: 16%;
-                                
+                             left: calc((43% / 98) * [percent] + (1819% / 98));
+                             top: calc((452% / 7) - (4% / 7) * [percent]);
+                             width: 16%;     
+                                        
                         }'
                     ],
                     [
