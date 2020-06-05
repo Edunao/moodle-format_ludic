@@ -28,6 +28,7 @@ namespace format_ludic;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir . '/gradelib.php');
+require_once($CFG->dirroot . '/grade/querylib.php');
 require_once($CFG->libdir . '/completionlib.php');
 
 class data_api {
@@ -51,12 +52,20 @@ class data_api {
      * @throws \dml_exception
      */
     public function get_course_module_user_grade($cminfo) {
+
         // Initialize default object.
         $return = (object) [
                 'grade'      => 0,
                 'grademax'   => 0,
                 'proportion' => 0
         ];
+
+        // When activity max grade is updated to 0, grademax of grade_items and grade_grades are not updated.
+        // We need to change gradetype
+        $gradeinfo = grade_get_grade_items_for_activity($cminfo);
+        if($gradeinfo && end($gradeinfo)->gradetype == 0){
+            return $return;
+        }
 
         // Get data for grade api.
         $courseid = $this->contexthelper->get_course_id();

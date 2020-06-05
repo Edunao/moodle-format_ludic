@@ -35,6 +35,7 @@ class format_ludic_skinned_tile implements renderable {
     public $title;
     public $css;
     public $emptydiv;
+    public $hiddentexts;
 
     /**
      * format_ludic_skin constructor.

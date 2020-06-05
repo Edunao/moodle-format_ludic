@@ -38,7 +38,8 @@
 }
 
 .format-ludic .item.selected{
-    border: 1px dashed #1D1061;
+    border: 3px dashed #1d1061;
+    border-radius: 20px;
 }
 
 .format-ludic .item.has-link {
@@ -140,18 +141,17 @@
     font-size: 80px;
 }
 
-.format-ludic .item .skin-tile .number {
+.format-ludic .item .skin-tile .percent {
     font-family: 'Montserrat-Black';
     font-size: 80px;
 }
-
 .format-ludic .item .skin-tile .unit {
     font-family: 'Montserrat-Medium';
     font-size: 40px;
 }
 
 /* For stacked images */
-.format-ludic .item .skin-tile .skin-img.img-step{
+.format-ludic .item .skin-tile .skin-img.img-step:not(.img-step-0){
     position: absolute;
     left: 0;
 }
@@ -192,7 +192,8 @@
     Section list page
  */
 
-#ludic-main-container.course-view .container-parents.section {
+#ludic-main-container.course-view .container-parents.section,
+#ludic-navbar-content .header-sections-list{
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -201,7 +202,8 @@
     justify-content: center;
 }
 
-#ludic-main-container.course-view .item.section {
+#ludic-main-container.course-view .item.section,
+#ludic-navbar-content .header-sections-list .item.section {
     flex-basis: 31%;
     margin-right: 10px;
     min-width: 350px;

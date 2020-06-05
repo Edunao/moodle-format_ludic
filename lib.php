@@ -510,7 +510,7 @@ function format_ludic_get_default_skins_settings() {
             'title'       => 'Trophée',
             'description' => 'Un trophée en fonction de votre réussite.',
             'properties'  => [
-                'steps' => [
+                'steps'           => [
                     [
                         'threshold' => 0,
                         'scorepart' => 0,
@@ -538,7 +538,7 @@ function format_ludic_get_default_skins_settings() {
                     ]
                 ],
                 'linearscorepart' => 1,
-                'css'   => '.sub-tile.skin-tile .skin-text {font-size:30px;} 
+                'css'             => '.sub-tile.skin-tile .skin-text {font-size:30px;} 
                             .skin-text.score{display: block;position: absolute;left: 59%;bottom: 49%;font-size:1.5rem;font-weight:bold;} 
                             .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}
                             .skin-text.threshold{display: inline-block;position: absolute;left: 43%;bottom: 17%;font-size:20px !important;font-weight:bold;}
@@ -595,53 +595,6 @@ function format_ludic_get_default_skins_settings() {
                 ],
                 'css'   => ''
             ],
-        ],
-        [
-            'id'          => 14,
-            'skinid'      => 'cm-progression',
-            'location'    => 'coursemodule',
-            'type'        => 'progression',
-            'title'       => 'Progression ',
-            'description' => 'Plus l\'activité est réussie, plus le personnage monte.',
-            'properties'  => [
-                'steps' => [
-                    [
-                        'threshold'  => 0,
-                        'proportion' => 0,
-                        'score'      => 0,
-                        'scoremax'   => 0,
-                        'scorepart'  => 0,
-                        'extratext'  => '',
-                        'extracss'   => '',
-                        'imgsrc'     => $OUTPUT->image_url('default-skins/cm-achievement-step1', 'format_ludic')->out(),
-                        'imgalt'     => 'En bas'
-                    ],
-                    [
-                        'threshold'  => 1,
-                        'proportion' => 1,
-                        'score'      => 1,
-                        'scoremax'   => 99,
-                        'scorepart'  => 1,
-                        'extratext'  => '',
-                        'extracss'   => '',
-                        'imgsrc'     => $OUTPUT->image_url('default-skins/cm-achievement-step2', 'format_ludic')->out(),
-                        'imgalt'     => 'On monte !'
-                    ],
-                    [
-                        'threshold'  => 2,
-                        'proportion' => 100,
-                        'score'      => 100,
-                        'scoremax'   => 100,
-                        'scorepart'  => 100,
-                        'extratext'  => '',
-                        'extracss'   => '',
-                        'imgsrc'     => $OUTPUT->image_url('default-skins/cm-achievement-step3', 'format_ludic')->out(),
-                        'imgalt'     => 'Ascension réussie !'
-                    ],
-                ],
-                'css'   => ''
-            ],
-
         ],
         [
             'id'          => 15,
@@ -891,15 +844,15 @@ function format_ludic_get_default_skins_settings() {
             'title'       => 'Médaille',
             'description' => 'Des médailles en fonction des réussites des activités !',
             'properties'  => [
-                'background-image'   => [
+                'background-image' => [
                     'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-bg', 'format_ludic')->out(),
                     'imgalt' => 'Fond de base'
                 ],
-                'final-image'  => [
+                'final-image'      => [
                     'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-final', 'format_ludic')->out(),
                     'imgalt' => '100% de réussite !'
                 ],
-                'steps' => [
+                'steps'            => [
                     [
                         'state'     => COMPLETION_INCOMPLETE,
                         'statestr'  => 'completion-incomplete',
@@ -929,15 +882,15 @@ function format_ludic_get_default_skins_settings() {
                         'scorepart' => 1,
                     ],
                 ],
-                'css'   => '
+                'css'              => '
                     .skin-text.completion-count.sup-zero{    
                                 display: block !important;
                                 background: #1d1061;
                                 color: white !important;
                                 border-radius: 100%;
                                 position: absolute;
-                                font-size: 27px !important;
-                                width: 47px;
+                                font-size: 23px !important;
+                                width: 39px;
                                 padding: 2px 2px;
                                 text-align: center;
                      } 
@@ -963,6 +916,132 @@ function format_ludic_get_default_skins_settings() {
                         width: 65px;
                      }
                  
+                '
+            ]
+        ],
+        [
+            'id'          => 17,
+            'skinid'      => 'section-progress',
+            'location'    => 'section',
+            'type'        => 'progress',
+            'title'       => 'Gravir les marches !',
+            'description' => 'Plus on réussit, plus on monte des marches',
+            'properties'  => [
+                'steps' => [
+                    [
+                        'threshold' => 0,
+                        "images"    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-step1', 'format_ludic')->out(),
+                                'imgalt' => 'En bas des marches'
+                            ]
+                        ],
+                        "css"       => ''
+                    ],
+                    [
+                        'threshold' => 1,
+                        "images"    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-step2', 'format_ludic')->out(),
+                                'imgalt' => 'Ascension en cours'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-step2-character', 'format_ludic')->out(),
+                                'imgalt' => 'Moi'
+                            ],
+                        ],
+                        "css"       => '
+                        .img-step-1{
+                             left: calc( 19% + ( [percent] * 0,434 )% );
+                             top : calc( 64% - ( [percent] * 0,596 )% );
+                             width: 16%;
+                                
+                        }'
+                    ],
+                    [
+                        'threshold' => 100,
+                        "images"    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-final', 'format_ludic')->out(),
+                                'imgalt' => 'En haut des marches'
+                            ]
+                        ],
+                        "css"       => ''
+                    ],
+
+                ],
+                'css'   => ' 
+                .skin-hidden-text.percent{
+                    display: block;
+                    position: absolute;
+                    right: 8%;
+                    bottom: 1%;
+                    font-size: 4.5rem;
+                }
+                .skin-hidden-text.percent:after {
+                    content: "%";
+                    font-weight: normal;
+                    font-family: \'Montserrat-Medium\';
+                }    
+                
+                '
+            ]
+        ],
+        [
+            'id'          => 18,
+            'skinid'      => 'cm-progress',
+            'location'    => 'coursemodule',
+            'type'        => 'progress',
+            'title'       => 'Gravir les marches !',
+            'description' => 'Réussir au mieux pour arriver au bout de l\'escalier (adapté aux activités à score)',
+            'properties'  => [
+                'steps' => [
+                    [
+                        'threshold' => 0,
+                        "images"    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/cm-progress/cm-progress-step1', 'format_ludic')->out(),
+                                'imgalt' => 'En bas des marches'
+                            ]
+                        ],
+                        "css"       => ''
+                    ],
+                    [
+                        'threshold' => 1,
+                        "images"    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/cm-progress/cm-progress-step2', 'format_ludic')->out(),
+                                'imgalt' => 'Ascension en cours'
+                            ],
+                        ],
+                        "css"       => ''
+                    ],
+                    [
+                        'threshold' => 100,
+                        "images"    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/cm-progress/cm-progress-step3', 'format_ludic')->out(),
+                                'imgalt' => 'En haut des marches'
+                            ]
+                        ],
+                        "css"       => ''
+                    ],
+
+                ],
+                'css'   => ' 
+                .skin-hidden-text.percent{
+                    display: block;
+                    position: absolute;
+                    right: 8%;
+                    bottom: 1%;
+                    font-size: 2.5rem;
+                }
+                .skin-hidden-text.percent:after {
+                    content: "%";
+                    font-weight: normal;
+                    font-family: \'Montserrat-Medium\';
+                }    
+                
                 '
             ]
         ],

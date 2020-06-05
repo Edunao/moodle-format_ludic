@@ -172,9 +172,7 @@ class section extends model implements skinnable_interface {
         if (!isset($data['id']) || $data['id'] != $this->id) {
             return false;
         }
-        if (isset($data['name']) && $data['name'] != $this->dbrecord->name
-            || isset($data['visible']) && $data['visible'] != $this->dbrecord->visible
-        ) {
+        if (isset($data['name']) && $data['name'] != $this->dbrecord->name || isset($data['visible']) && $data['visible'] != $this->dbrecord->visible) {
             $dbapi->update_section($moodlecourse, $this->dbrecord, $data);
         }
 
@@ -217,63 +215,74 @@ class section extends model implements skinnable_interface {
 
         // Submit form button.
         $savebutton = [
-                'identifier' => 'form-save',
-                'action'     => !$disabled ? 'saveForm' : '',
-                'order'      => 1,
-                'disabled'   => $disabled
+            'identifier' => 'form-save',
+            'action'     => !$disabled ? 'saveForm' : '',
+            'order'      => 1,
+            'disabled'   => $disabled
         ];
 
         // Revert form button.
         $revertbutton = [
-                'identifier' => 'form-revert',
-                'action'     => !$disabled ? 'revertForm' : '',
-                'order'      => 2,
-                'disabled'   => $disabled
+            'identifier' => 'form-revert',
+            'action'     => !$disabled ? 'revertForm' : '',
+            'order'      => 2,
+            'disabled'   => $disabled
         ];
 
         if ($disabled) {
             $editbuttons = [
-                    'identifier' => 'edit-settings',
-                    'action' => 'getDataLinkAndRedirectTo',
-                    'link'       => $editsectionurl,
-                    'order'         => 3,
+                'identifier' => 'edit-settings',
+                'action'     => 'getDataLinkAndRedirectTo',
+                'link'       => $editsectionurl,
+                'order'      => 3,
             ];
         } else {
             // Edit buttons : section settings, duplicate section, delete section.
             $editbuttons               = [
-                    'identifier'    => 'edit',
-                    'order'         => 3,
-                    'isdropdown' => true,
-                    'action'        => 'showSubButtons'
+                'identifier' => 'edit',
+                'order'      => 3,
+                'isdropdown' => true,
+                'action'     => 'showSubButtons'
             ];
             $editbuttons['subbuttons'] = [
-                    [
-                            'identifier' => 'edit-settings', 'action' => 'getDataLinkAndRedirectTo',
-                            'link'       => $editsectionurl,
-                    ],
-                    [
-                            'identifier' => 'duplicate', 'controller' => 'section', 'action' => 'duplicate_section',
-                            'callback'   => 'displaySections', 'itemid' => $this->id, 'disabled' => $disabled,
-                    ],
-                    [
-                            'identifier' => 'delete', 'action' => 'confirmAndDeleteSection',
-                            'link'       => $baseurl . '&sr=1&delete=1&sesskey=' . sesskey(),
-                            'disabled'   => $this->has_course_modules() || $disabled
-                    ]
+                [
+                    'identifier' => 'edit-settings',
+                    'action'     => 'getDataLinkAndRedirectTo',
+                    'link'       => $editsectionurl,
+                ],
+                [
+                    'identifier' => 'duplicate',
+                    'controller' => 'section',
+                    'action'     => 'duplicate_section',
+                    'callback'   => 'displaySections',
+                    'itemid'     => $this->id,
+                    'disabled'   => $disabled,
+                ],
+                [
+                    'identifier' => 'delete',
+                    'action'     => 'confirmAndDeleteSection',
+                    'link'       => $baseurl . '&sr=1&delete=1&sesskey=' . sesskey(),
+                    'disabled'   => $this->has_course_modules() || $disabled
+                ]
             ];
         }
 
         // Preview student section view button.
         $previewbutton = [
-                'identifier' => 'item-preview',
-                'controller' => !$disabled ? 'section' : '',
-                'action'     => !$disabled ? 'get_section_view_of_student' : '',
-                'callback'   => !$disabled ? 'displayPopup' : '',
-                'order'      => 4,
-                'disabled'   => $disabled
+            'identifier' => 'item-preview',
+            'controller' => !$disabled ? 'section' : '',
+            'action'     => !$disabled ? 'get_section_view_of_student' : '',
+            'callback'   => !$disabled ? 'displayPopup' : '',
+            'order'      => 4,
+            'disabled'   => $disabled
         ];
 
-        return [$savebutton, $revertbutton, $editbuttons, $previewbutton];
+        return [
+            $savebutton,
+            $revertbutton,
+            $editbuttons,
+            $previewbutton
+        ];
 
     }
 
@@ -386,27 +395,31 @@ class section extends model implements skinnable_interface {
 
         // Initialize completion info.
         $completioninfo = [
-                'completion-incomplete'    => [
-                        'state'    => COMPLETION_INCOMPLETE,
-                        'count'    => 0,
-                        'sequence' => []
-                ],
-                'completion-complete'      => [
-                        'state'    => COMPLETION_COMPLETE,
-                        'count'    => 0,
-                        'sequence' => []
-                ],
-                'completion-complete-pass' => [
-                        'state'    => COMPLETION_COMPLETE_PASS,
-                        'count'    => 0,
-                        'sequence' => []
-                ],
-                'completion-complete-fail' => [
-                        'state'    => COMPLETION_COMPLETE_FAIL,
-                        'count'    => 0,
-                        'sequence' => []
-                ],
-                'perfect'                  => count($coursemodules) > 0
+            'completion-incomplete'    => [
+                'state'    => COMPLETION_INCOMPLETE,
+                'count'    => 0,
+                'sequence' => []
+            ],
+            'completion-complete'      => [
+                'state'    => COMPLETION_COMPLETE,
+                'count'    => 0,
+                'sequence' => []
+            ],
+            'completion-complete-pass' => [
+                'state'    => COMPLETION_COMPLETE_PASS,
+                'count'    => 0,
+                'sequence' => []
+            ],
+            'completion-complete-fail' => [
+                'state'    => COMPLETION_COMPLETE_FAIL,
+                'count'    => 0,
+                'sequence' => []
+            ],
+            'perfect'                  => count($coursemodules) > 0
+        ];
+
+        $resultsdetails = [
+
         ];
 
         $score    = 0;
@@ -419,24 +432,28 @@ class section extends model implements skinnable_interface {
 
             // Update completion info.
             $results = $coursemodule->get_user_results();
-            $data    = $results['completioninfo'];
+            $resultsdetails[] = [
+                "cmid"    => $coursemodule->id,
+                "results" => $results];
+
+            $data = $results['completioninfo'];
             if (!isset($completioninfo[$data->completion])) {
                 continue;
             }
-            $completioninfo['perfect'] = $completioninfo['perfect'] &&
-                                         $completioninfo[$data->completion]['state'] == COMPLETION_COMPLETE_PASS;
+            $completioninfo['perfect'] = $completioninfo['perfect'] && $completioninfo[$data->completion]['state'] == COMPLETION_COMPLETE_PASS;
             $completioninfo[$data->completion]['count']++;
             $completioninfo[$data->completion]['sequence'][] = $coursemodule->id;
         }
 
         // Return data.
         $this->results = [
-                'gradeinfo'      => (object) [
-                        'score'      => $score,
-                        'scoremax'   => $scoremax,
-                        'proportion' => $scoremax > 0 ? ($score / $scoremax) : 0
-                ],
-                'completioninfo' => $completioninfo
+            'gradeinfo'      => (object) [
+                'score'      => $score,
+                'scoremax'   => $scoremax,
+                'proportion' => $scoremax > 0 ? ($score / $scoremax) : 0
+            ],
+            'completioninfo' => $completioninfo,
+            'resultsdetails' => $resultsdetails,
         ];
 
         return $this->results;
