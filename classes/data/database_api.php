@@ -443,5 +443,31 @@ class database_api {
             WHERE cmid IN ('.$sequence.')
         ');
     }
+
+    /**
+     * @param $sectionid
+     * @param $userid
+     * @return array|mixed
+     * @throws \dml_exception
+     */
+    public function get_section_user_skin_data($sectionid, $userid){
+        $record = $this->db->get_record('format_ludic_user_cs_state', ['userid' => $userid, 'sectionid' => $sectionid]);
+        return isset($record->data) ? (array) json_decode($record->data) :  [];
+    }
+
+    public function update_section_user_skin_data($courseid, $sectionid, $userid, $data){
+        if($currentdata = $this->db->get_record('format_ludic_user_cs_state', ['userid' => $userid, 'courseid'=> $courseid, 'sectionid' => $sectionid])){
+            $currentdata->data = json_encode($data);
+            return $this->db->update_record('format_ludic_user_cs_state', $currentdata);
+        }else{
+            $record = new \stdClass();
+            $record->courseid = $courseid;
+            $record->sectionid = $sectionid;
+            $record->userid = $userid;
+            $record->data = json_encode($data);
+            return $this->db->insert_record('format_ludic_user_cs_state', $record);
+        }
+    }
+
 }
 

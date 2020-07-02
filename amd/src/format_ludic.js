@@ -51,6 +51,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Initialize all required events.
             ludic.initEvents();
 
+            // Init Avatar
+            ludic.initAvatar('');
+
             // Edit skins mode
             if (ludic.editSkins) {
                 ludic.displaySkinsList();
@@ -94,6 +97,19 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Click on element with data-action attribute.
             $('body.format-ludic').on('click', '[data-action]', function (e) {
 
+                console.log('test : ', $(this), $(e.target), $(this).is(e.target))
+
+                if(!$(this).is(e.target)){
+                    if($(e.target).hasClass('no-ludic-event') || $(e.target).parents('.no-ludic-event').length > 0
+                        || ($(e.target).parents('.no-ludic-event').length > 0 && $(e.target).data('action') === undefined)
+                    ){
+                        console.log('ignore event', e.target, $(e.target).parents('.no-ludic-event'), $(e.target).data('action'));
+                        return false;
+                    }
+                }
+
+
+
                 // Get data.
                 let item = $(this);
                 let action = item.data('action');
@@ -101,6 +117,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 let controller = item.data('controller');
 
                 // Params for ajax call or javascript function.
+                // TODO get all data-* as params
                 let params = {
                     item: item,
                     id: item.data('id') ? item.data('id') : null,
@@ -108,8 +125,22 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                     type: item.data('type') ? item.data('type') : null,
                     itemId: item.data('itemid') ? item.data('itemid') : null,
                     itemType: item.data('itemtype') ? item.data('itemtype') : null,
-                    callback: callback
+                    callback: callback,
                 };
+
+                let skindata = {};
+                if(action == 'avatar_toggle_item' || action == 'avatar_buy_item'){
+                    // Avatar
+                    skindata.slotname = item.data('slotname') ? item.data('slotname') : null;
+                    skindata.itemname = item.data('itemname') ? item.data('itemname') : null;
+                    skindata.sectionid = item.data('sectionid') ? item.data('sectionid') : null;
+                    params.selectorId = item.data('sectionid') ? '.item[data-id="'+item.data('sectionid')+'"] .item-content-container'   : null;
+                    params.id = item.data('sectionid') ? item.data('sectionid') : null;
+
+                }
+
+                console.log('action' , action, params);
+
 
                 // Try to construct a selector id.
                 let hasItemSelectorId = params.itemType && params.itemId;
@@ -123,6 +154,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                         controller: controller,
                         action: action,
                         id: params.id ? params.id : params.itemId,
+                        skindata: skindata,
                         callback: function (response) {
                             if (callback) {
 
@@ -186,6 +218,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 case 'revertForm':
                     result = ludic.revertForm(itemSelectorId);
                     break;
+                case 'updateAvatar':
+                    result = ludic.updateAvatar(params.selectorId, id, html);
+                    break;
                 case 'displayCourseModules':
                     result = ludic.displayCourseModules(id, itemId, callback);
                     break;
@@ -232,7 +267,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             delete params.callback;
             delete params.loading;
 
-            console.log('params ', params);
+            if(params.skindata !== undefined){
+                params = $.extend(params, params.skindata);
+                delete params.skindata;
+            }
+            // delete params.data;
+
             // Execute ajax call with good params.
             $.ajax({
                 method: method,
@@ -318,6 +358,26 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
 
+        initAvatar: function(selector){
+            $(selector + ' .skin-type-avatar .open-shop').on('click', function(e){
+                let shopid = $(this).attr('class').split(' open-shop-')[1];
+                shopid = shopid.split(' ')[0];
+                $('#avatar-shop-' + shopid).modal('show')
+            });
+        },
+
+        updateAvatar: function(selectorId, sectionid, html){
+            $('#avatar-shop-' + sectionid).modal('hide');
+            $( selectorId ).each(function(){
+                $(this).html( html );
+            })
+            // Remove header shop popup to avoid duplicate
+            $('.header-sections-list ' +selectorId + ' .skin-extra-html').remove();
+
+            this.initAvatar(selectorId);
+            $('#avatar-shop-' + sectionid).modal('show')
+        },
+
         /**
          * Update input value when clicking on confirm button.
          */
@@ -370,7 +430,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 $('.container-parents .item').removeClass('pre-selected');
                 parent.addClass('pre-selected');
             });
-
         },
 
         /**

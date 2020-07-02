@@ -1045,399 +1045,1369 @@ function format_ludic_get_default_skins_settings() {
                 '
             ]
         ],
+        [
+            'id'          => 19,
+            'skinid'      => 'section-avatar',
+            'location'    => 'section',
+            'type'        => 'avatar',
+            'title'       => 'Avatar',
+            'description' => 'Achète des objets pour améliorer ta chambre',
+            'properties'  => [
+                'background' => [
+                    [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-background', 'format_ludic')->out(),
+                        'imgalt' => 'Background'
+                    ]
+
+                ],
+                'slots' => [
+                    [
+                        'name' => 'Gender',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-gender-F', 'format_ludic')->out(),
+                            'imgalt' => 'Gender'
+                        ],
+
+                    ],
+                    [
+                        'name' => 'Color',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-gender-F', 'format_ludic')->out(),
+                            'imgalt' => 'Color'
+                        ],
+
+                    ],
+                    [
+                        'name' => 'Desk',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-desk-cube', 'format_ludic')->out(),
+                            'imgalt' => 'Desk items'
+                        ],
+
+                    ],
+                    [
+                        'name' => 'Ground',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-ground-tennis', 'format_ludic')->out(),
+                            'imgalt' => 'Ground items'
+                        ],
+                    ],
+                    [
+                        'name' => 'Bedside table',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bedsidetable-oldschool', 'format_ludic')->out(),
+                            'imgalt' => 'Bedside table'
+                        ],
+                    ],
+                    [
+                        'name' => 'Bed',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-bed-pigeon', 'format_ludic')->out(),
+                            'imgalt' => 'Bed'
+                        ],
+                    ],
+                    [
+                        'name' => 'Poster',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-poster-star', 'format_ludic')->out(),
+                            'imgalt' => 'Poster'
+                        ],
+                    ],
+                    [
+                        'name' => 'Equipment',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-equipment-skate', 'format_ludic')->out(),
+                            'imgalt' => 'Equipment'
+                        ],
+                    ],
+                    [
+                        'name' => 'Banner',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-banner-lamp', 'format_ludic')->out(),
+                            'imgalt' => 'Banner'
+                        ],
+                    ],
+                    [
+                        'name' => 'Hair',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-hair-f-curly-purple', 'format_ludic')->out(),
+                            'imgalt' => 'Hair'
+                        ],
+                    ],
+
+                ],
+                'items' => [
+                    // Desk items
+                    [
+                        'name' => 'Cube',
+                        'cost' => 10,
+                        'slot' => 'Desk',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-desk-cube', 'format_ludic')->out(),
+                            'imgalt' => 'Cube'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-desk-cube', 'format_ludic')->out(),
+                                'imgalt' => 'Cube'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Lamp and phone',
+                        'cost' => 20,
+                        'slot' => 'Desk',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-desk-lamp', 'format_ludic')->out(),
+                            'imgalt' => 'Lamp and phone'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-desk-lamp', 'format_ludic')->out(),
+                                'imgalt' => 'Lamp and phone'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Laptop',
+                        'cost' => 30,
+                        'slot' => 'Desk',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-desk-laptop', 'format_ludic')->out(),
+                            'imgalt' => 'Laptop'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-desk-laptop', 'format_ludic')->out(),
+                                'imgalt' => 'Laptop'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Computer',
+                        'cost' => 40,
+                        'slot' => 'Desk',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-desk-computer', 'format_ludic')->out(),
+                            'imgalt' => 'Laptop'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-desk-computer', 'format_ludic')->out(),
+                                'imgalt' => 'Laptop'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    // Ground items
+                    [
+                        'name' => 'Tennis ball',
+                        'cost' => 10,
+                        'slot' => 'Ground',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-ground-tennis', 'format_ludic')->out(),
+                            'imgalt' => 'Tennis ball'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-ground-tennis', 'format_ludic')->out(),
+                                'imgalt' => 'Tennis ball'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'American Football',
+                        'cost' => 20,
+                        'slot' => 'Ground',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-ground-americanfootball', 'format_ludic')->out(),
+                            'imgalt' => 'American Football'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-ground-americanfootball', 'format_ludic')->out(),
+                                'imgalt' => 'American Football'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Volleyball',
+                        'cost' => 30,
+                        'slot' => 'Ground',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-ground-volley', 'format_ludic')->out(),
+                            'imgalt' => 'Volleyball'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-ground-volley', 'format_ludic')->out(),
+                                'imgalt' => 'Volleyball'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Basketball',
+                        'cost' => 40,
+                        'slot' => 'Ground',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-ground-basket', 'format_ludic')->out(),
+                            'imgalt' => 'Basketball'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-ground-basket', 'format_ludic')->out(),
+                                'imgalt' => 'Basketball'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    // Beside table items
+                    [
+                        'name' => 'Oldschool lamp',
+                        'cost' => 20,
+                        'slot' => 'Bedside table',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bedsidetable-oldschool', 'format_ludic')->out(),
+                            'imgalt' => ''
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bedsidetable-oldschool', 'format_ludic')->out(),
+                                'imgalt' => ''
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Retro lamp',
+                        'cost' => 30,
+                        'slot' => 'Bedside table',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bedsidetable-retro', 'format_ludic')->out(),
+                            'imgalt' => 'Retro lamp'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bedsidetable-retro', 'format_ludic')->out(),
+                                'imgalt' => 'Retro lamp'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Design lamp',
+                        'cost' => 40,
+                        'slot' => 'Bedside table',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bedsidetable-design', 'format_ludic')->out(),
+                            'imgalt' => 'Design lamp'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bedsidetable-design', 'format_ludic')->out(),
+                                'imgalt' => 'Design lamp'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    // Gender
+                    [
+                        'name' => 'Female',
+                        'cost' => 0,
+                        'slot' => 'Gender',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-gender-female', 'format_ludic')->out(),
+                            'imgalt' => 'Female'
+                        ],
+                        'images' => [
+
+                        ],
+                        'css' => '.skin-img.gender-male.img-object{display:none;}',
+                    ],
+                    [
+                        'name' => 'Male',
+                        'cost' => 0,
+                        'slot' => 'Gender',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-gender-male', 'format_ludic')->out(),
+                            'imgalt' => 'Male'
+                        ],
+                        'images' => [
+
+                        ],
+                        'css' => '.skin-img.gender-female.img-object{display:none;}',
+                    ],
+                    // Skin colors
+                    [
+                        'name' => 'Color 1',
+                        'cost' => 0,
+                        'slot' => 'Color',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-f-asian', 'format_ludic')->out(),
+                                'imgalt' => 'Asian Female',
+                                'classes' => 'gender-female',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-m-asian', 'format_ludic')->out(),
+                                'imgalt' => 'Asian Male',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-f-asian', 'format_ludic')->out(),
+                                'imgalt' => 'Asian Female',
+                                'classes' => 'gender-female',
+                                'zindex' => '10',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-m-asian', 'format_ludic')->out(),
+                                'imgalt' => 'Asian Male',
+                                'classes' => 'gender-male',
+                                'zindex' => '10',
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Color 2',
+                        'cost' => 0,
+                        'slot' => 'Color',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-f-african', 'format_ludic')->out(),
+                                'imgalt' => 'African Female',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-m-african', 'format_ludic')->out(),
+                                'imgalt' => 'African Male',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-f-african', 'format_ludic')->out(),
+                                'imgalt' => 'African Female',
+                                'classes' => 'gender-female',
+                                'zindex' => '10',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-m-african', 'format_ludic')->out(),
+                                'imgalt' => 'African Male',
+                                'classes' => 'gender-male',
+                                'zindex' => '10',
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Color 3',
+                        'cost' => 0,
+                        'slot' => 'Color',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-f-caucasian', 'format_ludic')->out(),
+                                'imgalt' => 'Caucasian Female',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-m-caucasian', 'format_ludic')->out(),
+                                'imgalt' => 'Caucasian Male',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-f-caucasian', 'format_ludic')->out(),
+                                'imgalt' => 'Caucasian Female',
+                                'classes' => 'gender-female',
+                                'zindex' => '10',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-m-caucasian', 'format_ludic')->out(),
+                                'imgalt' => 'Caucasian Male',
+                                'classes' => 'gender-male',
+                                'zindex' => '10',
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Color 4',
+                        'cost' => 0,
+                        'slot' => 'Color',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-f-oriental', 'format_ludic')->out(),
+                                'imgalt' => 'Oriental Female',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-color-m-oriental', 'format_ludic')->out(),
+                                'imgalt' => 'Oriental Male',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-f-oriental', 'format_ludic')->out(),
+                                'imgalt' => 'Oriental Female',
+                                'classes' => 'gender-female',
+                                'zindex' => '10',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-color-m-oriental', 'format_ludic')->out(),
+                                'imgalt' => 'Oriental Male',
+                                'classes' => 'gender-male',
+                                'zindex' => '10',
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    // Hair
+                    [
+                        'name' => 'Hair 1 - Black',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-short-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Black',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-1-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Black',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-black-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Black',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-black-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Black',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Black',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Black',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 1 - Purple',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-short-purple', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Purple',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-1-purple', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Purple',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-purple-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Purple',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-purple-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Purple',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Purple',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1-purple', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Purple',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 1 - Green',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-short-green', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Green',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-1-green', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Green',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-green-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Green',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-green-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Green',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Green',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1-green', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Green',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 1 - Blue',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-short-blue', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Blue',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-1-blue', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Blue',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-blue-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Blue',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-blue-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Blue',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Blue',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1-blue', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Blue',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 1 - Yellow',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-short-yellow', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Yellow',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-1-yellow', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Yellow',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-yellow-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Yellow',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-yellow-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Yellow',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Yellow',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-yellow-m-1-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Yellow',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 1 - Red',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-short-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Red',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-1-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Red',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-red-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Red',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-red-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Red',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Red',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Red',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 1 - Orange',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-short-orange', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Orange',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-1-orange', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Orange',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-orange-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Orange',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-short-orange-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Orange',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Orange',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-orange-m-1-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 1 - Orange',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 2 - Black',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-curly-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Black',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Black',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-black-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Black',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-black-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Black',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Black',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Black',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 2 - Purple',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-curly-purple', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Purple',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-purple', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Purple',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-purple-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Purple',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-purple-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Purple',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Purple',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-purple', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Purple',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 2 - Blue',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-curly-blue', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Blue',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-blue', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Blue',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-blue-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Blue',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-blue-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Blue',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Blue',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-blue', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Blue',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 2 - Green',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-curly-green', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Green',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-green', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Green',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-green-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Green',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-green-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Green',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Green',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-green', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Green',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 2 - Yellow',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-curly-yellow', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Yellow',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-yellow', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Yellow',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-yellow-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Yellow',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-yellow-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Yellow',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Yellow',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-yellow', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Yellow',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 2 - Red',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-curly-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Red',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Red',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-red-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Red',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-red-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Red',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Red',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Red',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 2 - Orange',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-curly-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Orange',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Orange',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-red-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Orange',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-curly-red-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Orange',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Orange',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-red', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 2 - Orange',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Hair 3 - Black',
+                        'cost' => 0,
+                        'slot' => 'Hair',
+                        'shopimage' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-f-bunches-black-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 3 - Black',
+                                'classes' => 'gender-female'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-hair-m-3-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 3 - Black',
+                                'classes' => 'gender-male'
+                            ],
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-bunches-black-1', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 3 - Black',
+                                'classes' => 'gender-female',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-f-bunches-black-2', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 3 - Black',
+                                'classes' => 'gender-female',
+                                'zindex' => '11'
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 3 - Black',
+                                'classes' => 'gender-male',
+                                'zindex' => '9',
+                            ],
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-3-black', 'format_ludic')->out(),
+                                'imgalt' => 'Hair 3 - Black',
+                                'classes' => 'gender-male',
+                                'zindex' => '11'
+                            ],
+
+                        ],
+                        'css' => ''
+                    ],
+                    // Poster
+                    [
+                        'name' => 'Game poster',
+                        'cost' => 10,
+                        'slot' => 'Poster',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-poster-game', 'format_ludic')->out(),
+                            'imgalt' => 'Game poster'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-poster-game', 'format_ludic')->out(),
+                                'imgalt' => 'Game poster'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Sport poster',
+                        'cost' => 20,
+                        'slot' => 'Poster',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-poster-sport', 'format_ludic')->out(),
+                            'imgalt' => 'Sport poster'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-poster-sport', 'format_ludic')->out(),
+                                'imgalt' => 'Sport poster'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Star poster',
+                        'cost' => 30,
+                        'slot' => 'Poster',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-poster-star', 'format_ludic')->out(),
+                            'imgalt' => 'Star poster'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-poster-star', 'format_ludic')->out(),
+                                'imgalt' => 'Star poster'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Unicorn poster',
+                        'cost' => 40,
+                        'slot' => 'Poster',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-poster-unicorn', 'format_ludic')->out(),
+                            'imgalt' => 'Unicorn poster'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-poster-unicorn', 'format_ludic')->out(),
+                                'imgalt' => 'Unicorn poster'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    // Equipment
+                    [
+                        'name' => 'Roller',
+                        'cost' => 10,
+                        'slot' => 'Equipment',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-equipment-roller', 'format_ludic')->out(),
+                            'imgalt' => 'Roller'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-equipment-roller', 'format_ludic')->out(),
+                                'imgalt' => 'Roller'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Skate',
+                        'cost' => 20,
+                        'slot' => 'Equipment',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-equipment-skate', 'format_ludic')->out(),
+                            'imgalt' => 'Skate'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-equipment-skate', 'format_ludic')->out(),
+                                'imgalt' => 'Skate'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Trotinette',
+                        'cost' => 30,
+                        'slot' => 'Equipment',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-equipment-trotinette', 'format_ludic')->out(),
+                            'imgalt' => 'Trotinette'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-equipment-trotinette', 'format_ludic')->out(),
+                                'imgalt' => 'Trotinette'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    // Bed
+                    [
+                        'name' => 'Pigeon',
+                        'cost' => 10,
+                        'slot' => 'Bed',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bed-pigeon', 'format_ludic')->out(),
+                            'imgalt' => 'Pigeon'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-pigeon', 'format_ludic')->out(),
+                                'imgalt' => 'Pigeon'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Teddy',
+                        'cost' => 20,
+                        'slot' => 'Bed',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bed-teddy', 'format_ludic')->out(),
+                            'imgalt' => 'Teddy'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-teddy', 'format_ludic')->out(),
+                                'imgalt' => 'Teddy'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Pingouin',
+                        'cost' => 30,
+                        'slot' => 'Bed',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bed-pingouin', 'format_ludic')->out(),
+                            'imgalt' => 'Pingouin'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-pingouin', 'format_ludic')->out(),
+                                'imgalt' => 'Pingouin'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Snake',
+                        'cost' => 40,
+                        'slot' => 'Bed',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bed-snake', 'format_ludic')->out(),
+                            'imgalt' => 'Snake'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-snake', 'format_ludic')->out(),
+                                'imgalt' => 'Snake'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    // Banner
+                    [
+                        'name' => 'Party banner',
+                        'cost' => 10,
+                        'slot' => 'Banner',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-banner-party', 'format_ludic')->out(),
+                            'imgalt' => 'Party banner'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-banner-party', 'format_ludic')->out(),
+                                'imgalt' => 'Party banner'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Origami banner',
+                        'cost' => 20,
+                        'slot' => 'Banner',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-banner-origami', 'format_ludic')->out(),
+                            'imgalt' => 'Origami banner'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-banner-origami', 'format_ludic')->out(),
+                                'imgalt' => 'Origami banner'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                    [
+                        'name' => 'Lamp banner',
+                        'cost' => 30,
+                        'slot' => 'Banner',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-banner-lamp', 'format_ludic')->out(),
+                            'imgalt' => 'Lamp banner'
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-banner-lamp', 'format_ludic')->out(),
+                                'imgalt' => 'Lamp banner'
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+
+                    // Empty
+                    [
+                        'name' => '',
+                        'cost' => 0,
+                        'slot' => '',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/', 'format_ludic')->out(),
+                            'imgalt' => ''
+                        ],
+                        'images' => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/', 'format_ludic')->out(),
+                                'imgalt' => ''
+                            ],
+                        ],
+                        'css' => ''
+                    ],
+                ],
+                'css' => '
+                    .slot-item-price:before{
+                        content: "$"
+                    }
+                '
+
+            ]
+
+        ]
     ];
 
     return ['skins' => $scoreskinstypes];
-}
-
-function format_ludic_get_default_skins_settings_old() {
-    global $CFG;
-    $defaultimage = $CFG->wwwroot . '/course/format/ludic/pix/default.svg';
-
-    return [
-        'skins' => [
-            11 => [
-                'id'          => 11,
-                'location'    => 'section',
-                'type'        => 'score',
-                'title'       => 'Coffre de pièces',
-                'description' => 'Ce coffre stock des pièces',
-                'properties'  => [
-                    'steps' => [
-                        [
-                            'threshold' => 0,
-                            'imgsrc'    => 'https://cdn1.iconfinder.com/data/icons/security-add-on-colored/48/JD-09-512.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 10,
-                            'imgsrc'    => 'https://picsum.photos/id/101/80/80',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 20,
-                            'imgsrc'    => 'https://picsum.photos/id/102/80/80',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 30,
-                            'imgsrc'    => 'https://picsum.photos/id/103/80/80',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 40,
-                            'imgsrc'    => 'https://picsum.photos/id/104/80/80',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 50,
-                            'imgsrc'    => 'https://picsum.photos/id/109/80/80',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 60,
-                            'imgsrc'    => 'https://picsum.photos/id/106/80/80',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 80,
-                            'imgsrc'    => 'https://picsum.photos/id/107/80/80',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 100,
-                            'imgsrc'    => 'https://www.clipartmax.com/png/middle/275-2750625_chest-icon-treasure-chest-icon-png.png',
-                            'imgalt'    => ''
-                        ]
-                    ],
-                    'css'   => '
-                                {background-color: aliceblue;} .sub-tile.skin-tile {background-color: beige;}
-                                .sub-tile.skin-tile .skin-text {font-size:30px;}'
-                ]
-            ],
-            12 => [
-                'id'          => 12,
-                'location'    => 'section',
-                'type'        => 'score',
-                'title'       => 'Coffre au trésor',
-                'description' => 'Ce coffre stock des trésors. 
-                        Commence avec un coffre vide, gagne un numéro tous les 10%.
-                        Termine avec un grand coffre !',
-                'properties'  => [
-                    'steps' => [
-                        [
-                            'threshold' => 0,
-                            'imgsrc'    => 'https://i.pinimg.com/originals/6a/1d/f3/6a1df304403e15c9a4b499e8539853ec.jpg',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 10,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/1-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 20,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/2-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 30,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/3-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 50,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/4-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 60,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/5-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 70,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/6-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 80,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/7-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 90,
-                            'imgsrc'    => 'http://www.pngall.com/wp-content/uploads/2/8-Number-PNG-Pic.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 100,
-                            'imgsrc'    => 'https://visualpharm.com/assets/324/Treasure%20Chest-595b40b85ba036ed117dacb5.svg',
-                            'imgalt'    => ''
-                        ]
-                    ],
-                    'css'   => '{background-color: yellow;}'
-                ],
-            ],
-            14 => [
-                'id'          => 14,
-                'location'    => 'coursemodule',
-                'type'        => 'score',
-                'title'       => 'Pokémon feu',
-                'description' => 'Petit Salamèche deviendra grand.',
-                'properties'  => [
-                    'steps'           => [
-                        [
-                            'threshold' => 0,
-                            'scorepart' => 0,
-                            'extratext' => 'tu as entre 0 et 9.99',
-                            'extracss'  => '{background-color: grey;}',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/4.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 50,
-                            'scorepart' => 1,
-                            'extratext' => 'tu as entre 10 et 19.99',
-                            'extracss'  => '{background-color: blue;}',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/5.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 100,
-                            'scorepart' => 1,
-                            'extratext' => 'tu as 20, bravo',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/6.png',
-                            'imgalt'    => ''
-                        ]
-                    ],
-                    'linearscorepart' => 1,
-                    'css'             => '{background-color: red;} .skin-img {    background-size: 20%;} .skin-text {color: black;}.title-tile {border-top: 1px solid blue;}'
-                ]
-            ],
-            13 => [
-                'id'          => 13,
-                'location'    => 'coursemodule',
-                'type'        => 'score',
-                'title'       => 'Pokémon plante',
-                'description' => 'Petit Bulbizarre deviendra grand.',
-                'properties'  => [
-                    'steps'           => [
-                        [
-                            'threshold' => 0,
-                            'scorepart' => 0,
-                            'extratext' => 'tu as entre 0 et 9.99',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/1.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 70,
-                            'scorepart' => 1,
-                            'extratext' => 'tu as entre 10 et 19.99',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/2.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 100,
-                            'scorepart' => 1,
-                            'extratext' => 'tu as 20, bravo',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/3.png',
-                            'imgalt'    => ''
-                        ]
-                    ],
-                    'linearscorepart' => 2,
-                    'css'             => '{background-color: green;}
-                                  .skin-img {    background-size: 110%;}
-                                 .skin-text {color: yellow;} .title-tile {border-top: 4px solid red;}'
-                ],
-            ],
-            16 => [
-                'id'          => 16,
-                'location'    => 'coursemodule',
-                'type'        => 'score',
-                'title'       => 'Pokémon eau',
-                'description' => 'Petit Carapuce deviendra grand.',
-                'properties'  => [
-                    'steps'           => [
-                        [
-                            'threshold' => 0,
-                            'scorepart' => 0,
-                            'extratext' => 'tu as entre 0 et 9.99',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/7.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 10,
-                            'scorepart' => 1,
-                            'extratext' => 'tu as entre 10 et 19.99',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/8.png',
-                            'imgalt'    => ''
-                        ],
-                        [
-                            'threshold' => 20,
-                            'scorepart' => 1,
-                            'extratext' => 'tu as 20, bravo',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/9.png',
-                            'imgalt'    => ''
-                        ]
-                    ],
-                    'linearscorepart' => 4,
-                    'css'             => '{background-color: blue;} .skin-text {color: white;} .title-tile {border-top: 2px solid yellow;}'
-                ]
-            ],
-            15 => [
-                'id'          => 15,
-                'location'    => 'coursemodule',
-                'type'        => 'achievement',
-                'title'       => 'Évolution max',
-                'description' => 'Plus tu réussis, plus tu évolues',
-                'properties'  => [
-                    'steps' => [
-                        [
-                            'state'     => COMPLETION_INCOMPLETE,
-                            //0
-                            'statestr'  => 'completion-incomplete',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/63.png',
-                            'imgalt'    => '',
-                            'scorepart' => 0,
-                            'extratext' => 'Abra'
-                        ],
-                        [
-                            'state'     => COMPLETION_COMPLETE,
-                            //1
-                            'statestr'  => 'completion-complete',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/65.png',
-                            'imgalt'    => '',
-                            'scorepart' => 0.75,
-                            'extratext' => 'Alakazam'
-                        ],
-                        [
-                            'state'     => COMPLETION_COMPLETE_PASS,
-                            //2
-                            'statestr'  => 'completion-complete-pass',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/10037.png',
-                            'imgalt'    => '',
-                            'scorepart' => 1,
-                            'extratext' => 'Méga-Alakazam'
-                        ],
-                        [
-                            'state'     => COMPLETION_COMPLETE_FAIL,
-                            //3
-                            'statestr'  => 'completion-complete-fail',
-                            'imgsrc'    => 'https://www.pokebip.com/pokedex-images/artworks/64.png',
-                            'imgalt'    => '',
-                            'scorepart' => 0.25,
-                            'extratext' => 'Kadabra'
-                        ]
-                    ],
-                    'css'   => '{background-color: purple;} .skin-text {color: white;}'
-                ]
-            ],
-            17 => [
-                'id'          => 17,
-                'location'    => 'section',
-                'type'        => 'collection',
-                'title'       => 'Chaque pokémon évolue',
-                'description' => 'Collectionne et fais évoluer les pokémons.',
-                'properties'  => [
-                    'baseimage'   => [
-                        'imgsrc' => 'https://i.ytimg.com/vi/XSPntFQODQQ/maxresdefault.jpg',
-                        'imgalt' => ''
-                    ],
-                    'finalimage'  => [
-                        'imgsrc' => 'https://images-na.ssl-images-amazon.com/images/I/71xp01I1uML.jpg',
-                        'imgalt' => ''
-                    ],
-                    'stampimages' => [
-                        [
-                            'index'                    => 1,
-                            'completion-incomplete'    => [
-                                'imgsrc' => $defaultimage,
-                                'imgalt' => ''
-                            ],
-                            'completion-complete'      => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/2.png',
-                                'imgalt' => ''
-                            ],
-                            'completion-complete-pass' => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/3.png',
-                                'imgalt' => ''
-                            ],
-                            'completion-complete-fail' => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/1.png',
-                                'imgalt' => ''
-                            ],
-                        ],
-                        [
-                            'index'                    => 2,
-                            'completion-incomplete'    => [
-                                'imgsrc' => $defaultimage,
-                                'imgalt' => ''
-                            ],
-                            'completion-complete'      => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/5.png',
-                                'imgalt' => ''
-                            ],
-                            'completion-complete-pass' => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/6.png',
-                                'imgalt' => ''
-                            ],
-                            'completion-complete-fail' => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/4.png',
-                                'imgalt' => ''
-                            ],
-                        ],
-                        [
-                            'index'                    => 3,
-                            'completion-incomplete'    => [
-                                'imgsrc' => $defaultimage,
-                                'imgalt' => ''
-                            ],
-                            'completion-complete'      => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/8.png',
-                                'imgalt' => ''
-                            ],
-                            'completion-complete-pass' => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/9.png',
-                                'imgalt' => ''
-                            ],
-                            'completion-complete-fail' => [
-                                'imgsrc' => 'https://www.pokebip.com/pokedex-images/artworks/7.png',
-                                'imgalt' => ''
-                            ],
-                        ],
-                    ],
-                    'stampcss'    => [
-                        [
-                            'number' => 1,
-                            'css'    => '{background-color: green;}'
-                        ],
-                        [
-                            'number' => 2,
-                            'css'    => '{background-color: blue;}'
-                        ],
-                        [
-                            'number' => 3,
-                            'css'    => '{background-color: red;}'
-                        ],
-                        [
-                            'number' => 4,
-                            'css'    => '{background-color: black;}'
-                        ],
-                        [
-                            'number' => 5,
-                            'css'    => '{background-color: beige;}'
-                        ],
-                        [
-                            'number' => 6,
-                            'css'    => '{background-color: aliceblue;}'
-                        ],
-                    ],
-                    'css'         => '{background-color: purple;} .skin-text {color: white;} 
-                                .skin-img.img-0 {filter: grayscale(1);}
-                                .skin-img.img-1 {width:33%;left:0;}.skin-img.img-2 {width:33%;right:0;}'
-                ]
-            ]
-        ]
-    ];
 }

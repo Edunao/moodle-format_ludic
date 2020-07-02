@@ -75,12 +75,22 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @param $id
      * @param string $title
      * @param string $content
-     * @param null $headericon
      * @return string
      */
-    public function render_popup($id, $title = '', $content = '', $headericon = null) {
-        $popup = new format_ludic_popup($id, $title, $content, $headericon);
+    public function render_popup($id, $title = '', $content = '') {
+        $popup = new format_ludic_popup($id, $title, $content);
         return $this->render($popup);
+    }
+
+    /**
+     * @param $id
+     * @param string $title
+     * @param array $slots
+     * @return string
+     */
+    public function render_avatar_shop($slots = []) {
+        $avatarshop = new format_ludic_avatar_shop($slots);
+        return $this->render($avatarshop);
     }
 
     /**
@@ -242,6 +252,10 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     protected function render_format_ludic_modchooser(format_ludic_modchooser $modchooser) {
         return $this->render_from_template('format_ludic/modchooser', $modchooser);
+    }
+
+    protected function render_format_ludic_avatar_shop(format_ludic_avatar_shop $avatarshop) {
+        return $this->render_from_template('format_ludic/avatar_shop', $avatarshop);
     }
 
     /**
@@ -566,6 +580,7 @@ class format_ludic_renderer extends format_section_renderer_base {
         $sections = $course->get_sections();
         $output = '';
         foreach ($sections as $section) {
+            $section->contextview = 'header';
             $output .= $this->render_section($section);
         }
 

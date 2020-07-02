@@ -243,6 +243,15 @@ abstract class skin extends model {
     }
 
     /**
+     * Return extra html to render before skin title
+     *
+     * @return array
+     */
+    public function get_extra_html_to_render(){
+        return [];
+    }
+
+    /**
      * Return all skin texts to render, each text with a class to select it in css.
      *
      * @return array

@@ -217,7 +217,7 @@ class progress extends \format_ludic\skin {
 
         if($results['completioninfo']->state == COMPLETION_COMPLETE ||
            $results['completioninfo']->state == COMPLETION_COMPLETE_PASS){
-            return 1;
+            return 100;
         }
 
         return 0;

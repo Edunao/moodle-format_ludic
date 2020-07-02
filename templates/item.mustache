@@ -39,7 +39,7 @@
 
     {{! Icons - 4 icons maximum }}
     {{#icons}}
-        <div class="item-icon position-{{position}}" title="{{imgalt}}" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}">
+        <div class="item-icon position-{{position}} {{classes}}" title="{{imgalt}}" style="background-image: url('{{imgsrc}}')" aria-label="{{imgalt}}">
             {{#link}}<a href="{{link}}"></a>{{/link}}
         </div>
     {{/icons}}

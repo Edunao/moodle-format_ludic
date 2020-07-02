@@ -55,6 +55,18 @@ class skin_controller extends controller_base {
             case 'get_skin_types_form':
                 $skintypeid = $this->get_param('id');
                 return $this->get_skin_types_form($skintypeid);
+
+            // Avatar action
+            case 'avatar_buy_item' :
+                $sectionid = $this->get_param('sectionid');
+                $slotname = $this->get_param('slotname');
+                $itemname = $this->get_param('itemname');
+                return $this->avatar_buy_item($sectionid, $slotname, $itemname);
+            case 'avatar_toggle_item':
+                $sectionid = $this->get_param('sectionid');
+                $slotname = $this->get_param('slotname');
+                $itemname = $this->get_param('itemname');
+                return $this->avatar_toggle_item($sectionid, $slotname, $itemname);
             default :
                 // Default case if the only parameter is id.
                 $id = $this->get_param('id', PARAM_INT);
@@ -181,5 +193,34 @@ class skin_controller extends controller_base {
         $skintype = $this->contexthelper->get_skin_type_by_id($skintypeid);
 
         return $renderer->render_edit_skins_form($COURSE->id, $skintype);
+    }
+
+    /*********************************
+     * Avatar actions
+     */
+
+
+    public function avatar_buy_item($sectionid, $slotname, $itemname){
+        $section = $this->contexthelper->get_section_by_id($sectionid);
+        if($section->skin->type != 'avatar'){
+            return false;
+        }
+        $section->skin->buy_item($slotname, $itemname);
+
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+        return $renderer->render_skinned_tile($section->skin);
+    }
+
+    public function avatar_toggle_item($sectionid, $slotname, $itemname){
+        $section = $this->contexthelper->get_section_by_id($sectionid);
+        if($section->skin->type != 'avatar'){
+            return false;
+        }
+        $section->skin->toggle_item($slotname, $itemname);
+
+        global $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+        return $renderer->render_skinned_tile($section->skin);
     }
 }

@@ -187,6 +187,86 @@
     display: none;
 }
 
+/* -----------------------------------------
+    Avatar
+ */
+
+
+.skin-img.img-object{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.skin-extra-html.shop .modal{
+    /*display: block;*/
+}
+
+.slot-title{
+    background-color: #F2F0EC;
+    font-family: 'Montserrat-Medium';
+    color: #1D1061;
+    border-bottom: 1px dashed #1d1061;
+}
+
+.slot-items{
+    margin-top : 10px;
+    margin-bottom: 10px;
+}
+
+.slot-item{
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat-Medium';
+    font-size: 25px;
+    color: #1d1061;
+}
+
+.slot-item:not(:last-child) {
+    border-bottom: 1px dashed #1d1061;
+}
+
+.slot-item-icon img{
+    width: 100px;
+}
+
+
+.format-ludic .item .skin-tile .skin-text.skin-hidden-text.open-shop{
+    display: block;
+}
+
+.format-ludic .item .skin-tile .skin-text.skin-hidden-text.cash{
+    display: block;
+}
+
+.slot-item-name,
+.slot-item-icon,
+.slot-item-state{
+    flex-basis: 33%;
+}
+
+.slot-item-state.notbuy .slot-item-equipped,
+.slot-item-state.notbuy .slot-item-notequipped{
+    display: none;
+}
+
+.slot-item-state.equipped .slot-item-buy,
+.slot-item-state.equipped .slot-item-notequipped{
+    display: none;
+}
+
+.slot-item-state.notequipped .slot-item-buy,
+.slot-item-state.notequipped .slot-item-equipped{
+    display: none;
+}
+
+.skin-text.skin-hidden-text.cash:before {
+    content: "$";
+}
+
+.slot-item-price:before{
+    content: "$";
+}
 
 /* -----------------------------------------
     Section list page
@@ -254,6 +334,24 @@
 #page-course-view-ludic .section-block .section.selected {
     border: none;
 }
+
+/* Manual completion */
+.ludic-container .coursemodule .item-icon.manual-completion{
+    width: 20px;
+    height: 20px;
+    background-repeat: no-repeat;
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+    background-color: white;
+}
+
+.ludic-container .coursemodule .item-icon.manual-completion a{
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
 
 /* -----------------------------------------
     Edition mode

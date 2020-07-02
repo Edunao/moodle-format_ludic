@@ -41,6 +41,7 @@ class section extends model implements skinnable_interface {
     public $coursemodules;
     public $skinid;
     public $skin;
+    public $contextview;
 
     /**
      * section constructor.
@@ -457,6 +458,14 @@ class section extends model implements skinnable_interface {
         ];
 
         return $this->results;
+    }
+
+    public function get_user_skin_data($userid){
+        return $this->contexthelper->get_database_api()->get_section_user_skin_data($this->id, $userid);
+    }
+
+    public function update_user_skin_data($userid, $data){
+        return $this->contexthelper->get_database_api()->update_section_user_skin_data($this->courseid, $this->id, $userid, $data);
     }
 
     /**

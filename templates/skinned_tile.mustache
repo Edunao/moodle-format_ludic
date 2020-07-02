@@ -17,9 +17,9 @@
 {{#css}}<style type="text/css">{{{css}}}</style>{{/css}}
 <div id="{{skinid}}" class="full-tile skin skin-type-{{skintype}}{{#classes}} {{class}}{{/classes}}">
 
-    <div class="sub-tile skin-tile">
+    <div class="sub-tile skin-tile" >
         {{#images}}
-            <img class="skin-img{{#class}} {{class}}{{/class}}" src="{{imgsrc}}" aria-label="{{imgalt}}"></img>
+            <img class="skin-img{{#class}} {{class}}{{/class}}" src="{{imgsrc}}" aria-label="{{imgalt}}" style="{{{css}}}"></img>
         {{/images}}
         {{#texts}}
             <div class="skin-text{{#class}} {{class}}{{/class}}">{{{text}}}</div>
@@ -31,6 +31,12 @@
             <div class="skin-empty-div div-{{number}}"></div>
         {{/emptydiv}}
     </div>
+
+    {{#extrahtml}}
+    <div class="skin-extra-html {{{classes}}}">
+        {{{content}}}
+    </div>
+    {{/extrahtml}}
 
     <div class="sub-tile title-tile">
         <div class="skin-text" title="{{title}}">{{title}}</div>

@@ -36,6 +36,7 @@ class format_ludic_skinned_tile implements renderable {
     public $css;
     public $emptydiv;
     public $hiddentexts;
+    public $extrahtml;
 
     /**
      * format_ludic_skin constructor.
@@ -52,7 +53,7 @@ class format_ludic_skinned_tile implements renderable {
         $this->weight     = $skin->get_weight();
         $this->classes    = $skin->get_classes();
         $this->images     = $skin->get_images_to_render();
-        $this->hiddentexts      = $skin->get_texts_to_render();
+        $this->hiddentexts = $skin->get_texts_to_render();
         $this->css        = $skin->get_css($this->skinid);
         $this->emptydiv   = [
                 ['number' => 1],
@@ -66,6 +67,7 @@ class format_ludic_skinned_tile implements renderable {
                 ['number' => 9],
                 ['number' => 10]
         ];
+        $this->extrahtml = $skin->get_extra_html_to_render();
     }
 
 }
