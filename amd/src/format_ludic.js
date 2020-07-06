@@ -95,9 +95,13 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         initLudicActionEvent: function () {
 
             // Click on element with data-action attribute.
-            $('body.format-ludic').on('click', '[data-action]', function (e) {
-
+            // Exclude not ludic element, because plugin like quiz use data-action
+            $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar').on('click', '[data-action]', function (e) {
+            //$('body.format-ludic').on('click', '[data-action]', function (e) {
                 console.log('test : ', $(this), $(e.target), $(this).is(e.target))
+
+
+
 
                 if(!$(this).is(e.target)){
                     if($(e.target).hasClass('no-ludic-event') || $(e.target).parents('.no-ludic-event').length > 0
@@ -107,8 +111,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                         return false;
                     }
                 }
-
-
 
                 // Get data.
                 let item = $(this);
@@ -136,11 +138,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                     skindata.sectionid = item.data('sectionid') ? item.data('sectionid') : null;
                     params.selectorId = item.data('sectionid') ? '.item[data-id="'+item.data('sectionid')+'"] .item-content-container'   : null;
                     params.id = item.data('sectionid') ? item.data('sectionid') : null;
-
                 }
 
                 console.log('action' , action, params);
-
 
                 // Try to construct a selector id.
                 let hasItemSelectorId = params.itemType && params.itemId;
