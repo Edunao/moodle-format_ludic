@@ -1,6 +1,5 @@
 <?php
 
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,7 +25,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 defined('MOODLE_INTERNAL') || die();
 
 class format_ludic_skins_list extends format_ludic_item {
@@ -42,7 +40,7 @@ class format_ludic_skins_list extends format_ludic_item {
     public function __construct($skinsinfo) {
         global $OUTPUT;
 
-        foreach($skinsinfo as $skininfo) {
+        foreach ($skinsinfo as $skininfo) {
             $this->skins[] = [
                 'id'          => $skininfo->id,
                 'skintype'    => $skininfo->type,

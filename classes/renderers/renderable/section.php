@@ -45,7 +45,7 @@ class format_ludic_section extends format_ludic_item {
         global $PAGE, $CFG;
 
         // General data.
-        $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+        $contexthelper      = \format_ludic\context_helper::get_instance($PAGE);
         $this->selectorid   = 'ludic-section-' . $section->section;
         $this->itemtype     = 'section';
         $this->id           = $section->id;
@@ -70,7 +70,7 @@ class format_ludic_section extends format_ludic_item {
 
             // Add in-edition class.
             $this->editmode = true;
-            
+
             // Action.
             $this->action           = 'get_course_modules';
             $this->controller       = 'section';
@@ -84,7 +84,7 @@ class format_ludic_section extends format_ludic_item {
                 $this->imgsrc = $imageobject->imgsrc;
                 $this->imgalt = $imageobject->imgalt;
 
-            } else if ($contexthelper->count_sections() == 0){
+            } else if ($contexthelper->count_sections() == 0) {
 
                 // Select section 0 if there is no other section in course.
                 $this->selected = true;
@@ -103,7 +103,7 @@ class format_ludic_section extends format_ludic_item {
             // The skin will render all section content.
             $this->content = $section->skin->render_skinned_tile();
 
-            if($contexthelper->get_section_id() == $section->id){
+            if ($contexthelper->get_section_id() == $section->id) {
                 $this->selected = true;
             }
 

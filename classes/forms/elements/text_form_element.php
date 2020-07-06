@@ -45,7 +45,7 @@ class text_form_element extends form_element {
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'text';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
-        $this->value     = !empty($this->value) ? $this->value : $this->defaultvalue;
+        $this->value = !empty($this->value) ? $this->value : $this->defaultvalue;
         $this->minlength = isset($attributes['minlength']) ? $attributes['minlength'] : false;
         $this->maxlength = isset($attributes['maxlength']) ? $attributes['maxlength'] : false;
     }
@@ -60,21 +60,33 @@ class text_form_element extends form_element {
 
         // Required validation.
         if ($this->required && empty($value)) {
-            return ['success' => 0, 'value' => get_string('error-required', 'format_ludic')];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-required', 'format_ludic')
+            ];
         }
 
         // Length >= min length validation.
         if ($this->minlength && strlen($value) < $this->minlength) {
-            return ['success' => 0, 'value' => get_string('error-str-min-length', 'format_ludic', $this->minlength)];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-str-min-length', 'format_ludic', $this->minlength)
+            ];
         }
 
         // Length <= max length validation.
         if ($this->maxlength && strlen($value) > $this->maxlength) {
-            return ['success' => 0, 'value' => get_string('error-str-max-length', 'format_ludic', $this->maxlength)];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-str-max-length', 'format_ludic', $this->maxlength)
+            ];
         }
 
         // Success.
-        return ['success' => 1, 'value' => (string) ($value)];
+        return [
+            'success' => 1,
+            'value'   => (string) ($value)
+        ];
     }
 
 }

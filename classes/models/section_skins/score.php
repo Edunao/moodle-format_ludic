@@ -28,23 +28,23 @@ defined('MOODLE_INTERNAL') || die();
 
 class score extends \format_ludic\skin {
 
-    public static function get_editor_config(){
+    public static function get_editor_config() {
         return [
             "settings" => [
-                "name"                  => "text",
-                "description"           => "text",
-                "main-css"              => "css",
+                "name"        => "text",
+                "description" => "text",
+                "main-css"    => "css",
             ],
-            "steps" => [
-                "threshold"       => "number",
-                "step-image"            => "image",
-                "step-text"             => "string",
-                "step-css"              => "css"
+            "steps"    => [
+                "threshold"  => "number",
+                "step-image" => "image",
+                "step-text"  => "string",
+                "step-css"   => "css"
             ]
         ];
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return 'section-score';
     }
 
@@ -56,7 +56,7 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public static function get_instance() {
-        return (object)[
+        return (object) [
             'id'          => self::get_unique_name(),
             'location'    => 'section',
             'type'        => 'score',
@@ -67,8 +67,6 @@ class score extends \format_ludic\skin {
     }
 
     private $currentstep = null;
-
-
 
     /**
      * Get the best image.
@@ -88,8 +86,8 @@ class score extends \format_ludic\skin {
     public function get_default_image() {
         global $OUTPUT;
         return (object) [
-                'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
-                'imgalt' => 'Default image.'
+            'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
+            'imgalt' => 'Default image.'
         ];
     }
 
@@ -117,12 +115,12 @@ class score extends \format_ludic\skin {
 
         // Define default case.
         $currentstep = (object) [
-                'threshold'  => 0,
-                'proportion' => 0,
-                'extratext'  => '',
-                'extracss'   => '',
-                'imgsrc'     => '',
-                'imgalt'     => '',
+            'threshold'  => 0,
+            'proportion' => 0,
+            'extratext'  => '',
+            'extracss'   => '',
+            'imgsrc'     => '',
+            'imgalt'     => '',
         ];
 
         $gradeinfo       = $this->get_grade_info();
@@ -176,10 +174,10 @@ class score extends \format_ludic\skin {
     public function get_images_to_render() {
         $step = $this->get_current_step();
         return [
-                [
-                        'imgsrc' => $step->imgsrc,
-                        'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
-                ]
+            [
+                'imgsrc' => $step->imgsrc,
+                'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
+            ]
         ];
     }
 
@@ -203,14 +201,31 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public function get_texts_to_render() {
-        $step   = $this->get_current_step();
+        $step = $this->get_current_step();
         return [
-                ['text' => $step->score . '<span class="unit">pts</span>', 'class' => 'score number'],
-                ['text' => '/', 'class' => 'fractionbar unit'],
-                ['text' => $step->scoremax, 'class' => 'scoremax number'],
-                ['text' => $step->score . '/' . $step->scoremax, 'class' => 'fullscore number'],
-                ['text' => $step->proportion . '<span class="unit">%</span>', 'class' => 'percentage number'],
-                ['text' => isset($step->extratext) ? $step->extratext : '', 'class' => 'extratext']
+            ['text'  => $step->score . '<span class="unit">pts</span>',
+             'class' => 'score number'
+            ],
+            [
+                'text'  => '/',
+                'class' => 'fractionbar unit'
+            ],
+            [
+                'text'  => $step->scoremax,
+                'class' => 'scoremax number'
+            ],
+            [
+                'text'  => $step->score . '/' . $step->scoremax,
+                'class' => 'fullscore number'
+            ],
+            [
+                'text'  => $step->proportion . '<span class="unit">%</span>',
+                'class' => 'percentage number'
+            ],
+            [
+                'text'  => isset($step->extratext) ? $step->extratext : '',
+                'class' => 'extratext'
+            ]
         ];
     }
 }

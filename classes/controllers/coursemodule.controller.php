@@ -91,9 +91,15 @@ class coursemodule_controller extends controller_base {
 
         // Define return.
         if ($success) {
-            $return = array('success' => 1, 'value' => $form->get_success_message());
+            $return = array(
+                'success' => 1,
+                'value'   => $form->get_success_message()
+            );
         } else {
-            $return = array('success' => 0, 'value' => $form->get_error_message());
+            $return = array(
+                'success' => 0,
+                'value'   => $form->get_error_message()
+            );
         }
 
         // Return a json encode array with success and message.
@@ -131,9 +137,9 @@ class coursemodule_controller extends controller_base {
         }
 
         // Render popup.
-        $renderer     = $PAGE->get_renderer('format_ludic');
+        $renderer = $PAGE->get_renderer('format_ludic');
         $popupcontent = label_get_coursemodule_info($coursemodule->cminfo)->content;
-        $popup        = $renderer->render_popup('label-popup', $coursemodule->name, $popupcontent);
+        $popup = $renderer->render_popup('label-popup', $coursemodule->name, $popupcontent);
 
         // Return popup html.
         return $popup;

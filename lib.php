@@ -116,6 +116,17 @@ class format_ludic extends \format_base {
         return $courseformatoptions;
     }
 
+    function page_set_course(\moodle_page $page) {
+        global $CFG, $USER;
+
+        // Put teacher in edition mode by defaut
+        $context = context_course::instance($page->course->id);
+        if (!$page->user_is_editing() && has_capability('moodle/course:manageactivities', $context) && $page->pagetype == 'course-view') {
+            $USER->editing = 1;
+            redirect($CFG->wwwroot . '/course/view.php?id=' . $page->course->id . '&sesskey=' . sesskey() . '&edit=on');
+        }
+    }
+
     /**
      * Whether this format allows to delete sections
      *

@@ -6,82 +6,82 @@
     <TABLES>
         <TABLE NAME="format_ludic_bravos" COMMENT="Defines who gave which bravo and to whom?">
             <FIELDS>
-                <FIELD NAME="id"         TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="courseid"   TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="studentid"  TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="teacherid"  TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="timestamp"  TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="bravoid"    TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="bravotitle" TYPE="char" LENGTH="255"   NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="reason"     TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="studentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="teacherid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="timestamp" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="bravoid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="bravotitle" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="reason" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="courseid"  TYPE="foreign" FIELDS="courseid"  REFTABLE="course" REFFIELDS="id"/>
-                <KEY NAME="studentid" TYPE="foreign" FIELDS="studentid" REFTABLE="user"   REFFIELDS="id"/>
-                <KEY NAME="teacherid" TYPE="foreign" FIELDS="teacherid" REFTABLE="user"   REFFIELDS="id"/>
+                <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+                <KEY NAME="studentid" TYPE="foreign" FIELDS="studentid" REFTABLE="user" REFFIELDS="id"/>
+                <KEY NAME="teacherid" TYPE="foreign" FIELDS="teacherid" REFTABLE="user" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="format_ludic_cm" COMMENT="Defines skin assignments on course modules">
             <FIELDS>
-                <FIELD NAME="id"       TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="cmid"     TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="skinid"   TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="weight"   TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="access"   TYPE="int" LENGTH="1"  NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="cmid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="skinid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="weight" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="access" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
-                <KEY NAME="primary"  TYPE="primary" FIELDS="id"/>
-                <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid"  REFTABLE="course"         REFFIELDS="id"/>
-                <KEY NAME="cmid"     TYPE="foreign" FIELDS="cmid"      REFTABLE="course_modules" REFFIELDS="id"/>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+                <KEY NAME="cmid" TYPE="foreign" FIELDS="cmid" REFTABLE="course_modules" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="format_ludic_cs" COMMENT="Defines skin assignments on course sections">
             <FIELDS>
-                <FIELD NAME="id"        TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="courseid"  TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
                 <FIELD NAME="sectionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="skinid"    TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="skinid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-                <KEY NAME="courseid"  TYPE="foreign" FIELDS="courseid"  REFTABLE="course"          REFFIELDS="id"/>
+                <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
                 <KEY NAME="sectionid" TYPE="foreign" FIELDS="sectionid" REFTABLE="course_sections" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="format_ludic_user_cs_state" COMMENT="Defines skin state of a user in a section">
             <FIELDS>
-                <FIELD NAME="id"        TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="true"/>
-                <FIELD NAME="courseid"  TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="sectionid" TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="userid"    TYPE="int"  LENGTH="10"    NOTNULL="true" SEQUENCE="false"/>
-                <FIELD NAME="data"      TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="sectionid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="data" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
-                <KEY NAME="primary"   TYPE="primary" FIELDS="id"/>
-                <KEY NAME="courseid"  TYPE="foreign" FIELDS="courseid"  REFTABLE="course"          REFFIELDS="id"/>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
                 <KEY NAME="sectionid" TYPE="foreign" FIELDS="sectionid" REFTABLE="course_sections" REFFIELDS="id"/>
-                <KEY NAME="userid"    TYPE="foreign" FIELDS="userid"    REFTABLE="user"            REFFIELDS="id"/>
+                <KEY NAME="userid" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
         <TABLE NAME="format_ludic_user_cm_state" COMMENT="Defines user activity state with access information">
             <FIELDS>
-                <FIELD NAME="id"              TYPE="int"  LENGTH="10"   NOTNULL="true"  SEQUENCE="true"/>
-                <FIELD NAME="courseid"        TYPE="int"  LENGTH="10"   NOTNULL="true"  SEQUENCE="false"/>
-                <FIELD NAME="cmid"            TYPE="int"  LENGTH="10"   NOTNULL="true"  SEQUENCE="false"/>
-                <FIELD NAME="studentid"       TYPE="int"  LENGTH="10"   NOTNULL="true"  SEQUENCE="false"/>
-                <FIELD NAME="manualunlock"    TYPE="int"  LENGTH="1"    NOTNULL="true"  SEQUENCE="false"/>
-                <FIELD NAME="achievementtime" TYPE="int"  LENGTH="10"   NOTNULL="false" SEQUENCE="false"/>
-                <FIELD NAME="firstaccesstime" TYPE="int"  LENGTH="10"   NOTNULL="true"  SEQUENCE="false"/>
-                <FIELD NAME="lastaccesstime"  TYPE="int"  LENGTH="10"   NOTNULL="true"  SEQUENCE="false"/>
-                <FIELD NAME="accesscount"     TYPE="int"  LENGTH="10"   NOTNULL="true"  SEQUENCE="false"/>
+                <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+                <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="cmid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="studentid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="manualunlock" TYPE="int" LENGTH="1" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="achievementtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+                <FIELD NAME="firstaccesstime" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="lastaccesstime" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+                <FIELD NAME="accesscount" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
             </FIELDS>
             <KEYS>
-                <KEY NAME="primary"   TYPE="primary" FIELDS="id"/>
-                <KEY NAME="courseid"  TYPE="foreign" FIELDS="courseid"  REFTABLE="course"         REFFIELDS="id"/>
-                <KEY NAME="cmid"      TYPE="foreign" FIELDS="cmid"      REFTABLE="course_modules" REFFIELDS="id"/>
-                <KEY NAME="studentid" TYPE="foreign" FIELDS="studentid" REFTABLE="user"           REFFIELDS="id"/>
+                <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+                <KEY NAME="courseid" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+                <KEY NAME="cmid" TYPE="foreign" FIELDS="cmid" REFTABLE="course_modules" REFFIELDS="id"/>
+                <KEY NAME="studentid" TYPE="foreign" FIELDS="studentid" REFTABLE="user" REFFIELDS="id"/>
             </KEYS>
         </TABLE>
     </TABLES>

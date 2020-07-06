@@ -28,16 +28,16 @@ defined('MOODLE_INTERNAL') || die();
 
 class stealth extends \format_ludic\skin {
 
-    public static function get_editor_config(){
+    public static function get_editor_config() {
         return [
             "settings" => [
-                "name"                  => "text",
-                "main-css"              => "css",
+                "name"     => "text",
+                "main-css" => "css",
             ]
         ];
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return 'cm-stealth';
     }
 
@@ -49,8 +49,8 @@ class stealth extends \format_ludic\skin {
     public function get_edit_image() {
         global $CFG;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/stealth.png",
-                'imgalt' => 'Stealth'
+            'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/stealth.png",
+            'imgalt' => 'Stealth'
         ];
     }
 
@@ -63,11 +63,11 @@ class stealth extends \format_ludic\skin {
      */
     static public function get_instance() {
         return new self((object) [
-                'id'          => FORMAT_LUDIC_CM_SKIN_STEALTH_ID,
-                'location'    => 'coursemodule',
-                'type'        => 'stealth',
-                'title'       => get_string('cm-skin-stealth-title', 'format_ludic'),
-                'description' => get_string('cm-skin-stealth-description', 'format_ludic')
+            'id'          => FORMAT_LUDIC_CM_SKIN_STEALTH_ID,
+            'location'    => 'coursemodule',
+            'type'        => 'stealth',
+            'title'       => get_string('cm-skin-stealth-title', 'format_ludic'),
+            'description' => get_string('cm-skin-stealth-description', 'format_ludic')
         ]);
     }
 

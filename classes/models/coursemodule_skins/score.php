@@ -29,25 +29,25 @@ defined('MOODLE_INTERNAL') || die();
 class score extends \format_ludic\skin {
 
     private $currentstep = null;
-    private $nextstep = null;
+    private $nextstep    = null;
 
-    public static function get_editor_config(){
+    public static function get_editor_config() {
         return [
             "settings" => [
-                "main-css"              => "css",
-                "linear-value-part"     => "int",
+                "main-css"          => "css",
+                "linear-value-part" => "int",
             ],
-            "steps" => [
-                "score-threshold"       => "number",
-                "fixed-value-part"      => "int",
-                "step-image"            => "image",
-                "step-text"             => "string",
-                "step-css"              => "css"
+            "steps"    => [
+                "score-threshold"  => "number",
+                "fixed-value-part" => "int",
+                "step-image"       => "image",
+                "step-text"        => "string",
+                "step-css"         => "css"
             ]
         ];
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return 'cm-score';
     }
 
@@ -59,7 +59,7 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public static function get_instance() {
-        return (object)[
+        return (object) [
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'score',
@@ -86,17 +86,17 @@ class score extends \format_ludic\skin {
 
         // Define default case.
         $currentstep = (object) [
-                'threshold'  => 0,
-                'proportion' => 0,
-                'score'      => 0,
-                'scoremax'   => 0,
-                'scorepart'  => 0,
-                'extratext'  => '',
-                'extracss'   => '',
-                'imgsrc'     => '',
-                'imgalt'     => ''
+            'threshold'  => 0,
+            'proportion' => 0,
+            'score'      => 0,
+            'scoremax'   => 0,
+            'scorepart'  => 0,
+            'extratext'  => '',
+            'extracss'   => '',
+            'imgsrc'     => '',
+            'imgalt'     => ''
         ];
-        $nextstep = null;
+        $nextstep    = null;
 
         // Copy steps into an associative array, indexed by threshold and calculate the total value parts score.
         $sortedsteps = [];
@@ -137,7 +137,7 @@ class score extends \format_ludic\skin {
             $step->proportion = $sum / $total;
             if (($gradeproportion * 100) >= $step->threshold) {
                 $currentstep = $step;
-            }else if( is_null($nextstep)){
+            } else if (is_null($nextstep)) {
                 $nextstep = $step;
             }
 
@@ -163,7 +163,7 @@ class score extends \format_ludic\skin {
 
         // Add score to current step.
         $currentstep->score    = $score;
-        $currentstep->grade = $gradeinfo->grade;
+        $currentstep->grade    = $gradeinfo->grade;
         $currentstep->grademax = $gradeinfo->grademax;
 
         // Ensure step has an image.
@@ -175,7 +175,7 @@ class score extends \format_ludic\skin {
 
         // Return current step.
         $this->currentstep = $currentstep;
-        $this->nextstep = $nextstep;
+        $this->nextstep    = $nextstep;
         return $this->currentstep;
     }
 
@@ -197,8 +197,8 @@ class score extends \format_ludic\skin {
     public function get_default_image() {
         global $OUTPUT;
         return (object) [
-                'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
-                'imgalt' => 'Default image.'
+            'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
+            'imgalt' => 'Default image.'
         ];
     }
 
@@ -222,10 +222,10 @@ class score extends \format_ludic\skin {
     public function get_images_to_render() {
         $step = $this->get_current_step();
         return [
-                [
-                        'imgsrc' => $step->imgsrc,
-                        'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
-                ]
+            [
+                'imgsrc' => $step->imgsrc,
+                'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
+            ]
         ];
     }
 
@@ -241,17 +241,49 @@ class score extends \format_ludic\skin {
         $step   = $this->get_current_step();
         $weight = $this->get_weight();
         return [
-                ['text' => $step->score, 'class' => 'score'],
-                ['text' => (int) $step->grade, 'class' => 'grade'],
-                ['text' => '/', 'class' => 'fractionbar-1'],
-                ['text' => '/', 'class' => 'fractionbar-2'],
-                ['text' => $weight, 'class' => 'scoremax'],
-                ['text' => $step->grademax, 'class' => 'grademax'],
-                ['text' => $step->score . '/' . $weight, 'class' => 'fullscore'],
-                ['text' => (int) $step->grade . '/' . $step->grademax, 'class' => 'fullgrade'],
-                ['text' => $step->proportion . '%', 'class' => 'percentage'],
-                ['text' => isset($step->extratext) ? $step->extratext : '', 'class' => 'extratext'],
-                ['text' => isset($this->nextstep->score) ? $this->nextstep->score : '', 'class' => 'threshold' ],
+            ['text'  => $step->score,
+             'class' => 'score'
+            ],
+            [
+                'text'  => (int) $step->grade,
+                'class' => 'grade'
+            ],
+            [
+                'text'  => '/',
+                'class' => 'fractionbar-1'
+            ],
+            [
+                'text'  => '/',
+                'class' => 'fractionbar-2'
+            ],
+            [
+                'text'  => $weight,
+                'class' => 'scoremax'
+            ],
+            [
+                'text'  => $step->grademax,
+                'class' => 'grademax'
+            ],
+            [
+                'text'  => $step->score . '/' . $weight,
+                'class' => 'fullscore'
+            ],
+            [
+                'text'  => (int) $step->grade . '/' . $step->grademax,
+                'class' => 'fullgrade'
+            ],
+            [
+                'text'  => $step->proportion . '%',
+                'class' => 'percentage'
+            ],
+            [
+                'text'  => isset($step->extratext) ? $step->extratext : '',
+                'class' => 'extratext'
+            ],
+            [
+                'text'  => isset($this->nextstep->score) ? $this->nextstep->score : '',
+                'class' => 'threshold'
+            ],
         ];
     }
 

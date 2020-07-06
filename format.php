@@ -32,10 +32,6 @@ $sectionid = $contexthelper->get_section_id();
 
 $PAGE->set_context($context);
 
-
-//$staticconfig = json_encode($staticconfig);
-//$contexthelper->update_course_format_options(['ludic_config' => $staticconfig]);
-
 // Display course.
 $renderer = $PAGE->get_renderer('format_ludic');
 if ($editmode) {

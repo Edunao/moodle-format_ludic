@@ -66,16 +66,16 @@ class select_form_element extends form_element {
             }
 
             // Set name from name key, if empty use value instead.
-            $options[$key]['name']        = isset($value['name']) ? $value['name'] : $options[$key]['value'];
+            $options[$key]['name'] = isset($value['name']) ? $value['name'] : $options[$key]['value'];
 
             // Optional description.
             $options[$key]['description'] = isset($value['description']) ? $value['description'] : null;
 
             // Selected current value.
-            $options[$key]['selected']    = $this->value == $options[$key]['value'];
+            $options[$key]['selected'] = $this->value == $options[$key]['value'];
 
             // Indicator to know easily if select has description.
-            $this->hasdescription         = $this->hasdescription || !empty($options[$key]['description']);
+            $this->hasdescription = $this->hasdescription || !empty($options[$key]['description']);
         }
 
         // Set options.
@@ -99,7 +99,10 @@ class select_form_element extends form_element {
             return ['success' => 0];
         }
 
-        return ['success' => 1, 'value' => $value];
+        return [
+            'success' => 1,
+            'value'   => $value
+        ];
     }
 
 }

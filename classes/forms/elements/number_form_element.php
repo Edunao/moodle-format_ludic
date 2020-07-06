@@ -46,8 +46,8 @@ class number_form_element extends form_element {
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'number';
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
-        $this->min  = isset($attributes['min']) ? $attributes['min'] : false;
-        $this->max  = isset($attributes['max']) ? $attributes['max'] : false;
+        $this->min = isset($attributes['min']) ? $attributes['min'] : false;
+        $this->max = isset($attributes['max']) ? $attributes['max'] : false;
         $this->step = isset($attributes['step']) ? $attributes['step'] : false;
     }
 
@@ -59,7 +59,10 @@ class number_form_element extends form_element {
     public function validate_value($value) {
         // Required validation.
         if ($this->required && $value === '') {
-            return ['success' => 0, 'value' => get_string('error-required', 'format_ludic')];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-required', 'format_ludic')
+            ];
         }
 
         // Convert value to int.
@@ -67,21 +70,33 @@ class number_form_element extends form_element {
 
         // Value >= min validation.
         if ($this->min >= 0 && $value < $this->min) {
-            return ['success' => 0, 'value' => get_string('error-int-min', 'format_ludic', $this->min)];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-int-min', 'format_ludic', $this->min)
+            ];
         }
 
         // Value <= max validation.
         if ($this->max >= 0 && $value > $this->max) {
-            return ['success' => 0, 'value' => get_string('error-int-max', 'format_ludic', $this->max)];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-int-max', 'format_ludic', $this->max)
+            ];
         }
 
         // Value is a desired step validation.
         if ($this->step && $value % $this->step != 0) {
-            return ['success' => 0, 'value' => get_string('error-int-step', 'format_ludic', $this->step)];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-int-step', 'format_ludic', $this->step)
+            ];
         }
 
         // Success.
-        return ['success' => 1, 'value' => $value];
+        return [
+            'success' => 1,
+            'value'   => $value
+        ];
     }
 
 }

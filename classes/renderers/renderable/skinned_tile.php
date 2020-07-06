@@ -47,27 +47,27 @@ class format_ludic_skinned_tile implements renderable {
      * @throws moodle_exception
      */
     public function __construct(\format_ludic\skin $skin) {
-        $this->skinid     = 'skin-' . $skin->location . '-' . $skin->item->id;
-        $this->skintype   = $skin->type;
-        $this->title      = $skin->item->get_skinned_tile_title();
-        $this->weight     = $skin->get_weight();
-        $this->classes    = $skin->get_classes();
-        $this->images     = $skin->get_images_to_render();
+        $this->skinid      = 'skin-' . $skin->location . '-' . $skin->item->id;
+        $this->skintype    = $skin->type;
+        $this->title       = $skin->item->get_skinned_tile_title();
+        $this->weight      = $skin->get_weight();
+        $this->classes     = $skin->get_classes();
+        $this->images      = $skin->get_images_to_render();
         $this->hiddentexts = $skin->get_texts_to_render();
-        $this->css        = $skin->get_css($this->skinid);
-        $this->emptydiv   = [
-                ['number' => 1],
-                ['number' => 2],
-                ['number' => 3],
-                ['number' => 4],
-                ['number' => 5],
-                ['number' => 6],
-                ['number' => 7],
-                ['number' => 8],
-                ['number' => 9],
-                ['number' => 10]
+        $this->css         = $skin->get_css($this->skinid);
+        $this->emptydiv    = [
+            ['number' => 1],
+            ['number' => 2],
+            ['number' => 3],
+            ['number' => 4],
+            ['number' => 5],
+            ['number' => 6],
+            ['number' => 7],
+            ['number' => 8],
+            ['number' => 9],
+            ['number' => 10]
         ];
-        $this->extrahtml = $skin->get_extra_html_to_render();
+        $this->extrahtml   = $skin->get_extra_html_to_render();
     }
 
 }

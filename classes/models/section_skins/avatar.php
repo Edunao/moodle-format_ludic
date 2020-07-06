@@ -100,24 +100,24 @@ class avatar extends \format_ludic\skin {
         // User images
         $useritems = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
         $skinitems = $this->get_items_data();
-        foreach($useritems as $itemid => $useritem){
-            if(!$useritem->equipped){
+        foreach ($useritems as $itemid => $useritem) {
+            if (!$useritem->equipped) {
                 continue;
             }
 
-            if(!array_key_exists($itemid, $skinitems)){
+            if (!array_key_exists($itemid, $skinitems)) {
                 continue;
             }
 
             $skinimage = $skinitems[$itemid]['images'];
-            foreach($skinimage as $imageinfo){
+            foreach ($skinimage as $imageinfo) {
                 $imageinfo->classes = isset($imageinfo->classes) ? $imageinfo->classes : '';
-                $cleanitemid = str_replace(' ', '', $itemid);
-                $imageinfo->class = $imageinfo->classes .  ' img-object img-slot-'.$useritem->slot.' img-object-'.$cleanitemid;
+                $cleanitemid        = str_replace(' ', '', $itemid);
+                $imageinfo->class   = $imageinfo->classes . ' img-object img-slot-' . $useritem->slot . ' img-object-' . $cleanitemid;
 
                 $imageinfo->css = '';
-                if(isset($imageinfo->zindex)){
-                    $imageinfo->css .= 'z-index:'. $imageinfo->zindex . ';';
+                if (isset($imageinfo->zindex)) {
+                    $imageinfo->css .= 'z-index:' . $imageinfo->zindex . ';';
                 }
 
                 $images[] = $imageinfo;
@@ -140,13 +140,13 @@ class avatar extends \format_ludic\skin {
         ];
     }
 
-    public function get_user_money(){
-        $useritems = $this->get_user_items_data();
+    public function get_user_money() {
+        $useritems   = $this->get_user_items_data();
         $userresults = $this->item->get_user_results();
         //print_object($userresults);
         $totalmoney = 1000;
 
-        foreach ($useritems as $itemid => $useritem){
+        foreach ($useritems as $itemid => $useritem) {
             $totalmoney -= $useritem->cost;
         }
 
@@ -155,19 +155,19 @@ class avatar extends \format_ludic\skin {
 
     public function get_user_items_data() {
         $currentitems = $this->get_items_data();
-        $useritems = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
+        $useritems    = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
 
         // Add free items in user items list
-        foreach($currentitems as $itemid => $item){
-            if($item['cost'] > 0){
+        foreach ($currentitems as $itemid => $item) {
+            if ($item['cost'] > 0) {
                 continue;
             }
 
-            if(!array_key_exists($itemid, $useritems)){
+            if (!array_key_exists($itemid, $useritems)) {
                 $useritem = [
                     'itemname' => $item['name'],
-                    'slot' => $item['slot'],
-                    'cost' => $item['cost'],
+                    'slot'     => $item['slot'],
+                    'cost'     => $item['cost'],
                     'equipped' => false,
                 ];
 
@@ -181,27 +181,27 @@ class avatar extends \format_ludic\skin {
         return $this->item->get_user_skin_data($this->contexthelper->get_user_id());
     }
 
-    public function buy_item($slotname, $itemname){
+    public function buy_item($slotname, $itemname) {
         $currentitems = $this->get_items_data();
-        $useritems = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
+        $useritems    = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
 
         // Get item
-        $itemid = $slotname . '-'. $itemname;
-        if(!array_key_exists($itemid, $currentitems)){
+        $itemid = $slotname . '-' . $itemname;
+        if (!array_key_exists($itemid, $currentitems)) {
             return false;
         }
         $item = $currentitems[$itemid];
 
         // Check is user can buy this item
         $currentmoney = $this->get_user_money();
-        if($currentmoney < $item['cost']){
+        if ($currentmoney < $item['cost']) {
             return false;
         }
 
         $useritem = [
             'itemname' => $item['name'],
-            'slot' => $item['slot'],
-            'cost' => $item['cost'],
+            'slot'     => $item['slot'],
+            'cost'     => $item['cost'],
             'equipped' => false,
         ];
 
@@ -214,41 +214,39 @@ class avatar extends \format_ludic\skin {
         return true;
     }
 
-
-    public function toggle_item($slotname, $itemname){
-        $useritems = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
+    public function toggle_item($slotname, $itemname) {
+        $useritems     = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
         $currentitemid = $slotname . '-' . $itemname;
 
-        if(!array_key_exists($currentitemid, $useritems)){
+        if (!array_key_exists($currentitemid, $useritems)) {
             return false;
         }
 
         $useritems[$currentitemid]->equipped = !$useritems[$currentitemid]->equipped;
 
         // Disabled all others slots items
-        foreach($useritems as $itemid => $itemdata){
-            if($currentitemid == $itemid){
+        foreach ($useritems as $itemid => $itemdata) {
+            if ($currentitemid == $itemid) {
                 continue;
             }
 
-            if($itemdata->slot == $slotname){
+            if ($itemdata->slot == $slotname) {
                 $useritems[$itemid]->equipped = false;
             }
         }
         $this->item->update_user_skin_data($this->contexthelper->get_user_id(), $useritems);
     }
 
+    public function get_items_data() {
 
-    public function get_items_data(){
-
-        if(!is_null($this->itemsdata)){
+        if (!is_null($this->itemsdata)) {
             return $this->itemsdata;
         }
 
         $slotsdata = $this->get_properties('slots');
         $itemsdata = $this->get_properties('items');
         $items     = [];
-        $slots = [];
+        $slots     = [];
         foreach ($slotsdata as $slotindex => $slotdata) {
             $slot                   = $slotdata;
             $slot->index            = $slotindex;
@@ -260,7 +258,7 @@ class avatar extends \format_ludic\skin {
             if (!array_key_exists($itemdata->slot, $slots)) {
                 continue;
             }
-            $uniqueid = $itemdata->slot . '-' . $itemdata->name;
+            $uniqueid         = $itemdata->slot . '-' . $itemdata->name;
             $items[$uniqueid] = (array) $itemdata;
         }
 
@@ -271,7 +269,7 @@ class avatar extends \format_ludic\skin {
     public function get_extra_html_to_render() {
 
         // Don't print shop popup if we display skin in header bar and it's the current section
-        if($this->item->contextview == 'header' && $this->contexthelper->get_section_id() == $this->item->dbrecord->id){
+        if ($this->item->contextview == 'header' && $this->contexthelper->get_section_id() == $this->item->dbrecord->id) {
             return [];
         }
 
@@ -295,20 +293,20 @@ class avatar extends \format_ludic\skin {
 
         foreach ($itemsdata as $itemdata) {
             $itemdata = (object) $itemdata;
-            $itemid = $itemdata->slot . '-' . $itemdata->name;
+            $itemid   = $itemdata->slot . '-' . $itemdata->name;
             if (!array_key_exists($itemdata->slot, $slots)) {
                 continue;
             }
 
             $itemdata->state = 'notbuy';
-            if(array_key_exists($itemid, $useritems)){
+            if (array_key_exists($itemid, $useritems)) {
                 $itemdata->state = 'notequipped';
-                if($useritems[$itemid]->equipped == true){
+                if ($useritems[$itemid]->equipped == true) {
                     $itemdata->state = 'equipped';
                 }
             }
 
-            $itemdata->sectionid = $this->item->dbrecord->id;
+            $itemdata->sectionid               = $this->item->dbrecord->id;
             $slots[$itemdata->slot]['items'][] = (array) $itemdata;
         }
         $shopcontent = $renderer->render_avatar_shop($slots);
@@ -326,12 +324,12 @@ class avatar extends \format_ludic\skin {
 
         $useritems = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
         $skinitems = $this->get_items_data();
-        foreach($useritems as $itemid => $useritem){
-            if(!$useritem->equipped){
+        foreach ($useritems as $itemid => $useritem) {
+            if (!$useritem->equipped) {
                 continue;
             }
 
-            if(!array_key_exists($itemid, $skinitems)){
+            if (!array_key_exists($itemid, $skinitems)) {
                 continue;
             }
             $globalcss .= ' ' . $skinitems[$itemid]['css'];

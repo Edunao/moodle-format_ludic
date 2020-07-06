@@ -1,6 +1,5 @@
 <?php
 
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -32,7 +31,7 @@ class format_ludic_skins_types_list extends format_ludic_item {
 
     public $selected;
     public $skintypes = [];
-    public $skinid = '';
+    public $skinid    = '';
 
     /**
      * format_ludic_skin constructor.
@@ -43,7 +42,7 @@ class format_ludic_skins_types_list extends format_ludic_item {
 
         $this->skinid = $skinid;
 
-        foreach($skintypes as $skintype) {
+        foreach ($skintypes as $skintype) {
             $this->skintypes[] = [
                 'id'          => $skintype->id,
                 'skinid'      => $skintype->skinid,

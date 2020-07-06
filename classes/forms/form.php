@@ -178,11 +178,10 @@ abstract class form {
             } else {
                 // Add an error to the error list.
                 $this->errors[] = [
-                        'id'    => $element->id,
-                        'label' => $element->label,
-                        'name'  => $element->name,
-                        'error' => isset($elementvalidation['value']) ?
-                                $elementvalidation['value'] : get_string('default-error', 'format_ludic')
+                    'id'    => $element->id,
+                    'label' => $element->label,
+                    'name'  => $element->name,
+                    'error' => isset($elementvalidation['value']) ? $elementvalidation['value'] : get_string('default-error', 'format_ludic')
                 ];
 
                 // Form is not valid.

@@ -97,16 +97,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Click on element with data-action attribute.
             // Exclude not ludic element, because plugin like quiz use data-action
             $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar').on('click', '[data-action]', function (e) {
-            //$('body.format-ludic').on('click', '[data-action]', function (e) {
                 console.log('test : ', $(this), $(e.target), $(this).is(e.target))
 
-
-
-
-                if(!$(this).is(e.target)){
-                    if($(e.target).hasClass('no-ludic-event') || $(e.target).parents('.no-ludic-event').length > 0
+                if (!$(this).is(e.target)) {
+                    if ($(e.target).hasClass('no-ludic-event') || $(e.target).parents('.no-ludic-event').length > 0
                         || ($(e.target).parents('.no-ludic-event').length > 0 && $(e.target).data('action') === undefined)
-                    ){
+                    ) {
                         console.log('ignore event', e.target, $(e.target).parents('.no-ludic-event'), $(e.target).data('action'));
                         return false;
                     }
@@ -131,16 +127,16 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 };
 
                 let skindata = {};
-                if(action == 'avatar_toggle_item' || action == 'avatar_buy_item'){
+                if (action == 'avatar_toggle_item' || action == 'avatar_buy_item') {
                     // Avatar
                     skindata.slotname = item.data('slotname') ? item.data('slotname') : null;
                     skindata.itemname = item.data('itemname') ? item.data('itemname') : null;
                     skindata.sectionid = item.data('sectionid') ? item.data('sectionid') : null;
-                    params.selectorId = item.data('sectionid') ? '.item[data-id="'+item.data('sectionid')+'"] .item-content-container'   : null;
+                    params.selectorId = item.data('sectionid') ? '.item[data-id="' + item.data('sectionid') + '"] .item-content-container' : null;
                     params.id = item.data('sectionid') ? item.data('sectionid') : null;
                 }
 
-                console.log('action' , action, params);
+                console.log('action', action, params);
 
                 // Try to construct a selector id.
                 let hasItemSelectorId = params.itemType && params.itemId;
@@ -267,7 +263,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             delete params.callback;
             delete params.loading;
 
-            if(params.skindata !== undefined){
+            if (params.skindata !== undefined) {
                 params = $.extend(params, params.skindata);
                 delete params.skindata;
             }
@@ -358,21 +354,21 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
 
-        initAvatar: function(selector){
-            $(selector + ' .skin-type-avatar .open-shop').on('click', function(e){
+        initAvatar: function (selector) {
+            $(selector + ' .skin-type-avatar .open-shop').on('click', function (e) {
                 let shopid = $(this).attr('class').split(' open-shop-')[1];
                 shopid = shopid.split(' ')[0];
                 $('#avatar-shop-' + shopid).modal('show')
             });
         },
 
-        updateAvatar: function(selectorId, sectionid, html){
+        updateAvatar: function (selectorId, sectionid, html) {
             $('#avatar-shop-' + sectionid).modal('hide');
-            $( selectorId ).each(function(){
-                $(this).html( html );
+            $(selectorId).each(function () {
+                $(this).html(html);
             })
             // Remove header shop popup to avoid duplicate
-            $('.header-sections-list ' +selectorId + ' .skin-extra-html').remove();
+            $('.header-sections-list ' + selectorId + ' .skin-extra-html').remove();
 
             this.initAvatar(selectorId);
             $('#avatar-shop-' + sectionid).modal('show')
@@ -907,28 +903,28 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         initDragAndDropEvents: function () {
             let body = $('body.format-ludic');
 
-            console.log('init drag and drop ? 2');
-            $(".container-children.coursemodules .children-elements").sortable({
-                items: ".ludic-drag",
-                change: function (event, ui) {
-                    console.log('change drag and drop ', event);
-                }
-            });
+            // console.log('init drag and drop ? 2');
+            // $(".container-children.coursemodules .children-elements").sortable({
+            //     items: ".ludic-drag",
+            //     change: function (event, ui) {
+            //         console.log('change drag and drop ', event);
+            //     }
+            // });
 
             // Save the selector id of the drag object.
-            // body.on('dragstart', '.ludic-drag', function (e) {
-            //     console.log('dragstart');
-            //     console.log(e.currentTarget.id);
-            //     e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.id);
-            // });
+            body.on('dragstart', '.ludic-drag', function (e) {
+                console.log('dragstart');
+                console.log(e.currentTarget.id);
+                e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.id);
+            });
 
             // Required to allow drop.
-            // body.on('dragover', '.ludic-drop', function (e) {
-            //     console.log('dragover');
-            //     e.preventDefault();
-            // });
+            body.on('dragover', '.ludic-drop', function (e) {
+                console.log('dragover');
+                e.preventDefault();
+            });
 
-            /* // Management of drop sections and course modules.
+             // Management of drop sections and course modules.
              body.on('drop', '.section.ludic-drop, .coursemodule.ludic-drop', function (e) {
                  console.log('drop');
                  console.log(e.currentTarget.id);
@@ -972,7 +968,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                          callback: callbackFunction
                      });
                  }
-             });*/
+             });
         },
 
         /**

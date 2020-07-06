@@ -101,12 +101,12 @@ class progress extends \format_ludic\skin {
     }
 
     public function get_images_to_render() {
-        $images = [];
+        $images      = [];
         $currentstep = $this->get_current_step();
 
-        foreach ($currentstep->images as $key => $image){
-            $image->class   = 'img-step img-step-' . $key;
-            $images[] = $image;
+        foreach ($currentstep->images as $key => $image) {
+            $image->class = 'img-step img-step-' . $key;
+            $images[]     = $image;
         }
 
         return $images;
@@ -123,7 +123,7 @@ class progress extends \format_ludic\skin {
             'threshold' => 0,
             'percent'   => 0,
             'extratext' => '',
-            'css'  => '',
+            'css'       => '',
             'images'    => [
                 [
                     'imgsrc' => '',
@@ -156,7 +156,7 @@ class progress extends \format_ludic\skin {
 
         // Get threshold
         foreach ($sortedsteps as $step) {
-            if($step->threshold <= $percent){
+            if ($step->threshold <= $percent) {
                 $currentstep = $step;
             }
         }
@@ -165,26 +165,24 @@ class progress extends \format_ludic\skin {
         return $currentstep;
     }
 
-
-    public function get_percent(){
+    public function get_percent() {
         $results = $this->item->get_user_results();
 
         $percent = 0;
-        $nbcms = 0;
-        foreach($results['resultsdetails'] as $cmresult){
+        $nbcms   = 0;
+        foreach ($results['resultsdetails'] as $cmresult) {
 
-            if($cmresult['results']['completioninfo']->type === COMPLETION_DISABLED && $cmresult['results']['gradeinfo']->grademax === 0){
+            if ($cmresult['results']['completioninfo']->type === COMPLETION_DISABLED && $cmresult['results']['gradeinfo']->grademax === 0) {
                 continue;
             }
 
-            if($cmresult['results']['gradeinfo']->grademax > 0){
+            if ($cmresult['results']['gradeinfo']->grademax > 0) {
                 $percent += $cmresult['results']['gradeinfo']->proportion;
-            }else if($cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE ||
-                     $cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE_PASS){
+            } else if ($cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE || $cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE_PASS) {
                 $percent += 1;
             }
 
-            $nbcms ++;
+            $nbcms++;
         }
 
         return $nbcms == 0 ? 0 : $percent * 100 / $nbcms;
@@ -193,15 +191,17 @@ class progress extends \format_ludic\skin {
     public function get_texts_to_render() {
         $percent = floor($this->get_percent());
         return [
-            ['text' => $percent, 'class' => 'percent percent-'.$percent]
+            ['text'  => $percent,
+             'class' => 'percent percent-' . $percent
+            ]
         ];
     }
 
     public function get_additional_css() {
-        $step = $this->get_current_step();
+        $step    = $this->get_current_step();
         $percent = $this->get_percent();
-        $css = isset($step->css) ? $step->css : '';
-        $css = str_replace('[percent]', $percent , $css);
+        $css     = isset($step->css) ? $step->css : '';
+        $css     = str_replace('[percent]', $percent, $css);
         return $css;
     }
 }

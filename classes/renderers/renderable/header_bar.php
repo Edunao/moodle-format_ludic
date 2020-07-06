@@ -60,10 +60,10 @@ class format_ludic_header_bar implements renderable {
         $this->notstudentview = !$this->contexthelper->is_student_view_forced();
         $editmode             = $this->contexthelper->is_editing();
 
-        if(!$editmode && $this->contexthelper->get_section_idx() > 0){
+        if (!$editmode && $this->contexthelper->get_section_idx() > 0) {
             $renderer = $PAGE->get_renderer('format_ludic');
             //$sectionscontent = $renderer->render_course_sections();
-            $sectionscontent = $renderer->render_header_course_sections();
+            $sectionscontent       = $renderer->render_header_course_sections();
             $this->sectionscontent = $sectionscontent;
         }
 
@@ -255,17 +255,17 @@ class format_ludic_header_bar implements renderable {
         if ($isadmin || $iseditingteacher || $isteacher) {
 
             // To student interface
-            if(!$isstudent){
-                $name           = get_string('header-bar-student-view', 'format_ludic');
-                $roleid = $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
-                $switchlink = $CFG->wwwroot . '/course/view.php?id='.$courseid.'&switchrole='.$roleid.'&sesskey=' . sesskey() . '&edit=on';
+            if (!$isstudent) {
+                $name       = get_string('header-bar-student-view', 'format_ludic');
+                $roleid     = $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
+                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole=' . $roleid . '&sesskey=' . sesskey() . '&edit=on';
             }
 
             // To edition interface
-            if($isstudent){
-                $name           = get_string('header-bar-teacher-view', 'format_ludic');
-                $roleid = 0;
-                $switchlink = $CFG->wwwroot . '/course/view.php?id='.$courseid.'&switchrole='.$roleid.'&sesskey=' . sesskey() . '&edit=on';
+            if ($isstudent) {
+                $name       = get_string('header-bar-teacher-view', 'format_ludic');
+                $roleid     = 0;
+                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole=' . $roleid . '&sesskey=' . sesskey() . '&edit=on';
             }
 
             $switchoption = [
@@ -283,20 +283,21 @@ class format_ludic_header_bar implements renderable {
             $list[] = $switchoption;
 
             // Edit skins
-            if(!$isstudent){
-                $editname   = 'Edit skins';
-                $editicon   = $OUTPUT->image_url('i/settings')->out();
-                $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
-                $editoption = [
-                    'action'  => 'getDataLinkAndRedirectTo',
-                    'link'    => $editlink,
-                    'iconsrc' => $editicon,
-                    'iconalt' => $editname,
-                    'name'    => $editname,
-                ];
-
-                $list[] = $editoption;
-            }
+            // TODO WIP
+            //if(!$isstudent){
+            //    $editname   = 'Edit skins';
+            //    $editicon   = $OUTPUT->image_url('i/settings')->out();
+            //    $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
+            //    $editoption = [
+            //        'action'  => 'getDataLinkAndRedirectTo',
+            //        'link'    => $editlink,
+            //        'iconsrc' => $editicon,
+            //        'iconalt' => $editname,
+            //        'name'    => $editname,
+            //    ];
+            //
+            //    $list[] = $editoption;
+            //}
 
         }
 

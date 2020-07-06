@@ -40,7 +40,7 @@ class format_ludic_course_module_inline extends format_ludic_item {
         global $PAGE, $CFG;
 
         // General data.
-        $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+        $contexthelper    = \format_ludic\context_helper::get_instance($PAGE);
         $this->selectorid = 'ludic-coursemodule-' . $coursemodule->order;
         $this->itemtype   = 'coursemodule';
         $this->modname    = $coursemodule->cminfo->modname;
@@ -55,7 +55,7 @@ class format_ludic_course_module_inline extends format_ludic_item {
         $this->iconsrc = $icon->imgsrc;
         $this->iconalt = $icon->imgalt;
         if (!$contexthelper->is_student_view_forced()) {
-            $this->link    = $coursemodule->get_link();
+            $this->link = $coursemodule->get_link();
         }
 
         if ($this->modname === 'label') {

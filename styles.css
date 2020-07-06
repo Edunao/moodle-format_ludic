@@ -37,7 +37,7 @@
     padding: 5px;
 }
 
-.format-ludic .item.selected{
+.format-ludic .item.selected {
     border: 3px dashed #1d1061;
     border-radius: 20px;
 }
@@ -52,7 +52,7 @@
     flex-direction: row;
 }
 
-.ludic-container.container-children{
+.ludic-container.container-children {
     width: 100%;
 }
 
@@ -73,7 +73,7 @@
     margin-bottom: 5px;
 }
 
-.format-ludic .header-sections-list{
+.format-ludic .header-sections-list {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -145,13 +145,14 @@
     font-family: 'Montserrat-Black';
     font-size: 80px;
 }
+
 .format-ludic .item .skin-tile .unit {
     font-family: 'Montserrat-Medium';
     font-size: 40px;
 }
 
 /* For stacked images */
-.format-ludic .item .skin-tile .skin-img.img-step:not(.img-step-0){
+.format-ludic .item .skin-tile .skin-img.img-step:not(.img-step-0) {
     position: absolute;
     left: 0;
 }
@@ -170,16 +171,16 @@
 }
 
 .format-ludic .item.inline.coursemodule.label,
-.format-ludic .section-no-cm{
+.format-ludic .section-no-cm {
     background-color: #F2F0EC;
     border: none;
     border-radius: 20px;
 }
 
-.format-ludic .section-no-cm{
+.format-ludic .section-no-cm {
     padding: 10px;
     display: block;
-    width:100%;
+    width: 100%;
     margin: 10px;
 }
 
@@ -192,29 +193,29 @@
  */
 
 
-.skin-img.img-object{
+.skin-img.img-object {
     position: absolute;
     top: 0;
     left: 0;
 }
 
-.skin-extra-html.shop .modal{
+.skin-extra-html.shop .modal {
     /*display: block;*/
 }
 
-.slot-title{
+.slot-title {
     background-color: #F2F0EC;
     font-family: 'Montserrat-Medium';
     color: #1D1061;
     border-bottom: 1px dashed #1d1061;
 }
 
-.slot-items{
-    margin-top : 10px;
+.slot-items {
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
-.slot-item{
+.slot-item {
     display: flex;
     align-items: center;
     font-family: 'Montserrat-Medium';
@@ -226,37 +227,37 @@
     border-bottom: 1px dashed #1d1061;
 }
 
-.slot-item-icon img{
+.slot-item-icon img {
     width: 100px;
 }
 
 
-.format-ludic .item .skin-tile .skin-text.skin-hidden-text.open-shop{
+.format-ludic .item .skin-tile .skin-text.skin-hidden-text.open-shop {
     display: block;
 }
 
-.format-ludic .item .skin-tile .skin-text.skin-hidden-text.cash{
+.format-ludic .item .skin-tile .skin-text.skin-hidden-text.cash {
     display: block;
 }
 
 .slot-item-name,
 .slot-item-icon,
-.slot-item-state{
+.slot-item-state {
     flex-basis: 33%;
 }
 
 .slot-item-state.notbuy .slot-item-equipped,
-.slot-item-state.notbuy .slot-item-notequipped{
+.slot-item-state.notbuy .slot-item-notequipped {
     display: none;
 }
 
 .slot-item-state.equipped .slot-item-buy,
-.slot-item-state.equipped .slot-item-notequipped{
+.slot-item-state.equipped .slot-item-notequipped {
     display: none;
 }
 
 .slot-item-state.notequipped .slot-item-buy,
-.slot-item-state.notequipped .slot-item-equipped{
+.slot-item-state.notequipped .slot-item-equipped {
     display: none;
 }
 
@@ -264,7 +265,7 @@
     content: "$";
 }
 
-.slot-item-price:before{
+.slot-item-price:before {
     content: "$";
 }
 
@@ -273,7 +274,7 @@
  */
 
 #ludic-main-container.course-view .container-parents.section,
-#ludic-navbar-content .header-sections-list{
+#ludic-navbar-content .header-sections-list {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -323,12 +324,12 @@
     max-width: 500px;
 }
 
-#section-block > .section{
+#section-block > .section {
     max-width: 500px;
 }
 
-#ludic-main-container .coursemodules-container{
-    border-top : 1px solid #1D1061;
+#ludic-main-container .coursemodules-container {
+    border-top: 1px solid #1D1061;
 }
 
 #page-course-view-ludic .section-block .section.selected {
@@ -336,7 +337,7 @@
 }
 
 /* Manual completion */
-.ludic-container .coursemodule .item-icon.manual-completion{
+.ludic-container .coursemodule .item-icon.manual-completion {
     width: 20px;
     height: 20px;
     background-repeat: no-repeat;
@@ -346,7 +347,7 @@
     background-color: white;
 }
 
-.ludic-container .coursemodule .item-icon.manual-completion a{
+.ludic-container .coursemodule .item-icon.manual-completion a {
     display: block;
     width: 100%;
     height: 100%;
@@ -357,27 +358,27 @@
     Edition mode
  */
 
-#ludic-main-container.editmode > .container-items{
+#ludic-main-container.editmode > .container-items {
     display: flex;
     flex-direction: row;
 }
 
-#ludic-main-container.editmode >  .container-items > .container-parents{
+#ludic-main-container.editmode > .container-items > .container-parents {
     width: 65%;
 }
 
-#ludic-main-container.editmode .container-properties{
+#ludic-main-container.editmode .container-properties {
     width: 35%;
-    border: 1px solid rgba(0,0,0,.125);
+    border: 1px solid rgba(0, 0, 0, .125);
     margin-left: 15px;
     padding: 15px;
 }
 
-#ludic-main-container.editmode .item-img-container{
+#ludic-main-container.editmode .item-img-container {
     width: 150px;
 }
 
-#ludic-main-container.editmode .item-title{
+#ludic-main-container.editmode .item-title {
     width: 150px;
     font-family: 'Montserrat-Light';
     border-radius: 20px;
@@ -388,15 +389,15 @@
     text-align: center;
 }
 
-#ludic-main-container.editmode .overview-img-container{
-    width : 100px;
+#ludic-main-container.editmode .overview-img-container {
+    width: 100px;
 }
 
-#ludic-main-container.editmode .coursemodule{
+#ludic-main-container.editmode .coursemodule {
     vertical-align: top;
 }
 
-#ludic-main-container.editmode .ludic-add-button{
+#ludic-main-container.editmode .ludic-add-button {
     height: auto;
     align-self: center;
 }
@@ -409,17 +410,17 @@
     background-color: #FFF;
 }
 
-#ludic-main-container.editmode .container-children.coursemodules{
+#ludic-main-container.editmode .container-children.coursemodules {
     padding: 10px;
-    border-top: 1px solid rgba(0,0,0,.125);
+    border-top: 1px solid rgba(0, 0, 0, .125);
 }
 
-#ludic-main-container.editmode .container-children.coursemodules .children-elements{
+#ludic-main-container.editmode .container-children.coursemodules .children-elements {
     display: flex;
     flex-wrap: wrap;
 }
 
-#ludic-main-container.editmode .container-children.coursemodules .visibleifjs.addresourcemodchooser{
+#ludic-main-container.editmode .container-children.coursemodules .visibleifjs.addresourcemodchooser {
     display: none;
 }
 
@@ -427,13 +428,13 @@
     Form
  */
 
-.ludic-form-group{
-    border-bottom: 1px solid rgba(0,0,0,.125);
+.ludic-form-group {
+    border-bottom: 1px solid rgba(0, 0, 0, .125);
     padding-bottom: 5px;
     margin-bottom: 10px;
 }
 
-.ludic-form-group input[type="text"]{
+.ludic-form-group input[type="text"] {
     width: 100%;
 }
 
@@ -445,18 +446,18 @@
     display: inline-block
 }
 
-#ludic-main-container .container-properties .container-buttons{
+#ludic-main-container .container-properties .container-buttons {
     text-align: center;
 }
 
 #ludic-main-container .container-properties .container-buttons > .dropdown,
-#ludic-main-container .container-properties .container-buttons > .btn{
+#ludic-main-container .container-properties .container-buttons > .btn {
     width: 40%;
     display: inline-block;
     margin: 5px;
 }
 
-#ludic-main-container .container-properties .container-buttons > .dropdown button{
+#ludic-main-container .container-properties .container-buttons > .dropdown button {
     width: 100%;
 }
 
@@ -464,25 +465,25 @@
     Skin choice
  */
 
-#selection-popup .ludic-container.container-items{
+#selection-popup .ludic-container.container-items {
     display: flex;
 }
 
-#selection-popup .ludic-container.container-properties{
+#selection-popup .ludic-container.container-properties {
     width: 34%;
-    padding: 10px ;
-    border-left : 1px solid #e9ecef;
+    padding: 10px;
+    border-left: 1px solid #e9ecef;
 }
 
-#selection-popup .item{
+#selection-popup .item {
     margin: 10px 10px;
 }
 
-#selection-popup .item.skin .item-img-container{
+#selection-popup .item.skin .item-img-container {
     width: 150px;
 }
 
-#selection-popup .item-title{
+#selection-popup .item-title {
     width: 100%;
     text-align: center;
     font-family: 'Montserrat-Light';

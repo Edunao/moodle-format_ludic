@@ -1,6 +1,5 @@
 <?php
 
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -29,7 +28,6 @@
 require_once '../../../config.php';
 require_once $CFG->dirroot . '/course/format/ludic/classes/forms/edit_skins_form.php';
 
-
 $courseid = required_param('id', PARAM_INT);
 
 $course = get_course($courseid);
@@ -38,14 +36,14 @@ require_login($courseid);
 $context = context_course::instance($courseid);
 $PAGE->set_context($context);
 
-$url = new moodle_url('/course/format/ludic/edit_skins.php', array('id'=>$courseid));
+$url = new moodle_url('/course/format/ludic/edit_skins.php', array('id' => $courseid));
 $PAGE->set_url($url);
 
 $PAGE->set_pagelayout('incourse');
 
 $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
 
-if(!$contexthelper->can_edit()){
+if (!$contexthelper->can_edit()) {
     print_error('nopermissions', 'error');
 }
 

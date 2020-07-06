@@ -432,10 +432,11 @@ class section extends model implements skinnable_interface {
             }
 
             // Update completion info.
-            $results = $coursemodule->get_user_results();
+            $results          = $coursemodule->get_user_results();
             $resultsdetails[] = [
                 "cmid"    => $coursemodule->id,
-                "results" => $results];
+                "results" => $results
+            ];
 
             $data = $results['completioninfo'];
             if (!isset($completioninfo[$data->completion])) {
@@ -460,11 +461,11 @@ class section extends model implements skinnable_interface {
         return $this->results;
     }
 
-    public function get_user_skin_data($userid){
+    public function get_user_skin_data($userid) {
         return $this->contexthelper->get_database_api()->get_section_user_skin_data($this->id, $userid);
     }
 
-    public function update_user_skin_data($userid, $data){
+    public function update_user_skin_data($userid, $data) {
         return $this->contexthelper->get_database_api()->update_section_user_skin_data($this->courseid, $this->id, $userid, $data);
     }
 

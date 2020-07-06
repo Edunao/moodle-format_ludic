@@ -28,17 +28,17 @@ defined('MOODLE_INTERNAL') || die();
 
 class noludic extends \format_ludic\skin {
 
-    public static function get_editor_config(){
+    public static function get_editor_config() {
         return [
             "settings" => [
-                "name"                  => "text",
-                "main-css"              => "css",
-                "background"            => "image"
+                "name"       => "text",
+                "main-css"   => "css",
+                "background" => "image"
             ]
         ];
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return 'section-noludic';
     }
 
@@ -50,8 +50,8 @@ class noludic extends \format_ludic\skin {
     public function get_edit_image() {
         global $OUTPUT;
         return (object) [
-                'imgsrc' => $OUTPUT->image_url('default-section', 'format_ludic')->out(),
-                'imgalt' => 'No ludic'
+            'imgsrc' => $OUTPUT->image_url('default-section', 'format_ludic')->out(),
+            'imgalt' => 'No ludic'
         ];
     }
 
@@ -64,11 +64,11 @@ class noludic extends \format_ludic\skin {
      */
     static public function get_instance() {
         return new self((object) [
-                'id'          => FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID,
-                'location'    => 'section',
-                'type'        => 'noludic',
-                'title'       => get_string('cs-skin-noludic-title', 'format_ludic'),
-                'description' => get_string('cs-skin-noludic-description', 'format_ludic')
+            'id'          => FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID,
+            'location'    => 'section',
+            'type'        => 'noludic',
+            'title'       => get_string('cs-skin-noludic-title', 'format_ludic'),
+            'description' => get_string('cs-skin-noludic-description', 'format_ludic')
         ]);
     }
 

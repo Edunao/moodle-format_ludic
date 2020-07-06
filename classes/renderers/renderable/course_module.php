@@ -89,10 +89,10 @@ class format_ludic_course_module extends format_ludic_item {
                 $completionlink .= '&sesskey=' . sesskey() . '&completionstate=' . $targetstate;
 
                 $completionicon = [
-                        'imgsrc'   => $CFG->wwwroot . '/course/format/ludic/pix/' . $completion . '.svg',
-                        'imgalt'   => $completioninfo->completionstr,
-                        'position' => 'bottom',
-                        'classes'  => ' manual-completion '
+                    'imgsrc'   => $CFG->wwwroot . '/course/format/ludic/pix/' . $completion . '.svg',
+                    'imgalt'   => $completioninfo->completionstr,
+                    'position' => 'bottom',
+                    'classes'  => ' manual-completion '
                 ];
 
                 // Toggle completion on click.

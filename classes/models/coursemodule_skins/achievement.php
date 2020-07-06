@@ -28,23 +28,23 @@ defined('MOODLE_INTERNAL') || die();
 
 class achievement extends \format_ludic\skin {
 
-    public static function get_editor_config(){
+    public static function get_editor_config() {
         return [
             "settings" => [
-                "name"                  => "text",
-                "main-css"              => "css",
+                "name"     => "text",
+                "main-css" => "css",
             ],
-            "steps" => [
-                "achievement-name"      => "text",
-                "value-part"            => "int",
-                "step-image"            => "image",
-                "step-text"             => "string",
-                "step-css"              => "css"
+            "steps"    => [
+                "achievement-name" => "text",
+                "value-part"       => "int",
+                "step-image"       => "image",
+                "step-text"        => "string",
+                "step-css"         => "css"
             ]
         ];
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return 'cm-achievement';
     }
 
@@ -56,7 +56,7 @@ class achievement extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public static function get_instance() {
-        return (object)[
+        return (object) [
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'achievement',
@@ -66,7 +66,6 @@ class achievement extends \format_ludic\skin {
         ];
     }
 
-
     /**
      * Return best image for course edition.
      *
@@ -75,8 +74,8 @@ class achievement extends \format_ludic\skin {
     public function get_edit_image() {
         global $OUTPUT;
         $editimage = (object) [
-                'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
-                'imgalt' => 'Default image.'
+            'imgsrc' => $OUTPUT->image_url('default', 'format_ludic')->out(),
+            'imgalt' => 'Default image.'
         ];
 
         // Select image for best completion step.
@@ -104,7 +103,7 @@ class achievement extends \format_ludic\skin {
         $completioninfo = $this->get_completion_info();
 
         // Current step is step with same completion state.
-        $currentstep    = null;
+        $currentstep = null;
         foreach ($this->steps as $step) {
 
             //  Ensure to have a step.
@@ -137,10 +136,10 @@ class achievement extends \format_ludic\skin {
     public function get_images_to_render() {
         $step = $this->get_current_step();
         return [
-                [
-                        'imgsrc' => $step->imgsrc,
-                        'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
-                ]
+            [
+                'imgsrc' => $step->imgsrc,
+                'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
+            ]
         ];
     }
 
@@ -156,8 +155,13 @@ class achievement extends \format_ludic\skin {
         $completioninfo = $this->get_completion_info();
         $step           = $this->get_current_step();
         return [
-                ['text' => $completioninfo->completionstr, 'class' => 'completion'],
-                ['text' => isset($step->extratext) ? $step->extratext : '', 'class' => 'extratext']
+            ['text'  => $completioninfo->completionstr,
+             'class' => 'completion'
+            ],
+            [
+                'text'  => isset($step->extratext) ? $step->extratext : '',
+                'class' => 'extratext'
+            ]
         ];
     }
 

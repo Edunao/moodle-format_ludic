@@ -29,5 +29,4 @@ defined('MOODLE_INTERNAL') || die();
  */
 class format_ludic_hidden_form_element extends format_ludic_form_element {
 
-
 }

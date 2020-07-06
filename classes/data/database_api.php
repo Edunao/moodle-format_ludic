@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class database_api {
 
-    private $db;
+    private   $db;
     protected $contexthelper;
 
     /**
@@ -237,7 +237,8 @@ class database_api {
      */
     public function get_section_id_by_courseid_and_sectionidx($courseid, $sectionidx) {
         return $this->db->get_field('course_sections', 'id', [
-                'course' => $courseid, 'section' => $sectionidx
+            'course'  => $courseid,
+            'section' => $sectionidx
         ]);
     }
 
@@ -251,7 +252,8 @@ class database_api {
      */
     public function get_section_name_by_courseid_and_sectionidx($courseid, $sectionidx) {
         return $this->db->get_field('course_sections', 'name', [
-                'course' => $courseid, 'section' => $sectionidx
+            'course'  => $courseid,
+            'section' => $sectionidx
         ]);
     }
 
@@ -289,8 +291,7 @@ class database_api {
             SELECT cm.*, m.name as modname
             FROM {course_modules} cm
             JOIN {modules} m ON m.id = cm.module
-            WHERE cm.id = ?', ['id' => $id]
-        );
+            WHERE cm.id = ?', ['id' => $id]);
     }
 
     /**
@@ -305,8 +306,7 @@ class database_api {
             SELECT m.name
             FROM {course_modules} cm
             JOIN {modules} m ON m.id = cm.module
-            WHERE cm.id = ?', ['id' => $cmid]
-        );
+            WHERE cm.id = ?', ['id' => $cmid]);
     }
 
     /**
@@ -345,7 +345,10 @@ class database_api {
         if (!$cmrecord) {
             return false;
         }
-        $updaterecord = (object) ['id' => $cmrecord->instance, 'name' => $name];
+        $updaterecord = (object) [
+            'id'   => $cmrecord->instance,
+            'name' => $name
+        ];
         return $this->db->update_record($cmrecord->modname, $updaterecord);
     }
 
@@ -358,7 +361,10 @@ class database_api {
      * @throws \dml_exception
      */
     public function update_course_module_visible($cmid, $visible) {
-        $updaterecord = (object) ['id' => $cmid, 'visible' => $visible];
+        $updaterecord = (object) [
+            'id'      => $cmid,
+            'visible' => $visible
+        ];
         return $this->db->update_record('course_modules', $updaterecord);
     }
 
@@ -401,8 +407,7 @@ class database_api {
             SELECT * 
             FROM {course_sections} 
             WHERE course = :courseid 
-            ORDER BY section DESC LIMIT 1', ['courseid' => $courseid]
-        );
+            ORDER BY section DESC LIMIT 1', ['courseid' => $courseid]);
     }
 
     /**
@@ -421,12 +426,11 @@ class database_api {
                 AND filename <> :filename
                 AND itemid = :itemid
             ', [
-                    'component' => 'user',
-                    'filearea'  => 'draft',
-                    'filename'  => '.',
-                    'itemid'    => $itemid
-            ]
-        );
+            'component' => 'user',
+            'filearea'  => 'draft',
+            'filename'  => '.',
+            'itemid'    => $itemid
+        ]);
     }
 
     /**
@@ -440,7 +444,7 @@ class database_api {
         return $this->db->get_field_sql('
             SELECT SUM(weight)
             FROM {format_ludic_cm}
-            WHERE cmid IN ('.$sequence.')
+            WHERE cmid IN (' . $sequence . ')
         ');
     }
 
@@ -450,21 +454,28 @@ class database_api {
      * @return array|mixed
      * @throws \dml_exception
      */
-    public function get_section_user_skin_data($sectionid, $userid){
-        $record = $this->db->get_record('format_ludic_user_cs_state', ['userid' => $userid, 'sectionid' => $sectionid]);
-        return isset($record->data) ? (array) json_decode($record->data) :  [];
+    public function get_section_user_skin_data($sectionid, $userid) {
+        $record = $this->db->get_record('format_ludic_user_cs_state', [
+            'userid'    => $userid,
+            'sectionid' => $sectionid
+        ]);
+        return isset($record->data) ? (array) json_decode($record->data) : [];
     }
 
-    public function update_section_user_skin_data($courseid, $sectionid, $userid, $data){
-        if($currentdata = $this->db->get_record('format_ludic_user_cs_state', ['userid' => $userid, 'courseid'=> $courseid, 'sectionid' => $sectionid])){
+    public function update_section_user_skin_data($courseid, $sectionid, $userid, $data) {
+        if ($currentdata = $this->db->get_record('format_ludic_user_cs_state', [
+            'userid'    => $userid,
+            'courseid'  => $courseid,
+            'sectionid' => $sectionid
+        ])) {
             $currentdata->data = json_encode($data);
             return $this->db->update_record('format_ludic_user_cs_state', $currentdata);
-        }else{
-            $record = new \stdClass();
-            $record->courseid = $courseid;
+        } else {
+            $record            = new \stdClass();
+            $record->courseid  = $courseid;
             $record->sectionid = $sectionid;
-            $record->userid = $userid;
-            $record->data = json_encode($data);
+            $record->userid    = $userid;
+            $record->data      = json_encode($data);
             return $this->db->insert_record('format_ludic_user_cs_state', $record);
         }
     }

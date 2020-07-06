@@ -55,15 +55,15 @@ class data_api {
 
         // Initialize default object.
         $return = (object) [
-                'grade'      => 0,
-                'grademax'   => 0,
-                'proportion' => 0
+            'grade'      => 0,
+            'grademax'   => 0,
+            'proportion' => 0
         ];
 
         // When activity max grade is updated to 0, grademax of grade_items and grade_grades are not updated.
         // We need to change gradetype
         $gradeinfo = grade_get_grade_items_for_activity($cminfo);
-        if($gradeinfo && end($gradeinfo)->gradetype == 0){
+        if ($gradeinfo && end($gradeinfo)->gradetype == 0) {
             return $return;
         }
 
@@ -89,15 +89,15 @@ class data_api {
 
         // Grade is in first item of this array.
         if (count($grade->grades) > 0) {
-            $grade         = reset($grade->grades);
-            $return->grade = $grade->grade !== null ? $grade->grade : $return->grade;
+            $grade              = reset($grade->grades);
+            $return->grade      = $grade->grade !== null ? $grade->grade : $return->grade;
             $return->proportion = ($return->grade / $return->grademax);
         }
 
         return $return;
     }
 
-    public function cm_is_graded($cminfo){
+    public function cm_is_graded($cminfo) {
         // Get data for grade api.
         $courseid = $this->contexthelper->get_course_id();
         $modname  = $cminfo->modname;
@@ -120,10 +120,10 @@ class data_api {
     public function get_course_module_user_completion($cminfo) {
         // Initialize default object.
         $return        = (object) [
-                'type'          => COMPLETION_DISABLED,
-                'state'         => COMPLETION_TRACKING_NONE,
-                'completion'    => '',
-                'completionstr' => ''
+            'type'          => COMPLETION_DISABLED,
+            'state'         => COMPLETION_TRACKING_NONE,
+            'completion'    => '',
+            'completionstr' => ''
         ];
         $completion    = 'completion-disabled';
         $completionstr = 'completion_none';
@@ -154,7 +154,7 @@ class data_api {
                 break;
             case COMPLETION_COMPLETE:
                 // If cm is not graded, activity is considered as complete and pass
-                if($this->cm_is_graded($cminfo)){
+                if ($this->cm_is_graded($cminfo)) {
                     $completion    = 'completion-complete';
                     $completionstr = 'completion-y';
                     break;

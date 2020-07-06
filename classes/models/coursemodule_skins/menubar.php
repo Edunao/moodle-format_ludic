@@ -28,17 +28,17 @@ defined('MOODLE_INTERNAL') || die();
 
 class menubar extends \format_ludic\skin {
 
-    public static function get_editor_config(){
+    public static function get_editor_config() {
         return [
             "settings" => [
-                "name"                  => "text",
-                "main-css"              => "css",
-                "background"                 => "image"
+                "name"       => "text",
+                "main-css"   => "css",
+                "background" => "image"
             ]
         ];
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return 'cm-menubar';
     }
 
@@ -50,8 +50,8 @@ class menubar extends \format_ludic\skin {
     public function get_edit_image() {
         global $CFG;
         return (object) [
-                'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/menubar.png",
-                'imgalt' => 'Menu bar'
+            'imgsrc' => $CFG->wwwroot . "/course/format/ludic/pix/menubar.png",
+            'imgalt' => 'Menu bar'
         ];
     }
 
@@ -64,11 +64,11 @@ class menubar extends \format_ludic\skin {
      */
     public static function get_instance() {
         return new self((object) [
-                'id'          => FORMAT_LUDIC_CM_SKIN_MENUBAR_ID,
-                'location'    => 'coursemodule',
-                'type'        => 'menubar',
-                'title'       => get_string('cm-skin-menubar-title', 'format_ludic'),
-                'description' => get_string('cm-skin-menubar-description', 'format_ludic')
+            'id'          => FORMAT_LUDIC_CM_SKIN_MENUBAR_ID,
+            'location'    => 'coursemodule',
+            'type'        => 'menubar',
+            'title'       => get_string('cm-skin-menubar-title', 'format_ludic'),
+            'description' => get_string('cm-skin-menubar-description', 'format_ludic')
         ]);
     }
 

@@ -148,7 +148,7 @@ class section_controller extends controller_base {
         if ($coursemodule->section->section > 0) {
 
             // Move a course module to another section.
-            $isvisible = $coursemodule->move_to_section($sectionid);
+            $coursemodule->move_to_section($sectionid);
         }
 
         // Return course modules html.
@@ -228,9 +228,15 @@ class section_controller extends controller_base {
 
         // Define return.
         if ($success) {
-            $return = array('success' => 1, 'value' => $form->get_success_message());
+            $return = array(
+                'success' => 1,
+                'value'   => $form->get_success_message()
+            );
         } else {
-            $return = array('success' => 0, 'value' => $form->get_error_message());
+            $return = array(
+                'success' => 0,
+                'value'   => $form->get_error_message()
+            );
         }
 
         // Return a json encode array with success and message.
@@ -261,7 +267,10 @@ class section_controller extends controller_base {
         $newsection = $section->duplicate();
 
         // Trigger event update course.
-        $data  = ['context' => $this->get_context(), 'objectid' => $newsection->courseid];
+        $data  = [
+            'context'  => $this->get_context(),
+            'objectid' => $newsection->courseid
+        ];
         $event = \core\event\course_updated::create($data);
         $event->trigger();
 
@@ -293,7 +302,10 @@ class section_controller extends controller_base {
         $newcoursemodule = $coursemodule->duplicate(true);
 
         // Trigger event update course.
-        $data  = ['context' => $this->get_context(), 'objectid' => $newcoursemodule->courseid];
+        $data  = [
+            'context'  => $this->get_context(),
+            'objectid' => $newcoursemodule->courseid
+        ];
         $event = \core\event\course_updated::create($data);
         $event->trigger();
 

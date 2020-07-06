@@ -1,6 +1,5 @@
 <?php
 
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -37,7 +36,7 @@ class edit_skins_form extends form {
 
     public function __construct($courseid, $skin) {
         parent::__construct('course', $courseid);
-        $this->skin   = $skin;
+        $this->skin     = $skin;
         $this->object   = $this->contexthelper->get_course_by_id($courseid);
         $this->elements = $this->get_definition();
     }
@@ -45,29 +44,29 @@ class edit_skins_form extends form {
     public function get_definition() {
 
         // Course id.
-        $id = $this->object->id;
+        $id         = $this->object->id;
         $elements[] = new hidden_form_element('id', 'course-id', $id, 0);
 
         // Skin
-        $id = $this->skin->get_unique_name();
+        $id         = $this->skin->get_unique_name();
         $elements[] = new hidden_form_element('skinid', 'skin-id', $id, 0);
 
         // Skin settings
         $settings = $this->skin->get_editor_config();
 
-        foreach($settings as $section => $options){
+        foreach ($settings as $section => $options) {
 
-            if($section == 'steps'){
+            if ($section == 'steps') {
                 continue;
             }
 
-            foreach($options as $elementname => $type){
-                switch ($type){
+            foreach ($options as $elementname => $type) {
+                switch ($type) {
                     case 'int':
                         $elements[] = new number_form_element($elementname, $elementname, '', '', $elementname);
                         break;
                     case 'css':
-                        $elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname);
+                        $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname);
                         break;
                     case 'image':
                         //$elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname);
@@ -79,8 +78,7 @@ class edit_skins_form extends form {
 
         }
 
-        $elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
-
+        $elements[] = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
 
         return $elements;
 

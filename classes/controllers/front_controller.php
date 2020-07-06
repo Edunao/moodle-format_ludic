@@ -105,8 +105,7 @@ class front_controller implements front_controller_interface {
     public function set_action($action) {
         $reflector = new \ReflectionClass($this->namespace . $this->controller);
         if (!$reflector->hasMethod($action)) {
-            throw new \InvalidArgumentException(
-                    "The controller action '$action' has been not defined.");
+            throw new \InvalidArgumentException("The controller action '$action' has been not defined.");
         }
         $this->action = $action;
         return $this;

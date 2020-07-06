@@ -1,6 +1,5 @@
 <?php
 
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -40,8 +39,8 @@ class achievement extends \format_ludic\skin {
                 "description" => "text",
             ],
             "properties" => [
-                "background-image"  => "image",
-                "final-image" => "image"
+                "background-image" => "image",
+                "final-image"      => "image"
             ],
             "steps"      => [
                 "index"                    => "int",
@@ -112,7 +111,7 @@ class achievement extends \format_ludic\skin {
      * @throws \coding_exception
      */
     public function get_images_to_render() {
-        $images         = [];
+        $images = [];
 
         $completioninfo = $this->get_completion_info();
 
@@ -131,15 +130,15 @@ class achievement extends \format_ludic\skin {
         $images[]         = $baseimage;
 
         // Image for completion state
-        $steps      = $this->get_properties('steps');
+        $steps = $this->get_properties('steps');
         foreach ($completioninfo as $completionkey => $completion) {
-            if($completion['count'] > 0){
-                foreach ($steps as $stepinfo){
-                    if($stepinfo->state == $completion['state']){
+            if ($completion['count'] > 0) {
+                foreach ($steps as $stepinfo) {
+                    if ($stepinfo->state == $completion['state']) {
                         $image = $stepinfo;
 
-                        if(isset($image->imgsrc) && $image->imgsrc != ''){
-                            $image->class   = 'img-step img-step-' . $completionkey;
+                        if (isset($image->imgsrc) && $image->imgsrc != '') {
+                            $image->class           = 'img-step img-step-' . $completionkey;
                             $images[$completionkey] = $image;
                             break;
                         }
@@ -155,25 +154,26 @@ class achievement extends \format_ludic\skin {
         $texts = [];
 
         $completioninfo = $this->get_completion_info();
-        $isperfect = $completioninfo['perfect'];
+        $isperfect      = $completioninfo['perfect'];
         unset($completioninfo['perfect']);
-        $steps      = $this->get_properties('steps');
+        $steps = $this->get_properties('steps');
         foreach ($completioninfo as $completionkey => $completion) {
-            foreach ($steps as $stepinfo){
-                if($stepinfo->state == $completion['state']){
+            foreach ($steps as $stepinfo) {
+                if ($stepinfo->state == $completion['state']) {
                     $classes = ' number completion-count ' . $completionkey;
-                    if($completion['count'] > 0){
+                    if ($completion['count'] > 0) {
                         $classes .= ' sup-zero ';
                     }
-                    if($isperfect){
+                    if ($isperfect) {
                         $classes .= ' perfect ';
                     }
-                    $texts[] = ['text' => $completion['count'], 'class' => $classes];
+                    $texts[] = ['text'  => $completion['count'],
+                                'class' => $classes
+                    ];
                     break;
                 }
             }
         }
-
 
         return $texts;
     }

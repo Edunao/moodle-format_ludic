@@ -56,12 +56,12 @@ abstract class skin extends model {
         $this->properties  = isset($skin->properties) ? $skin->properties : null;
         $this->maincss     = isset($skin->properties->css) ? $skin->properties->css : null;
 
-        $this->steps       = isset($skin->properties->steps) ? $skin->properties->steps : [];
-        $this->item        = $item;
-        $this->skinid      = $this->get_unique_name();
+        $this->steps  = isset($skin->properties->steps) ? $skin->properties->steps : [];
+        $this->item   = $item;
+        $this->skinid = $this->get_unique_name();
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return self::class;
     }
 
@@ -143,7 +143,7 @@ abstract class skin extends model {
     public function get_css($selectorid) {
         $output   = '';
         $css      = $this->maincss . $this->get_additional_css();
-        $css = str_replace("\n", "", $css);
+        $css      = str_replace("\n", "", $css);
         $cssarray = [];
         $success  = preg_match_all('/.*?{.*?}/', $css, $cssarray);
         if (!$success) {
@@ -247,7 +247,7 @@ abstract class skin extends model {
      *
      * @return array
      */
-    public function get_extra_html_to_render(){
+    public function get_extra_html_to_render() {
         return [];
     }
 

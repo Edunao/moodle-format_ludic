@@ -181,7 +181,7 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render($skinslist);
     }
 
-    public function render_skin_skin_types_list($skinid, $skintypes){
+    public function render_skin_skin_types_list($skinid, $skintypes) {
         $skintypeslist = new format_ludic_skins_types_list($skinid, $skintypes);
         return $this->render($skintypeslist);
     }
@@ -346,7 +346,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_container_items($type, $editmode, $parentscontent = '', $propertiescontent = '', $helpcontent = '',  $parenttitle = '') {
+    public function render_container_items($type, $editmode, $parentscontent = '', $propertiescontent = '', $helpcontent = '', $parenttitle = '') {
         return $this->render_from_template('format_ludic/container_items', [
             'parentstype'       => $type,
             'parenttitle'       => $parenttitle,
@@ -448,7 +448,10 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_container_children($childrentype, $childrentitle = '') {
-        return $this->render_from_template('format_ludic/container_children', ['childrentype' => $childrentype, 'childrentitle' => $childrentitle]);
+        return $this->render_from_template('format_ludic/container_children', [
+            'childrentype'  => $childrentype,
+            'childrentitle' => $childrentitle
+        ]);
     }
 
     /**
@@ -574,14 +577,14 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $output;
     }
 
-    public function render_header_course_sections(){
+    public function render_header_course_sections() {
         // Get data.
         $course   = $this->contexthelper->get_course();
         $sections = $course->get_sections();
-        $output = '';
+        $output   = '';
         foreach ($sections as $section) {
             $section->contextview = 'header';
-            $output .= $this->render_section($section);
+            $output               .= $this->render_section($section);
         }
 
         return $output;

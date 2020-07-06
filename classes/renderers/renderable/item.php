@@ -103,7 +103,6 @@ class format_ludic_item implements renderable {
      */
     public $imgsrc;
 
-
     /**
      * Html content of item.
      *

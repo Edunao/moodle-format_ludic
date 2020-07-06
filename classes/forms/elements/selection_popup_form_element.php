@@ -47,7 +47,7 @@ class selection_popup_form_element extends form_element {
      * @param array $specific
      */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
-        $this->type           = 'selection_popup';
+        $this->type = 'selection_popup';
 
         // Popup content comes from an ajax call $controller->action().
 
@@ -55,10 +55,10 @@ class selection_popup_form_element extends form_element {
         $this->itemcontroller = isset($specific['itemcontroller']) ? $specific['itemcontroller'] : null;
 
         // Action, function name to execute.
-        $this->itemaction     = isset($specific['itemaction']) ? $specific['itemaction'] : null;
+        $this->itemaction = isset($specific['itemaction']) ? $specific['itemaction'] : null;
 
         // Define popup title here.
-        $this->popuptitle     = isset($specific['popuptitle']) ? $specific['popuptitle'] : '';
+        $this->popuptitle = isset($specific['popuptitle']) ? $specific['popuptitle'] : '';
 
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
@@ -73,11 +73,17 @@ class selection_popup_form_element extends form_element {
 
         // Ensure user has selected one item.
         if ($this->required && $value === '') {
-            return ['success' => 0, 'value' => get_string('error-required', 'format_ludic')];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-required', 'format_ludic')
+            ];
         }
 
         // Success.
-        return ['success' => 1, 'value' => (string) ($value)];
+        return [
+            'success' => 1,
+            'value'   => (string) ($value)
+        ];
     }
 
 }

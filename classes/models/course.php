@@ -52,7 +52,7 @@ class course extends model {
     public function get_sections($globalsection = false) {
 
         // Get sections.
-        $dbapi = $this->contexthelper->get_database_api();
+        $dbapi          = $this->contexthelper->get_database_api();
         $sectionrecords = $dbapi->get_course_sections_by_courseid($this->id);
 
         // Return section object.
@@ -89,7 +89,7 @@ class course extends model {
      * @throws \moodle_exception
      */
     public function create_section() {
-        $dbapi = $this->contexthelper->get_database_api();
+        $dbapi      = $this->contexthelper->get_database_api();
         $nbsections = $dbapi->count_course_sections($this->id);
 
         if (!$dbapi->create_section($this->id, $nbsections)) {

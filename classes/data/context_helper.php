@@ -43,7 +43,6 @@ define('FORMAT_LUDIC_CM_SKIN_STEALTH_ID', 3);
 // Skin inline id.
 define('FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID', 10);
 
-
 // Always accessible.
 define('FORMAT_LUDIC_ACCESS_ACCESSIBLE', 1);
 
@@ -466,12 +465,15 @@ class context_helper {
         $location = $this->get_location();
         switch ($location) {
             case 'section':
-                $url = new \moodle_url('/course/view.php', array('id' => $this->get_course_id(), 'section' => $this->get_section_idx()));
+                $url = new \moodle_url('/course/view.php', array(
+                    'id'      => $this->get_course_id(),
+                    'section' => $this->get_section_idx()
+                ));
                 break;
             case 'coursemodule':
                 $cmid    = $this->get_course_module_id();
                 $modname = $this->dbapi->get_module_name_by_course_module_id($cmid);
-                $url = new \moodle_url('/mod/'.$modname.'/view.php', array('id' => $cmid));
+                $url     = new \moodle_url('/mod/' . $modname . '/view.php', array('id' => $cmid));
                 break;
             default:
                 $url = new \moodle_url('/course/view.php', array('id' => $this->get_course_id()));
@@ -577,7 +579,7 @@ class context_helper {
      *
      * @return bool
      */
-    public function can_edit(){
+    public function can_edit() {
         return $this->page->user_allowed_editing();
     }
 
@@ -672,8 +674,8 @@ class context_helper {
     public function get_course_modules_info() {
         if ($this->coursemodulesinfo == null) {
             $cms = $this->get_course_info()->get_cms();
-            foreach ($cms as $cmid => $cm){
-                if($cm->deletioninprogress == 0){
+            foreach ($cms as $cmid => $cm) {
+                if ($cm->deletioninprogress == 0) {
                     $this->coursemodulesinfo[$cmid] = $cm;
                 }
             }
@@ -912,7 +914,7 @@ class context_helper {
             // Get ludic config (json).
             $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
             $ludicconfig = json_decode($ludicconfig);
-            if(!$ludicconfig){
+            if (!$ludicconfig) {
                 $defaultconfig = format_ludic_get_default_skins_settings();
                 $this->update_course_format_options(['ludic_config' => json_encode($defaultconfig)]);
                 $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
@@ -955,19 +957,18 @@ class context_helper {
         $skins    = [];
         $allskins = array_merge($defaultskins, $skinsconfig);
         foreach ($allskins as $skin) {
-            $skin = (object) $skin;
+            $skin             = (object) $skin;
             $skins[$skin->id] = skin::get_by_instance($skin);
         }
-
 
         // Return all skins.
         return $skins;
     }
 
-    public function get_skin_type_by_id($skintypeid){
+    public function get_skin_type_by_id($skintypeid) {
         $allskinstypes = $this->get_skins();
-        foreach($allskinstypes as $skintype){
-            if($skintype->id == $skintypeid){
+        foreach ($allskinstypes as $skintype) {
+            if ($skintype->id == $skintypeid) {
                 return $skintype;
             }
         }
@@ -983,7 +984,7 @@ class context_helper {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function get_skins_format(){
+    public function get_skins_format() {
         global $CFG;
 
         //$defaultskins = $this->get_default_skins();
@@ -993,7 +994,7 @@ class context_helper {
         //$cmskins = $this->get_course_module_skins();
 
         $sectionskins = [];
-        $cmskins = [];
+        $cmskins      = [];
 
         //$sectionskinspath = $CFG->dirroot . '/course/format/ludic/classes/models/section_skins';
         //$sectionskinsdir = scandir($sectionskinspath);
@@ -1010,7 +1011,6 @@ class context_helper {
         //    $sectionskins = $classname::get_instance();
         //}
 
-
         //$tempskins = array_merge($defaultskins, $sectionskins, $globalsection, $cmskins);
         //$skins = [];
         //foreach ($tempskins as $skin){
@@ -1018,18 +1018,18 @@ class context_helper {
         //    $skins[$uniquename] = $skin;
         //}
 
-        $noludic = \format_ludic\section\noludic::get_instance();
-        $skins[\format_ludic\section\noludic::get_unique_name()] = $noludic;
-        $score = \format_ludic\coursemodule\score::get_instance();
-        $skins[\format_ludic\coursemodule\score::get_unique_name()] = $score;
-        $achievements = \format_ludic\coursemodule\achievement::get_instance();
+        $noludic                                                          = \format_ludic\section\noludic::get_instance();
+        $skins[\format_ludic\section\noludic::get_unique_name()]          = $noludic;
+        $score                                                            = \format_ludic\coursemodule\score::get_instance();
+        $skins[\format_ludic\coursemodule\score::get_unique_name()]       = $score;
+        $achievements                                                     = \format_ludic\coursemodule\achievement::get_instance();
         $skins[\format_ludic\coursemodule\achievement::get_unique_name()] = $achievements;
-        $sectionscore = \format_ludic\section\score::get_instance();
-        $skins[\format_ludic\section\score::get_unique_name()] = $sectionscore;
-        $sectioncollection = \format_ludic\section\collection::get_instance();
-        $skins[\format_ludic\section\collection::get_unique_name()] = $sectioncollection;
-        $sectionachievement = \format_ludic\section\achievement::get_instance();
-        $skins[\format_ludic\section\achievement::get_unique_name()] = $sectionachievement;
+        $sectionscore                                                     = \format_ludic\section\score::get_instance();
+        $skins[\format_ludic\section\score::get_unique_name()]            = $sectionscore;
+        $sectioncollection                                                = \format_ludic\section\collection::get_instance();
+        $skins[\format_ludic\section\collection::get_unique_name()]       = $sectioncollection;
+        $sectionachievement                                               = \format_ludic\section\achievement::get_instance();
+        $skins[\format_ludic\section\achievement::get_unique_name()]      = $sectionachievement;
 
         return $skins;
     }
@@ -1046,8 +1046,8 @@ class context_helper {
      */
     public function get_default_skins() {
         return [
-                coursemodule\inline::get_instance(),
-                section\noludic::get_instance()
+            coursemodule\inline::get_instance(),
+            section\noludic::get_instance()
         ];
     }
 
@@ -1082,8 +1082,8 @@ class context_helper {
      */
     public function get_global_section_skins() {
         return [
-                coursemodule\menubar::get_instance(),
-                coursemodule\stealth::get_instance()
+            coursemodule\menubar::get_instance(),
+            coursemodule\stealth::get_instance()
         ];
     }
 

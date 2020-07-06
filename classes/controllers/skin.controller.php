@@ -59,13 +59,13 @@ class skin_controller extends controller_base {
             // Avatar action
             case 'avatar_buy_item' :
                 $sectionid = $this->get_param('sectionid');
-                $slotname = $this->get_param('slotname');
-                $itemname = $this->get_param('itemname');
+                $slotname  = $this->get_param('slotname');
+                $itemname  = $this->get_param('itemname');
                 return $this->avatar_buy_item($sectionid, $slotname, $itemname);
             case 'avatar_toggle_item':
                 $sectionid = $this->get_param('sectionid');
-                $slotname = $this->get_param('slotname');
-                $itemname = $this->get_param('itemname');
+                $slotname  = $this->get_param('slotname');
+                $itemname  = $this->get_param('itemname');
                 return $this->avatar_toggle_item($sectionid, $slotname, $itemname);
             default :
                 // Default case if the only parameter is id.
@@ -91,7 +91,7 @@ class skin_controller extends controller_base {
         $renderer     = $PAGE->get_renderer('format_ludic');
         $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
         $skins        = $coursemodule->get_available_skins();
-        $title = 'Skins';
+        $title        = 'Skins';
 
         // Render skins.
         $content = '';
@@ -126,7 +126,7 @@ class skin_controller extends controller_base {
             if (!empty($selectedskinid) && $selectedskinid == $skin->id) {
                 $skin->selected = true;
             }
-            $content                .= $renderer->render_skin($skin);
+            $content .= $renderer->render_skin($skin);
         }
 
         // Return skins html in container.
@@ -148,20 +148,20 @@ class skin_controller extends controller_base {
         return $skin->description;
     }
 
-    public function get_course_skins_list(){
+    public function get_course_skins_list() {
         global $PAGE;
 
         // Get data.
         $renderer = $PAGE->get_renderer('format_ludic');
-        $skins = $this->contexthelper->get_skins_format();
+        $skins    = $this->contexthelper->get_skins_format();
 
         return $renderer->render_skins_list($skins);
     }
 
-    public function get_skin_properties($skinid){
+    public function get_skin_properties($skinid) {
 
         $skins = $this->contexthelper->get_skins_format();
-        if(!array_key_exists($skinid, $skins)){
+        if (!array_key_exists($skinid, $skins)) {
             return false;
         }
 
@@ -170,13 +170,13 @@ class skin_controller extends controller_base {
         return $skin->description;
     }
 
-    public function get_skin_types($skinid){
+    public function get_skin_types($skinid) {
         global $PAGE;
 
         $allskinstypes = $this->contexthelper->get_skins();
-        $skintypes = [];
-        foreach($allskinstypes as $skintype){
-            if($skintype->skinid == $skinid){
+        $skintypes     = [];
+        foreach ($allskinstypes as $skintype) {
+            if ($skintype->skinid == $skinid) {
                 $skintypes[] = $skintype;
             }
         }
@@ -186,7 +186,7 @@ class skin_controller extends controller_base {
         return $renderer->render_skin_skin_types_list($skinid, $skintypes);
     }
 
-    public function get_skin_types_form($skintypeid){
+    public function get_skin_types_form($skintypeid) {
         global $PAGE, $COURSE;
         $renderer = $PAGE->get_renderer('format_ludic');
 
@@ -199,10 +199,9 @@ class skin_controller extends controller_base {
      * Avatar actions
      */
 
-
-    public function avatar_buy_item($sectionid, $slotname, $itemname){
+    public function avatar_buy_item($sectionid, $slotname, $itemname) {
         $section = $this->contexthelper->get_section_by_id($sectionid);
-        if($section->skin->type != 'avatar'){
+        if ($section->skin->type != 'avatar') {
             return false;
         }
         $section->skin->buy_item($slotname, $itemname);
@@ -212,9 +211,9 @@ class skin_controller extends controller_base {
         return $renderer->render_skinned_tile($section->skin);
     }
 
-    public function avatar_toggle_item($sectionid, $slotname, $itemname){
+    public function avatar_toggle_item($sectionid, $slotname, $itemname) {
         $section = $this->contexthelper->get_section_by_id($sectionid);
-        if($section->skin->type != 'avatar'){
+        if ($section->skin->type != 'avatar') {
             return false;
         }
         $section->skin->toggle_item($slotname, $itemname);

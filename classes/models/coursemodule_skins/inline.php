@@ -28,17 +28,17 @@ defined('MOODLE_INTERNAL') || die();
 
 class inline extends \format_ludic\skin {
 
-    public static function get_editor_config(){
+    public static function get_editor_config() {
         return [
             "settings" => [
-                "name"                  => "text",
-                "main-css"              => "css",
-                "background"                 => "image"
+                "name"       => "text",
+                "main-css"   => "css",
+                "background" => "image"
             ]
         ];
     }
 
-    public static function get_unique_name(){
+    public static function get_unique_name() {
         return 'cm-inline';
     }
 
@@ -50,8 +50,8 @@ class inline extends \format_ludic\skin {
     public function get_edit_image() {
         global $OUTPUT;
         return (object) [
-                'imgsrc' => $OUTPUT->image_url('default-cm', 'format_ludic')->out(),
-                'imgalt' => 'In page'
+            'imgsrc' => $OUTPUT->image_url('default-cm', 'format_ludic')->out(),
+            'imgalt' => 'In page'
         ];
     }
 
@@ -64,11 +64,11 @@ class inline extends \format_ludic\skin {
      */
     static public function get_instance() {
         return new self((object) [
-                'id'          => FORMAT_LUDIC_CM_SKIN_INLINE_ID,
-                'location'    => 'coursemodule',
-                'type'        => 'inline',
-                'title'       => get_string('cm-skin-inline-title', 'format_ludic'),
-                'description' => get_string('cm-skin-inline-description', 'format_ludic')
+            'id'          => FORMAT_LUDIC_CM_SKIN_INLINE_ID,
+            'location'    => 'coursemodule',
+            'type'        => 'inline',
+            'title'       => get_string('cm-skin-inline-title', 'format_ludic'),
+            'description' => get_string('cm-skin-inline-description', 'format_ludic')
         ]);
     }
 

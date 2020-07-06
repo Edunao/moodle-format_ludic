@@ -28,16 +28,16 @@ defined('MOODLE_INTERNAL') || die();
 
 class course_module extends model implements skinnable_interface {
 
-    public $name;
-    public $order;
-    public $cminfo;
-    public $courseid;
-    public $section;
-    public $sectionid;
-    public $access;
-    public $visible;
-    public $skinid;
-    public $skin;
+    public  $name;
+    public  $order;
+    public  $cminfo;
+    public  $courseid;
+    public  $section;
+    public  $sectionid;
+    public  $access;
+    public  $visible;
+    public  $skinid;
+    public  $skin;
     private $weight;
     private $results;
 
@@ -83,10 +83,10 @@ class course_module extends model implements skinnable_interface {
         $this->section   = $section;
         $this->sectionid = $sectionid;
         $movetosection   = (object) [
-                'id'      => $section->id,
-                'section' => $section->section,
-                'course'  => $section->courseid,
-                'visible' => $section->visible
+            'id'      => $section->id,
+            'section' => $section->section,
+            'course'  => $section->courseid,
+            'visible' => $section->visible
         ];
         moveto_module($this->cminfo, $movetosection, $beforeid);
     }
@@ -128,11 +128,11 @@ class course_module extends model implements skinnable_interface {
         $dbapi        = $this->contexthelper->get_database_api();
         $course       = $this->contexthelper->get_moodle_course();
         $coursemodule = (object) [
-                'id'      => $this->id,
-                'course'  => $this->courseid,
-                'section' => $this->sectionid,
-                'name'    => $this->name,
-                'modname' => $this->cminfo->modname
+            'id'      => $this->id,
+            'course'  => $this->courseid,
+            'section' => $this->sectionid,
+            'name'    => $this->name,
+            'modname' => $this->cminfo->modname
         ];
 
         // Duplicate course module.
@@ -173,54 +173,55 @@ class course_module extends model implements skinnable_interface {
 
         // Defines url here.
         $editcmurl   = $CFG->wwwroot . '/course/modedit.php?update=' . $this->id . '&return=0';
-        $deletecmurl = $CFG->wwwroot . '/course/mod.php?sesskey=' . sesskey() . '&sr=' . $this->section->section
-                       . '&delete=' . $this->id . '&confirm=1';
+        $deletecmurl = $CFG->wwwroot . '/course/mod.php?sesskey=' . sesskey() . '&sr=' . $this->section->section . '&delete=' . $this->id . '&confirm=1';
         $assignurl   = $CFG->wwwroot . '/admin/roles/assign.php?contextid=' . $this->cminfo->context->id;
 
         return [
-                [
-                        'identifier' => 'form-save',
-                        'action'     => 'saveForm',
-                        'order'      => 1
-                ],
-                [
-                        'identifier' => 'form-revert',
-                        'action'     => 'revertForm',
-                        'order'      => 2
-                ],
-                [
-                        'identifier'    => 'edit',
-                        'order'         => 3,
-                        'isdropdown' => true,
-                        'action'        => 'showSubButtons',
-                        'subbuttons'    => [
-                                [
-                                        'identifier' => 'edit-settings', 'action' => 'getDataLinkAndRedirectTo',
-                                        'link'       => $editcmurl
-                                ],
-                                [
-                                        'identifier' => 'duplicate', 'controller' => 'section',
-                                        'action'     => 'duplicate_course_module',
-                                        'callback'   => 'displayCourseModulesHtml'
-                                ],
-                                [
-                                        'identifier' => 'assign',
-                                        'link'       => $assignurl,
-                                        'action'     => 'getDataLinkAndRedirectTo'
-                                ],
-                                [
-                                        'identifier' => 'delete',
-                                        'link'       => $deletecmurl,
-                                        'action'     => 'confirmAndDeleteCourseModule'
-                                ]
-                        ]
-                ],
-                [
-                        'identifier' => 'item-open',
-                        'link'       => $this->get_link(),
+            [
+                'identifier' => 'form-save',
+                'action'     => 'saveForm',
+                'order'      => 1
+            ],
+            [
+                'identifier' => 'form-revert',
+                'action'     => 'revertForm',
+                'order'      => 2
+            ],
+            [
+                'identifier' => 'edit',
+                'order'      => 3,
+                'isdropdown' => true,
+                'action'     => 'showSubButtons',
+                'subbuttons' => [
+                    [
+                        'identifier' => 'edit-settings',
                         'action'     => 'getDataLinkAndRedirectTo',
-                        'order'      => 4
+                        'link'       => $editcmurl
+                    ],
+                    [
+                        'identifier' => 'duplicate',
+                        'controller' => 'section',
+                        'action'     => 'duplicate_course_module',
+                        'callback'   => 'displayCourseModulesHtml'
+                    ],
+                    [
+                        'identifier' => 'assign',
+                        'link'       => $assignurl,
+                        'action'     => 'getDataLinkAndRedirectTo'
+                    ],
+                    [
+                        'identifier' => 'delete',
+                        'link'       => $deletecmurl,
+                        'action'     => 'confirmAndDeleteCourseModule'
+                    ]
                 ]
+            ],
+            [
+                'identifier' => 'item-open',
+                'link'       => $this->get_link(),
+                'action'     => 'getDataLinkAndRedirectTo',
+                'order'      => 4
+            ]
         ];
     }
 
@@ -246,10 +247,7 @@ class course_module extends model implements skinnable_interface {
         }
 
         // Update skin id, weight or access if required.
-        if (isset($data['skinid']) && $data['skinid'] != $this->skinid ||
-            isset($data['weight']) && $data['weight'] != $this->weight ||
-            isset($data['access']) && $data['access'] != $this->access
-        ) {
+        if (isset($data['skinid']) && $data['skinid'] != $this->skinid || isset($data['weight']) && $data['weight'] != $this->weight || isset($data['access']) && $data['access'] != $this->access) {
             $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['access']);
         }
 
@@ -266,8 +264,8 @@ class course_module extends model implements skinnable_interface {
      */
     public function get_mod_icon() {
         return (object) [
-                'imgsrc' => $this->cminfo->get_icon_url()->out(false),
-                'imgalt' => $this->cminfo->modname
+            'imgsrc' => $this->cminfo->get_icon_url()->out(false),
+            'imgalt' => $this->cminfo->modname
         ];
     }
 
@@ -291,7 +289,7 @@ class course_module extends model implements skinnable_interface {
             return [coursemodule\inline::get_instance()];
         }
 
-        $skins   = $this->contexthelper->get_course_module_skins();
+        $skins = $this->contexthelper->get_course_module_skins();
 
         // True if this course module supports grades.
         $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
@@ -321,7 +319,7 @@ class course_module extends model implements skinnable_interface {
 
         // Default skin for section 0 is inline for resources and menubar for activities.
         if ($this->section->section == 0) {
-            $modname = $this->cminfo->modname;
+            $modname    = $this->cminfo->modname;
             $isresource = $modname ? plugin_supports('mod', $modname, FEATURE_MOD_ARCHETYPE, false) : false;
             return $isresource ? coursemodule\inline::get_instance() : coursemodule\menubar::get_instance();
         }
@@ -399,8 +397,8 @@ class course_module extends model implements skinnable_interface {
 
         // Return data.
         $this->results = [
-                'gradeinfo'      => $grade,
-                'completioninfo' => $state
+            'gradeinfo'      => $grade,
+            'completioninfo' => $state
         ];
 
         return $this->results;

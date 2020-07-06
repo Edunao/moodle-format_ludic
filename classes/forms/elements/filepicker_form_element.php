@@ -59,11 +59,17 @@ class filepicker_form_element extends form_element {
         // Search if file exists in draft.
         $dbapi = $this->contexthelper->get_database_api();
         if ($this->required && !$dbapi->file_exists_in_draft($itemid)) {
-            return ['success' => 0, 'value' => get_string('error-required', 'format_ludic')];
+            return [
+                'success' => 0,
+                'value'   => get_string('error-required', 'format_ludic')
+            ];
         }
 
         // Success.
-        return ['success' => 1, 'value' => $itemid];
+        return [
+            'success' => 1,
+            'value'   => $itemid
+        ];
     }
 
 }
