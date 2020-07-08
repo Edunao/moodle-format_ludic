@@ -50,6 +50,14 @@ class section_controller extends controller_base {
                 $cmidtomove = $this->get_param('idtomove', PARAM_INT);
                 $aftercmid  = $this->get_param('toid', PARAM_INT);
                 return $this->move_on_section($cmidtomove, $aftercmid);
+            case 'update_cm_order' :
+                $cmidtomove = $this->get_param('cmid', PARAM_INT);
+                $newindex  = $this->get_param('newindex', PARAM_INT);
+                return $this->update_cm_order($cmidtomove, $newindex);
+            case 'update_section_order':
+                $sectionidtomove = $this->get_param('sectionid', PARAM_INT);
+                $newindex  = $this->get_param('newindex', PARAM_INT);
+                return $this->update_section_order($sectionidtomove, $newindex);
             case 'move_section_to' :
                 $sectionidtomove = $this->get_param('idtomove', PARAM_INT);
                 $aftersectionid  = $this->get_param('toid', PARAM_INT);
@@ -177,6 +185,37 @@ class section_controller extends controller_base {
 
         // Return course modules html.
         return $this->get_course_modules($sectionid);
+    }
+
+    public function update_cm_order($cmid, $newindex) {
+        // Get course module.
+        $coursemodule = $this->contexthelper->get_course_module_by_id($cmid);
+
+        // Keep section id to render his course modules.
+        $sectionid = $coursemodule->sectionid;
+
+        // Move a course module after another course module.
+        $coursemodule->update_cm_order($cmid, $newindex);
+
+        // Return course modules html.
+        return $this->get_course_modules($sectionid);
+    }
+
+    public function update_section_order($sectionidtomove, $newindex) {
+        // Get section to move.
+        $sectiontomove = $this->contexthelper->get_section_by_id($sectionidtomove);
+
+        if($newindex == 0){
+            $newindex++;
+        }
+
+        // Can't move section 0.
+        if ($sectiontomove->section > 0) {
+            $sectiontomove->move_section_to($newindex);
+        }
+
+        // Return course section html.
+        return $this->get_course_sections();
     }
 
     /**

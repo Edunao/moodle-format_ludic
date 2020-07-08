@@ -900,6 +900,44 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * TODO : fix all drag and drop using jquery ui
          * Initialize all drag and drop specific events to monitor.
          */
+        initModuleDragDrop: function(){
+            console.log('init drag and drop ? 5');
+            $(".container-children.coursemodules .children-elements").sortable({
+                items: ".ludic-drag",
+                update: function (event, ui) {
+                    console.log('change drag and drop ', ui, ui.item.attr('id'), $(".container-children.coursemodules .children-elements .ludic-drag").index(ui.item));
+
+                    let cmid = ui.item.data('id');
+                    //update_cm_order
+                    ludic.ajaxCall({
+                         cmid: cmid,
+                         newindex: $(".container-children.coursemodules .children-elements .ludic-drag").index(ui.item),
+                         controller: 'section',
+                         action: 'update_cm_order',
+                         callback: ludic.displayCourseModulesHtml
+                     });
+                }
+            });
+        },
+
+        initSectionDragDrop: function(){
+            $(".ludic-container.container-parents").sortable({
+                items: ".item.section.ludic-drag",
+                update: function (event, ui) {
+                    console.log('change drag and drop ', ui, ui.item.attr('id'), $(".ludic-container.container-parents .item.section").index(ui.item));
+
+                    let sectionid = ui.item.data('id');
+                    //update_cm_order
+                    ludic.ajaxCall({
+                        sectionid: sectionid,
+                        newindex: $(".ludic-container.container-parents .item.section").index(ui.item),
+                        controller: 'section',
+                        action: 'update_section_order',
+                        callback: ludic.displaySections
+                    });
+                }
+            });
+        },
         initDragAndDropEvents: function () {
             let body = $('body.format-ludic');
 
@@ -908,67 +946,71 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             //     items: ".ludic-drag",
             //     change: function (event, ui) {
             //         console.log('change drag and drop ', event);
+
             //     }
             // });
 
+
+
+
             // Save the selector id of the drag object.
-            body.on('dragstart', '.ludic-drag', function (e) {
-                console.log('dragstart');
-                console.log(e.currentTarget.id);
-                e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.id);
-            });
-
-            // Required to allow drop.
-            body.on('dragover', '.ludic-drop', function (e) {
-                console.log('dragover');
-                e.preventDefault();
-            });
-
-             // Management of drop sections and course modules.
-             body.on('drop', '.section.ludic-drop, .coursemodule.ludic-drop', function (e) {
-                 console.log('drop');
-                 console.log(e.currentTarget.id);
-
-                 // Get drag item data.
-                 let dragItem = $('#' + e.originalEvent.dataTransfer.getData('text/plain'));
-                 let dragId = dragItem.data('id');
-                 let dragType = dragItem.data('type');
-
-                 // Get drop item data.
-                 let dropItem = $('#' + e.currentTarget.id);
-                 let dropId = dropItem.data('id');
-                 let dropType = dropItem.data('type');
-
-                 if (dragItem.is(dropItem)) {
-                     console.log('drop on same item, nothing to do');
-                     return false;
-                 }
-
-                 // Define the action here.
-                 let action = false;
-                 if (dragType === 'section' && dropType === 'section') {
-                     action = 'move_section_to';
-                 } else if (dragType === 'coursemodule' && dropType === 'section') {
-                     action = 'move_to_section';
-                 } else if (dragType === 'coursemodule' && dropType === 'coursemodule') {
-                     action = 'move_on_section';
-                 }
-
-                 // If an action has been found, make an ajax call to the section controller.
-                 // Then set the html on the parent of the dragged object.
-                 if (action) {
-                     let callbackFunction = action === 'move_section_to' ? ludic.displaySections : ludic.displayCourseModulesHtml;
-                     console.log('execute ', action, callbackFunction);
-
-                     ludic.ajaxCall({
-                         idtomove: dragId,
-                         toid: dropId,
-                         controller: 'section',
-                         action: action,
-                         callback: callbackFunction
-                     });
-                 }
-             });
+            // body.on('dragstart', '.ludic-drag', function (e) {
+            //     console.log('dragstart');
+            //     console.log(e.currentTarget.id);
+            //     e.originalEvent.dataTransfer.setData('text/plain', e.currentTarget.id);
+            // });
+            //
+            // // Required to allow drop.
+            // body.on('dragover', '.ludic-drop', function (e) {
+            //     console.log('dragover');
+            //     e.preventDefault();
+            // });
+            //
+            //  // Management of drop sections and course modules.
+            //  body.on('drop', '.section.ludic-drop, .coursemodule.ludic-drop', function (e) {
+            //      console.log('drop');
+            //      console.log(e.currentTarget.id);
+            //
+            //      // Get drag item data.
+            //      let dragItem = $('#' + e.originalEvent.dataTransfer.getData('text/plain'));
+            //      let dragId = dragItem.data('id');
+            //      let dragType = dragItem.data('type');
+            //
+            //      // Get drop item data.
+            //      let dropItem = $('#' + e.currentTarget.id);
+            //      let dropId = dropItem.data('id');
+            //      let dropType = dropItem.data('type');
+            //
+            //      if (dragItem.is(dropItem)) {
+            //          console.log('drop on same item, nothing to do');
+            //          return false;
+            //      }
+            //
+            //      // Define the action here.
+            //      let action = false;
+            //      if (dragType === 'section' && dropType === 'section') {
+            //          action = 'move_section_to';
+            //      } else if (dragType === 'coursemodule' && dropType === 'section') {
+            //          action = 'move_to_section';
+            //      } else if (dragType === 'coursemodule' && dropType === 'coursemodule') {
+            //          action = 'move_on_section';
+            //      }
+            //
+            //      // If an action has been found, make an ajax call to the section controller.
+            //      // Then set the html on the parent of the dragged object.
+            //      if (action) {
+            //          let callbackFunction = action === 'move_section_to' ? ludic.displaySections : ludic.displayCourseModulesHtml;
+            //          console.log('execute ', action, callbackFunction);
+            //
+            //          ludic.ajaxCall({
+            //              idtomove: dragId,
+            //              toid: dropId,
+            //              controller: 'section',
+            //              action: action,
+            //              callback: callbackFunction
+            //          });
+            //      }
+            //  });
         },
 
         /**
@@ -1034,6 +1076,8 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                 return;
             }
+
+            ludic.initModuleDragDrop();
 
             // In edit view, we have to check some parameters (user is editing, wait moodle mod chooser is ready).
             // If the form has been updated, we ensure that the user has confirmed his choice to leave the edition
@@ -1248,6 +1292,8 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 });
 
             }
+
+            ludic.initSectionDragDrop();
         },
 
         displaySkinsList: function (html, callback) {

@@ -113,6 +113,27 @@ class course_module extends model implements skinnable_interface {
         $this->section->update_sequence($newsequence);
     }
 
+    public function update_cm_order($cmidtomove, $newindex){
+        $sequence    = $this->section->sequence;
+        $newsequence = [];
+        $newsequence[$newindex] = $cmidtomove;
+        foreach ($sequence as $index => $cmid) {
+            if ($cmid == $cmidtomove) {
+                continue;
+            }
+
+            if($index < $newindex){
+                $newsequence[$index] = $cmid;
+            }
+
+            if($index >= $newindex){
+                $newsequence[($index+1)] = $cmid;
+            }
+        }
+        ksort($newsequence);
+        $this->section->update_sequence($newsequence);
+    }
+
     /**
      * Duplicate the module
      *
