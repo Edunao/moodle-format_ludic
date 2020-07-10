@@ -918,6 +918,11 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                      });
                 }
             });
+
+
+            // $(".container-children.coursemodules .children-elements .ludic-drag")
+
+
         },
 
         initSectionDragDrop: function(){
@@ -938,6 +943,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 }
             });
         },
+
         initDragAndDropEvents: function () {
             let body = $('body.format-ludic');
 

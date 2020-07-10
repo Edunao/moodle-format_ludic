@@ -551,6 +551,9 @@ class format_ludic_renderer extends format_section_renderer_base {
 
         // Render sections.
         $output = '';
+        if($this->contexthelper->is_editing()){
+            $output .= '<div class="sections-container-title">'.get_string('edit-title-section', 'format_ludic').'</div>';
+        }
         foreach ($sections as $section) {
             $output .= $this->render_section($section);
         }

@@ -38,10 +38,21 @@ along with Moodle.  If not, see
                         <div class="slot-item-price-text" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                              data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar">Buy now !</div>
                     </div>
-                    <div class="slot-item-equipped" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
-                         data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">V</div>
-                    <div class="slot-item-notequipped" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
-                         data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">X</div>
+
+                    <div class="slot-item-equipped ludic-switch" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
+                         data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">
+                        <input type="checkbox" checked>
+                        <span class="ludic-slider" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
+                              data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar"></span>
+
+                    </div>
+
+                    <div class="slot-item-notequipped ludic-switch" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
+                         data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">
+                        <input type="checkbox" >
+                        <span class="ludic-slider" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
+                              data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar"></span>
+                    </div>
 
                 </div>
 

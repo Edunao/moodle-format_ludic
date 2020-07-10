@@ -32,36 +32,42 @@
     }
 }}
 <div id="ludic-header-bar" class="format-ludic header-bar navbar navbar-light bg-light">
-    <a class="btn btn-primary" data-toggle="collapse" href="#ludic-navbar-content" role="button" aria-expanded="false" aria-controls="ludic-navbar-content">
-        L
-    </a>
-</div>
 
+        <a class="btn btn-primary nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            L
+        </a>
 
-<div class="collapse" id="ludic-navbar-content">
-    <div class="card card-body">
-        {{#hasoptions}}
+        <div class="dropdown-menu" id="ludic-navbar-content" aria-labelledby="navbarDropdownMenuLink">
+            {{#hasoptions}}
             {{#notstudentview}}
-                {{#optionslist}}
-                    <div class="collapse-item {{#link}}link{{/link}}" data-action="{{action}}"{{#link}} data-link="{{link}}"{{/link}}{{#controller}}
-                        data-controller="{{controller}}"{{/controller}}{{#callback}} data-callback="{{callback}}"{{/callback}}{{#id}} data-id="{{id}}"{{/id}}>
-                        <img class="activityicon" src="{{iconsrc}}" aria-label="{{iconsrc}}">
-                        <span class="text">{{name}}</span>
-                    </div>
-                {{/optionslist}}
+            {{#optionslist}}
+                <div class="dropdown-item {{#link}}link{{/link}}" data-action="{{action}}"{{#link}} data-link="{{link}}"{{/link}}{{#controller}}
+                data-controller="{{controller}}"{{/controller}}{{#callback}} data-callback="{{callback}}"{{/callback}}{{#id}} data-id="{{id}}"{{/id}}>
+                <img class="activityicon" src="{{iconsrc}}" aria-label="{{iconsrc}}">
+                <span class="text">{{name}}</span>
+                </div>
+            {{/optionslist}}
             {{/notstudentview}}
-        {{/hasoptions}}
+            {{/hasoptions}}
 
-        {{^hasoptions}}
+            {{^hasoptions}}
             {{#str}}header-no-content, format_ludic{{/str}}
-        {{/hasoptions}}
+            {{/hasoptions}}
 
-        <div class="header-sections-list">
-        {{{sectionscontent}}}
+            <div class="dropdown-divider"></div>
+
+            <div class="header-sections-list ">
+
+                {{#sections}}
+
+                <div class="section-title dropdown-item" data-id="{{id}}" data-link="{{link}}" data-action="getDataLinkAndRedirectTo" data-type="section">{{name}}</div>
+                {{/sections}}
+
+            </div>
+
         </div>
-
-    </div>
 </div>
+
 
 
 

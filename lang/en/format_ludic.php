@@ -59,6 +59,7 @@ $string['section-no-cm']          = 'Aucune activité disponible';
 $string['edit-title-section']     = 'Sections :';
 $string['addsection-button']      = 'Add section';
 
+
 // Course module edition.
 $string['course-module-skin-selection'] = 'Select a skin for the course module';
 $string['label-course-module-title']    = 'Title';

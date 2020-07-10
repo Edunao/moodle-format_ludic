@@ -45,6 +45,7 @@ class format_ludic_header_bar implements renderable {
     public $hasoptions;
     public $display;
     public $sectionscontent;
+    public $sections;
 
     /**
      * model constructor.
@@ -52,7 +53,7 @@ class format_ludic_header_bar implements renderable {
      * @throws moodle_exception
      */
     public function __construct() {
-        global $PAGE, $USER;
+        global $PAGE, $USER, $CFG;
 
         $this->contexthelper  = \format_ludic\context_helper::get_instance($PAGE);
         $this->optionslist    = $this->get_options_list();
@@ -60,11 +61,11 @@ class format_ludic_header_bar implements renderable {
         $this->notstudentview = !$this->contexthelper->is_student_view_forced();
         $editmode             = $this->contexthelper->is_editing();
 
-        if (!$editmode && $this->contexthelper->get_section_idx() > 0) {
-            $renderer = $PAGE->get_renderer('format_ludic');
-            //$sectionscontent = $renderer->render_course_sections();
-            $sectionscontent       = $renderer->render_header_course_sections();
-            $this->sectionscontent = $sectionscontent;
+        // Sections
+        $course   = $this->contexthelper->get_course();
+        $this->sections = array_values($course->get_sections());
+        foreach($this->sections as $section){
+            $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
         }
 
         // Javascript parameters.
