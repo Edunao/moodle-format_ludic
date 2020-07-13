@@ -309,10 +309,11 @@ class avatar extends \format_ludic\skin {
             $itemdata->sectionid               = $this->item->dbrecord->id;
             $slots[$itemdata->slot]['items'][] = (array) $itemdata;
         }
+
         $shopcontent = $renderer->render_avatar_shop($slots);
 
         $htmls[] = [
-            'classes' => 'shop no-ludic-event',
+            'classes' => 'shop no-ludic-event ',
             'content' => $renderer->render_popup('avatar-shop-' . $this->item->sectioninfo->id, "Magasin", $shopcontent),
         ];
 

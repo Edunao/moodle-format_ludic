@@ -358,7 +358,16 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             $(selector + ' .skin-type-avatar .open-shop').on('click', function (e) {
                 let shopid = $(this).attr('class').split(' open-shop-')[1];
                 shopid = shopid.split(' ')[0];
-                $('#avatar-shop-' + shopid).modal('show')
+                $('#avatar-shop-' + shopid).modal('show');
+            });
+
+            // Put avatar content in popup
+            $(selector + ' .skin-type-avatar .open-shop').each(function(){
+                let shopid = $(this).attr('class').split(' open-shop-')[1];
+                shopid = shopid.split(' ')[0];
+
+                $('#avatar-shop-' + shopid + ' .avatar-preview').html($('#skin-section-' + shopid + ' .skin-tile').prop('outerHTML'));
+                $('#avatar-shop-' + shopid + ' .avatar-preview .open-shop').remove();
             });
         },
 

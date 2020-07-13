@@ -73,11 +73,11 @@
     margin-bottom: 5px;
 }
 
-.header-sections-list{
+.header-sections-list {
     margin: 10px;
 }
 
-.header-sections-list .section-title{
+.header-sections-list .section-title {
     background-color: #F2F0EC;
     font-family: 'Montserrat-Medium';
     color: #1D1061;
@@ -196,7 +196,7 @@
     Avatar
  */
 
-.skin-type-avatar{
+.skin-type-avatar {
     text-align: center;
 }
 
@@ -277,6 +277,21 @@
     border-radius: 37px;
 }
 
+.skin-extra-html.shop .modal-dialog {
+    max-width: 75%;
+}
+
+.no-ludic-event.shop-container {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+@media (max-width: 1050px) {
+    .no-ludic-event.shop-container {
+        flex-wrap: wrap;
+    }
+}
 
 .skin-text.skin-hidden-text.cash:before {
     content: "$";
@@ -286,8 +301,42 @@
     content: "$";
 }
 
-.slot-item-price {
+.shop-container .avatar-preview {
+    flex-basis: 500px;
+}
 
+.shop-container .shop-content {
+    flex-grow: 1;
+    margin-left: 15px;
+    overflow: auto;
+    height: 100%;
+}
+
+.format-ludic .item .skin-type-avatar .skin-tile .skin-text.skin-hidden-text.open-shop {
+    position: absolute;
+    right: 11px;
+    background-color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 40px;
+    border-radius: 20px;
+    bottom: 6px;
+    background-image: url([[pix:format_ludic|default-skins/section-avatar/shopping-cart]]);
+    background-repeat: no-repeat;
+    background-position: 98px;
+    background-size: 30px;
+    z-index: 100;
+}
+
+.skin-extra-html.shop .modal-dialog,
+.skin-extra-html.shop .modal-content {
+    height: 80%;
+}
+
+.skin-extra-html.shop .modal-body {
+    height: 100%;
+    overflow-y: scroll;
 }
 
 /* -----------------------------------------
@@ -393,11 +442,11 @@
     width: 150px;
 }
 
-#ludic-main-container.editmode #ludic-section-0 .item-title{
+#ludic-main-container.editmode #ludic-section-0 .item-title {
     margin-top: 37%;
 }
 
-#ludic-main-container.editmode .section{
+#ludic-main-container.editmode .section {
     border-radius: 15px;
 }
 
@@ -416,7 +465,7 @@
     text-align: center;
 }
 
-#ludic-main-container.editmode .item.section .item-title{
+#ludic-main-container.editmode .item.section .item-title {
     width: 225px;
     border-radius: 10px;
 }
@@ -430,7 +479,7 @@
     vertical-align: top;
 }
 
-#ludic-main-container .children-title, #ludic-main-container .sections-container-title{
+#ludic-main-container .children-title, #ludic-main-container .sections-container-title {
     background-color: #F2F0EC;
     font-family: 'Montserrat-Medium';
     color: #1D1061;
@@ -438,7 +487,7 @@
     width: 100%;
 }
 
-#ludic-main-container.editmode .sections-container-title{
+#ludic-main-container.editmode .sections-container-title {
     margin: 0 10px;
 }
 

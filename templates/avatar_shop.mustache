@@ -15,7 +15,9 @@ You should have received a copy of the GNU General Public License
 along with Moodle.  If not, see
 <http://www.gnu.org/licenses/>.
 }}
-<div class="no-ludic-event">
+<div class="no-ludic-event shop-container">
+    <div class="avatar-preview"></div>
+    <div class="shop-content">
     {{#slots}}
     <div class="slot slot-{{name}}">
         <div class="slot-title">{{name}}</div>
@@ -42,7 +44,7 @@ along with Moodle.  If not, see
                     <div class="slot-item-equipped ludic-switch" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                          data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">
                         <input type="checkbox" checked>
-                        <span class="ludic-slider" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
+                        <span class="ludic-slider round" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                               data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar"></span>
 
                     </div>
@@ -50,7 +52,7 @@ along with Moodle.  If not, see
                     <div class="slot-item-notequipped ludic-switch" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                          data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">
                         <input type="checkbox" >
-                        <span class="ludic-slider" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
+                        <span class="ludic-slider round" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                               data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar"></span>
                     </div>
 
@@ -61,5 +63,5 @@ along with Moodle.  If not, see
         </div>
     </div>
     {{/slots}}
-
+    </div>
 </div>
