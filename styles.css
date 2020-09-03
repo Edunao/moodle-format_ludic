@@ -56,6 +56,14 @@
     width: 100%;
 }
 
+.format-ludic .label-content-container{
+    color: #1d1061;
+}
+
+.format-ludic .label-content-container .no-overflow >  p {
+    margin-bottom: 0;
+}
+
 /* -----------------------------------------
     Navbar
 */

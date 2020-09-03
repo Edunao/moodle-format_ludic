@@ -73,7 +73,7 @@ class collection extends \format_ludic\skin {
      */
     public function get_edit_image() {
         $image = $this->get_properties('finalimage');
-        return count($image) > 0 ? $image : $this->get_default_image();
+        return $image ? $image : $this->get_default_image();
     }
 
     /**

@@ -692,7 +692,7 @@ function format_ludic_get_default_skins_settings() {
                             'imgalt' => 'Owl'
                         ],
                         'completion-complete-pass' => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collecton-owls', 'format_ludic')->out(),
+                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collecton-owl', 'format_ludic')->out(),
                             'imgalt' => 'Owl'
                         ],
                         'completion-complete-fail' => [
@@ -1136,6 +1136,13 @@ function format_ludic_get_default_skins_settings() {
                         'icon' => [
                             'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-banner-lamp', 'format_ludic')->out(),
                             'imgalt' => 'Banner'
+                        ],
+                    ],
+                    [
+                        'name' => 'Duvet',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-duvet-cloud', 'format_ludic')->out(),
+                            'imgalt' => 'Duvet'
                         ],
                     ],
                     [
@@ -2873,7 +2880,8 @@ function format_ludic_get_default_skins_settings() {
                         'images'    => [
                             [
                                 'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-pigeon', 'format_ludic')->out(),
-                                'imgalt' => 'Pigeon'
+                                'imgalt' => 'Pigeon',
+                                'zindex'  => '5',
                             ],
                         ],
                         'css'       => ''
@@ -2889,7 +2897,8 @@ function format_ludic_get_default_skins_settings() {
                         'images'    => [
                             [
                                 'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-teddy', 'format_ludic')->out(),
-                                'imgalt' => 'Teddy'
+                                'imgalt' => 'Teddy',
+                                'zindex'  => '5',
                             ],
                         ],
                         'css'       => ''
@@ -2905,7 +2914,8 @@ function format_ludic_get_default_skins_settings() {
                         'images'    => [
                             [
                                 'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-pingouin', 'format_ludic')->out(),
-                                'imgalt' => 'Pingouin'
+                                'imgalt' => 'Pingouin',
+                                'zindex'  => '5',
                             ],
                         ],
                         'css'       => ''
@@ -2921,7 +2931,8 @@ function format_ludic_get_default_skins_settings() {
                         'images'    => [
                             [
                                 'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-snake', 'format_ludic')->out(),
-                                'imgalt' => 'Snake'
+                                'imgalt' => 'Snake',
+                                'zindex'  => '5',
                             ],
                         ],
                         'css'       => ''
@@ -2975,7 +2986,71 @@ function format_ludic_get_default_skins_settings() {
                         ],
                         'css'       => ''
                     ],
-
+                    // Duvet
+                    [
+                        'name'      => 'Sport duvet',
+                        'cost'      => 10,
+                        'slot'      => 'Duvet',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-duvet-sport', 'format_ludic')->out(),
+                            'imgalt' => 'Sport duvet'
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-duvet-sport', 'format_ludic')->out(),
+                                'imgalt' => 'Sport duvet'
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    [
+                        'name'      => 'Game duvet',
+                        'cost'      => 20,
+                        'slot'      => 'Duvet',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-duvet-game', 'format_ludic')->out(),
+                            'imgalt' => 'Game duvet'
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-duvet-game', 'format_ludic')->out(),
+                                'imgalt' => 'Game duvet'
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    [
+                        'name'      => 'Cloud duvet',
+                        'cost'      => 30,
+                        'slot'      => 'Duvet',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-duvet-cloud', 'format_ludic')->out(),
+                            'imgalt' => 'Cloud duvet'
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-duvet-cloud', 'format_ludic')->out(),
+                                'imgalt' => 'Cloud duvet'
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    [
+                        'name'      => 'Star duvet',
+                        'cost'      => 40,
+                        'slot'      => 'Duvet',
+                        'shopimage' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-duvet-star', 'format_ludic')->out(),
+                            'imgalt' => 'Star duvet'
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-duvet-star', 'format_ludic')->out(),
+                                'imgalt' => 'Star duvet'
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
                     // Empty
                     [
                         'name'      => '',
