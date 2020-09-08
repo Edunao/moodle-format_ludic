@@ -65,6 +65,7 @@ class format_ludic_header_bar implements renderable {
         $course   = $this->contexthelper->get_course();
         $this->sections = array_values($course->get_sections());
         foreach($this->sections as $section){
+            $section->name = $section->name != '' ? $section->name : get_string('default-section-title', 'format_ludic', $section->section);
             $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
         }
 
@@ -285,20 +286,20 @@ class format_ludic_header_bar implements renderable {
 
             // Edit skins
             // TODO WIP
-            //if(!$isstudent){
-            //    $editname   = 'Edit skins';
-            //    $editicon   = $OUTPUT->image_url('i/settings')->out();
-            //    $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
-            //    $editoption = [
-            //        'action'  => 'getDataLinkAndRedirectTo',
-            //        'link'    => $editlink,
-            //        'iconsrc' => $editicon,
-            //        'iconalt' => $editname,
-            //        'name'    => $editname,
-            //    ];
-            //
-            //    $list[] = $editoption;
-            //}
+            if(!$isstudent){
+                $editname   = 'Edit skins';
+                $editicon   = $OUTPUT->image_url('i/settings')->out();
+                $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
+                $editoption = [
+                    'action'  => 'getDataLinkAndRedirectTo',
+                    'link'    => $editlink,
+                    'iconsrc' => $editicon,
+                    'iconalt' => $editname,
+                    'name'    => $editname,
+                ];
+
+                $list[] = $editoption;
+            }
 
         }
 

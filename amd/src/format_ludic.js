@@ -66,6 +66,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                 // Click on last item clicked in order to keep navigation.
                 ludic.clickOnLastItemClicked();
+
+                // Set correct height for left content
+                ludic.setEditContentHeight();
             }
         },
 
@@ -838,7 +841,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // If an anchor or section is specified click on it.
             let anchor = window.location.hash.substr(1);
-            let section = ludic.get_url_param('section', window.location.href);
+            let section = ludic.getUrlParam('section', window.location.href);
             // Section parameter has priority over anchor.
             if (section !== null) {
                 anchor = 'section-' + section;
@@ -1384,6 +1387,14 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             })
         },
 
+        setEditContentHeight: function () {
+            var bodyheight = $(window).height();
+            var paneloffset = $('#ludic-main-container.editmode.edit-view').offset();
+            var panelheight = bodyheight - paneloffset.top - 32;
+            $('#ludic-main-container.editmode.edit-view').css('min-height', panelheight + 'px');
+            $('#ludic-main-container.editmode.edit-view > .ludic-container.container-items > .ludic-container.container-parents').css('max-height', panelheight);
+        },
+
         /**
          * Return value of url param
          *
@@ -1391,7 +1402,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * @param url
          * @return string | null | number
          */
-        get_url_param: function (name, url) {
+        getUrlParam: function (name, url) {
             var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(url);
             if (results === null) {
                 return null;

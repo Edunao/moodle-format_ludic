@@ -167,22 +167,31 @@ class progress extends \format_ludic\skin {
 
     public function get_percent() {
         $results = $this->item->get_user_results();
+        $cms = $this->item->get_course_modules();
 
         $percent = 0;
         $nbcms   = 0;
         foreach ($results['resultsdetails'] as $cmresult) {
 
+            // Cm has no completion or grade, ignore it
             if ($cmresult['results']['completioninfo']->type === COMPLETION_DISABLED && $cmresult['results']['gradeinfo']->grademax === 0) {
                 continue;
             }
 
-            if ($cmresult['results']['gradeinfo']->grademax > 0) {
-                $percent += $cmresult['results']['gradeinfo']->proportion;
-            } else if ($cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE || $cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE_PASS) {
-                $percent += 1;
+            // Cm weight is 0, ignore it too
+            $cm = $cms[$cmresult['cmid']];
+            if($cm->get_weight() == 0){
+                continue;
             }
 
-            $nbcms++;
+            // Cm
+            if ($cmresult['results']['gradeinfo']->grademax > 0) {
+                $percent += $cmresult['results']['gradeinfo']->proportion * $cm->get_weight();
+            } else if ($cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE || $cmresult['results']['completioninfo']->state == COMPLETION_COMPLETE_PASS) {
+                $percent += 1 * $cm->get_weight();
+            }
+
+            $nbcms += $cm->get_weight();
         }
 
         return $nbcms == 0 ? 0 : $percent * 100 / $nbcms;

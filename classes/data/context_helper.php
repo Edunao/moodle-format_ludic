@@ -1020,16 +1020,19 @@ class context_helper {
 
         $noludic                                                          = \format_ludic\section\noludic::get_instance();
         $skins[\format_ludic\section\noludic::get_unique_name()]          = $noludic;
+
         $score                                                            = \format_ludic\coursemodule\score::get_instance();
         $skins[\format_ludic\coursemodule\score::get_unique_name()]       = $score;
-        $achievements                                                     = \format_ludic\coursemodule\achievement::get_instance();
-        $skins[\format_ludic\coursemodule\achievement::get_unique_name()] = $achievements;
+
+        $progress = \format_ludic\coursemodule\progress::get_instance();
+        $skins[\format_ludic\coursemodule\progress::get_unique_name()]       = $progress;
+
         $sectionscore                                                     = \format_ludic\section\score::get_instance();
         $skins[\format_ludic\section\score::get_unique_name()]            = $sectionscore;
+
         $sectioncollection                                                = \format_ludic\section\collection::get_instance();
         $skins[\format_ludic\section\collection::get_unique_name()]       = $sectioncollection;
-        $sectionachievement                                               = \format_ludic\section\achievement::get_instance();
-        $skins[\format_ludic\section\achievement::get_unique_name()]      = $sectionachievement;
+
 
         return $skins;
     }

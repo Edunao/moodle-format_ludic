@@ -66,8 +66,8 @@ class progress extends \format_ludic\skin {
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'progress',
-            'title'       => 'Progression de base',
-            'description' => 'On avance avec des pourcentages',
+            'title'       => 'Progression d\'activité',
+            'description' => get_string('skin-activity-progress', 'format_ludic'),
             'settings'    => self::get_editor_config(),
         ];
     }
@@ -206,23 +206,35 @@ class progress extends \format_ludic\skin {
         return $css;
     }
 
-    public function get_percent() {
-        $results = $this->item->get_user_results();
+    public function get_percent(){
 
-        if ($results['completioninfo']->state === COMPLETION_DISABLED && $results['gradeinfo']->grademax === 0) {
+        $skinresults = $this->get_skin_results();
+
+        if($skinresults['score'] === false && $skinresults['completion'] === false){
             return 0;
         }
 
-        if ($results['gradeinfo']->grademax > 0) {
-            return $results['gradeinfo']->proportion * 100;
-        }
-
-        if ($results['completioninfo']->state == COMPLETION_COMPLETE || $results['completioninfo']->state == COMPLETION_COMPLETE_PASS) {
-            return 100;
-        }
-
-        return 0;
+        return $skinresults['score'] !== false ? $skinresults['score'] : $skinresults['completion'];
     }
+
+    public function get_skin_results() {
+
+        $skinresults = parent::get_skin_results();
+
+        if($skinresults['score'] !== false){
+            $skinresults['score'] = $skinresults['score'] * 100;
+        }
+
+        if($skinresults['completion'] !== false){
+            $skinresults['completion'] = $skinresults['completion'] * 100;
+        }
+
+        $skinresults['skin'] = 'progress';
+
+        return $skinresults;
+    }
+
+
 
 }
 

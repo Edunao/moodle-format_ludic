@@ -143,7 +143,6 @@ class avatar extends \format_ludic\skin {
     public function get_user_money() {
         $useritems   = $this->get_user_items_data();
         $userresults = $this->item->get_user_results();
-        //print_object($userresults);
         $totalmoney = 1000;
 
         foreach ($useritems as $itemid => $useritem) {

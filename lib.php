@@ -559,55 +559,6 @@ function format_ludic_get_default_skins_settings() {
             ]
         ],
         [
-            'id'          => 13,
-            'skinid'      => 'cm-achievement',
-            'location'    => 'coursemodule',
-            'type'        => 'achievement',
-            'title'       => 'Achivement',
-            'description' => 'Plus l\'activité est réussie, plus le personnage monte.',
-            'properties'  => [
-                'steps' => [
-                    [
-                        'state'     => COMPLETION_INCOMPLETE,
-                        //0
-                        'statestr'  => 'completion-incomplete',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step1', 'format_ludic')->out(),
-                        'imgalt'    => '',
-                        'scorepart' => 0,
-                        'extratext' => 'En bas'
-                    ],
-                    [
-                        'state'     => COMPLETION_COMPLETE,
-                        //1
-                        'statestr'  => 'completion-complete',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step3', 'format_ludic')->out(),
-                        'imgalt'    => '',
-                        'scorepart' => 0.75,
-                        'extratext' => 'En haut !'
-                    ],
-                    [
-                        'state'     => COMPLETION_COMPLETE_PASS,
-                        //2
-                        'statestr'  => 'completion-complete-pass',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step3', 'format_ludic')->out(),
-                        'imgalt'    => '',
-                        'scorepart' => 1,
-                        'extratext' => 'En haut mais en mieux'
-                    ],
-                    [
-                        'state'     => COMPLETION_COMPLETE_FAIL,
-                        //3
-                        'statestr'  => 'completion-complete-fail',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-achievement-step1', 'format_ludic')->out(),
-                        'imgalt'    => '',
-                        'scorepart' => 0.25,
-                        'extratext' => 'En bas mais en moins bien'
-                    ]
-                ],
-                'css'   => ''
-            ],
-        ],
-        [
             'id'          => 15,
             'skinid'      => 'section-collection',
             'location'    => 'section',
@@ -1077,6 +1028,14 @@ function format_ludic_get_default_skins_settings() {
                         'icon' => [
                             'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-gender-F', 'format_ludic')->out(),
                             'imgalt' => 'Gender'
+                        ],
+
+                    ],
+                    [
+                        'name' => 'T-shirt',
+                        'icon' => [
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-tshirt-cube', 'format_ludic')->out(),
+                            'imgalt' => 'T-shirt'
                         ],
 
                     ],
@@ -3047,6 +3006,164 @@ function format_ludic_get_default_skins_settings() {
                             [
                                 'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-duvet-star', 'format_ludic')->out(),
                                 'imgalt' => 'Star duvet'
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    // T-shirt
+                    [
+                        'name'      => 'Cube T-shirt',
+                        'cost'      => 10,
+                        'slot'      => 'T-shirt',
+                        'shopimage' => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-cube', 'format_ludic')->out(),
+                                'imgalt'  => 'Cube T-shirt',
+                            ],
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-f-cube', 'format_ludic')->out(),
+                                'imgalt'  => 'Cube T-shirt',
+                                'classes' => 'gender-female',
+                                'zindex'  => '12',
+                            ],
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-m-cube', 'format_ludic')->out(),
+                                'imgalt'  => 'Cube T-shirt',
+                                'classes' => 'gender-male',
+                                'zindex'  => '12',
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    [
+                        'name'      => 'Snake T-shirt',
+                        'cost'      => 20,
+                        'slot'      => 'T-shirt',
+                        'shopimage' => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-snake', 'format_ludic')->out(),
+                                'imgalt'  => 'Snake T-shirt',
+                            ],
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-f-snake', 'format_ludic')->out(),
+                                'imgalt'  => 'Snake T-shirt',
+                                'classes' => 'gender-female',
+                                'zindex'  => '12',
+                            ],
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-m-snake', 'format_ludic')->out(),
+                                'imgalt'  => 'Snake T-shirt',
+                                'classes' => 'gender-male',
+                                'zindex'  => '12',
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    [
+                        'name'      => 'Pigeon T-shirt',
+                        'cost'      => 30,
+                        'slot'      => 'T-shirt',
+                        'shopimage' => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-pigeon', 'format_ludic')->out(),
+                                'imgalt'  => 'Pigeon T-shirt',
+                            ],
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-f-pigeon', 'format_ludic')->out(),
+                                'imgalt'  => 'Pigeon T-shirt',
+                                'classes' => 'gender-female',
+                                'zindex'  => '12',
+                            ],
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-m-pigeon', 'format_ludic')->out(),
+                                'imgalt'  => 'Pigeon T-shirt',
+                                'classes' => 'gender-male',
+                                'zindex'  => '12',
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    [
+                        'name'      => 'Unicorn T-shirt',
+                        'cost'      => 40,
+                        'slot'      => 'T-shirt',
+                        'shopimage' => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-unicorn', 'format_ludic')->out(),
+                                'imgalt'  => 'Unicorn T-shirt',
+                            ],
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-f-unicorn', 'format_ludic')->out(),
+                                'imgalt'  => 'Unicorn T-shirt',
+                                'classes' => 'gender-female',
+                                'zindex'  => '12',
+                            ],
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-m-unicorn', 'format_ludic')->out(),
+                                'imgalt'  => 'Unicorn T-shirt',
+                                'classes' => 'gender-male',
+                                'zindex'  => '12',
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+                    [
+                        'name'      => 'Star T-shirt',
+                        'cost'      => 50,
+                        'slot'      => 'T-shirt',
+                        'shopimage' => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-star', 'format_ludic')->out(),
+                                'imgalt'  => 'Star T-shirt',
+                            ],
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-f-star', 'format_ludic')->out(),
+                                'imgalt'  => 'Star T-shirt',
+                                'classes' => 'gender-female',
+                                'zindex'  => '12',
+                            ],
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-m-star', 'format_ludic')->out(),
+                                'imgalt'  => 'Star T-shirt',
+                                'classes' => 'gender-male',
+                                'zindex'  => '12',
+                            ],
+                        ],
+                        'css'       => ''
+                    ],
+
+                    [
+                        'name'      => 'Game T-shirt',
+                        'cost'      => 60,
+                        'slot'      => 'T-shirt',
+                        'shopimage' => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-game', 'format_ludic')->out(),
+                                'imgalt'  => 'Game T-shirt',
+                            ],
+                        ],
+                        'images'    => [
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-f-game', 'format_ludic')->out(),
+                                'imgalt'  => 'Game T-shirt',
+                                'classes' => 'gender-female',
+                                'zindex'  => '12',
+                            ],
+                            [
+                                'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-tshirt-m-game', 'format_ludic')->out(),
+                                'imgalt'  => 'Game T-shirt',
+                                'classes' => 'gender-male',
+                                'zindex'  => '12',
                             ],
                         ],
                         'css'       => ''

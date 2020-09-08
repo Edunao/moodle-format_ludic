@@ -138,3 +138,10 @@ $string['confirmation-form-exit-content'] = 'Vous êtes en train d\'éditer un f
 $string['close-button-alt']            = 'Fermer';
 $string['confirmation-button-confirm'] = 'Confirmer';
 $string['confirmation-button-cancel']  = 'Annuler';
+
+// Skin
+$string['skin-activity-progress'] = 'Ce motivateur affiche la progression de l\'utilisateur au sein de l\'activité. 
+Il se base sur la note (ratio entre la note de l\'utilisateur et celle qu\'il est possible d\'obtenir au maximum pour créer un pourcentage) ou sur la complétion si l\'activité n\'est pas noté (100% si l\'activité est complétée, 0% sinon).';
+$string['skin-activity-score'] = 'Ce motivateur affiche un nombre de points gagnés par l\'utilisateur au sein de l\'activite.
+Le nombre de point dépend des réglages de l\'activité et du skin choisi : 
+ -  ';

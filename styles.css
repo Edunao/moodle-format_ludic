@@ -37,6 +37,10 @@
     padding: 5px;
 }
 
+.format-ludic .item.pre-selected{
+    border :2px dashed rgba(29,16,97, 0.44);
+}
+
 .format-ludic .item.selected {
     border: 3px dashed #1d1061;
     border-radius: 20px;
@@ -437,6 +441,7 @@
 
 #ludic-main-container.editmode > .container-items > .container-parents {
     width: 65%;
+    overflow: auto;
 }
 
 #ludic-main-container.editmode .container-properties {
@@ -481,10 +486,15 @@
 
 #ludic-main-container.editmode .overview-img-container {
     width: 100px;
+    border: 2px dashed black;
+    padding: 5px;
+    border-radius: 7px;
+    cursor: pointer;
 }
 
 #ludic-main-container.editmode .coursemodule {
     vertical-align: top;
+    cursor: pointer;
 }
 
 #ludic-main-container .children-title, #ludic-main-container .sections-container-title {
@@ -493,6 +503,7 @@
     color: #1D1061;
     padding: 3px 10px;
     width: 100%;
+    height: 30px;
 }
 
 #ludic-main-container.editmode .sections-container-title {
@@ -524,6 +535,8 @@
 #ludic-main-container.editmode .container-children.coursemodules .visibleifjs.addresourcemodchooser {
     display: none;
 }
+
+
 
 /* -----------------------------------------
     Form

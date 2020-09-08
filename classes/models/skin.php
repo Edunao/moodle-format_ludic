@@ -211,6 +211,39 @@ abstract class skin extends model {
     }
 
     /**
+     * @return array
+     */
+    public function get_skin_results(){
+        $results = $this->item->get_user_results();
+        $skinresults = [];
+
+        // Completion
+        // COMPLETION_DISABLED and COMPLETION_INCOMPLETE have the same state value, but COMPLETION_DISABLED has type = 0
+        if($results['completioninfo']->state === COMPLETION_DISABLED && $results['completioninfo']->type == 0){
+            $skinresults['completion'] = false;
+        } else if($results['completioninfo']->state == COMPLETION_COMPLETE || $results['completioninfo']->state == COMPLETION_COMPLETE_PASS){
+            $skinresults['completion'] = 1;
+        }else{
+            $skinresults['completion'] = 0;
+        }
+
+        // Grade
+        if ($results['gradeinfo']->grademax > 0) {
+            $skinresults['score'] = $results['gradeinfo']->proportion;
+        }else{
+            $skinresults['score'] = false;
+        }
+
+        // Weight
+        $skinresults['weight'] = $this->item->get_weight();
+
+        return $skinresults;
+
+
+       return $results;
+    }
+
+    /**
      * Get edit image.
      *
      * @return \stdClass

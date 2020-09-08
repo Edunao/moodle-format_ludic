@@ -103,7 +103,7 @@ class section extends model implements skinnable_interface {
             foreach ($coursemodules as $coursemodule) {
                 if ($coursemodule->id == $cmid) {
                     $coursemodule->order   = $order;
-                    $this->coursemodules[] = $coursemodule;
+                    $this->coursemodules[$cmid] = $coursemodule;
                 }
             }
         }
@@ -435,7 +435,7 @@ class section extends model implements skinnable_interface {
             $results          = $coursemodule->get_user_results();
             $resultsdetails[] = [
                 "cmid"    => $coursemodule->id,
-                "results" => $results
+                "results" => $results,
             ];
 
             $data = $results['completioninfo'];
@@ -500,8 +500,11 @@ class section extends model implements skinnable_interface {
      * @return array
      */
     public function get_collection_sequence() {
+
         $sequence = [];
+
         foreach ($this->sequence as $key => $id) {
+
             $sequence[$key + 1] = $id;
         }
         return $sequence;

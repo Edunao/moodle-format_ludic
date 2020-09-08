@@ -113,13 +113,6 @@ class collection extends \format_ludic\skin {
         $completioninfo = $this->get_completion_info();
         $sequence       = $this->get_collection_sequence();
 
-        // TODO Vérifier comment gérer le "perfect"
-        // ​​If the activities have all been completed, then the final image is displayed.
-        //if ($completioninfo['perfect']) {
-        //    $images[] = $this->get_properties('finalimage');
-        //    return $images;
-        //}
-
         // From now this indicator is useless.
         unset($completioninfo['perfect']);
 
@@ -139,20 +132,15 @@ class collection extends \format_ludic\skin {
         srand($this->item->dbrecord->id);
         shuffle($stampimages);
 
-        // For each state of completion.
+        // Get stamp for each completed activity activity
         foreach ($completioninfo as $completionkey => $completion) {
-            // For each item in sequence.
-            foreach ($completion['sequence'] as $id) {
-                // Find index.
-                $index = $sequence[$id];
-
-                // Find config related to this index.
+            foreach ($completion['sequence'] as $cmid) {
+                if(!array_key_exists($cmid, $sequence)){
+                    continue;
+                }
+                $index = $sequence[$cmid];
                 $stamp = $stampimages[$index];
-
-                // Take image with current item state.
                 $image = $stamp->$completionkey;
-
-                // Add image with class.
                 $image->class   = 'img-step img-step-' . $index;
                 $images[$index] = $image;
             }
@@ -164,34 +152,46 @@ class collection extends \format_ludic\skin {
     }
 
     /**
-     * Get cm order excluding cm without completion
-     *
-     * @return array
+     * Get list of activity with
+     * @return array|null
      * @throws \coding_exception
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    private function get_collection_sequence() {
-        $sectionsequence = array_flip($this->item->get_collection_sequence());
-        $completioninfo  = $this->get_completion_info();
-        unset($completioninfo['perfect']);
+    public function get_collection_sequence(){
+        $coursemodules = $this->item->get_course_modules();
+        $sequence = $this->item->sequence;
 
-        $tempseq = [];
-        foreach ($completioninfo as $completionkey => $completion) {
-            foreach ($completion['sequence'] as $cmid) {
-                $tempseq[$sectionsequence[$cmid]] = $cmid;
+        $collectionsequence = [];
+        $i = 1;
+        foreach ($sequence as $index => $cmid){
+            if(!array_key_exists($cmid,$coursemodules)){
+                continue;
             }
-        }
-        ksort($tempseq);
+            $cm = $coursemodules[$cmid];
+            $cmresults = $cm->skin->get_skin_results();
 
-        $sequence = [];
-        $i        = 1;
-        foreach ($tempseq as $index => $cmid) {
-            $sequence[$cmid] = $i;
+            // If cm has no completion, ignore it
+            if($cmresults['completion'] === false){
+                continue;
+            }
+            // If cm weight is 0, ignore it
+            if($cmresults['weight'] == 0){
+                continue;
+            }
+
+            // If not visible, ignore it
+            if($cm->visible != 1){
+                continue;
+            }
+
+            $collectionsequence[$i] = $cm->id;
             $i++;
         }
 
-        return $sequence;
+        ksort($collectionsequence);
+
+        return array_flip($collectionsequence);
     }
 
     /**
