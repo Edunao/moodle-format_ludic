@@ -31,23 +31,18 @@ class collection extends \format_ludic\skin {
     public static function get_editor_config() {
         return [
             "settings"   => [
-                "name"        => "text",
-                "main-css"    => "css",
-                "description" => "text",
+                "title"        => "text",
+                "description" => "textarea",
+                "css"         => "textarea",
             ],
             "properties" => [
-                "base-image"  => "image",
-                "final-image" => "image"
+                "baseimage"  => "image",
+                "finalimage" => "image",
+                "stampimages" => [
+                    "image-off" => "image",
+                    "image-on"  => "image"
+                ]
             ],
-            "steps"      => [
-                "index"                    => "int",
-                "completion-incomplete"    => "image",
-                "completion-complete"      => "image",
-                "completion-complete-pass" => "image",
-                "completion-complete-fail" => "image",
-                "step-text"                => "text",
-                "step-css"                 => "css"
-            ]
         ];
     }
 
@@ -61,7 +56,7 @@ class collection extends \format_ludic\skin {
             'location'    => 'section',
             'type'        => 'collection',
             'title'       => 'Collection de tampons',
-            'description' => 'Chaque activité fait gagner des tampons',
+            'description' => get_string('skin-section-collection', 'format_ludic'),
             'settings'    => self::get_editor_config(),
         ];
     }
@@ -124,8 +119,8 @@ class collection extends \format_ludic\skin {
         // Ensure to order stamps by index.
         $stamps      = $this->get_properties('stampimages');
         $stampimages = [];
-        foreach ($stamps as $stamp) {
-            $stampimages[$stamp->index] = $stamp;
+        foreach ($stamps as $index => $stamp) {
+            $stampimages[$index] = $stamp;
         }
 
         // Randomize stamp order
@@ -133,14 +128,26 @@ class collection extends \format_ludic\skin {
         shuffle($stampimages);
 
         // Get stamp for each completed activity activity
+        $completionkeymap = [
+            'completion-incomplete'    => 'off',
+            'completion-complete-fail' => 'off',
+            'completion-complete'      => 'on',
+            'completion-complete-pass' => 'on',
+        ];
         foreach ($completioninfo as $completionkey => $completion) {
             foreach ($completion['sequence'] as $cmid) {
-                if(!array_key_exists($cmid, $sequence)){
+                if (!array_key_exists($cmid, $sequence)) {
                     continue;
                 }
-                $index = $sequence[$cmid];
-                $stamp = $stampimages[$index];
-                $image = $stamp->$completionkey;
+                $imgstate = 'image-' . $completionkeymap[$completionkey];
+                $index    = $sequence[$cmid];
+
+                // Check if we have enough stamp for each activity, if not, get an already used stamp
+                if (!array_key_exists($index, $stampimages)) {
+                    $index = rand(0, (count($stampimages) - 1));
+                }
+                $stamp          = $stampimages[$index];
+                $image          = $stamp->$imgstate;
                 $image->class   = 'img-step img-step-' . $index;
                 $images[$index] = $image;
             }
@@ -153,35 +160,36 @@ class collection extends \format_ludic\skin {
 
     /**
      * Get list of activity with
+     *
      * @return array|null
      * @throws \coding_exception
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function get_collection_sequence(){
+    public function get_collection_sequence() {
         $coursemodules = $this->item->get_course_modules();
-        $sequence = $this->item->sequence;
+        $sequence      = $this->item->sequence;
 
         $collectionsequence = [];
-        $i = 1;
-        foreach ($sequence as $index => $cmid){
-            if(!array_key_exists($cmid,$coursemodules)){
+        $i                  = 1;
+        foreach ($sequence as $index => $cmid) {
+            if (!array_key_exists($cmid, $coursemodules)) {
                 continue;
             }
-            $cm = $coursemodules[$cmid];
+            $cm        = $coursemodules[$cmid];
             $cmresults = $cm->skin->get_skin_results();
 
             // If cm has no completion, ignore it
-            if($cmresults['completion'] === false){
+            if ($cmresults['completion'] === false) {
                 continue;
             }
             // If cm weight is 0, ignore it
-            if($cmresults['weight'] == 0){
+            if ($cmresults['weight'] == 0) {
                 continue;
             }
 
             // If not visible, ignore it
-            if($cm->visible != 1){
+            if ($cm->visible != 1) {
                 continue;
             }
 

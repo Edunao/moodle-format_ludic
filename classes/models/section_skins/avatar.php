@@ -142,11 +142,31 @@ class avatar extends \format_ludic\skin {
 
     public function get_user_money() {
         $useritems   = $this->get_user_items_data();
-        $userresults = $this->item->get_user_results();
-        $totalmoney = 1000;
+        $totalmoney = 0;
+
+        $cms = $this->item->get_course_modules();
+        foreach($cms as $cm){
+            $cmresults = $cm->skin->get_skin_results();
+            if($cmresults['completion'] === false && $cmresults['score'] === false){
+                continue;
+            }
+
+            // Get score from grade and weight
+            if($cmresults['score'] !== false){
+                $totalmoney += $cmresults['score'] * $cmresults['weight'] / 10;
+                continue;
+            }
+
+            // If we not have grade, use completion
+            $totalmoney += $cmresults['completion'] * $cmresults['weight'] / 10;
+        }
 
         foreach ($useritems as $itemid => $useritem) {
             $totalmoney -= $useritem->cost;
+        }
+
+        if($totalmoney < 0){
+            $totalmoney = 0;
         }
 
         return $totalmoney;
@@ -278,6 +298,7 @@ class avatar extends \format_ludic\skin {
         $htmls = [];
 
         // Prepare shop
+        $money = $this->get_user_money();
         $useritems = $this->get_user_items_data();
         $slotsdata = $this->get_properties('slots');
         $itemsdata = $this->get_properties('items');
@@ -303,6 +324,8 @@ class avatar extends \format_ludic\skin {
                 if ($useritems[$itemid]->equipped == true) {
                     $itemdata->state = 'equipped';
                 }
+            }else if($itemdata->cost > $money){
+                $itemdata->cantbuy = true;
             }
 
             $itemdata->sectionid               = $this->item->dbrecord->id;

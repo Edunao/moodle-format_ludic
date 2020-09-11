@@ -238,7 +238,7 @@ class format_ludic_header_bar implements renderable {
      * @throws moodle_exception
      */
     private function get_teacher_options_list() {
-        global $OUTPUT, $CFG;
+        global $OUTPUT, $CFG, $PAGE;
         // Initialize list.
         $list = [];
 
@@ -284,21 +284,38 @@ class format_ludic_header_bar implements renderable {
 
             $list[] = $switchoption;
 
-            // Edit skins
-            // TODO WIP
-            if(!$isstudent){
-                $editname   = 'Edit skins';
-                $editicon   = $OUTPUT->image_url('i/settings')->out();
-                $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
-                $editoption = [
-                    'action'  => 'getDataLinkAndRedirectTo',
-                    'link'    => $editlink,
-                    'iconsrc' => $editicon,
-                    'iconalt' => $editname,
-                    'name'    => $editname,
-                ];
 
-                $list[] = $editoption;
+            if(!$isstudent){
+
+                // Edit skins
+               if(strpos($PAGE->pagetype, 'edit_skins') === false){
+                   $editname   = get_string('editskins', 'format_ludic');
+                   $editicon   = $OUTPUT->image_url('i/settings')->out();
+                   $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
+                   $editoption = [
+                       'action'  => 'getDataLinkAndRedirectTo',
+                       'link'    => $editlink,
+                       'iconsrc' => $editicon,
+                       'iconalt' => $editname,
+                       'name'    => $editname,
+                   ];
+
+                   //$list[] = $editoption;
+               }else{
+                   // Edit course
+                   $editname   = get_string('editcourse', 'format_ludic');
+                   $editicon   = $OUTPUT->image_url('i/settings')->out();
+                   $editlink   = $CFG->wwwroot . '/course/view.php?id=' . $courseid;
+                   $editoption = [
+                       'action'  => 'getDataLinkAndRedirectTo',
+                       'link'    => $editlink,
+                       'iconsrc' => $editicon,
+                       'iconalt' => $editname,
+                       'name'    => $editname,
+                   ];
+                   $list[] = $editoption;
+               }
+
             }
 
         }

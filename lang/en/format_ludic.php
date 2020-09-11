@@ -41,6 +41,8 @@ $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and b
 
 // Skins edition
 $string['edit-skins-title'] = 'Edition des skins';
+$string['skins-types-list'] = 'Skins types';
+$string['skins-list'] = 'Skins';
 
 // Header bar.
 $string['header-bar-preview-section'] = 'Preview section';
@@ -97,6 +99,14 @@ $string['cm-skin-stealth-description'] = 'Allows labels and other such activitie
 $string['cs-skin-noludic-title']       = 'No ludic';
 $string['cs-skin-noludic-description'] = 'No ludification.';
 $string['label-skin-selection']        = 'Appearance';
+$string['skin-activity-progress'] = 'Ce motivateur affiche la progression de l\'utilisateur au sein de l\'activité. 
+Il se base sur la note (ratio entre la note de l\'utilisateur et celle qu\'il est possible d\'obtenir au maximum pour créer un pourcentage) ou sur la complétion si l\'activité n\'est pas noté (100% si l\'activité est complétée, 0% sinon).
+Il est possible de choisir des images différentes pour chaque pallier (ex : 1%, 50%, 100%), et d\afficher le pourcentage de progression.';
+$string['skin-activity-score'] = 'Ce motivateur affiche un nombre de points gagnés par l\'utilisateur au sein de l\'activite.
+Le nombre de point dépend des réglages de l\'activité et du skin choisi : 
+ -  ';
+$string['skin-section-collection'] = "Ce motivateur affiche à l'utilisateur un ensemble d'images en fonction de ses réussites aux activités. 
+Il se base sur la complétion des activités uniquement : une activité complété = une image supplémentaire, en puisant aléatoirement dans la base des images.";
 
 // Settings.
 $string['setting-weight-title']       = 'Poids des activités.';
@@ -124,6 +134,9 @@ $string['duplicate']     = 'Duplicate';
 $string['delete']        = 'Delete';
 $string['assign']        = 'Assign roles';
 $string['collapsed-alt'] = 'Collapsed';
+$string['editskins']     = 'Edit skins';
+$string['editcourse']    = 'Edit course';
+
 
 // Popups.
 $string['confirmation-popup-title']   = 'Confirmation';
@@ -139,9 +152,3 @@ $string['close-button-alt']            = 'Fermer';
 $string['confirmation-button-confirm'] = 'Confirmer';
 $string['confirmation-button-cancel']  = 'Annuler';
 
-// Skin
-$string['skin-activity-progress'] = 'Ce motivateur affiche la progression de l\'utilisateur au sein de l\'activité. 
-Il se base sur la note (ratio entre la note de l\'utilisateur et celle qu\'il est possible d\'obtenir au maximum pour créer un pourcentage) ou sur la complétion si l\'activité n\'est pas noté (100% si l\'activité est complétée, 0% sinon).';
-$string['skin-activity-score'] = 'Ce motivateur affiche un nombre de points gagnés par l\'utilisateur au sein de l\'activite.
-Le nombre de point dépend des réglages de l\'activité et du skin choisi : 
- -  ';

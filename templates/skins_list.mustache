@@ -18,4 +18,7 @@ along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 {{#skins}}
     {{> format_ludic/item}}
 {{/skins}}
-<div class="ludic-container container-children skin-types-list"></div>
+<div class="ludic-container container-children skin-types-list">
+    <div class="children-title">{{# str }}skins-list, format_ludic{{/ str }}</div>
+    <div class="children-elements">{{{childrencontent}}}</div>
+</div>

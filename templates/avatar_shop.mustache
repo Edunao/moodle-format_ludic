@@ -34,11 +34,19 @@ along with Moodle.  If not, see
                     <div class="slot-item-buy" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                          data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar"
                     >
+                        {{^cantbuy}}
                         <div class="slot-item-price" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                              data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar">{{cost}}
                         </div>
                         <div class="slot-item-price-text" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
                              data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar">Buy now !</div>
+                        {{/cantbuy}}
+
+                        {{#cantbuy}}
+                        <div class="slot-item-price cant-buy" data-sectionid="{{sectionid}}" data-itemname="{{name}}">{{cost}}</div>
+                        <div class="slot-item-price-text cant-buy" data-sectionid="{{sectionid}}" data-itemname="{{name}}"
+                             data-slotname="{{slot}}">Not enough money !</div>
+                        {{/cantbuy}}
                     </div>
 
                     <div class="slot-item-equipped ludic-switch" data-sectionid="{{sectionid}}" data-itemname="{{name}}"

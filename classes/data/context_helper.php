@@ -1018,14 +1018,21 @@ class context_helper {
         //    $skins[$uniquename] = $skin;
         //}
 
-        $noludic                                                          = \format_ludic\section\noludic::get_instance();
-        $skins[\format_ludic\section\noludic::get_unique_name()]          = $noludic;
+
+
+        // Cm
+        $noludic                                                          = \format_ludic\coursemodule\inline::get_instance();
+        $skins[\format_ludic\coursemodule\inline::get_unique_name()]         = $noludic;
 
         $score                                                            = \format_ludic\coursemodule\score::get_instance();
         $skins[\format_ludic\coursemodule\score::get_unique_name()]       = $score;
 
         $progress = \format_ludic\coursemodule\progress::get_instance();
         $skins[\format_ludic\coursemodule\progress::get_unique_name()]       = $progress;
+
+        // Section
+        $noludic                                                          = \format_ludic\section\noludic::get_instance();
+        $skins[\format_ludic\section\noludic::get_unique_name()]          = $noludic;
 
         $sectionscore                                                     = \format_ludic\section\score::get_instance();
         $skins[\format_ludic\section\score::get_unique_name()]            = $sectionscore;

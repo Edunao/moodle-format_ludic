@@ -35,7 +35,6 @@ class format_ludic_form_element implements renderable {
     public $class;
     public $attributes;
     public $specific;
-
     public $placeholder;
     public $autofocus;
     public $disabled;
@@ -51,6 +50,7 @@ class format_ludic_form_element implements renderable {
         $this->id         = $element->id;
         $this->name       = $element->name;
         $this->attributes = $element->attributes;
+
         $this->specific   = $element->specific;
 
         $this->value        = $element->value;

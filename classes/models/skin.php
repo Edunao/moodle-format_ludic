@@ -35,6 +35,9 @@ abstract class skin extends model {
     public $steps;
     public $selected;
     public $item;
+    public $skinid;
+    public $id;
+
 
     private $weight  = null;
     private $results = null;
@@ -53,12 +56,17 @@ abstract class skin extends model {
         $this->type        = isset($skin->type) ? $skin->type : null;
         $this->title       = isset($skin->title) ? $skin->title : null;
         $this->description = isset($skin->description) ? $skin->description : null;
-        $this->properties  = isset($skin->properties) ? $skin->properties : null;
+        $this->properties  = isset($skin->properties) ? $skin->properties : new \stdClass();
         $this->maincss     = isset($skin->properties->css) ? $skin->properties->css : null;
+        $this->id          = isset($skin->id) ? $skin->id : null;
 
         $this->steps  = isset($skin->properties->steps) ? $skin->properties->steps : [];
         $this->item   = $item;
         $this->skinid = $this->get_unique_name();
+
+        $this->properties->title = $this->title;
+        $this->properties->description = $this->description;
+
     }
 
     public static function get_unique_name() {
@@ -124,6 +132,8 @@ abstract class skin extends model {
 
         // Ensure properties is array.
         $properties = !empty($this->properties) ? get_object_vars($this->properties) : [];
+
+        // Add title and description has properties
 
         // Name is defined : return property only.
         if ($name != null) {
@@ -214,22 +224,32 @@ abstract class skin extends model {
      * @return array
      */
     public function get_skin_results(){
-        $results = $this->item->get_user_results();
+        if($this->item === null){
+            return [
+                'completion' => false,
+                'score' => false,
+                'weight' => 0
+            ];
+        }
+
+        if($this->results === null){
+            $this->results = $this->item->get_user_results();
+        }
         $skinresults = [];
 
         // Completion
         // COMPLETION_DISABLED and COMPLETION_INCOMPLETE have the same state value, but COMPLETION_DISABLED has type = 0
-        if($results['completioninfo']->state === COMPLETION_DISABLED && $results['completioninfo']->type == 0){
+        if($this->results['completioninfo']->state === COMPLETION_DISABLED && $this->results['completioninfo']->type == 0){
             $skinresults['completion'] = false;
-        } else if($results['completioninfo']->state == COMPLETION_COMPLETE || $results['completioninfo']->state == COMPLETION_COMPLETE_PASS){
+        } else if($this->results['completioninfo']->state == COMPLETION_COMPLETE || $this->results['completioninfo']->state == COMPLETION_COMPLETE_PASS){
             $skinresults['completion'] = 1;
         }else{
             $skinresults['completion'] = 0;
         }
 
         // Grade
-        if ($results['gradeinfo']->grademax > 0) {
-            $skinresults['score'] = $results['gradeinfo']->proportion;
+        if ($this->results['gradeinfo']->grademax > 0) {
+            $skinresults['score'] = $this->results['gradeinfo']->proportion;
         }else{
             $skinresults['score'] = false;
         }
@@ -302,4 +322,22 @@ abstract class skin extends model {
         return '';
     }
 
+
+    public function get_edit_buttons() {
+        global $CFG;
+
+
+        return [
+            [
+                'identifier' => 'form-save',
+                'action'     => 'saveForm',
+                'order'      => 1
+            ],
+            [
+                'identifier' => 'form-revert',
+                'action'     => 'revertForm',
+                'order'      => 2
+            ]
+        ];
+    }
 }

@@ -138,8 +138,13 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_edit_skins_form($courseid, $skin) {
+        $output = '';
         $form = new \format_ludic\edit_skins_form($courseid, $skin);
-        return $form->render();
+        $output .= $form->render();
+        $editbuttons = $skin->get_edit_buttons();
+        $output .= $this->render_buttons($editbuttons, $skin->id, 'skin');
+
+        return $output;
     }
 
     /**

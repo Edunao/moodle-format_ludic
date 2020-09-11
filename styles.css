@@ -37,8 +37,8 @@
     padding: 5px;
 }
 
-.format-ludic .item.pre-selected{
-    border :2px dashed rgba(29,16,97, 0.44);
+.format-ludic .item.pre-selected {
+    border: 2px dashed rgba(29, 16, 97, 0.44);
 }
 
 .format-ludic .item.selected {
@@ -60,11 +60,11 @@
     width: 100%;
 }
 
-.format-ludic .label-content-container{
+.format-ludic .label-content-container {
     color: #1d1061;
 }
 
-.format-ludic .label-content-container .no-overflow >  p {
+.format-ludic .label-content-container .no-overflow > p {
     margin-bottom: 0;
 }
 
@@ -256,6 +256,11 @@
 
 .format-ludic .item .skin-type-avatar .skin-tile .skin-text.skin-hidden-text.cash {
     display: block;
+}
+
+.skin-type-avatar .slot-item .slot-item-state .cant-buy{
+    cursor: not-allowed;
+    color: #a7a4a4;
 }
 
 .skin-type-avatar .slot-item-name,
@@ -537,7 +542,6 @@
 }
 
 
-
 /* -----------------------------------------
     Form
  */
@@ -552,6 +556,10 @@
     width: 100%;
 }
 
+.ludic-form-group textarea {
+    width: 100%;
+}
+
 #ludic-main-container .container-form .ludic-form .ludic-form-group .select-description .option-description {
     display: none
 }
@@ -563,6 +571,7 @@
 #ludic-main-container .container-properties .container-buttons {
     text-align: center;
 }
+
 
 #ludic-main-container .container-properties .container-buttons > .dropdown,
 #ludic-main-container .container-properties .container-buttons > .btn {

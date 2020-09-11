@@ -66,7 +66,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                 // Click on last item clicked in order to keep navigation.
                 ludic.clickOnLastItemClicked();
+            }
 
+            if(ludic.editMode){
                 // Set correct height for left content
                 ludic.setEditContentHeight();
             }
@@ -99,7 +101,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             // Click on element with data-action attribute.
             // Exclude not ludic element, because plugin like quiz use data-action
-            $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar').on('click', '[data-action]', function (e) {
+            $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar, #page-course-format-ludic-edit_skins').on('click', '[data-action]', function (e) {
                 console.log('test : ', $(this), $(e.target), $(this).is(e.target))
 
                 if (!$(this).is(e.target)) {
@@ -1246,7 +1248,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             console.log('displaySkinTypesHtml ', ' /// callback => ', callback);
 
             // Skins list
-            let container = $('.edit-skins-view > .container-items > .container-parents .skin-types-list');
+            let container = $('.edit-skins-view > .container-items > .container-parents .skin-types-list > .children-elements');
             if (html) {
                 ludic.addLoading(container);
                 container.html(html);
@@ -1318,7 +1320,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             console.log('displaySkinsList html => ', html, ' /// callback => ', callback);
 
             // Skins list
-            let container = $('.edit-skins-view > .container-items > .container-parents');
+            let container = $('.edit-skins-view > .container-items > .container-parents > .children-elements');
             if (html) {
 
                 ludic.addLoading(container);
@@ -1389,10 +1391,10 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
         setEditContentHeight: function () {
             var bodyheight = $(window).height();
-            var paneloffset = $('#ludic-main-container.editmode.edit-view').offset();
+            var paneloffset = $('#ludic-main-container.editmode').offset();
             var panelheight = bodyheight - paneloffset.top - 32;
-            $('#ludic-main-container.editmode.edit-view').css('min-height', panelheight + 'px');
-            $('#ludic-main-container.editmode.edit-view > .ludic-container.container-items > .ludic-container.container-parents').css('max-height', panelheight);
+            $('#ludic-main-container.editmode').css('min-height', panelheight + 'px');
+            $('#ludic-main-container.editmode > .ludic-container.container-items > .ludic-container.container-parents').css('max-height', panelheight);
         },
 
         /**

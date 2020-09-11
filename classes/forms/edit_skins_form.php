@@ -33,55 +33,144 @@ require_once 'form.php';
 
 class edit_skins_form extends form {
     private $skin;
+    private $courseid;
 
     public function __construct($courseid, $skin) {
-        parent::__construct('course', $courseid);
+        parent::__construct('skin', $skin->id);
         $this->skin     = $skin;
-        $this->object   = $this->contexthelper->get_course_by_id($courseid);
+        $this->object   = $skin;
+        $this->courseid = $courseid;
         $this->elements = $this->get_definition();
     }
 
     public function get_definition() {
 
-        // Course id.
-        $id         = $this->object->id;
-        $elements[] = new hidden_form_element('id', 'course-id', $id, 0);
 
-        // Skin
-        $id         = $this->skin->get_unique_name();
-        $elements[] = new hidden_form_element('skinid', 'skin-id', $id, 0);
+        // Course id.
+        $courseid         = $this->courseid;
+        $elements[] = new hidden_form_element('courseid', 'course-id', $courseid, 0);
+
+        // Skin type id
+        $skintypeid         = $this->skin->get_unique_name();
+        $elements[] = new hidden_form_element('skintypeid', 'skintype-id', $skintypeid, 0);
+
+        // Skin id
+        $skinid         = $this->skin->id;
+        $elements[] = new hidden_form_element('id', 'id', $skinid, 0);
 
         // Skin settings
         $settings = $this->skin->get_editor_config();
-
+//print_object($settings);
         foreach ($settings as $section => $options) {
+//    public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
+            foreach ($options as $elementname => $elementtype) {
+                if(is_array($elementtype)){
+                    //print_object('array !');
 
-            if ($section == 'steps') {
-                continue;
-            }
+                    // Parcourir les settings et faire une enveloppe vide qu'on pourra copier
+                    $index = 0;
+                    $groupname = $elementname;
+                    foreach ($elementtype as $subname => $subtype){
+                        $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, false));
+                    }
 
-            foreach ($options as $elementname => $type) {
-                switch ($type) {
-                    case 'int':
-                        $elements[] = new number_form_element($elementname, $elementname, '', '', $elementname);
-                        break;
-                    case 'css':
-                        $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname);
-                        break;
-                    case 'image':
-                        //$elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname);
-                        break;
-                    default:
-                        break;
+                    $groupvalue = $this->skin->get_properties($groupname);
+                    foreach($groupvalue as $index => $subelements){
+                        foreach ($elementtype as $subname => $subtype){
+                            $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
+                        }
+                    }
+
+                    // Parcourir les propriétés pour créer les enveloppes pleines, chaque enveloppe devra pouvoir être supprimés
+
+                    // On doit pouvoir ajouter une enveloppe vide
+
+                    // TODO add empty elements to duplicate
+                }else{
+                    $elements = array_merge($elements, $this->get_element($elementname, $elementtype));
                 }
+
             }
 
         }
 
-        $elements[] = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
+        //$elements[] = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
 
         return $elements;
 
+    }
+
+    private function get_group_element($groupname, $elementname, $elementtype, $index){
+        $elements = [];
+        $groupvalue = $this->skin->get_properties($groupname);
+//print_object($groupvalue);
+        $currentvalue = '';
+        if($index !== false) {
+            $currentvalue = $groupvalue[$index];
+        }else{
+            $index = 'empty';
+        }
+
+        $elementname = $groupname.'_' .$elementname . '_' . $index;
+
+        // Parcourir les settings et faire une enveloppe vide qu'on pourra copier
+
+        // Parcourir les propriétés pour créer les enveloppes pleines, chaque enveloppe devra pouvoir être supprimés
+
+        // On doit pouvoir ajouter une enveloppe vide
+        $attributes = ['data-group' => $groupname, 'data-name' => $elementname , 'data-index' => $index];
+        switch ($elementtype) {
+            case 'text':
+                $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementname,$attributes);
+                break;
+            case 'textarea':
+                $elements[]    = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementname, array_merge($attributes,['rows' => 5]));
+                break;
+            case 'int':
+                $elements[] = new number_form_element($elementname, $elementname, '', '', $elementname, $attributes);
+                break;
+            case 'css':
+                $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname, $attributes);
+                break;
+            case 'image':
+                //$elements[] = new filepicker_form_element($elementname, $elementname, null, null, 'section filepicker label', ['required' => true]);
+                $elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname, ['required' => true, 'data-test' => 'coucou'], ['required' => true]);
+                break;
+            default:
+                break;
+        }
+
+        return $elements;
+    }
+
+    private function get_element($elementname, $elementtype){
+        $elements = [];
+        // Get current value
+        $currentvalue = $this->skin->get_properties($elementname);
+        //print_object('name ' . $elementname);
+        //print_object($currentvalue);
+
+        switch ($elementtype) {
+            case 'text':
+                $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementname);
+                break;
+            case 'textarea':
+                $elements[]    = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementname, ['rows' => 5]);
+                break;
+            case 'int':
+                $elements[] = new number_form_element($elementname, $elementname, '', '', $elementname);
+                break;
+            case 'css':
+                $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname);
+                break;
+            case 'image':
+                $elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname);
+                break;
+            default:
+                break;
+        }
+
+        return $elements;
     }
 
     /**

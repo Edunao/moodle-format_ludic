@@ -55,7 +55,11 @@ class skin_controller extends controller_base {
             case 'get_skin_types_form':
                 $skintypeid = $this->get_param('id');
                 return $this->get_skin_types_form($skintypeid);
-
+            case 'validate_form' :
+                $skinid = $this->get_param('id', PARAM_INT);
+                $courseid = $this->get_param('courseid', PARAM_INT);
+                $data = $this->get_param('data');
+                return $this->validate_form($courseid, $skinid, $data);
             // Avatar action
             case 'avatar_buy_item' :
                 $sectionid = $this->get_param('sectionid');
@@ -192,7 +196,52 @@ class skin_controller extends controller_base {
 
         $skintype = $this->contexthelper->get_skin_type_by_id($skintypeid);
 
-        return $renderer->render_edit_skins_form($COURSE->id, $skintype);
+        $output = '';
+
+        $output .= $renderer->render_edit_skins_form($COURSE->id, $skintype);
+
+
+
+        return $output;
+    }
+
+    /**
+     * Validate form.
+     * If everything is valid => update and return a success message.
+     * Else does not update and return an error message.
+     *
+     * @param $cmid
+     * @param $data
+     * @return false|string
+     * @throws \coding_exception
+     * @throws \dml_exception
+     * @throws \moodle_exception
+     */
+    public function validate_form($courseid, $skin, $data) {
+
+        // Create form.
+        //$form = new edit_skins_form($courseid, $skin);
+
+        print_object($data);
+
+        //// Update successful or errors ?
+        //$success = $form->validate_and_update($data);
+        //
+        //// Define return.
+        //if ($success) {
+        //    $return = array(
+        //        'success' => 1,
+        //        'value'   => $form->get_success_message()
+        //    );
+        //} else {
+        //    $return = array(
+        //        'success' => 0,
+        //        'value'   => $form->get_error_message()
+        //    );
+        //}
+
+        // Return a json encode array with success and message.
+        //return json_encode($return);
     }
 
     /*********************************
