@@ -560,6 +560,9 @@ class format_ludic_renderer extends format_section_renderer_base {
             $output .= '<div class="sections-container-title">'.get_string('edit-title-section', 'format_ludic').'</div>';
         }
         foreach ($sections as $section) {
+            if(!$this->contexthelper->is_editing() && !$section->visible){
+                continue;
+            }
             $output .= $this->render_section($section);
         }
 

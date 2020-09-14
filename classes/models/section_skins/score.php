@@ -123,8 +123,7 @@ class score extends \format_ludic\skin {
             'imgalt'     => '',
         ];
 
-        $gradeinfo       = $this->get_grade_info();
-        $gradeproportion = $gradeinfo->proportion;
+        $nextstep = null;
 
         // Copy steps into an associative array, indexed by threshold and calculate the total value parts score.
         $sortedsteps = [];
@@ -147,17 +146,34 @@ class score extends \format_ludic\skin {
             $sortedsteps          = [0 => $firststep] + $sortedsteps;
         }
 
+        // Get user score
+        $coursemodules = $this->item->get_course_modules();
+        $score         = 0;
+        foreach ($coursemodules as $cm) {
+            $cmresults = $cm->skin->get_skin_results();
+            if ($cmresults['score'] === false || $cmresults['weight'] === 0) {
+                continue;
+            }
+
+            if(isset($cmresults['scorehasweight']) && $cmresults['scorehasweight']){
+                $score += $cmresults['score'];
+            }else{
+                $score += $cmresults['score'] * $cmresults['weight'];
+            }
+        }
+
         // Find current step.
         foreach ($sortedsteps as $step) {
-            if (($gradeproportion * 100) >= $step->threshold) {
+            if ($score >= $step->threshold) {
                 $currentstep = $step;
+            }else if(is_null($nextstep)){
+                $nextstep = $step;
             }
         }
 
         // Set data.
-        $currentstep->proportion = $gradeproportion;
-        $currentstep->score      = $gradeinfo->score;
-        $currentstep->scoremax   = $gradeinfo->scoremax;
+        $currentstep->nextthreahold = isset($nextstep->threshold) ? $nextstep->threshold : null;
+        $currentstep->score         = $score;
 
         // Return step.
         $this->currentstep = $currentstep;
@@ -203,24 +219,17 @@ class score extends \format_ludic\skin {
     public function get_texts_to_render() {
         $step = $this->get_current_step();
         return [
-            ['text'  => $step->score . '<span class="unit">pts</span>',
-             'class' => 'score number'
+            [
+                'text'  => $step->score . '<span class="unit">pts</span>',
+                'class' => 'score number'
             ],
             [
                 'text'  => '/',
                 'class' => 'fractionbar unit'
             ],
             [
-                'text'  => $step->scoremax,
-                'class' => 'scoremax number'
-            ],
-            [
-                'text'  => $step->score . '/' . $step->scoremax,
-                'class' => 'fullscore number'
-            ],
-            [
-                'text'  => $step->proportion . '<span class="unit">%</span>',
-                'class' => 'percentage number'
+                'text'  => (!is_null($step->nextthreahold) ? $step->nextthreahold  . '<span class="unit">pts</span>' : ''),
+                'class' => 'next-threahold number'
             ],
             [
                 'text'  => isset($step->extratext) ? $step->extratext : '',

@@ -48,7 +48,7 @@ abstract class skin extends model {
      * skin constructor.
      *
      * @param $skin
-     * @param course_module|section $item
+     * @param skin $item
      */
     public function __construct($skin, $item = null) {
         parent::__construct($skin);
@@ -324,8 +324,7 @@ abstract class skin extends model {
 
 
     public function get_edit_buttons() {
-        global $CFG;
-
+        global $COURSE;
 
         return [
             [
@@ -337,6 +336,22 @@ abstract class skin extends model {
                 'identifier' => 'form-revert',
                 'action'     => 'revertForm',
                 'order'      => 2
+            ],
+            [
+                'identifier' => 'form-duplicate-skin',
+                'action'     => 'confirmAndDuplicateSkin',
+                'order'      => 3,
+                'attributes' => [
+                    'courseid' => $COURSE->id
+                ],
+            ],
+            [
+                'identifier' => 'form-delete-skin',
+                'action'     => 'confirmAndDeleteSkin',
+                'order'      => 4,
+                'attributes' => [
+                    'courseid' => $COURSE->id
+                ],
             ]
         ];
     }

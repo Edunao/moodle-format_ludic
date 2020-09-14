@@ -62,12 +62,21 @@ class format_ludic_header_bar implements renderable {
         $editmode             = $this->contexthelper->is_editing();
 
         // Sections
-        $course   = $this->contexthelper->get_course();
-        $this->sections = array_values($course->get_sections());
-        foreach($this->sections as $section){
-            $section->name = $section->name != '' ? $section->name : get_string('default-section-title', 'format_ludic', $section->section);
-            $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
+        if(!$editmode){
+            $course         = $this->contexthelper->get_course();
+            $this->sections = array_values($course->get_sections());
+            foreach ($this->sections as $key => $section) {
+                if (!$editmode && !$section->visible) {
+                    unset($this->sections[$key]);
+                    continue;
+                }
+                $section->name = $section->name != '' ? $section->name : get_string('default-section-title', 'format_ludic', $section->section);
+                $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
+            }
+
+            $this->sections = array_values($this->sections);
         }
+
 
         // Javascript parameters.
         $params = [
@@ -284,37 +293,38 @@ class format_ludic_header_bar implements renderable {
 
             $list[] = $switchoption;
 
+            if (!$isstudent) {
 
-            if(!$isstudent){
+                if(strpos($PAGE->pagetype, 'view-ludic') === false){
+                    // Edit course
+                    $editname   = get_string('editcourse', 'format_ludic');
+                    $editicon   = $OUTPUT->image_url('i/settings')->out();
+                    $editlink   = $CFG->wwwroot . '/course/view.php?id=' . $courseid;
+                    $editoption = [
+                        'action'  => 'getDataLinkAndRedirectTo',
+                        'link'    => $editlink,
+                        'iconsrc' => $editicon,
+                        'iconalt' => $editname,
+                        'name'    => $editname,
+                    ];
+                    $list[]     = $editoption;
+                }
 
                 // Edit skins
-               if(strpos($PAGE->pagetype, 'edit_skins') === false){
-                   $editname   = get_string('editskins', 'format_ludic');
-                   $editicon   = $OUTPUT->image_url('i/settings')->out();
-                   $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
-                   $editoption = [
-                       'action'  => 'getDataLinkAndRedirectTo',
-                       'link'    => $editlink,
-                       'iconsrc' => $editicon,
-                       'iconalt' => $editname,
-                       'name'    => $editname,
-                   ];
+                if (strpos($PAGE->pagetype, 'edit_skins') === false) {
+                    $editname   = get_string('editskins', 'format_ludic');
+                    $editicon   = $OUTPUT->image_url('i/settings')->out();
+                    $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
+                    $editoption = [
+                        'action'  => 'getDataLinkAndRedirectTo',
+                        'link'    => $editlink,
+                        'iconsrc' => $editicon,
+                        'iconalt' => $editname,
+                        'name'    => $editname,
+                    ];
 
-                   //$list[] = $editoption;
-               }else{
-                   // Edit course
-                   $editname   = get_string('editcourse', 'format_ludic');
-                   $editicon   = $OUTPUT->image_url('i/settings')->out();
-                   $editlink   = $CFG->wwwroot . '/course/view.php?id=' . $courseid;
-                   $editoption = [
-                       'action'  => 'getDataLinkAndRedirectTo',
-                       'link'    => $editlink,
-                       'iconsrc' => $editicon,
-                       'iconalt' => $editname,
-                       'name'    => $editname,
-                   ];
-                   $list[] = $editoption;
-               }
+                    $list[] = $editoption;
+                }
 
             }
 

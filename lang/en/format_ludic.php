@@ -126,6 +126,7 @@ $string['error-int-step']       = 'The value must be a multiple of {$a}.';
 // Buttons.
 $string['form-save']     = 'Save';
 $string['form-revert']   = 'Revert';
+$string['form-delete-skin'] = "Delete skin";
 $string['item-preview']  = 'Preview';
 $string['item-open']     = 'Open';
 $string['edit']          = 'Edit';

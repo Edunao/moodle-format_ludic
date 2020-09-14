@@ -60,6 +60,10 @@ class skin_controller extends controller_base {
                 $courseid = $this->get_param('courseid', PARAM_INT);
                 $data = $this->get_param('data');
                 return $this->validate_form($courseid, $skinid, $data);
+            case 'delete_skin':
+                $skinid = $this->get_param('id', PARAM_INT);
+                $courseid = $this->get_param('courseid', PARAM_INT);
+                return $this->delete_skin($courseid, $skinid);
             // Avatar action
             case 'avatar_buy_item' :
                 $sectionid = $this->get_param('sectionid');
@@ -242,6 +246,16 @@ class skin_controller extends controller_base {
 
         // Return a json encode array with success and message.
         //return json_encode($return);
+    }
+
+    public function delete_skin($courseid, $skinid){
+        // Check if skin exist and load it
+        print_object($this->contexthelper->get_skins_config());
+
+        // Check if skin is used => if used, return errors with number of activities
+
+
+        // If not used, purge course format option and file table
     }
 
     /*********************************

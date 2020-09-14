@@ -28,6 +28,7 @@
         {{#callback}} data-callback="{{callback}}"{{/callback}}
         {{#order}} data-order="{{order}}"{{/order}}
         {{#disabled}} disabled{{/disabled}}
+        {{{attributesstr}}}
         >
     {{#name}}{{name}}{{/name}}
     </button>
@@ -45,6 +46,7 @@
             {{#action}} data-action="{{action}}"{{/action}}
             {{#callback}} data-callback="{{callback}}"{{/callback}}
             {{#disabled}} disabled{{/disabled}}
+            {{{attributesstr}}}
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
         >
             {{#name}}{{name}}{{/name}}
@@ -62,6 +64,7 @@
                 {{#action}} data-action="{{action}}"{{/action}}
                 {{#callback}} data-callback="{{callback}}"{{/callback}}
                 {{#order}} data-order="{{order}}"{{/order}}
+                {{{attributesstr}}}
             >
                 {{#name}}{{name}}{{/name}}
             </a>

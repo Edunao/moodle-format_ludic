@@ -30,6 +30,9 @@ class score extends \format_ludic\skin {
 
     private $currentstep = null;
     private $nextstep    = null;
+    private $finalscore  = null;
+    private $maxgrade    = 0;
+    private $grade = 0;
 
     public static function get_editor_config() {
         return [
@@ -77,106 +80,52 @@ class score extends \format_ludic\skin {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function get_current_step() {
+    private function prepare_data() {
 
-        // We have a stored current step then return it.
-        if ($this->currentstep !== null) {
-            return $this->currentstep;
+        if ($this->finalscore !== null) {
+            return true;
         }
 
-        // Define default case.
-        $currentstep = (object) [
-            'threshold'  => 0,
-            'proportion' => 0,
-            'score'      => 0,
-            'scoremax'   => 0,
-            'scorepart'  => 0,
-            'extratext'  => '',
-            'extracss'   => '',
-            'imgsrc'     => '',
-            'imgalt'     => ''
-        ];
-        $nextstep    = null;
+        // Prepare current and next steps
+        $currentscorepart = 0;
+        $totalscorepart   = 0;
+        $linearpart       = $this->get_properties('linearscorepart');
 
-        // Copy steps into an associative array, indexed by threshold and calculate the total value parts score.
-        $sortedsteps = [];
-        $total       = 0;
-        foreach ($this->steps as $step) {
-            $total                         += $step->scorepart;
-            $sortedsteps[$step->threshold] = $step;
-        }
+        $weight = $this->get_weight();
 
-        // Sort the steps.
-        ksort($sortedsteps, SORT_NUMERIC);
+        $sortedsteps = $this->get_sorted_steps();
 
-        // The threshold for the first item is clamped down to 0.​
-        if (!isset($sortedsteps[0])) {
-            $keys      = array_keys($sortedsteps);
-            $firstkey  = $keys[0];
-            $firststep = $sortedsteps[$firstkey];
-            unset($sortedsteps[$firstkey]);
+        // Get user grade and step
+        $gradeinfo = $this->get_grade_info();
+        $this->maxgrade  = $gradeinfo->grademax;
+        $this->grade     = $gradeinfo->grade;
+        $percent   = $gradeinfo->proportion * 100;
 
-            // Add first step to start of array.
-            $firststep->threshold = 0;
-            $sortedsteps          = [0 => $firststep] + $sortedsteps;
-        }
-
-        // Derive each of their proportion values for discrete score calculation.
-        $gradeinfo       = $this->get_grade_info();
-        $gradeproportion = $gradeinfo->proportion;
-        $sum             = 0;
+        // Get validated steps and next step
         foreach ($sortedsteps as $step) {
-            // Prevent division by 0.
-            if ($total === 0) {
-                $step->proportion = 0;
-                continue;
+            if ($percent >= $step->threshold) {
+                $this->currentstep = $step;
+                $currentscorepart  += $step->scorepart;
+            } else if ($this->nextstep == null) {
+                $this->nextstep = $step;
             }
-
-            // Define proportion and current step.
-            $sum              += $step->scorepart;
-            $step->proportion = $sum / $total;
-            if (($gradeproportion * 100) >= $step->threshold) {
-                $currentstep = $step;
-            } else if (is_null($nextstep)) {
-                $nextstep = $step;
-            }
-
+            $totalscorepart += $step->scorepart;
         }
 
-        // If the sum of score parts is 0 then the linear_score_part value is clamped to 1.
-        $linearscorepart = $this->get_properties()['linearscorepart'];
-        $linearscorepart = $total === 0 ? 1 : $linearscorepart;
-
-        // Derive the normalised proportion value for linear score calculation.
-        $linearproportion = $linearscorepart / $total;
-
-        // Calculate score proportion.
-        if ($currentstep->proportion > 0) {
-            $currentstep->proportion = $gradeproportion * $linearproportion + $currentstep->proportion;
-            $currentstep->proportion = $currentstep->proportion > 1 ? 1 : $currentstep->proportion;
+        if($totalscorepart == 0){
+            $linearpart = 1;
         }
 
-        // Calculate score.
-        $score = $this->get_weight() * $currentstep->proportion;
-        // It should be rounded to 2 significant figures for display and for use by the topics skin.
-        $score = (int) floatval(sprintf('%.2g', $score));
-
-        // Add score to current step.
-        $currentstep->score    = $score;
-        $currentstep->grade    = $gradeinfo->grade;
-        $currentstep->grademax = $gradeinfo->grademax;
+        $this->finalscore = ($currentscorepart + ($linearpart * $this->grade / $this->maxgrade)) * $weight / ($totalscorepart + $linearpart);
 
         // Ensure step has an image.
-        if (empty($currentstep->imgsrc)) {
+        if (empty($this->currentstep->imgsrc)) {
             $defaultimg          = $this->get_default_image();
-            $currentstep->imgsrc = $defaultimg->imgsrc;
-            $currentstep->imgalt = $defaultimg->imgalt;
+            $this->currentstep->imgsrc = $defaultimg->imgsrc;
+            $this->currentstep->imgalt = $defaultimg->imgalt;
         }
 
-        // Return current step.
-        $this->currentstep = $currentstep;
-        $this->nextstep    = $nextstep;
-        return $this->currentstep;
+        return true;
     }
 
     /**
@@ -229,6 +178,14 @@ class score extends \format_ludic\skin {
         ];
     }
 
+    public function get_current_step(){
+        if($this->currentstep !== null){
+            $this->prepare_data();
+        }
+
+        return $this->currentstep;
+    }
+
     /**
      * Return all skin texts to render, each text with a class to select it in css.
      *
@@ -238,14 +195,16 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public function get_texts_to_render() {
+        $score  = $this->get_score();
         $step   = $this->get_current_step();
         $weight = $this->get_weight();
         return [
-            ['text'  => $step->score,
-             'class' => 'score'
+            [
+                'text'  => $score,
+                'class' => 'score'
             ],
             [
-                'text'  => (int) $step->grade,
+                'text'  => (int) $this->grade,
                 'class' => 'grade'
             ],
             [
@@ -261,20 +220,8 @@ class score extends \format_ludic\skin {
                 'class' => 'scoremax'
             ],
             [
-                'text'  => $step->grademax,
-                'class' => 'grademax'
-            ],
-            [
-                'text'  => $step->score . '/' . $weight,
-                'class' => 'fullscore'
-            ],
-            [
-                'text'  => (int) $step->grade . '/' . $step->grademax,
+                'text'  => (int) $this->grade . '/' . $this->maxgrade,
                 'class' => 'fullgrade'
-            ],
-            [
-                'text'  => $step->proportion . '%',
-                'class' => 'percentage'
             ],
             [
                 'text'  => isset($step->extratext) ? $step->extratext : '',
@@ -296,8 +243,8 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public function get_additional_css() {
-        $step = $this->get_current_step();
-        return isset($step->extracss) ? $step->extracss : '';
+        $currenstep = $this->get_current_step();
+        return isset($currenstep->extracss) ? $currenstep->extracss : '';
     }
 
     /**
@@ -309,9 +256,47 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public function get_score() {
-        $step = $this->get_current_step();
-        return $step->score;
+
+        if($this->finalscore !== null){
+            return $this->finalscore;
+        }
+
+        $this->prepare_data();
+        return $this->finalscore;
     }
 
+    public function get_skin_results() {
+
+        $skinresults = parent::get_skin_results();
+
+        $skinresults['score'] = round($this->get_score(), 2);
+
+        $skinresults['scorehasweight'] = true;
+
+        return $skinresults;
+    }
+
+    private function get_sorted_steps(){
+
+        // Prepare steps
+        // Copy steps into an associative array, indexed by threshold and calculate the total value parts score.
+        $sortedsteps = [];
+        foreach ($this->steps as $step) {
+            if ($step->scorepart < 0) {
+                $step->scorepart = 0;
+            }
+            $sortedsteps[$step->threshold] = $step;
+        }
+        ksort($sortedsteps, SORT_NUMERIC);
+
+        // Prepare first step if needed
+        if (!array_key_exists(0, $sortedsteps)) {
+            $firstkey       = array_keys($sortedsteps)[0];
+            $sortedsteps[0] = $sortedsteps[$firstkey];
+            unset($sortedsteps[$firstkey]);
+        }
+
+        return $sortedsteps;
+    }
 }
 

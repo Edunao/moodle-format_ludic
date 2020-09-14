@@ -214,20 +214,13 @@ class progress extends \format_ludic\skin {
             return 0;
         }
 
-        return $skinresults['score'] !== false ? $skinresults['score'] : $skinresults['completion'];
+        return $skinresults['score'] !== false ? $skinresults['score'] * 100 : $skinresults['completion'] * 100;
     }
 
     public function get_skin_results() {
 
         $skinresults = parent::get_skin_results();
 
-        if($skinresults['score'] !== false){
-            $skinresults['score'] = $skinresults['score'] * 100;
-        }
-
-        if($skinresults['completion'] !== false){
-            $skinresults['completion'] = $skinresults['completion'] * 100;
-        }
 
         $skinresults['skin'] = 'progress';
 

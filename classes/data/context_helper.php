@@ -908,7 +908,7 @@ class context_helper {
      *
      * @return array
      */
-    private function get_ludic_config() {
+    public function get_ludic_config() {
         if ($this->ludicconfig == null) {
 
             // Get ludic config (json).

@@ -463,268 +463,11 @@ function format_ludic_require_files() {
     require_files_recursively($classesdir);
 }
 
-function format_ludic_get_default_collection_skins(){
-    global $OUTPUT;
-
-    $animalsstamps = [
-            'id'          => 15,
-            'skinid'      => 'section-collection',
-            'location'    => 'section',
-            'type'        => 'collection',
-            'title'       => 'Collection d\'animaux',
-            'description' => 'La progression fait gagner des tampons animaux.',
-            'properties'  => [
-                'baseimage'   => [
-                    'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
-                    'imgalt' => 'Fond collection'
-                ],
-                'finalimage'  => [
-                    'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
-                    'imgalt' => 'Fond collection'
-                ],
-                'stampimages' => [
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-whale', 'format_ludic')->out(),
-                            'imgalt' => 'Whale'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-frog', 'format_ludic')->out(),
-                            'imgalt' => 'Frog'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-walrus', 'format_ludic')->out(),
-                            'imgalt' => 'Walrus'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collecton-owl', 'format_ludic')->out(),
-                            'imgalt' => 'Owl'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-pigeon', 'format_ludic')->out(),
-                            'imgalt' => 'Pigeon'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-snake', 'format_ludic')->out(),
-                            'imgalt' => 'Snake'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-cow', 'format_ludic')->out(),
-                            'imgalt' => 'Cow'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bear', 'format_ludic')->out(),
-                            'imgalt' => 'Bear'
-                        ]
-                    ],
-                    [
-                        'image-off'    => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
-                            'imgalt' => 'Empty'
-                        ],
-                        'image-on'      => [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-mouse', 'format_ludic')->out(),
-                            'imgalt' => 'Mouse'
-                        ],
-                    ],
-                ],
-                'stampcss'    => [
-                    [
-                        'number' => 1,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 2,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 3,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 4,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 5,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 6,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 7,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 8,
-                        'css'    => ''
-                    ],
-                    [
-                        'number' => 9,
-                        'css'    => ''
-                    ],
-                ],
-                'css'         => '
-                    .img-step{top:2%; width:33% !important;}
-                    .img-step-2{left:33%;}
-                    .img-step-3{left:64%;}
-                    .img-step-4{top:32%;}
-                    .img-step-5{top:32%;left:33%;}
-                    .img-step-6{top:32%;left:64%;}
-                    .img-step-7{top:62%;}
-                    .img-step-8{top:62%;left:33%;}
-                    .img-step-9{top:62%;left:64%;}'
-            ]
-    ];
-
-
-    return [$animalsstamps];
-}
 
 function format_ludic_get_default_skins_settings() {
     global $OUTPUT;
 
     $scoreskinstypes = [
-        [
-            'id'          => 11,
-            'skinid'      => 'section-score',
-            'location'    => 'section',
-            'type'        => 'score',
-            'title'       => 'Médaille',
-            'description' => 'Des points avec une médaille à la fin !',
-            'properties'  => [
-                'steps' => [
-                    [
-                        'threshold' => 0,
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step1', 'format_ludic')->out(),
-                        'imgalt'    => 'Aucune récompense'
-                    ],
-                    [
-                        'threshold' => 20,
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step2', 'format_ludic')->out(),
-                        'imgalt'    => 'Moitié des points obtenus !'
-                    ],
-                    [
-                        'threshold' => 30,
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step3', 'format_ludic')->out(),
-                        'imgalt'    => 'Médaille obtenue !'
-                    ],
-                    [
-                        'threshold' => 50,
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step4', 'format_ludic')->out(),
-                        'imgalt'    => 'Premier trophée obtenu !'
-                    ],
-                    [
-                        'threshold' => 80,
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step5', 'format_ludic')->out(),
-                        'imgalt'    => 'Couronne obtenue !'
-                    ],
-                    [
-                        'threshold' => 100,
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step6', 'format_ludic')->out(),
-                        'imgalt'    => 'Trophée obtenu !'
-                    ]
-                ],
-                'css'   => ' 
-                .skin-text.score{display: block;position: absolute;bottom: 0px;width: 100%;text-align: center;} 
-                
-                '
-            ]
-        ],
-        [
-            'id'          => 12,
-            'skinid'      => 'cm-score',
-            'location'    => 'coursemodule',
-            'type'        => 'score',
-            'title'       => 'Trophée',
-            'description' => 'Un trophée en fonction de votre réussite.',
-            'properties'  => [
-                'steps'           => [
-                    [
-                        'threshold' => 0,
-                        'scorepart' => 0,
-                        'extratext' => '',
-                        'extracss'  => '',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step1', 'format_ludic')->out(),
-                        'imgalt'    => 'Pas de trophée'
-                    ],
-                    [
-                        'threshold' => 50,
-                        'scorepart' => 1,
-                        'extratext' => '',
-                        'extracss'  => '',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step2', 'format_ludic')->out(),
-                        'imgalt'    => 'Trophée d\'argent'
-                    ],
-                    [
-                        'threshold' => 100,
-                        'scorepart' => 2,
-                        'extratext' => '',
-                        'extracss'  => '.skin-text.threshold{display:none;}
-                                        .skin-text.score{bottom: 39%}',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step3', 'format_ludic')->out(),
-                        'imgalt'    => 'Trophée d\'or'
-                    ]
-                ],
-                'linearscorepart' => 1,
-                'css'             => '.sub-tile.skin-tile .skin-text {font-size:30px;} 
-                            .skin-text.score{display: block;position: absolute;left: 59%;bottom: 49%;font-size:1.5rem;font-weight:bold;} 
-                            .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}
-                            .skin-text.threshold{display: inline-block;position: absolute;left: 43%;bottom: 17%;font-size:20px !important;font-weight:bold;}
-                            .skin-text.threshold::before{content: "SEUIL : ";font-size:20px;font-weight:normal;}
-                            .skin-text.threshold::after{content: "pts ";font-size:20px;font-weight:normal;}'
-
-            ]
-        ],
-
 
         [
             'id'          => 16,
@@ -860,19 +603,18 @@ function format_ludic_get_default_skins_settings() {
 
                 ],
                 'css'   => ' 
-                .skin-hidden-text.percent{
-                    display: block;
-                    position: absolute;
-                    right: 8%;
-                    bottom: 1%;
-                    font-size: 4.5rem;
-                }
-                .skin-hidden-text.percent:after {
-                    content: "%";
-                    font-weight: normal;
-                    font-family: \'Montserrat-Medium\';
-                }    
-                
+.skin-hidden-text.percent{
+    display: block;
+    position: absolute;
+    right: 8%;
+    bottom: 1%;
+    font-size: 4.5rem;
+}
+.skin-hidden-text.percent:after {
+    content: "%";
+    font-weight: normal;
+    font-family: \'Montserrat-Medium\';
+}          
                 '
             ]
         ],
@@ -918,26 +660,26 @@ function format_ludic_get_default_skins_settings() {
 
                 ],
                 'css'   => ' 
-                .skin-hidden-text.percent{
-                    display: block;
-                    position: absolute;
-                    right: 8%;
-                    bottom: 1%;
-                    font-size: 2.5rem;
-                }
-                .skin-hidden-text.percent:after {
-                    content: "%";
-                    font-weight: normal;
-                    font-family: \'Montserrat-Medium\';
-                }    
-                
+.skin-hidden-text.percent{
+    display: block;
+    position: absolute;
+    right: 8%;
+    bottom: 1%;
+    font-size: 2.5rem;
+}
+.skin-hidden-text.percent:after {
+     content: "%";
+     font-weight: normal;
+     font-family: \'Montserrat-Medium\';
+}          
                 '
             ]
         ],
 
     ];
 
-    $scoreskinstypes = array_merge(format_ludic_get_default_collection_skins(), format_ludic_get_default_avatar_skins(), $scoreskinstypes);
+    $scoreskinstypes = array_merge(format_ludic_get_default_collection_skins(),
+        format_ludic_get_default_avatar_skins(), format_ludic_get_default_section_score_skins(),format_ludic_get_default_activity_score_skins(), $scoreskinstypes);
 
     return ['skins' => $scoreskinstypes];
 }
@@ -3136,5 +2878,277 @@ function format_ludic_get_default_avatar_skins(){
 
 
     return [$avatardata];
+
+}
+
+function format_ludic_get_default_section_score_skins(){
+    global $OUTPUT;
+
+    $scoreskins = [
+        'id'          => 11,
+        'skinid'      => 'section-score',
+        'location'    => 'section',
+        'type'        => 'score',
+        'title'       => 'Médaille',
+        'description' => 'Des points avec une médaille à la fin !',
+        'properties'  => [
+            'steps' => [
+                [
+                    'threshold' => 0,
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step1', 'format_ludic')->out(),
+                    'imgalt'    => 'Aucune récompense'
+                ],
+                [
+                    'threshold' => 300,
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step2', 'format_ludic')->out(),
+                    'imgalt'    => 'Palier des 300 points !'
+                ],
+                [
+                    'threshold' => 500,
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step3', 'format_ludic')->out(),
+                    'imgalt'    => 'Médaille obtenue ! (500 points)'
+                ],
+                [
+                    'threshold' => 600,
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step4', 'format_ludic')->out(),
+                    'imgalt'    => 'Premier trophée obtenu ! (600 points)'
+                ],
+                [
+                    'threshold' => 700,
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step5', 'format_ludic')->out(),
+                    'imgalt'    => 'Couronne obtenue ! (700 points)'
+                ],
+                [
+                    'threshold' => 800,
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step6', 'format_ludic')->out(),
+                    'imgalt'    => 'Trophée obtenu ! (800 points)'
+                ]
+            ],
+            'css'   => ' 
+                .skin-text.score{display: block;position: absolute;bottom: 0px;width: 100%;text-align: center;} 
+                
+                '
+        ]
+    ];
+
+    return [$scoreskins];
+}
+
+function format_ludic_get_default_collection_skins(){
+    global $OUTPUT;
+
+    $animalsstamps = [
+        'id'          => 15,
+        'skinid'      => 'section-collection',
+        'location'    => 'section',
+        'type'        => 'collection',
+        'title'       => 'Collection d\'animaux',
+        'description' => 'La progression fait gagner des tampons animaux.',
+        'properties'  => [
+            'baseimage'   => [
+                'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
+                'imgalt' => 'Fond collection'
+            ],
+            'finalimage'  => [
+                'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
+                'imgalt' => 'Fond collection'
+            ],
+            'stampimages' => [
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-whale', 'format_ludic')->out(),
+                        'imgalt' => 'Whale'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-frog', 'format_ludic')->out(),
+                        'imgalt' => 'Frog'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-walrus', 'format_ludic')->out(),
+                        'imgalt' => 'Walrus'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collecton-owl', 'format_ludic')->out(),
+                        'imgalt' => 'Owl'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-pigeon', 'format_ludic')->out(),
+                        'imgalt' => 'Pigeon'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-snake', 'format_ludic')->out(),
+                        'imgalt' => 'Snake'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-cow', 'format_ludic')->out(),
+                        'imgalt' => 'Cow'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bear', 'format_ludic')->out(),
+                        'imgalt' => 'Bear'
+                    ]
+                ],
+                [
+                    'image-off'    => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                        'imgalt' => 'Empty'
+                    ],
+                    'image-on'      => [
+                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-mouse', 'format_ludic')->out(),
+                        'imgalt' => 'Mouse'
+                    ],
+                ],
+            ],
+            'stampcss'    => [
+                [
+                    'number' => 1,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 2,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 3,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 4,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 5,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 6,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 7,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 8,
+                    'css'    => ''
+                ],
+                [
+                    'number' => 9,
+                    'css'    => ''
+                ],
+            ],
+            'css'         => '
+                    .img-step{top:2%; width:33% !important;}
+                    .img-step-2{left:33%;}
+                    .img-step-3{left:64%;}
+                    .img-step-4{top:32%;}
+                    .img-step-5{top:32%;left:33%;}
+                    .img-step-6{top:32%;left:64%;}
+                    .img-step-7{top:62%;}
+                    .img-step-8{top:62%;left:33%;}
+                    .img-step-9{top:62%;left:64%;}'
+        ]
+    ];
+
+
+    return [$animalsstamps];
+}
+
+function format_ludic_get_default_activity_score_skins(){
+    global $OUTPUT;
+
+    $scoreskins = [
+        'id'          => 12,
+        'skinid'      => 'cm-score',
+        'location'    => 'coursemodule',
+        'type'        => 'score',
+        'title'       => 'Trophée',
+        'description' => 'Un trophée en fonction de votre réussite.',
+        'properties'  => [
+            'steps'           => [
+                [
+                    'threshold' => 0,
+                    'scorepart' => 0,
+                    'extratext' => '',
+                    'extracss'  => '',
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step1', 'format_ludic')->out(),
+                    'imgalt'    => 'Pas de trophée'
+                ],
+                [
+                    'threshold' => 50,
+                    'scorepart' => 10,
+                    'extratext' => '',
+                    'extracss'  => '',
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step2', 'format_ludic')->out(),
+                    'imgalt'    => 'Trophée d\'argent'
+                ],
+                [
+                    'threshold' => 100,
+                    'scorepart' => 20,
+                    'extratext' => '',
+                    'extracss'  => '.skin-text.threshold{display:none;}
+                                        .skin-text.score{bottom: 39%}',
+                    'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step3', 'format_ludic')->out(),
+                    'imgalt'    => 'Trophée d\'or'
+                ]
+            ],
+            'linearscorepart' => 2,
+            'css'             => '.sub-tile.skin-tile .skin-text {font-size:30px;} 
+                            .skin-text.score{display: block;position: absolute;left: 59%;bottom: 49%;font-size:1.5rem;font-weight:bold;} 
+                            .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}
+                            .skin-text.threshold{display: inline-block;position: absolute;left: 43%;bottom: 17%;font-size:20px !important;font-weight:bold;}
+                            .skin-text.threshold::before{content: "SEUIL : ";font-size:20px;font-weight:normal;}
+                            .skin-text.threshold::after{content: "pts ";font-size:20px;font-weight:normal;}'
+
+        ]
+    ];
+
+    return [$scoreskins];
 
 }

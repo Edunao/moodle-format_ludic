@@ -661,6 +661,30 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
 
+        confirmAndDeleteSkin: function(skin){
+            // Add confirmation before delete.
+            console.log('confirmation', skin.data());
+            let context = {
+                skinid: $(skin).data('itemid') ? $(skin).data('itemid') : null,
+                courseid: $(skin).data('courseid') ? $(skin).data('courseid') : null
+            };
+            ludic.displayChoicePopup('confirmation-popup', 'deleteSkin', context);
+        },
+
+        deleteSkin: function(skin){
+            let skinid = $(skin).data('itemid');
+            let courseid = $(skin).data('courseid');
+            ludic.ajaxCall({
+                controller: 'skin',
+                action: 'delete_skin',
+                id: skinid,
+                courseid: courseid,
+                callback: function () {
+                    // TODO : recharger la liste de skin du skintype
+                }
+            });
+        },
+
         /**
          * Open a selection popup with items to select.
          * Confirm will execute updateInputAfterSelect function.
