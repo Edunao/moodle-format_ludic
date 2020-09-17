@@ -88,15 +88,6 @@ class section_form extends form {
                 ]);
         }
 
-        // TODO : Supprimer après usage dans skin edition.
-        // ces éléments ne font pas parties de la section, ils sont là pour test uniquement.
-        //$elements[]    = new filepicker_form_element('image-1', 'section-image-1', null, null, 'section filepicker label', ['required' => true]);
-        //$elements[]    = new filepicker_form_element('image-2', 'section-image-2', null, null, 'section filepicker label');
-        //$elements[]    = new number_form_element('weight', 'section-weight', null, 800, 'section number label',
-        //        ['min' => 0, 'max' => 1000, 'step' => 100]);
-        //$elements[]    = new textarea_form_element('css', 'section-css', null, '[section-tile] {
-        //}', 'section textarea label', ['rows' => 10]);
-
         return $elements;
     }
 

@@ -304,27 +304,25 @@ class course_module extends model implements skinnable_interface {
             return $this->contexthelper->get_global_section_skins();
         }
 
-        // Label can use only inline skin.
         $modname = $this->cminfo->modname;
-        if ($modname === 'label') {
-            return [coursemodule\inline::get_instance()];
-        }
-
         $skins = $this->contexthelper->get_course_module_skins();
 
-        // True if this course module supports grades.
+        // Filter skins is cm has no grade or is inline activity
         $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
-
-        // Keep skins with grades only if the module course supports grades.
+        $isinline = $modname ? plugin_supports('mod', $modname, FEATURE_NO_VIEW_LINK, false) : false;
         $coursemodulesskins = [];
         foreach ($skins as $skin) {
+
+            if($isinline && $skin->type != 'inline'){
+                continue;
+            }
+
             if ($skin->require_grade() && !$isgraded) {
                 continue;
             }
             $coursemodulesskins[$skin->id] = $skin;
         }
 
-        // Return filtered skins.
         return $coursemodulesskins;
     }
 
@@ -340,22 +338,18 @@ class course_module extends model implements skinnable_interface {
 
         // Default skin for section 0 is inline for resources and menubar for activities.
         if ($this->section->section == 0) {
-            $modname    = $this->cminfo->modname;
-            $isresource = $modname ? plugin_supports('mod', $modname, FEATURE_MOD_ARCHETYPE, false) : false;
-            return $isresource ? coursemodule\inline::get_instance() : coursemodule\menubar::get_instance();
+            return coursemodule\menubar::get_instance();
         }
 
         // Get available skins.
         $skins = $this->get_available_skins();
-
         // Search one skin available and return it.
         foreach ($skins as $skin) {
-            if (!in_array($skin->id, [FORMAT_LUDIC_CM_SKIN_INLINE_ID])) {
                 return $skin;
-            }
         }
 
         // No skins found, return inline by default.
+        // TODO fix this, inline skin can't be call like that
         return coursemodule\inline::get_instance();
     }
 
@@ -372,6 +366,8 @@ class course_module extends model implements skinnable_interface {
         // Get data.
         $dbapi    = $this->contexthelper->get_database_api();
         $dbrecord = $dbapi->get_format_ludic_cm_by_cmid($this->id);
+
+        // TODO check if skin still exist !
 
         // If we found relation record, return it.
         if ($dbrecord) {

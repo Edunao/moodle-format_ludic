@@ -679,7 +679,8 @@ function format_ludic_get_default_skins_settings() {
     ];
 
     $scoreskinstypes = array_merge(format_ludic_get_default_collection_skins(),
-        format_ludic_get_default_avatar_skins(), format_ludic_get_default_section_score_skins(),format_ludic_get_default_activity_score_skins(), $scoreskinstypes);
+        format_ludic_get_default_avatar_skins(), format_ludic_get_default_section_score_skins(),
+        format_ludic_get_default_activity_score_skins(), format_ludic_get_default_not_ludic_skins(), $scoreskinstypes);
 
     return ['skins' => $scoreskinstypes];
 }
@@ -705,92 +706,40 @@ function format_ludic_get_default_avatar_skins(){
             'slots'      => [
                 [
                     'name' => 'Gender',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-gender-F', 'format_ludic')->out(),
-                        'imgalt' => 'Gender'
-                    ],
-
                 ],
 
                 [
                     'name' => 'Color',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-gender-F', 'format_ludic')->out(),
-                        'imgalt' => 'Color'
-                    ],
-
                 ],
                 [
                     'name' => 'Hair',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-hair-f-curly-purple', 'format_ludic')->out(),
-                        'imgalt' => 'Hair'
-                    ],
                 ],
                 [
                     'name' => 'T-shirt',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-tshirt-cube', 'format_ludic')->out(),
-                        'imgalt' => 'T-shirt'
-                    ],
-
                 ],
                 [
                     'name' => 'Desk',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-desk-cube', 'format_ludic')->out(),
-                        'imgalt' => 'Desk items'
-                    ],
-
                 ],
                 [
                     'name' => 'Ground',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-ground-tennis', 'format_ludic')->out(),
-                        'imgalt' => 'Ground items'
-                    ],
                 ],
                 [
                     'name' => 'Bedside table',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-bedsidetable-oldschool', 'format_ludic')->out(),
-                        'imgalt' => 'Bedside table'
-                    ],
                 ],
                 [
                     'name' => 'Bed',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-bed-pigeon', 'format_ludic')->out(),
-                        'imgalt' => 'Bed'
-                    ],
                 ],
                 [
                     'name' => 'Poster',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-poster-star', 'format_ludic')->out(),
-                        'imgalt' => 'Poster'
-                    ],
                 ],
                 [
                     'name' => 'Equipment',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-equipment-skate', 'format_ludic')->out(),
-                        'imgalt' => 'Equipment'
-                    ],
                 ],
                 [
                     'name' => 'Banner',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-banner-lamp', 'format_ludic')->out(),
-                        'imgalt' => 'Banner'
-                    ],
                 ],
                 [
                     'name' => 'Duvet',
-                    'icon' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/section-avatar-duvet-cloud', 'format_ludic')->out(),
-                        'imgalt' => 'Duvet'
-                    ],
                 ]
             ],
             'items'      => [
@@ -3143,12 +3092,63 @@ function format_ludic_get_default_activity_score_skins(){
                             .skin-text.score{display: block;position: absolute;left: 59%;bottom: 49%;font-size:1.5rem;font-weight:bold;} 
                             .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}
                             .skin-text.threshold{display: inline-block;position: absolute;left: 43%;bottom: 17%;font-size:20px !important;font-weight:bold;}
-                            .skin-text.threshold::before{content: "SEUIL : ";font-size:20px;font-weight:normal;}
-                            .skin-text.threshold::after{content: "pts ";font-size:20px;font-weight:normal;}'
-
+                            .skin-text.threshold::before{content: "SEUIL : ";font-size:20px;font-weight:normal;}'
         ]
     ];
 
     return [$scoreskins];
 
+}
+
+function format_ludic_get_default_not_ludic_skins(){
+    global $OUTPUT;
+
+    $sectionnoludic = [
+        'id'          => 10,
+        'skinid'      => 'section-noludic',
+        'location'    => 'section',
+        'type'        => 'noludic',
+        'title'       => 'Pas de motivateur',
+        'description' => 'Rien d\'autres qu\'une jolie image.',
+        'properties'  => [
+            'background' => [
+                'imgsrc' => $OUTPUT->image_url('default-skins/section-notludic', 'format_ludic')->out(),
+                'imgalt' => 'Not ludic',
+            ]
+        ]
+    ];
+
+    $cmnoludic = [
+        'id'          => 1,
+        'skinid'      => 'cm-inline',
+        'location'    => 'coursemodule',
+        'type'        => 'inline',
+        'title'       => 'Pas de motivateur',
+        'description' => 'Une image de cahier ou l\'activité inline.',
+        'properties'  => [
+            'background' => [
+                'imgsrc' => $OUTPUT->image_url('default-skins/cm-notludic', 'format_ludic')->out(),
+                'imgalt' => 'Not ludic',
+            ],
+            'css' => ''
+        ]
+    ];
+
+    $cmnoludic2 = [
+        'id'          =>  23,
+        'skinid'      => 'cm-inline',
+        'location'    => 'coursemodule',
+        'type'        => 'inline',
+        'title'       => 'Pas de motivateur mais il est rouge !',
+        'description' => 'Une image de cahier ROUGE ou l\'activité inline.',
+        'properties'  => [
+            'background' => [
+                'imgsrc' => $OUTPUT->image_url('default-cm-rouge', 'format_ludic')->out(),
+                'imgalt' => 'Not ludic',
+            ],
+            'css' => ''
+        ]
+    ];
+
+    return [$sectionnoludic, $cmnoludic, $cmnoludic2];
 }

@@ -56,14 +56,14 @@ class achievement extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public static function get_instance() {
-        return (object) [
+        return new self((object) [
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'achievement',
             'title'       => 'Achievement de base',
             'description' => 'des passages de steps à l\'autre et puis voilà',
             'settings'    => self::get_editor_config(),
-        ];
+        ]);
     }
 
     /**

@@ -45,48 +45,64 @@ class edit_skins_form extends form {
 
     public function get_definition() {
 
-
         // Course id.
-        $courseid         = $this->courseid;
+        $courseid   = $this->courseid;
         $elements[] = new hidden_form_element('courseid', 'course-id', $courseid, 0);
 
         // Skin type id
-        $skintypeid         = $this->skin->get_unique_name();
+        $skintypeid = $this->skin->get_unique_name();
         $elements[] = new hidden_form_element('skintypeid', 'skintype-id', $skintypeid, 0);
 
         // Skin id
-        $skinid         = $this->skin->id;
+        $skinid     = $this->skin->id;
         $elements[] = new hidden_form_element('id', 'id', $skinid, 0);
 
         // Skin settings
         $settings = $this->skin->get_editor_config();
-//print_object($settings);
         foreach ($settings as $section => $options) {
-//    public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
+
             foreach ($options as $elementname => $elementtype) {
-                if(is_array($elementtype)){
-                    //print_object('array !');
+                if (is_array($elementtype)) {
 
                     // Parcourir les settings et faire une enveloppe vide qu'on pourra copier
-                    $index = 0;
+                    $index     = 0;
                     $groupname = $elementname;
-                    foreach ($elementtype as $subname => $subtype){
-                        $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, false));
-                    }
+                    $elements[] = new separator_form_element($groupname,$groupname);
+                    $elements[] = new separator_form_element($groupname . ' '. 0,$groupname . ' '. 0);
+                    foreach ($elementtype as $subname => $subtype) {
 
-                    $groupvalue = $this->skin->get_properties($groupname);
-                    foreach($groupvalue as $index => $subelements){
-                        foreach ($elementtype as $subname => $subtype){
-                            $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
-                        }
+                        $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, false));
+                        $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
+                            'action' => 'editSkindeleteStep',
+                            'itemid' => $groupname . '-' . 0,
+                            'class'  => 'delete-group'
+                        ]);
                     }
 
                     // Parcourir les propriétés pour créer les enveloppes pleines, chaque enveloppe devra pouvoir être supprimés
+                    $groupvalue = $this->skin->get_properties($groupname);
+                    if($groupvalue){
+                        foreach ($groupvalue as $index => $subelements) {
+                            $elements[] = new separator_form_element($groupname . ' '. $index ,$groupname . ' '. $index);
+                            foreach ($elementtype as $subname => $subtype) {
+                                $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
+                            }
+                            // Delete step button
+                            $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
+                                'action' => 'editSkindeleteStep',
+                                'itemid' => $groupname . '-' . $index,
+                                'class'  => 'delete-group'
+                            ]);
+                        }
+                    }
 
-                    // On doit pouvoir ajouter une enveloppe vide
+                    $elements[] = new button_form_element('addstep', 'addstep', '', '', 'Ajouter une étape', [
+                        'action' => 'editSkinAddStep',
+                        'itemid' => $index,
+                        'class'  => 'add-group'
+                    ]);
 
-                    // TODO add empty elements to duplicate
-                }else{
+                } else {
                     $elements = array_merge($elements, $this->get_element($elementname, $elementtype));
                 }
 
@@ -100,31 +116,35 @@ class edit_skins_form extends form {
 
     }
 
-    private function get_group_element($groupname, $elementname, $elementtype, $index){
-        $elements = [];
+    private function get_group_element($groupname, $elementname, $elementtype, $index) {
+        $elements   = [];
         $groupvalue = $this->skin->get_properties($groupname);
-//print_object($groupvalue);
+        //print_object($groupvalue);
         $currentvalue = '';
-        if($index !== false) {
-            $currentvalue = $groupvalue[$index];
-        }else{
+        if ($index !== false) {
+            $currentvalue = $groupvalue[$index]->$elementname;
+        } else {
             $index = 'empty';
         }
 
-        $elementname = $groupname.'_' .$elementname . '_' . $index;
+        $elementname = $groupname . '_' . $elementname . '_' . $index;
 
         // Parcourir les settings et faire une enveloppe vide qu'on pourra copier
 
         // Parcourir les propriétés pour créer les enveloppes pleines, chaque enveloppe devra pouvoir être supprimés
 
         // On doit pouvoir ajouter une enveloppe vide
-        $attributes = ['data-group' => $groupname, 'data-name' => $elementname , 'data-index' => $index];
+        $attributes = [
+            'data-group' => $groupname,
+            'data-name'  => $elementname,
+            'data-index' => $index
+        ];
         switch ($elementtype) {
             case 'text':
-                $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementname,$attributes);
+                $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementname, $attributes);
                 break;
             case 'textarea':
-                $elements[]    = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementname, array_merge($attributes,['rows' => 5]));
+                $elements[] = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementname, array_merge($attributes, ['rows' => 5]));
                 break;
             case 'int':
                 $elements[] = new number_form_element($elementname, $elementname, '', '', $elementname, $attributes);
@@ -133,8 +153,14 @@ class edit_skins_form extends form {
                 $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname, $attributes);
                 break;
             case 'image':
-                //$elements[] = new filepicker_form_element($elementname, $elementname, null, null, 'section filepicker label', ['required' => true]);
-                $elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname, ['required' => true, 'data-test' => 'coucou'], ['required' => true]);
+                $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
+
+                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementname, [
+                    'required'  => true,
+                    'data-test' => 'coucou',
+                    'groupclass' => $groupname,
+                ], ['required' => true]);
+                $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementname . ' alt text');
                 break;
             default:
                 break;
@@ -143,7 +169,7 @@ class edit_skins_form extends form {
         return $elements;
     }
 
-    private function get_element($elementname, $elementtype){
+    private function get_element($elementname, $elementtype) {
         $elements = [];
         // Get current value
         $currentvalue = $this->skin->get_properties($elementname);
@@ -155,7 +181,7 @@ class edit_skins_form extends form {
                 $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementname);
                 break;
             case 'textarea':
-                $elements[]    = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementname, ['rows' => 5]);
+                $elements[] = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementname, ['rows' => 5]);
                 break;
             case 'int':
                 $elements[] = new number_form_element($elementname, $elementname, '', '', $elementname);
@@ -164,7 +190,12 @@ class edit_skins_form extends form {
                 $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname);
                 break;
             case 'image':
-                $elements[] = new filepicker_form_element($elementname, $elementname,'','', $elementname);
+                $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
+                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', 31948528, '', $elementname, [
+                    'accepted_types' => 'png, jpg, gif, svg, jpeg',
+                    'required'       => true,
+                ]);
+                $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementname . ' alt text');
                 break;
             default:
                 break;

@@ -62,14 +62,14 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public static function get_instance() {
-        return (object) [
+        return new self((object) [
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'score',
             'title'       => 'Score de base',
             'description' => 'des points et puis voilà',
             'settings'    => self::get_editor_config(),
-        ];
+        ]);
     }
 
     /**
@@ -103,6 +103,7 @@ class score extends \format_ludic\skin {
 
         // Get validated steps and next step
         foreach ($sortedsteps as $step) {
+
             if ($percent >= $step->threshold) {
                 $this->currentstep = $step;
                 $currentscorepart  += $step->scorepart;
@@ -111,11 +112,16 @@ class score extends \format_ludic\skin {
             }
             $totalscorepart += $step->scorepart;
         }
-
         if($totalscorepart == 0){
             $linearpart = 1;
         }
 
+        // Prepare next step score threshold
+        if($this->nextstep){
+            $this->nextstep->thresholdgrade = $this->nextstep->threshold * $this->maxgrade / 100;
+        }
+
+        // Get final score form grade, score part and linear part
         $this->finalscore = ($currentscorepart + ($linearpart * $this->grade / $this->maxgrade)) * $weight / ($totalscorepart + $linearpart);
 
         // Ensure step has an image.
@@ -179,7 +185,7 @@ class score extends \format_ludic\skin {
     }
 
     public function get_current_step(){
-        if($this->currentstep !== null){
+        if($this->currentstep === null){
             $this->prepare_data();
         }
 
@@ -228,7 +234,7 @@ class score extends \format_ludic\skin {
                 'class' => 'extratext'
             ],
             [
-                'text'  => isset($this->nextstep->score) ? $this->nextstep->score : '',
+                'text'  => isset($this->nextstep->thresholdgrade) ? $this->nextstep->thresholdgrade . '/' . $this->maxgrade : '',
                 'class' => 'threshold'
             ],
         ];

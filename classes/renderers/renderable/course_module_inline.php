@@ -58,6 +58,13 @@ class format_ludic_course_module_inline extends format_ludic_item {
             $this->link = $coursemodule->get_link();
         }
 
+        //else{
+        //    $libfile = $CFG->dirroot . '/mod/' . $this->modname . '/lib.php';
+        //    if(file_exists()){
+        //
+        //    }
+        //}
+
         if ($this->modname === 'label') {
             $this->link    = false;
             $this->content = label_get_coursemodule_info($coursemodule->cminfo)->content;

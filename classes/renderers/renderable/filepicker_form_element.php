@@ -39,8 +39,9 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
      */
     public function __construct(\format_ludic\form_element $element) {
         parent::__construct($element);
-        //print_object(array_merge(['id' => 'id_' . $this->name], $this->attributes));
+
         $this->filepicker = new MoodleQuickForm_filepicker($this->name, $this->name, array_merge(['id' => 'id_' . $this->name], $this->attributes));
+        $this->filepicker->setValue($this->value);
         $this->content    = $this->filepicker->toHtml();
         $this->options    = json_encode($this->get_js_options());
     }

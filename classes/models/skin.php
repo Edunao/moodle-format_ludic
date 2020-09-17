@@ -24,6 +24,11 @@
 
 namespace format_ludic;
 
+use format_ludic\coursemodule\inline;
+use format_ludic\coursemodule\menubar;
+use format_ludic\coursemodule\stealth;
+use format_ludic\section\noludic;
+
 defined('MOODLE_INTERNAL') || die();
 
 abstract class skin extends model {
@@ -99,14 +104,20 @@ abstract class skin extends model {
         global $PAGE;
 
         // Skin is not in config.
-        if ($skinid == FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
-            return coursemodule\inline::get_instance();
-        } else if ($skinid == FORMAT_LUDIC_CM_SKIN_MENUBAR_ID) {
+        //if ($skinid == FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
+        //    return coursemodule\inline::get_instance();
+        //} else if ($skinid == FORMAT_LUDIC_CM_SKIN_MENUBAR_ID) {
+        //    return coursemodule\menubar::get_instance();
+        //} else if ($skinid == FORMAT_LUDIC_CM_SKIN_STEALTH_ID) {
+        //    return coursemodule\stealth::get_instance();
+        //} else if ($skinid == FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID) {
+        //    return self::get_by_instance(section\noludic::get_instance(), $item);
+        //}
+
+        if ($skinid == FORMAT_LUDIC_CM_SKIN_MENUBAR_ID) {
             return coursemodule\menubar::get_instance();
         } else if ($skinid == FORMAT_LUDIC_CM_SKIN_STEALTH_ID) {
             return coursemodule\stealth::get_instance();
-        } else if ($skinid == FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID) {
-            return self::get_by_instance(section\noludic::get_instance(), $item);
         }
 
         // Skin is in config.

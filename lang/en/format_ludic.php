@@ -33,7 +33,10 @@ $string['no-section']      = 'Aucune section disponible';
 $string['no-section-help'] = 'Aucune section disponible. Passez en mode édition pour en ajouter.';
 
 // Privacy.
-$string['privacy:metadata'] = 'The Ludic format plugin does not store any personal data.';
+$string['privacy:metadata:format_ludic_user_cs_state'] = 'Informations à propos des choix de l\'utilisateur au sein des motivateurs de sections (par exemple, les achats effectués dans la magasin de l\'avatar)';
+$string['privacy:metadata:format_ludic_user_cs_state:userid'] = 'Identifiant unique de l\'utilisateur concerné.';
+$string['privacy:metadata:format_ludic_user_cs_state:courseid'] = 'Identifiant unique du cours concerné.';
+$string['privacy:metadata:format_ludic_user_cs_state:sectionid'] = 'Identifiant unique de la section concernée.';
 
 // Course format options.
 $string['ludicconfiglabel']     = 'Ludic course configuration data';
@@ -127,6 +130,7 @@ $string['error-int-step']       = 'The value must be a multiple of {$a}.';
 $string['form-save']     = 'Save';
 $string['form-revert']   = 'Revert';
 $string['form-delete-skin'] = "Delete skin";
+$string['form-duplicate-skin'] = "Duplicate skin";
 $string['item-preview']  = 'Preview';
 $string['item-open']     = 'Open';
 $string['edit']          = 'Edit';

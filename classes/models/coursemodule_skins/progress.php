@@ -62,14 +62,14 @@ class progress extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public static function get_instance() {
-        return (object) [
+        return new self((object) [
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'progress',
             'title'       => 'Progression d\'activité',
             'description' => get_string('skin-activity-progress', 'format_ludic'),
             'settings'    => self::get_editor_config(),
-        ];
+        ]);
     }
 
     /**

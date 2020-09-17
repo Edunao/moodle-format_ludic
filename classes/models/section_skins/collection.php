@@ -37,7 +37,6 @@ class collection extends \format_ludic\skin {
             ],
             "properties" => [
                 "baseimage"  => "image",
-                "finalimage" => "image",
                 "stampimages" => [
                     "image-off" => "image",
                     "image-on"  => "image"
@@ -51,14 +50,14 @@ class collection extends \format_ludic\skin {
     }
 
     public static function get_instance() {
-        return (object) [
+        return new self((object) [
             'id'          => self::get_unique_name(),
             'location'    => 'section',
             'type'        => 'collection',
             'title'       => 'Collection de tampons',
             'description' => get_string('skin-section-collection', 'format_ludic'),
             'settings'    => self::get_editor_config(),
-        ];
+        ]);
     }
 
     /**

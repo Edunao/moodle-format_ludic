@@ -478,6 +478,24 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     /**
+     * @param format_ludic_separatorform_element $element
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_separator_form_element(format_ludic_separator_form_element $element) {
+        return $this->render_from_template('format_ludic/separator_form_element', $element);
+    }
+
+    /**
+     * @param format_ludic_text_form_element $element
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_button_form_element(format_ludic_button_form_element $element) {
+        return $this->render_from_template('format_ludic/button_form_element', $element);
+    }
+
+    /**
      * @param format_ludic_number_form_element $element
      * @return bool|string
      * @throws moodle_exception
@@ -629,7 +647,8 @@ class format_ludic_renderer extends format_section_renderer_base {
                 }
 
                 // In course module skin type is "inline", render it inline.
-                if ($coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_INLINE_ID) {
+                $hasnolink = plugin_supports('mod', $coursemodule->cminfo->modname, FEATURE_NO_VIEW_LINK, false);
+                if ($coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_INLINE_ID && $hasnolink) {
                     $renderable = new format_ludic_course_module_inline($coursemodule);
                 }
 
@@ -640,7 +659,7 @@ class format_ludic_renderer extends format_section_renderer_base {
 
             }
 
-            // In the edit view or if the skin is not online, render it normally.
+            // In the edit view or if the skin is not inline, render it normally.
             $renderable = $renderable ? $renderable : new \format_ludic_course_module($coursemodule);
 
             // Add class "selected" on selected course module.

@@ -30,11 +30,14 @@ class noludic extends \format_ludic\skin {
 
     public static function get_editor_config() {
         return [
-            "settings" => [
-                "name"       => "text",
-                "main-css"   => "css",
-                "background" => "image"
-            ]
+            "settings"   => [
+                "title"        => "text",
+                "description" => "textarea",
+                "css"         => "textarea",
+            ],
+            "properties" => [
+                "background"  => "image",
+            ],
         ];
     }
 
@@ -48,10 +51,10 @@ class noludic extends \format_ludic\skin {
      * @return \stdClass
      */
     public function get_edit_image() {
-        global $OUTPUT;
+        $background = $this->get_properties('background');
         return (object) [
-            'imgsrc' => $OUTPUT->image_url('default-section', 'format_ludic')->out(),
-            'imgalt' => 'No ludic'
+            'imgsrc' => $background->imgsrc,
+            'imgalt' => isset($background->imgalt) ? $background->imgalt : ''
         ];
     }
 
@@ -64,11 +67,12 @@ class noludic extends \format_ludic\skin {
      */
     static public function get_instance() {
         return new self((object) [
-            'id'          => FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID,
+            'id'          => self::get_unique_name(),
             'location'    => 'section',
             'type'        => 'noludic',
             'title'       => get_string('cs-skin-noludic-title', 'format_ludic'),
-            'description' => get_string('cs-skin-noludic-description', 'format_ludic')
+            'description' => get_string('cs-skin-noludic-description', 'format_ludic'),
+            'settings'    => self::get_editor_config(),
         ]);
     }
 
@@ -87,7 +91,13 @@ class noludic extends \format_ludic\skin {
      * @return array
      */
     public function get_images_to_render() {
-        return [$this->get_edit_image()];
+        $background = $this->get_properties('background');
+         return [
+            [
+                'imgsrc' => $background->imgsrc,
+                'imgalt' => isset($background->imgalt) ? $background->imgalt : ''
+            ]
+        ];
     }
 
 }

@@ -56,14 +56,14 @@ class score extends \format_ludic\skin {
      * @throws \moodle_exception
      */
     public static function get_instance() {
-        return (object) [
+        return new self((object) [
             'id'          => self::get_unique_name(),
             'location'    => 'section',
             'type'        => 'score',
             'title'       => 'Score de base pour section',
             'description' => 'des points et puis voilà, mais pour la section',
             'settings'    => self::get_editor_config(),
-        ];
+        ]);
     }
 
     private $currentstep = null;

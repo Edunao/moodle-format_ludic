@@ -30,11 +30,14 @@ class inline extends \format_ludic\skin {
 
     public static function get_editor_config() {
         return [
-            "settings" => [
-                "name"       => "text",
-                "main-css"   => "css",
-                "background" => "image"
-            ]
+            "settings"   => [
+                "title"        => "text",
+                "description" => "textarea",
+                "css"         => "textarea",
+            ],
+            "properties" => [
+                "background"  => "image",
+            ],
         ];
     }
 
@@ -48,10 +51,10 @@ class inline extends \format_ludic\skin {
      * @return \stdClass
      */
     public function get_edit_image() {
-        global $OUTPUT;
+        $background = $this->get_properties('background');
         return (object) [
-            'imgsrc' => $OUTPUT->image_url('default-cm', 'format_ludic')->out(),
-            'imgalt' => 'In page'
+            'imgsrc' => $background->imgsrc,
+            'imgalt' => isset($background->imgalt) ? $background->imgalt : ''
         ];
     }
 
@@ -64,11 +67,12 @@ class inline extends \format_ludic\skin {
      */
     static public function get_instance() {
         return new self((object) [
-            'id'          => FORMAT_LUDIC_CM_SKIN_INLINE_ID,
+            'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'inline',
             'title'       => get_string('cm-skin-inline-title', 'format_ludic'),
-            'description' => get_string('cm-skin-inline-description', 'format_ludic')
+            'description' => get_string('cm-skin-inline-description', 'format_ludic'),
+            'settings'    => self::get_editor_config(),
         ]);
     }
 
@@ -81,5 +85,14 @@ class inline extends \format_ludic\skin {
         return false;
     }
 
+    public function get_images_to_render() {
+        $background = $this->get_properties('background');
+        return [
+            [
+                'imgsrc' => $background->imgsrc,
+                'imgalt' => isset($background->imgalt) ? $background->imgalt : ''
+            ]
+        ];
+    }
 }
 

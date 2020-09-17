@@ -59,14 +59,14 @@ class achievement extends \format_ludic\skin {
     }
 
     public static function get_instance() {
-        return (object) [
+        return new self((object) [
             'id'          => self::get_unique_name(),
             'location'    => 'section',
             'type'        => 'achievement',
             'title'       => 'Récompenses d\'activités',
             'description' => 'Chaque activité niveau de réussite des activités change l\'état.',
             'settings'    => self::get_editor_config(),
-        ];
+        ]);
     }
 
     /**

@@ -948,7 +948,8 @@ class context_helper {
      */
     public function get_skins() {
         // Skins that don't depend on the ludic config.
-        $defaultskins = $this->get_default_skins();
+        //$defaultskins = $this->get_default_skins();
+        $defaultskins = [];
 
         // Skins from ludic config.
         $skinsconfig = $this->get_skins_config();
@@ -965,7 +966,7 @@ class context_helper {
         return $skins;
     }
 
-    public function get_skin_type_by_id($skintypeid) {
+    public function get_skin_by_id($skintypeid) {
         $allskinstypes = $this->get_skins();
         foreach ($allskinstypes as $skintype) {
             if ($skintype->id == $skintypeid) {
@@ -1103,12 +1104,14 @@ class context_helper {
      * @return skin[]
      */
     public function get_course_module_skins() {
+
         // Get all skins.
         $skins = $this->get_skins();
 
         // Keep only course module skin.
         $coursemodulesskins = [];
         foreach ($skins as $skin) {
+
             if ($skin->location === 'coursemodule') {
                 $coursemodulesskins[$skin->id] = $skin;
             }
@@ -1116,5 +1119,35 @@ class context_helper {
 
         // Return filtered skins.
         return $coursemodulesskins;
+    }
+
+    public function add_new_skin(){
+
+    }
+
+    public function update_skin(){
+
+    }
+
+    public function delete_skin(){
+
+    }
+
+    public function skin_is_used($skinid){
+        $skin = $this->get_skin_by_id($skinid);
+
+        if($skin->location == 'section'){
+            $sections = $this->get_sections();
+            foreach ($sections as $section){
+                if($section->skinid == $skinid){
+                    return true;
+                }
+            }
+        }else{
+            $coursemodules = $this->get_course_modules();
+            print_object('nbcoursesmodules : ' . count($coursemodules));
+        }
+
+        return false;
     }
 }

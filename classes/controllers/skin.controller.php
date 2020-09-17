@@ -55,8 +55,11 @@ class skin_controller extends controller_base {
             case 'get_skin_types_form':
                 $skintypeid = $this->get_param('id');
                 return $this->get_skin_types_form($skintypeid);
+            case 'get_add_skin_form';
+                $skintypeid =  $this->get_param('id');
+                return $this->get_add_skin_form($skintypeid);
             case 'validate_form' :
-                $skinid = $this->get_param('id', PARAM_INT);
+                $skinid = $this->get_param('id');
                 $courseid = $this->get_param('courseid', PARAM_INT);
                 $data = $this->get_param('data');
                 return $this->validate_form($courseid, $skinid, $data);
@@ -198,15 +201,31 @@ class skin_controller extends controller_base {
         global $PAGE, $COURSE;
         $renderer = $PAGE->get_renderer('format_ludic');
 
-        $skintype = $this->contexthelper->get_skin_type_by_id($skintypeid);
-
+        $skintype = $this->contexthelper->get_skin_by_id($skintypeid);
         $output = '';
 
         $output .= $renderer->render_edit_skins_form($COURSE->id, $skintype);
 
+        return $output;
+    }
 
+    public function get_add_skin_form($skintypeid){
+        global $COURSE, $PAGE;
+        $renderer = $PAGE->get_renderer('format_ludic');
+
+        $skintypes = $this->contexthelper->get_skins_format();
+
+        if(!array_key_exists($skintypeid, $skintypes)){
+            print_object('skin type pas correct ' . $skintypeid);
+            return false;
+        }
+
+        $output = '';
+
+        $output .= $renderer->render_edit_skins_form($COURSE->id, $skintypes[$skintypeid]);
 
         return $output;
+
     }
 
     /**
@@ -221,12 +240,89 @@ class skin_controller extends controller_base {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function validate_form($courseid, $skin, $data) {
+    public function validate_form($courseid, $skinid, $data) {
+        global $DB, $USER, $COURSE;
+
+
+
+        // if skin is not int, it's new skin (we have skin type id)
+
+        if(!is_numeric($skinid)){
+            print_object('nouveau skin !');
+            $skin = $this->contexthelper->get_skins_format()[$skinid];
+        }else{
+            $skin = $this->contexthelper->get_skin_by_id($skinid);
+            print_object($this->contexthelper->skin_is_used($skinid));
+        }
 
         // Create form.
         //$form = new edit_skins_form($courseid, $skin);
 
+        $fs = get_file_storage();
+
         print_object($data);
+
+        $skinsettings = $skin->get_editor_config();
+
+        print_object($skinsettings);
+
+        foreach ($skinsettings as $section => $options) {
+
+
+        }
+
+        $skindata = [];
+
+        $courseid = 0;
+
+        $images = [];
+        $alt = [];
+        foreach ($data as $element){
+
+            if(substr($element['name'], -4) == '-img'){
+                print_object('une image !');
+                $key = substr($element['name'], -4);
+                $images[$key] = $element;
+                continue;
+            }else if(substr($element['name'], -4) == '-alt'){
+                print_object('un alt !');
+                $key = substr($element['name'], -4);
+                $alt[$key] = $element;
+                continue;
+            }
+
+        }
+
+        if(!$courseid){
+            return false;
+        }
+
+        // TODO check capabilities
+
+        /*foreach ($images as $imagedata){
+            $draftrecord = $DB->get_record_sql(
+                'SELECT * FROM {files} where itemid = :itemid AND filearea = :filearea AND mimetype IS NOT NULL', ['itemid' => $imagedata['value'], 'filearea' => 'draft']);
+            if(!$draftrecord){
+                print_object("error ! " . $imagedata['name'] . ' ' . $imagedata['value']);
+                return false;
+            }
+
+            // Get draft file
+            $file = $fs->get_file($draftrecord->contextid, $draftrecord->component, $draftrecord->filearea,
+                $draftrecord->itemid, $draftrecord->filepath, $draftrecord->filename);
+
+            // Create file
+            $fileinfo = array(
+                'contextid' => \context_course::instance($courseid)->id,
+                'component' => 'format_ludic',
+                'filearea' => 'skin',
+                'itemid' => 0,
+                'filepath' => '/' . $imagedata['name'],
+                'filename' => $file->get_filename());
+            $fs->create_file_from_string($fileinfo, $file->get_content());
+
+            //
+        }*/
 
         //// Update successful or errors ?
         //$success = $form->validate_and_update($data);

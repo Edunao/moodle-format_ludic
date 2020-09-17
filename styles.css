@@ -68,6 +68,16 @@
     margin-bottom: 0;
 }
 
+@media (max-width: 1050px) {
+    .format-ludic #region-main .card-body{
+        padding: 0;
+    }
+
+    .format-ludic #ludic-main-container{
+        border: 0;
+    }
+}
+
 /* -----------------------------------------
     Navbar
 */
@@ -131,6 +141,13 @@
     line-height: normal;
     min-height: 120px;
     width: 100%;
+}
+
+@media (max-width: 1050px) {
+    .format-ludic .item.section .title-tile {
+        min-height: 0;
+        font-size: 20px;
+    }
 }
 
 .format-ludic .item.coursemodule .title-tile {
@@ -241,6 +258,12 @@
     color: #1d1061;
 }
 
+@media (max-width: 800px) {
+    .skin-type-avatar .slot-item {
+        font-size: 16px;
+    }
+}
+
 .skin-type-avatar .slot-item:not(:last-child) {
     border-bottom: 1px dotted #1d1061;
 }
@@ -298,6 +321,12 @@
     max-width: 75%;
 }
 
+@media (max-width: 1050px) {
+    .skin-extra-html.shop .modal-dialog {
+        max-width: 98%;
+    }
+}
+
 .no-ludic-event.shop-container {
     display: flex;
     align-items: center;
@@ -320,6 +349,15 @@
 
 .shop-container .avatar-preview {
     flex-basis: 500px;
+    margin-bottom: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (max-width: 1050px) {
+    .shop-container .avatar-preview {
+        flex-basis: 350px;
+    }
 }
 
 .shop-container .shop-content {
@@ -349,6 +387,13 @@
 .skin-extra-html.shop .modal-dialog,
 .skin-extra-html.shop .modal-content {
     height: 80%;
+}
+
+@media (max-width: 1050px) {
+    .skin-extra-html.shop .modal-dialog,
+    .skin-extra-html.shop .modal-content {
+        height: 95%;
+    }
 }
 
 .skin-extra-html.shop .modal-body {
@@ -411,6 +456,13 @@
 
 #section-block > .section {
     max-width: 500px;
+}
+
+@media (max-width: 800px) {
+    #section-block > .section {
+        margin-left: 0;
+        margin-right: 0;
+    }
 }
 
 #page-course-view-ludic .section-block .section.selected {
@@ -488,6 +540,10 @@
     border-radius: 10px;
 }
 
+#ludic-main-container.editmode .item.section.is-not-visible .item-img-container{
+    opacity: 0.4;
+}
+
 
 #ludic-main-container.editmode .overview-img-container {
     width: 100px;
@@ -511,6 +567,23 @@
     height: 30px;
 }
 
+.ludic-form .ludic-form-separator{
+    background-color: #F2F0EC;
+    font-family: 'Montserrat-Medium';
+    color: #1D1061;
+    padding: 3px 10px;
+    width: 100%;
+    height: 25px;
+    margin-bottom: 7px;
+    margin-top: 7px;
+}
+
+@media (max-width: 800px) {
+    #ludic-main-container .children-title, #ludic-main-container .sections-container-title {
+        text-align: center;
+    }
+}
+
 #ludic-main-container.editmode .sections-container-title {
     margin: 0 10px;
 }
@@ -518,6 +591,7 @@
 #ludic-main-container.editmode .ludic-add-button {
     height: auto;
     align-self: center;
+    margin-top: 10px;
 }
 
 #ludic-main-container.editmode .item-icon.position-top {

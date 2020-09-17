@@ -225,6 +225,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 case 'displayCourseModules':
                     result = ludic.displayCourseModules(id, itemId, callback);
                     break;
+                case 'editSkinAddStep':
+                    result = ludic.editSkinAddStep(item);
+                    break;
                 default:
                     result = eval('ludic.' + name + '(item)');
                     return result;
@@ -323,6 +326,16 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
 
+        editSkinAddStep: function(element){
+            console.log('coucou', element)
+            ludic.setFormChanged(true);
+        },
+
+        editSkindeleteStep: function(element){
+            console.log('Courouc 2 ', element);
+            ludic.setFormChanged(true);
+        },
+
         /**
          * Display properties of item.
          *
@@ -358,7 +371,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 }
             });
         },
-
         initAvatar: function (selector) {
             $(selector + ' .skin-type-avatar .open-shop').on('click', function (e) {
                 let shopid = $(this).attr('class').split(' open-shop-')[1];
@@ -471,7 +483,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 dataType: 'json',
                 action: 'validate_form',
                 callback: function (json) {
-                    console.log('form is validate', json);
 
                     // Add html with corresponding class : error or success.
                     let newClass = json.success ? 'success' : 'error';

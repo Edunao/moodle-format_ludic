@@ -51,14 +51,14 @@ class avatar extends \format_ludic\skin {
     }
 
     public static function get_instance() {
-        return (object) [
+        return new self((object) [
             'id'          => self::get_unique_name(),
             'location'    => 'section',
             'type'        => 'avatar',
             'title'       => 'Avatar',
             'description' => 'Chaque réussite donne des points à dépenser pour acheter des objects',
             'settings'    => self::get_editor_config(),
-        ];
+        ]);
     }
 
     /**
