@@ -66,7 +66,7 @@ class collection extends \format_ludic\skin {
      * @return \stdClass
      */
     public function get_edit_image() {
-        $image = $this->get_properties('finalimage');
+        $image = $this->get_properties('baseimage');
         return $image ? $image : $this->get_default_image();
     }
 

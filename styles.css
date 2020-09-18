@@ -658,6 +658,16 @@
     width: 100%;
 }
 
+
+#ludic-main-container .container-form .ludic-filepicker-img-preview{
+    margin-bottom: 10px;
+}
+
+#ludic-main-container .container-form .ludic-filepicker-img-preview img{
+    max-width: 100px;
+    height: auto;
+}
+
 /* -----------------------------------------
     Skin choice
  */

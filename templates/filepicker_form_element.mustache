@@ -23,6 +23,12 @@
     {{/required}}
  </label>
 
+    {{#previewsrc}}
+    <div class="ludic-filepicker-img-preview">
+        <img src="{{previewsrc}}">
+    </div>
+    {{/previewsrc}}
+
     <div class="ludic-filepicker-container" data-options="{{options}}">
         {{{content}}}
     </div>

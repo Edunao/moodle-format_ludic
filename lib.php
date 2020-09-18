@@ -260,11 +260,11 @@ class format_ludic extends \format_base {
  * @throws require_login_exception
  */
 function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
+
     // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     if ($context->contextlevel != CONTEXT_COURSE) {
         return false;
     }
-
     // Make sure the user is logged in and has access to the module.
     require_login($course, true);
 
@@ -285,13 +285,17 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
     }
 
     // Retrieve the file from the Files API.
-    $fs   = get_file_storage();
-    $file = $fs->get_file($context->id, 'course', 'section', $itemid, $filepath, $filename);
+    $fs = get_file_storage();
+    if ($filearea == 'skin') {
+        $file = $fs->get_file($context->id, 'format_ludic', $filearea, $itemid, $filepath, $filename);
+    } else {
+        $file = $fs->get_file($context->id, 'course', 'section', $itemid, $filepath, $filename);
+    }
+
     if (!$file) {
         // The file does not exist.
         return false;
     }
-
     // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
     send_stored_file($file, 86400, 0, $forcedownload, $options);
 }
@@ -463,6 +467,10 @@ function format_ludic_require_files() {
     require_files_recursively($classesdir);
 }
 
+/*************  Prepare default skin data *************/
+require_once $CFG->dirroot . '/course/format/ludic/classes/data/file_api.php';
+
+// TODO il y a des problèmes de chargements multiples de la config qui mène à la création en boucle des files.... files qui ne fonctionnent pas
 
 function format_ludic_get_default_skins_settings() {
     global $OUTPUT;
@@ -678,14 +686,12 @@ function format_ludic_get_default_skins_settings() {
 
     ];
 
-    $scoreskinstypes = array_merge(format_ludic_get_default_collection_skins(),
-        format_ludic_get_default_avatar_skins(), format_ludic_get_default_section_score_skins(),
-        format_ludic_get_default_activity_score_skins(), format_ludic_get_default_not_ludic_skins(), $scoreskinstypes);
+    $scoreskinstypes = array_merge(format_ludic_get_default_collection_skins(), format_ludic_get_default_avatar_skins(), format_ludic_get_default_section_score_skins(), format_ludic_get_default_activity_score_skins(), format_ludic_get_default_not_ludic_skins(), $scoreskinstypes);
 
     return ['skins' => $scoreskinstypes];
 }
 
-function format_ludic_get_default_avatar_skins(){
+function format_ludic_get_default_avatar_skins() {
     global $OUTPUT;
 
     $avatardata = [
@@ -2469,7 +2475,7 @@ function format_ludic_get_default_avatar_skins(){
                         [
                             'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-pigeon', 'format_ludic')->out(),
                             'imgalt' => 'Pigeon',
-                            'zindex'  => '5',
+                            'zindex' => '5',
                         ],
                     ],
                     'css'       => ''
@@ -2486,7 +2492,7 @@ function format_ludic_get_default_avatar_skins(){
                         [
                             'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-teddy', 'format_ludic')->out(),
                             'imgalt' => 'Teddy',
-                            'zindex'  => '5',
+                            'zindex' => '5',
                         ],
                     ],
                     'css'       => ''
@@ -2503,7 +2509,7 @@ function format_ludic_get_default_avatar_skins(){
                         [
                             'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-pingouin', 'format_ludic')->out(),
                             'imgalt' => 'Pingouin',
-                            'zindex'  => '5',
+                            'zindex' => '5',
                         ],
                     ],
                     'css'       => ''
@@ -2520,7 +2526,7 @@ function format_ludic_get_default_avatar_skins(){
                         [
                             'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-bed-snake', 'format_ludic')->out(),
                             'imgalt' => 'Snake',
-                            'zindex'  => '5',
+                            'zindex' => '5',
                         ],
                     ],
                     'css'       => ''
@@ -2646,8 +2652,8 @@ function format_ludic_get_default_avatar_skins(){
                     'slot'      => 'T-shirt',
                     'shopimage' => [
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-cube', 'format_ludic')->out(),
-                            'imgalt'  => 'Cube T-shirt',
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-cube', 'format_ludic')->out(),
+                            'imgalt' => 'Cube T-shirt',
                         ],
                     ],
                     'images'    => [
@@ -2672,8 +2678,8 @@ function format_ludic_get_default_avatar_skins(){
                     'slot'      => 'T-shirt',
                     'shopimage' => [
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-snake', 'format_ludic')->out(),
-                            'imgalt'  => 'Snake T-shirt',
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-snake', 'format_ludic')->out(),
+                            'imgalt' => 'Snake T-shirt',
                         ],
                     ],
                     'images'    => [
@@ -2698,8 +2704,8 @@ function format_ludic_get_default_avatar_skins(){
                     'slot'      => 'T-shirt',
                     'shopimage' => [
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-pigeon', 'format_ludic')->out(),
-                            'imgalt'  => 'Pigeon T-shirt',
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-pigeon', 'format_ludic')->out(),
+                            'imgalt' => 'Pigeon T-shirt',
                         ],
                     ],
                     'images'    => [
@@ -2724,8 +2730,8 @@ function format_ludic_get_default_avatar_skins(){
                     'slot'      => 'T-shirt',
                     'shopimage' => [
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-unicorn', 'format_ludic')->out(),
-                            'imgalt'  => 'Unicorn T-shirt',
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-unicorn', 'format_ludic')->out(),
+                            'imgalt' => 'Unicorn T-shirt',
                         ],
                     ],
                     'images'    => [
@@ -2750,8 +2756,8 @@ function format_ludic_get_default_avatar_skins(){
                     'slot'      => 'T-shirt',
                     'shopimage' => [
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-star', 'format_ludic')->out(),
-                            'imgalt'  => 'Star T-shirt',
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-star', 'format_ludic')->out(),
+                            'imgalt' => 'Star T-shirt',
                         ],
                     ],
                     'images'    => [
@@ -2777,8 +2783,8 @@ function format_ludic_get_default_avatar_skins(){
                     'slot'      => 'T-shirt',
                     'shopimage' => [
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-game', 'format_ludic')->out(),
-                            'imgalt'  => 'Game T-shirt',
+                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/section-avatar-tshirt-game', 'format_ludic')->out(),
+                            'imgalt' => 'Game T-shirt',
                         ],
                     ],
                     'images'    => [
@@ -2825,12 +2831,11 @@ function format_ludic_get_default_avatar_skins(){
 
     ];
 
-
     return [$avatardata];
 
 }
 
-function format_ludic_get_default_section_score_skins(){
+function format_ludic_get_default_section_score_skins() {
     global $OUTPUT;
 
     $scoreskins = [
@@ -2844,33 +2849,45 @@ function format_ludic_get_default_section_score_skins(){
             'steps' => [
                 [
                     'threshold' => 0,
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step1', 'format_ludic')->out(),
-                    'imgalt'    => 'Aucune récompense'
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step1', 'format_ludic')->out(),
+                        'imgalt'    => 'Aucune récompense'
+                    ]
                 ],
                 [
                     'threshold' => 300,
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step2', 'format_ludic')->out(),
-                    'imgalt'    => 'Palier des 300 points !'
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step2', 'format_ludic')->out(),
+                        'imgalt'    => 'Palier des 300 points !'
+                    ]
                 ],
                 [
                     'threshold' => 500,
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step3', 'format_ludic')->out(),
-                    'imgalt'    => 'Médaille obtenue ! (500 points)'
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step3', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaille obtenue ! (500 points)'
+                    ]
                 ],
                 [
                     'threshold' => 600,
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step4', 'format_ludic')->out(),
-                    'imgalt'    => 'Premier trophée obtenu ! (600 points)'
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step4', 'format_ludic')->out(),
+                        'imgalt'    => 'Premier trophée obtenu ! (600 points)'
+                    ]
                 ],
                 [
                     'threshold' => 700,
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step5', 'format_ludic')->out(),
-                    'imgalt'    => 'Couronne obtenue ! (700 points)'
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step5', 'format_ludic')->out(),
+                        'imgalt'    => 'Couronne obtenue ! (700 points)'
+                    ]
                 ],
                 [
                     'threshold' => 800,
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step6', 'format_ludic')->out(),
-                    'imgalt'    => 'Trophée obtenu ! (800 points)'
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step6', 'format_ludic')->out(),
+                        'imgalt'    => 'Trophée obtenu ! (800 points)'
+                    ]
                 ]
             ],
             'css'   => ' 
@@ -2883,8 +2900,10 @@ function format_ludic_get_default_section_score_skins(){
     return [$scoreskins];
 }
 
-function format_ludic_get_default_collection_skins(){
-    global $OUTPUT;
+function format_ludic_get_default_collection_skins() {
+    global $OUTPUT, $COURSE;
+
+    $fileapi = new \format_ludic\file_api();
 
     $animalsstamps = [
         'id'          => 15,
@@ -2895,101 +2914,97 @@ function format_ludic_get_default_collection_skins(){
         'description' => 'La progression fait gagner des tampons animaux.',
         'properties'  => [
             'baseimage'   => [
-                'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
-                'imgalt' => 'Fond collection'
-            ],
-            'finalimage'  => [
-                'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')->out(),
+                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'baseimage', $OUTPUT->image_url('default-skins/collection/section-collection-bg', 'format_ludic')),
                 'imgalt' => 'Fond collection'
             ],
             'stampimages' => [
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stampimages_image-off_1', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-whale', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stampimages_image-on_1', $OUTPUT->image_url('default-skins/collection/section-collection-whale', 'format_ludic')),
                         'imgalt' => 'Whale'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-frog-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-frog', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-frog', $OUTPUT->image_url('default-skins/collection/section-collection-frog', 'format_ludic')),
                         'imgalt' => 'Frog'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-walrus-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-walrus', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-walrus', $OUTPUT->image_url('default-skins/collection/section-collection-walrus', 'format_ludic')),
                         'imgalt' => 'Walrus'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-owl-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collecton-owl', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-owl', $OUTPUT->image_url('default-skins/collection/section-collecton-owl', 'format_ludic')),
                         'imgalt' => 'Owl'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-pigeon-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-pigeon', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-pigeon', $OUTPUT->image_url('default-skins/collection/section-collection-pigeon', 'format_ludic')),
                         'imgalt' => 'Pigeon'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-snake-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-snake', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-snake', $OUTPUT->image_url('default-skins/collection/section-collection-snake', 'format_ludic')),
                         'imgalt' => 'Snake'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-cow-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-cow', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-cow', $OUTPUT->image_url('default-skins/collection/section-collection-cow', 'format_ludic')),
                         'imgalt' => 'Cow'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-bear-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-bear', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-bear', $OUTPUT->image_url('default-skins/collection/section-collection-bear', 'format_ludic')),
                         'imgalt' => 'Bear'
                     ]
                 ],
                 [
-                    'image-off'    => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')->out(),
+                    'image-off' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-mouse-empty', $OUTPUT->image_url('default-skins/collection/section-collection-emptystamp', 'format_ludic')),
                         'imgalt' => 'Empty'
                     ],
-                    'image-on'      => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/collection/section-collection-mouse', 'format_ludic')->out(),
+                    'image-on'  => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-collection', 15, 'stamp-mouse', $OUTPUT->image_url('default-skins/collection/section-collection-mouse', 'format_ludic')),
                         'imgalt' => 'Mouse'
                     ],
                 ],
@@ -3045,11 +3060,10 @@ function format_ludic_get_default_collection_skins(){
         ]
     ];
 
-
     return [$animalsstamps];
 }
 
-function format_ludic_get_default_activity_score_skins(){
+function format_ludic_get_default_activity_score_skins() {
     global $OUTPUT;
 
     $scoreskins = [
@@ -3100,8 +3114,10 @@ function format_ludic_get_default_activity_score_skins(){
 
 }
 
-function format_ludic_get_default_not_ludic_skins(){
-    global $OUTPUT;
+function format_ludic_get_default_not_ludic_skins() {
+    global $OUTPUT, $COURSE;
+
+    $fileapi = new \format_ludic\file_api();
 
     $sectionnoludic = [
         'id'          => 10,
@@ -3112,7 +3128,7 @@ function format_ludic_get_default_not_ludic_skins(){
         'description' => 'Rien d\'autres qu\'une jolie image.',
         'properties'  => [
             'background' => [
-                'imgsrc' => $OUTPUT->image_url('default-skins/section-notludic', 'format_ludic')->out(),
+                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-noludic', 10, 'background', $OUTPUT->image_url('default-skins/section-notludic', 'format_ludic')),
                 'imgalt' => 'Not ludic',
             ]
         ]
@@ -3127,15 +3143,15 @@ function format_ludic_get_default_not_ludic_skins(){
         'description' => 'Une image de cahier ou l\'activité inline.',
         'properties'  => [
             'background' => [
-                'imgsrc' => $OUTPUT->image_url('default-skins/cm-notludic', 'format_ludic')->out(),
+                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-noludic', 10, 'background', $OUTPUT->image_url('default-skins/cm-notludic', 'format_ludic')),
                 'imgalt' => 'Not ludic',
             ],
-            'css' => ''
+            'css'        => ''
         ]
     ];
 
     $cmnoludic2 = [
-        'id'          =>  23,
+        'id'          => 23,
         'skinid'      => 'cm-inline',
         'location'    => 'coursemodule',
         'type'        => 'inline',
@@ -3143,12 +3159,16 @@ function format_ludic_get_default_not_ludic_skins(){
         'description' => 'Une image de cahier ROUGE ou l\'activité inline.',
         'properties'  => [
             'background' => [
-                'imgsrc' => $OUTPUT->image_url('default-cm-rouge', 'format_ludic')->out(),
+                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-noludic', 10, 'background', $OUTPUT->image_url('default-cm-rouge', 'format_ludic')),
                 'imgalt' => 'Not ludic',
             ],
-            'css' => ''
+            'css'        => ''
         ]
     ];
 
-    return [$sectionnoludic, $cmnoludic, $cmnoludic2];
+    return [
+        $sectionnoludic,
+        $cmnoludic,
+        $cmnoludic2
+    ];
 }

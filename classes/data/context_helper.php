@@ -24,6 +24,7 @@
 
 namespace format_ludic;
 
+use core\session\file;
 use format_ludic\section\noludic;
 use format_ludic\section\score;
 
@@ -119,6 +120,8 @@ class context_helper {
      * @var data_api
      */
     private $dataapi = null;
+
+    public $fileapi = null;
 
     /**
      * Current course context.
@@ -234,6 +237,7 @@ class context_helper {
         $this->courseid = $page->course->id;
         $this->dbapi    = new database_api($this);
         $this->dataapi  = new data_api($this);
+        $this->fileapi  = new file_api();
     }
 
     /**
@@ -986,41 +990,6 @@ class context_helper {
      * @throws \moodle_exception
      */
     public function get_skins_format() {
-        global $CFG;
-
-        //$defaultskins = $this->get_default_skins();
-        $defaultskins = [];
-        //$sectionskins = $this->get_section_skins();
-        //$globalsection = $this->get_global_section_skins();
-        //$cmskins = $this->get_course_module_skins();
-
-        $sectionskins = [];
-        $cmskins      = [];
-
-        //$sectionskinspath = $CFG->dirroot . '/course/format/ludic/classes/models/section_skins';
-        //$sectionskinsdir = scandir($sectionskinspath);
-        //$sectionskins = [];
-        //foreach ($sectionskinsdir as $key => $file) {
-        //    if (in_array($file, array(".", ".."))) {
-        //        continue;
-        //    }
-        //    if(!is_file($sectionskinspath .'/' .$file)){
-        //        continue;
-        //    }
-        //    require_once $sectionskinspath .'/' .$file;
-        //    $classname = 'format_ludic\section\\' .pathinfo($sectionskinspath .'/' .$file)['filename'];
-        //    $sectionskins = $classname::get_instance();
-        //}
-
-        //$tempskins = array_merge($defaultskins, $sectionskins, $globalsection, $cmskins);
-        //$skins = [];
-        //foreach ($tempskins as $skin){
-        //    $uniquename = $skin->get_unique_name();
-        //    $skins[$uniquename] = $skin;
-        //}
-
-
-
         // Cm
         $noludic                                                          = \format_ludic\coursemodule\inline::get_instance();
         $skins[\format_ludic\coursemodule\inline::get_unique_name()]         = $noludic;
@@ -1040,6 +1009,12 @@ class context_helper {
 
         $sectioncollection                                                = \format_ludic\section\collection::get_instance();
         $skins[\format_ludic\section\collection::get_unique_name()]       = $sectioncollection;
+
+        $sectionprogress                                                = \format_ludic\section\progress::get_instance();
+        $skins[\format_ludic\section\progress::get_unique_name()]       = $sectionprogress;
+
+        $sectionavatar                                                = \format_ludic\section\avatar::get_instance();
+        $skins[\format_ludic\section\avatar::get_unique_name()]       = $sectionavatar;
 
 
         return $skins;

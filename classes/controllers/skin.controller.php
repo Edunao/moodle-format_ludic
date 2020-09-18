@@ -216,7 +216,6 @@ class skin_controller extends controller_base {
         $skintypes = $this->contexthelper->get_skins_format();
 
         if(!array_key_exists($skintypeid, $skintypes)){
-            print_object('skin type pas correct ' . $skintypeid);
             return false;
         }
 
@@ -225,7 +224,6 @@ class skin_controller extends controller_base {
         $output .= $renderer->render_edit_skins_form($COURSE->id, $skintypes[$skintypeid]);
 
         return $output;
-
     }
 
     /**
@@ -243,16 +241,15 @@ class skin_controller extends controller_base {
     public function validate_form($courseid, $skinid, $data) {
         global $DB, $USER, $COURSE;
 
-
-
         // if skin is not int, it's new skin (we have skin type id)
-
+        $newskin = true;
         if(!is_numeric($skinid)){
             print_object('nouveau skin !');
             $skin = $this->contexthelper->get_skins_format()[$skinid];
         }else{
             $skin = $this->contexthelper->get_skin_by_id($skinid);
-            print_object($this->contexthelper->skin_is_used($skinid));
+            $newskin = false;
+            //print_object($this->contexthelper->skin_is_used($skinid));
         }
 
         // Create form.
@@ -260,66 +257,116 @@ class skin_controller extends controller_base {
 
         $fs = get_file_storage();
 
-        print_object($data);
+        //print_object($data);
 
         $skinsettings = $skin->get_editor_config();
 
         print_object($skinsettings);
 
-        foreach ($skinsettings as $section => $options) {
+
+        // Prepare base skin data
+        $skindata = [
+            'id' => !$newskin ? $skin->id : 0,
+            'skinid'      => $skin->skinid,
+            'location'    => 'section',
+            'type'        => $skin->type,
+            'properties'  => []
+        ];
+
+        print_object($skindata);
+
+        foreach ($data as $element){
+            $formname = $element['name'];
+            $formvalue = $element['value'];
+
+            $explodedname = explode('_', $formname);
+            if(count($explodedname) == 1){
+                // First layers
+                if(array_key_exists($formname, $skinsettings['settings'])){
+                    $skindata[$formname] = $formvalue;
+                }else if(array_key_exists($formname, $skinsettings['properties'])){
+                    if(substr($element['name'], -4) == '-alt' || substr($element['name'], -4) == '-img'){
+                        // Image attribute
+                        $realname = substr($element['name'], -4);
+                        $explodedname[0] = $realname;
+                        $explodedname[1] = substr($element['name'], -4) == '-alt' ? 'imgalt' : 'imgsrc';
+                    }
+                }
+            }
 
 
         }
+        print_object('------------');
+        print_object($skindata);
 
-        $skindata = [];
 
-        $courseid = 0;
 
-        $images = [];
+        /*$images = [];
         $alt = [];
         foreach ($data as $element){
-
+            $explodedname = explode('_', $element['name']);
             if(substr($element['name'], -4) == '-img'){
                 print_object('une image !');
                 $key = substr($element['name'], -4);
                 $images[$key] = $element;
-                continue;
             }else if(substr($element['name'], -4) == '-alt'){
                 print_object('un alt !');
                 $key = substr($element['name'], -4);
                 $alt[$key] = $element;
-                continue;
+                $element['name'] = $key;
+
+            }else{
+                print_object('autre : ' . $element['name']);
+
+                if(count($explodedname) == 1){
+                    // Premier niveau
+                    $skindata[$explodedname[0]] = $element['value'];
+                }else{
+                    // on va devoir descendre
+                    foreach ($explodedname as $name => $subelement){
+
+                    }
+                }
             }
 
-        }
 
-        if(!$courseid){
-            return false;
-        }
+
+
+        }*/
+
+        //if(!$courseid){
+        //    return false;
+        //}
 
         // TODO check capabilities
 
-        /*foreach ($images as $imagedata){
-            $draftrecord = $DB->get_record_sql(
-                'SELECT * FROM {files} where itemid = :itemid AND filearea = :filearea AND mimetype IS NOT NULL', ['itemid' => $imagedata['value'], 'filearea' => 'draft']);
-            if(!$draftrecord){
-                print_object("error ! " . $imagedata['name'] . ' ' . $imagedata['value']);
-                return false;
-            }
+       /* foreach ($images as $imagedata){
 
-            // Get draft file
-            $file = $fs->get_file($draftrecord->contextid, $draftrecord->component, $draftrecord->filearea,
-                $draftrecord->itemid, $draftrecord->filepath, $draftrecord->filename);
-
-            // Create file
-            $fileinfo = array(
-                'contextid' => \context_course::instance($courseid)->id,
-                'component' => 'format_ludic',
-                'filearea' => 'skin',
-                'itemid' => 0,
-                'filepath' => '/' . $imagedata['name'],
-                'filename' => $file->get_filename());
-            $fs->create_file_from_string($fileinfo, $file->get_content());
+            $draftitemid = $imagedata['value'];
+            print_object('image data');
+            print_object($imagedata);
+            //$this->contexthelper->fileapi->create_skin_file_from_draft($courseid, );
+            //
+            //$draftrecord = $DB->get_record_sql(
+            //    'SELECT * FROM {files} where itemid = :itemid AND filearea = :filearea AND mimetype IS NOT NULL', ['itemid' => , 'filearea' => 'draft']);
+            //if(!$draftrecord){
+            //    print_object("draft vide " . $imagedata['name'] . ' ' . $imagedata['value']);
+            //    continue;
+            //}
+            //
+            //// Get draft file
+            //$file = $fs->get_file($draftrecord->contextid, $draftrecord->component, $draftrecord->filearea,
+            //    $draftrecord->itemid, $draftrecord->filepath, $draftrecord->filename);
+            //
+            //// Create file
+            //$fileinfo = array(
+            //    'contextid' => \context_course::instance($courseid)->id,
+            //    'component' => 'format_ludic',
+            //    'filearea' => 'skin',
+            //    'itemid' => 0,
+            //    'filepath' => '/' . $imagedata['name'],
+            //    'filename' => $file->get_filename());
+            //$fs->create_file_from_string($fileinfo, $file->get_content());
 
             //
         }*/
@@ -346,7 +393,7 @@ class skin_controller extends controller_base {
 
     public function delete_skin($courseid, $skinid){
         // Check if skin exist and load it
-        print_object($this->contexthelper->get_skins_config());
+        //print_object($this->contexthelper->get_skins_config());
 
         // Check if skin is used => if used, return errors with number of activities
 

@@ -28,16 +28,115 @@ defined('MOODLE_INTERNAL') || die();
 
 class file_api {
 
-    protected $contexthelper;
+
+    public function get_skin_img_from_fileid($fileid){
+        global $DB, $CFG;
+        $filerecord = $DB->get_record('files', ['id' => $fileid]);
+
+        if(!$filerecord){
+            // TODO maybe return default image ?
+            return '';
+        }
+
+        $fs = get_file_storage();
+        $file = $fs->get_file($filerecord->contextid, $filerecord->component, $filerecord->filearea,
+            $filerecord->itemid, $filerecord->filepath, $filerecord->filename);
+        if(!$file){
+            return '';
+        }
+        return $url = \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), false)->out();
+    }
 
     /**
-     * file_api constructor.
+     * Create moodle file for skin file with filame
      *
-     * @param $contexthelper
+     * @param $courseid
+     * @param $skintype
+     * @param $skinid
+     * @param $attribute
+     * @param $imgmoodleurl
+     * @return int
+     * @throws \file_exception
+     * @throws \stored_file_creation_exception
      */
-    public function __construct($contexthelper) {
-        $this->contexthelper = $contexthelper;
+    public function create_skin_file_from_url($courseid, $skintype, $skinid, $attribute, $imgmoodleurl){
+
+        // Prepare file data based on moodleurl
+        $filename = basename($imgmoodleurl->get_path());
+        $content = file_get_contents($imgmoodleurl->out());
+
+        $fs = get_file_storage();
+
+        $fileinfo = array(
+            'contextid' => \context_course::instance($courseid)->id,
+            'component' => 'format_ludic',
+            'filearea'  => 'skin',
+            'filepath'  => '/'.$skintype.'/' .$skinid . '/' . $attribute . '/' ,
+            'itemid'    => 0,
+            'filename'  => basename($filename),
+        );
+
+        // Check if file exist
+        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+            $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+        if($file){
+            $file->delete();
+        }
+
+        // Create file
+        return $fs->create_file_from_string($fileinfo, $content)->get_id();
     }
+
+    public function create_skin_file_from_draft($courseid, $skintype, $skinid, $attribute,$itemid){
+        global $DB;
+
+        $draftrecord = $DB->get_record_sql('
+            SELECT * 
+            FROM {files} 
+            WHERE itemid = :itemid AND filearea = :filearea AND mimetype IS NOT NULL
+            ', ['itemid' => $itemid, 'filearea' => 'draft']);
+
+        if(!$draftrecord){
+            return false;
+        }
+
+        $fs = get_file_storage();
+
+        $draftfile = $fs->get_file($draftrecord->contextid, $draftrecord->component, $draftrecord->filearea,
+            $draftrecord->itemid, $draftrecord->filepath, $draftrecord->filename);
+
+        $content = $draftfile->get_content();
+
+        $fileinfo = array(
+            'contextid' => \context_course::instance($courseid)->id,
+            'component' => 'format_ludic',
+            'filearea'  => 'skin',
+            'filepath'  => '/'.$skintype.'/' .$skinid . '/' . $attribute . '/' ,
+            'itemid'    => 0,
+            'filename'  => $draftfile->get_filename(),
+        );
+
+        // Check if file exist
+        $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+            $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+        if($file){
+            $file->delete();
+        }
+
+        // Create file
+        return $fs->create_file_from_string($fileinfo, $content)->get_id();
+    }
+
+    public function get_draft_itemid_from_fileid($fileid){
+        global $DB;
+        $file = $DB->get_record('files', ['id' => $fileid]);
+        $draftitemid = file_get_submitted_draft_itemid('background');
+
+        file_prepare_draft_area($draftitemid, $file->contextid, $file->component,'background', 0);
+
+        return $draftitemid;
+    }
+
 
 }
 

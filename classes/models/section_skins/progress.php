@@ -67,8 +67,8 @@ class progress extends \format_ludic\skin {
             'id'          => self::get_unique_name(),
             'location'    => 'section',
             'type'        => 'progress',
-            'title'       => 'Récompenses d\'activités',
-            'description' => 'Chaque activité niveau de réussite des activités change l\'état.',
+            'title'       => 'Récompenses de section',
+            'description' => 'Chaque réussites des activités de la section change l\'état.',
             'settings'    => self::get_editor_config(),
         ]);
     }

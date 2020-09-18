@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class filepicker_form_element extends form_element {
 
+    public $previewsrc;
+
     /**
      * filepicker_form_element constructor.
      *
@@ -41,6 +43,7 @@ class filepicker_form_element extends form_element {
      */
     public function __construct($name, $id, $value, $defaultvalue, $label = '', $attributes = [], $specific = []) {
         $this->type = 'filepicker';
+        $this->previewsrc = isset($specific['previewsrc']) ? $specific['previewsrc'] : false;
         parent::__construct($name, $id, $value, $defaultvalue, $label, $attributes, $specific);
     }
 

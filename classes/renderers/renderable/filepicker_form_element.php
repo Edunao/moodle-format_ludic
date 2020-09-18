@@ -31,6 +31,7 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
     public $filepicker;
     public $content;
     public $options;
+    public $previewsrc;
 
     /**
      * format_ludic_filepicker_form_element constructor.
@@ -44,6 +45,7 @@ class format_ludic_filepicker_form_element extends format_ludic_form_element {
         $this->filepicker->setValue($this->value);
         $this->content    = $this->filepicker->toHtml();
         $this->options    = json_encode($this->get_js_options());
+        $this->previewsrc = isset($element->specific['previewsrc']) ? $element->specific['previewsrc'] : '';
     }
 
     /**

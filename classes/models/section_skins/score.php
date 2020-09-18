@@ -30,17 +30,17 @@ class score extends \format_ludic\skin {
 
     public static function get_editor_config() {
         return [
-            "settings" => [
-                "name"        => "text",
-                "description" => "text",
-                "main-css"    => "css",
+            "settings"   => [
+                "title"       => "text",
+                "description" => "textarea",
+                "css"         => "textarea",
             ],
-            "steps"    => [
-                "threshold"  => "number",
-                "step-image" => "image",
-                "step-text"  => "string",
-                "step-css"   => "css"
-            ]
+            "properties" => [
+                "steps" => [
+                    "threshold" => "number",
+                    "image"     => "image",
+                ]
+            ],
         ];
     }
 
@@ -75,7 +75,7 @@ class score extends \format_ludic\skin {
      */
     public function get_edit_image() {
         $image = $this->get_default_image();
-        return count($this->steps) > 0 ? end($this->steps) : $image;
+        return count($this->steps) > 0 ? end($this->steps)->image : $image;
     }
 
     /**
@@ -119,8 +119,10 @@ class score extends \format_ludic\skin {
             'proportion' => 0,
             'extratext'  => '',
             'extracss'   => '',
-            'imgsrc'     => '',
-            'imgalt'     => '',
+            'image'      => [
+                'imgsrc' => '',
+                'imgalt' => '',
+            ]
         ];
 
         $nextstep = null;
@@ -155,9 +157,9 @@ class score extends \format_ludic\skin {
                 continue;
             }
 
-            if(isset($cmresults['scorehasweight']) && $cmresults['scorehasweight']){
+            if (isset($cmresults['scorehasweight']) && $cmresults['scorehasweight']) {
                 $score += $cmresults['score'];
-            }else{
+            } else {
                 $score += $cmresults['score'] * $cmresults['weight'];
             }
         }
@@ -166,7 +168,7 @@ class score extends \format_ludic\skin {
         foreach ($sortedsteps as $step) {
             if ($score >= $step->threshold) {
                 $currentstep = $step;
-            }else if(is_null($nextstep)){
+            } else if (is_null($nextstep)) {
                 $nextstep = $step;
             }
         }
@@ -191,8 +193,8 @@ class score extends \format_ludic\skin {
         $step = $this->get_current_step();
         return [
             [
-                'imgsrc' => $step->imgsrc,
-                'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
+                'imgsrc' => $step->image->imgsrc,
+                'imgalt' => isset($step->image->imgalt) ? $step->image->imgalt : ''
             ]
         ];
     }
@@ -228,7 +230,7 @@ class score extends \format_ludic\skin {
                 'class' => 'fractionbar unit'
             ],
             [
-                'text'  => (!is_null($step->nextthreahold) ? $step->nextthreahold  . '<span class="unit">pts</span>' : ''),
+                'text'  => (!is_null($step->nextthreahold) ? $step->nextthreahold . '<span class="unit">pts</span>' : ''),
                 'class' => 'next-threahold number'
             ],
             [

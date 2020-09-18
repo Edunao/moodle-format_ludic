@@ -72,6 +72,29 @@ abstract class skin extends model {
         $this->properties->title = $this->title;
         $this->properties->description = $this->description;
 
+        $this->properties = $this->prepare_properties($this->properties);
+
+    }
+
+    private function prepare_properties($properties){
+        foreach((array)$properties as $key => $value){
+            if(is_array($value)){
+                $properties->$key = $this->prepare_properties($value);
+            }else if(is_object($value)){
+                if(isset($value->imgsrc) && is_numeric($value->imgsrc)){
+                    $properties->$key->imgfileid = $value->imgsrc;
+                    $properties->$key->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_fileid($value->imgsrc);
+                }else{
+                    if(is_array($properties)){
+                        $properties[$key] = $this->prepare_properties($value);
+                    }else{
+                        $properties->$key = $this->prepare_properties($value);
+                    }
+                }
+            }
+        }
+
+        return $properties;
     }
 
     public static function get_unique_name() {

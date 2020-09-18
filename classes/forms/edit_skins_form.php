@@ -153,13 +153,12 @@ class edit_skins_form extends form {
                 $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname, $attributes);
                 break;
             case 'image':
+                $imgsrc = isset($currentvalue->imgsrc) ? $currentvalue->imgsrc : '';
                 $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
-
                 $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementname, [
                     'required'  => true,
-                    'data-test' => 'coucou',
                     'groupclass' => $groupname,
-                ], ['required' => true]);
+                ], ['previewsrc' => $imgsrc]);
                 $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementname . ' alt text');
                 break;
             default:
@@ -190,11 +189,17 @@ class edit_skins_form extends form {
                 $elements[] = new filepicker_form_element($elementname, $elementname, '', '', $elementname);
                 break;
             case 'image':
+                $itemid = '';
+                if(isset($currentvalue->imgfileid)){
+                    $itemid = $this->contexthelper->fileapi->get_draft_itemid_from_fileid($currentvalue->imgfileid);
+                }
+
+                $imgsrc = isset($currentvalue->imgsrc) ? $currentvalue->imgsrc : '';
                 $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
-                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', 31948528, '', $elementname, [
+                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', $itemid, '', $elementname, [
                     'accepted_types' => 'png, jpg, gif, svg, jpeg',
                     'required'       => true,
-                ]);
+                ],['previewsrc' => $imgsrc]);
                 $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementname . ' alt text');
                 break;
             default:
