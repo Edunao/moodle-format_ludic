@@ -33,9 +33,9 @@ class collection extends \format_ludic\skin {
             "settings"   => [
                 "title"        => "text",
                 "description" => "textarea",
-                "css"         => "textarea",
             ],
             "properties" => [
+                "css"         => "textarea",
                 "baseimage"  => "image",
                 "stampimages" => [
                     "image-off" => "image",
@@ -207,13 +207,13 @@ class collection extends \format_ludic\skin {
      * @return string
      */
     public function get_additional_css() {
-        $stampscss = $this->get_properties('stampcss');
-        $number    = count($this->get_collection_sequence());
-        foreach ($stampscss as $stampcss) {
-            if ($stampcss->number == $number) {
-                return $stampcss->css;
-            }
-        }
+        //$stampscss = $this->get_properties('stampcss');
+        //$number    = count($this->get_collection_sequence());
+        //foreach ($stampscss as $stampcss) {
+        //    if ($stampcss->number == $number) {
+        //        return $stampcss->css;
+        //    }
+        //}
         return '';
     }
 

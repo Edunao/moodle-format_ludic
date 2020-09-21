@@ -3009,44 +3009,6 @@ function format_ludic_get_default_collection_skins() {
                     ],
                 ],
             ],
-            'stampcss'    => [
-                [
-                    'number' => 1,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 2,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 3,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 4,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 5,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 6,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 7,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 8,
-                    'css'    => ''
-                ],
-                [
-                    'number' => 9,
-                    'css'    => ''
-                ],
-            ],
             'css'         => '
                     .img-step{top:2%; width:33% !important;}
                     .img-step-2{left:33%;}

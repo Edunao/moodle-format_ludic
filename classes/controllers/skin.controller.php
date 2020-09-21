@@ -259,7 +259,7 @@ class skin_controller extends controller_base {
 
         $skinsettings = $skin->get_editor_config();
 
-        //print_object($skinsettings);
+        //print_object($skin->get_properties());
 
 
         // Prepare base skin data
@@ -271,13 +271,20 @@ class skin_controller extends controller_base {
             'properties'  => []
         ];
 
+        //print_object('setting');
+        //print_object($skinsettings);
+
         //print_object($skindata);
+        // New index for each group
+        $indexesmap = [];
+        $groupsindex = [];
 
         foreach ($data as $element){
             $formname = $element['name'];
             $formvalue = $element['value'];
 
             $explodedname = explode('_', $formname);
+
             if(count($explodedname) == 1){
                 // First layers
                 if(array_key_exists($formname, $skinsettings['settings'])){
@@ -306,6 +313,68 @@ class skin_controller extends controller_base {
                             }
                             $skindata['properties'][$realname]->imgsrc = $fileid;
                         }
+                }else if(array_key_exists($formname, $skinsettings['properties'])){
+                    $skindata['properties'][$formname] = $formvalue;
+                }
+            }else{
+                //print_object('exploded name ');
+                //print_object($explodedname);
+                $groupname = $explodedname[0];
+                // Check if group name exist in settings
+                if(!array_key_exists($groupname, $skinsettings['properties'])){
+                    continue;
+                }
+
+                if(!array_key_exists($groupname,$groupsindex)){
+                    $groupsindex[$groupname] = 0;
+                }
+
+                $attribute = $explodedname[1];
+                if(!array_key_exists($attribute,  $skinsettings['properties'][$groupname])){
+                    continue;
+                }
+
+                $other = $explodedname[2];
+                // Ignored false data
+                if(strpos($other, 'empty') === 0){
+                    continue;
+                }
+
+                $currentindex = is_numeric($other) ? $other : substr($other, 0, -4);
+                if(!isset($indexesmap[$groupname][$currentindex])){
+                    $indexesmap[$groupname][$currentindex] = $groupsindex[$groupname];
+                    $groupsindex[$groupname]++;
+                }
+                $newindex = $indexesmap[$groupname][$currentindex];
+                if(!isset($skindata['properties'][$groupname][$newindex])){
+                    $skindata['properties'][$groupname][$newindex] = new \stdClass();
+                }
+
+                if(substr($other, -4) == '-alt' || substr($other, -4) == '-img'){
+                    $imgname = substr($element['name'], -4) == '-alt' ? 'imgalt' : 'imgitemid';
+                    if(!isset($skindata['properties'][$groupname][$newindex]->$attribute)){
+                        $skindata['properties'][$groupname][$newindex]->$attribute = new \stdClass();
+                    }
+
+                    $skindata['properties'][$groupname][$newindex]->$attribute->$imgname = $element['value'];
+
+                    if($imgname == 'imgitemid'){
+                        $fileid = $this->contexthelper->fileapi->create_skin_file_from_draft($this->contexthelper->get_course_id(),
+                            $skindata['skinid'], $skindata['id'], $attribute, $element['value']);
+                        if(!$fileid){
+                            // Draft not found, use previous image
+                            if(!$newskin){
+                                $groupproperty = $skin->get_properties($groupname);
+                                if(isset($groupproperty[$currentindex]->$attribute->imgfileid)){
+                                    $fileid = $groupproperty[$currentindex]->$attribute->imgfileid;
+                                }
+                            }
+                        }
+                        $skindata['properties'][$groupname][$newindex]->$attribute->imgsrc = $fileid;
+                    }
+
+                }else{
+                    $skindata['properties'][$groupname][$newindex][$attribute] = $formvalue;
                 }
             }
         }
@@ -318,9 +387,9 @@ class skin_controller extends controller_base {
         //print_object($skindata);
         $skindata = (object) $skindata;
         $this->contexthelper->add_new_skin($skindata);
-
-
-
+        //
+        //
+        //
         $return = array(
             'success' => 1,
             'value'   => 'ok',
@@ -329,6 +398,7 @@ class skin_controller extends controller_base {
         );
         return json_encode($return);
     }
+
 
     public function delete_skin($courseid, $skinid){
         // Check if skin exist and load it

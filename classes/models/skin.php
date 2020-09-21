@@ -366,19 +366,19 @@ abstract class skin extends model {
                 'action'     => 'saveForm',
                 'order'      => 1
             ],
-            [
-                'identifier' => 'form-revert',
-                'action'     => 'revertForm',
-                'order'      => 2
-            ],
-            [
-                'identifier' => 'form-duplicate-skin',
-                'action'     => 'confirmAndDuplicateSkin',
-                'order'      => 3,
-                'attributes' => [
-                    'courseid' => $COURSE->id
-                ],
-            ],
+            //[
+            //    'identifier' => 'form-revert',
+            //    'action'     => 'revertForm',
+            //    'order'      => 2
+            //],
+            //[
+            //    'identifier' => 'form-duplicate-skin',
+            //    'action'     => 'confirmAndDuplicateSkin',
+            //    'order'      => 3,
+            //    'attributes' => [
+            //        'courseid' => $COURSE->id
+            //    ],
+            //],
             [
                 'identifier' => 'form-delete-skin',
                 'action'     => 'confirmAndDeleteSkin',

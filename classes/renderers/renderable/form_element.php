@@ -59,7 +59,7 @@ class format_ludic_form_element implements renderable {
 
         $this->class = isset($this->specific['class']) ? $this->specific['class'] : '';
         $this->class = is_array($this->class) ? implode(' ', $this->class) : $this->class;
-        $this->groupclass = is_array($this->groupclass) ? implode(' ', $this->groupclass) : $this->groupclass;
+        $this->groupclass = $element->groupclass;
 
         $this->label      = $element->label;
         $this->labelclass = isset($this->specific['labelclass']) ? $this->specific['labelclass'] : '';

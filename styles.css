@@ -661,11 +661,21 @@
 
 #ludic-main-container .container-form .ludic-filepicker-img-preview{
     margin-bottom: 10px;
+    cursor: pointer;
 }
 
 #ludic-main-container .container-form .ludic-filepicker-img-preview img{
     max-width: 100px;
     height: auto;
+}
+
+/*  */
+#ludic-main-container .container-form .ludic-form-group.group-index-empty, #ludic-main-container .container-form .ludic-form-separator.group-index-empty{
+    display: none;
+}
+
+#ludic-main-container .container-form .ludic-filepicker-img-preview ~ .ludic-filepicker-container {
+    display: none;
 }
 
 /* -----------------------------------------

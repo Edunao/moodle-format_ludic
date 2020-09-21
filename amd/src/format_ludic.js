@@ -326,14 +326,24 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
 
+        toggleFilepicker: function(element){
+          console.log('toggle file picker', element);
+          element.parent('.ludic-form-group').find('.ludic-filepicker-container').toggle();
+        },
+
         editSkinAddStep: function (element) {
             console.log('coucou', element)
             ludic.setFormChanged(true);
         },
 
-        editSkindeleteStep: function (element) {
+        editSkinDeleteStep: function (element) {
             console.log('Courouc 2 ', element);
             ludic.setFormChanged(true);
+
+            let itemid = element.data('itemid');
+            $('.ludic-form-group.' + itemid).remove();
+            element.remove();
+
         },
 
         /**

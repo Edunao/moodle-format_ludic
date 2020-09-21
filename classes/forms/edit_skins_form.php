@@ -68,16 +68,16 @@ class edit_skins_form extends form {
                     $index     = 0;
                     $groupname = $elementname;
                     $elements[] = new separator_form_element($groupname,$groupname);
-                    $elements[] = new separator_form_element($groupname . ' '. 0,$groupname . ' '. 0);
+                    $elements[] = new separator_form_element($groupname . ' empty',$groupname . ' empty', ['groupclass' => 'group-index-empty']);
                     foreach ($elementtype as $subname => $subtype) {
 
                         $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, false));
-                        $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
-                            'action' => 'editSkindeleteStep',
-                            'itemid' => $groupname . '-' . 0,
-                            'class'  => 'delete-group'
-                        ]);
                     }
+                    $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
+                        'action' => 'editSkinDeleteStep',
+                        'itemid' => $groupname . '_empty',
+                        'class'  => 'delete-group group group-index-empty',
+                    ]);
 
                     // Parcourir les propriétés pour créer les enveloppes pleines, chaque enveloppe devra pouvoir être supprimés
                     $groupvalue = $this->skin->get_properties($groupname);
@@ -89,9 +89,9 @@ class edit_skins_form extends form {
                             }
                             // Delete step button
                             $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
-                                'action' => 'editSkindeleteStep',
-                                'itemid' => $groupname . '-' . $index,
-                                'class'  => 'delete-group'
+                                'action' => 'editSkinDeleteStep',
+                                'itemid' => $groupname . '_' . $index,
+                                'class'  => 'delete-group ' . $groupname . '_' .$index . ' ' . $groupname
                             ]);
                         }
                     }
@@ -135,10 +135,9 @@ class edit_skins_form extends form {
 
         // On doit pouvoir ajouter une enveloppe vide
         $attributes = [
-            'data-group' => $groupname,
-            'data-name'  => $elementname,
-            'data-index' => $index
+            'groupclass' => $groupname . ' ' . $groupname . '_' .$index . ' group-index-'.$index,
         ];
+
         switch ($elementtype) {
             case 'text':
                 $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementname, $attributes);
@@ -155,11 +154,10 @@ class edit_skins_form extends form {
             case 'image':
                 $imgsrc = isset($currentvalue->imgsrc) ? $currentvalue->imgsrc : '';
                 $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
-                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementname, [
+                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementname, array_merge($attributes,[
                     'required'  => true,
-                    'groupclass' => $groupname,
-                ], ['previewsrc' => $imgsrc]);
-                $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementname . ' alt text');
+                ]), ['previewsrc' => $imgsrc]);
+                $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementname . ' alt text',$attributes);
                 break;
             default:
                 break;

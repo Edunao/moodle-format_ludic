@@ -43,6 +43,7 @@ abstract class form_element {
     public $label;
     public $attributes;
     public $specific;
+    public $groupclass;
 
     // Attributes which are common to all input types but have special behaviors when used on a given input type.
     public $autofocus;
@@ -75,6 +76,7 @@ abstract class form_element {
         $this->disabled      = isset($this->attributes['disabled']) ? $this->attributes['disabled'] : null;
         $this->required      = isset($this->attributes['required']) ? $this->attributes['required'] : null;
         $this->readonly      = isset($this->attributes['readonly']) ? $this->attributes['readonly'] : null;
+        $this->groupclass    = isset($this->attributes['groupclass']) ? $this->attributes['groupclass'] : null;
     }
 
     /**

@@ -24,8 +24,9 @@
  </label>
 
     {{#previewsrc}}
-    <div class="ludic-filepicker-img-preview">
+    <div class="ludic-filepicker-img-preview" data-action="toggleFilepicker">
         <img src="{{previewsrc}}">
+        {{#pix}}t/editinline, core, {{# str }}edit, format_ludic{{/ str }}{{/pix}}
     </div>
     {{/previewsrc}}
 
