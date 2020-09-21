@@ -68,7 +68,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 ludic.clickOnLastItemClicked();
             }
 
-            if(ludic.editMode){
+            if (ludic.editMode) {
                 // Set correct height for left content
                 ludic.setEditContentHeight();
             }
@@ -326,12 +326,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
 
-        editSkinAddStep: function(element){
+        editSkinAddStep: function (element) {
             console.log('coucou', element)
             ludic.setFormChanged(true);
         },
 
-        editSkindeleteStep: function(element){
+        editSkindeleteStep: function (element) {
             console.log('Courouc 2 ', element);
             ludic.setFormChanged(true);
         },
@@ -379,7 +379,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
 
             // Put avatar content in popup
-            $(selector + ' .skin-type-avatar .open-shop').each(function(){
+            $(selector + ' .skin-type-avatar .open-shop').each(function () {
                 let shopid = $(this).attr('class').split(' open-shop-')[1];
                 shopid = shopid.split(' ')[0];
 
@@ -483,7 +483,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 dataType: 'json',
                 action: 'validate_form',
                 callback: function (json) {
-
+                    console.log('itemType', itemType, itemId);
                     // Add html with corresponding class : error or success.
                     let newClass = json.success ? 'success' : 'error';
                     let unwantedClass = json.success ? 'error' : 'success';
@@ -523,6 +523,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                         // Params required to display course modules.
                         params.id = $('.item.' + itemType + '[data-id="' + itemId + '"]').data('parentid');
                         params.itemId = itemId;
+                    } else if (itemType === 'skin') {
+                        // TODO load
+                        let skintype = json.skintype;
+                        console.log('skin type', skintype);
+                        $('.item.skin[data-id="'+skintype+'"]').trigger('click');
+                        return;
                     }
 
                     // Display items with callback function to select current item.
@@ -672,7 +678,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
 
-        confirmAndDeleteSkin: function(skin){
+        confirmAndDeleteSkin: function (skin) {
             // Add confirmation before delete.
             console.log('confirmation', skin.data());
             let context = {
@@ -682,7 +688,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.displayChoicePopup('confirmation-popup', 'deleteSkin', context);
         },
 
-        deleteSkin: function(skin){
+        deleteSkin: function (skin) {
             let skinid = $(skin).data('itemid');
             let courseid = $(skin).data('courseid');
             ludic.ajaxCall({
@@ -949,7 +955,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
          * TODO : fix all drag and drop using jquery ui
          * Initialize all drag and drop specific events to monitor.
          */
-        initModuleDragDrop: function(){
+        initModuleDragDrop: function () {
             console.log('init drag and drop ? 5');
             $(".container-children.coursemodules .children-elements").sortable({
                 items: ".ludic-drag",
@@ -959,12 +965,12 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                     let cmid = ui.item.data('id');
                     //update_cm_order
                     ludic.ajaxCall({
-                         cmid: cmid,
-                         newindex: $(".container-children.coursemodules .children-elements .ludic-drag").index(ui.item),
-                         controller: 'section',
-                         action: 'update_cm_order',
-                         callback: ludic.displayCourseModulesHtml
-                     });
+                        cmid: cmid,
+                        newindex: $(".container-children.coursemodules .children-elements .ludic-drag").index(ui.item),
+                        controller: 'section',
+                        action: 'update_cm_order',
+                        callback: ludic.displayCourseModulesHtml
+                    });
                 }
             });
 
@@ -974,7 +980,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
         },
 
-        initSectionDragDrop: function(){
+        initSectionDragDrop: function () {
             $(".ludic-container.container-parents").sortable({
                 items: ".item.section.ludic-drag",
                 update: function (event, ui) {
@@ -1004,8 +1010,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             //     }
             // });
-
-
 
 
             // Save the selector id of the drag object.

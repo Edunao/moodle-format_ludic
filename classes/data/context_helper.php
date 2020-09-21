@@ -1096,8 +1096,23 @@ class context_helper {
         return $coursemodulesskins;
     }
 
-    public function add_new_skin(){
+    public function get_next_skinid(){
+        $maxskinid = 0;
+        $skins = $this->get_skins();
+        foreach ($skins as $skin){
+            if($skin->id > $maxskinid){
+                $maxskinid = $skin->id;
+            }
+        }
+        return $maxskinid + 1;
+    }
 
+    public function add_new_skin($skindata){
+        // TODO check if skinid is not used
+        $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
+        $ludicconfig = json_decode($ludicconfig);
+        $ludicconfig->skins[] = $skindata;
+        $this->update_course_format_options(['ludic_config' => json_encode($ludicconfig)]);
     }
 
     public function update_skin(){
@@ -1120,7 +1135,7 @@ class context_helper {
             }
         }else{
             $coursemodules = $this->get_course_modules();
-            print_object('nbcoursesmodules : ' . count($coursemodules));
+            //print_object('nbcoursesmodules : ' . count($coursemodules));
         }
 
         return false;
