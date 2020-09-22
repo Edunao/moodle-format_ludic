@@ -37,7 +37,7 @@ class score extends \format_ludic\skin {
             ],
             "properties" => [
                 "steps" => [
-                    "threshold" => "number",
+                    "threshold" => "int",
                     "image"     => "image",
                 ]
             ],

@@ -36,16 +36,19 @@ class score extends \format_ludic\skin {
 
     public static function get_editor_config() {
         return [
-            "settings" => [
-                "main-css"          => "css",
-                "linear-value-part" => "int",
+            "settings"   => [
+                "title"        => "text",
+                "description" => "textarea",
             ],
-            "steps"    => [
-                "score-threshold"  => "number",
-                "fixed-value-part" => "int",
-                "step-image"       => "image",
-                "step-text"        => "string",
-                "step-css"         => "css"
+            "properties"    => [
+                'css' => 'textarea',
+                'linearscorepart' => 'int',
+                "steps" => [
+                    'threshold' => 'int',
+                    'scorepart' => 'int',
+                    'extracss'  => 'textarea',
+                    'background' => 'image'
+                ],
             ]
         ];
     }
@@ -66,8 +69,8 @@ class score extends \format_ludic\skin {
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'score',
-            'title'       => 'Score de base',
-            'description' => 'des points et puis voilà',
+            'title'       => 'Score activité',
+            'description' => 'On gagne des points en fonction de la note de l\'activité',
             'settings'    => self::get_editor_config(),
         ]);
     }
@@ -125,10 +128,12 @@ class score extends \format_ludic\skin {
         $this->finalscore = ($currentscorepart + ($linearpart * $this->grade / $this->maxgrade)) * $weight / ($totalscorepart + $linearpart);
 
         // Ensure step has an image.
-        if (empty($this->currentstep->imgsrc)) {
+        if (empty($this->currentstep->background)) {
             $defaultimg          = $this->get_default_image();
-            $this->currentstep->imgsrc = $defaultimg->imgsrc;
-            $this->currentstep->imgalt = $defaultimg->imgalt;
+            $this->currentstep->background = (object)[
+                'imgsrc'    => $defaultimg->imgsrc,
+                'imgalt'    =>  $defaultimg->imgalt
+            ];
         }
 
         return true;
@@ -141,7 +146,7 @@ class score extends \format_ludic\skin {
      */
     public function get_edit_image() {
         $image = $this->get_default_image();
-        return count($this->steps) > 0 ? end($this->steps) : $image;
+        return count($this->steps) > 0 ? end($this->steps)->background : $image;
     }
 
     /**
@@ -177,10 +182,7 @@ class score extends \format_ludic\skin {
     public function get_images_to_render() {
         $step = $this->get_current_step();
         return [
-            [
-                'imgsrc' => $step->imgsrc,
-                'imgalt' => isset($step->imgalt) ? $step->imgalt : ''
-            ]
+            $step->background
         ];
     }
 

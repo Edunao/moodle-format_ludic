@@ -33,18 +33,17 @@ class progress extends \format_ludic\skin {
     public static function get_editor_config() {
         return [
             "settings" => [
-                "name"        => "text",
-                "main-css"    => "css",
-                "description" => "text",
+                "title"        => "text",
+                "description" => "textarea",
             ],
-            "steps"    => [
-                "threshold" => "int",
-                // Min percent of progress to display images
-                "images"    => [
-                    "imgsrc" => "image",
-                    "imgalt" => "image",
+            "properties"    => [
+                'css' => 'textarea',
+                'linearscorepart' => 'int',
+                "steps" => [
+                    'threshold' => 'int',
+                    'css'  => 'textarea',
+                    'images' => 'images'
                 ],
-                "css"       => "text",
 
             ]
         ];

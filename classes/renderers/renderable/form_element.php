@@ -55,6 +55,7 @@ class format_ludic_form_element implements renderable {
         $this->specific   = $element->specific;
 
         $this->value        = $element->value;
+
         $this->defaultvalue = $element->defaultvalue;
 
         $this->class = isset($this->specific['class']) ? $this->specific['class'] : '';

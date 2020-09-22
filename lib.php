@@ -2836,7 +2836,9 @@ function format_ludic_get_default_avatar_skins() {
 }
 
 function format_ludic_get_default_section_score_skins() {
-    global $OUTPUT;
+    global $OUTPUT, $COURSE;
+
+    $fileapi = new \format_ludic\file_api();
 
     $scoreskins = [
         'id'          => 11,
@@ -2850,42 +2852,42 @@ function format_ludic_get_default_section_score_skins() {
                 [
                     'threshold' => 0,
                     'image' => [
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step1', 'format_ludic')->out(),
+                        'imgsrc'    => $fileapi->create_skin_file_from_url($COURSE->id, 'section-score', 11, 'image-0', $OUTPUT->image_url('default-skins/section-score-step1', 'format_ludic')),
                         'imgalt'    => 'Aucune récompense'
                     ]
                 ],
                 [
                     'threshold' => 300,
                     'image' => [
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step2', 'format_ludic')->out(),
+                        'imgsrc'    => $fileapi->create_skin_file_from_url($COURSE->id, 'section-score', 11, 'image-1', $OUTPUT->image_url('default-skins/section-score-step2', 'format_ludic')),
                         'imgalt'    => 'Palier des 300 points !'
                     ]
                 ],
                 [
                     'threshold' => 500,
                     'image' => [
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step3', 'format_ludic')->out(),
+                        'imgsrc'    => $fileapi->create_skin_file_from_url($COURSE->id, 'section-score', 11, 'image-2', $OUTPUT->image_url('default-skins/section-score-step3', 'format_ludic')),
                         'imgalt'    => 'Médaille obtenue ! (500 points)'
                     ]
                 ],
                 [
                     'threshold' => 600,
                     'image' => [
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step4', 'format_ludic')->out(),
+                        'imgsrc'    => $fileapi->create_skin_file_from_url($COURSE->id, 'section-score', 11, 'image-3', $OUTPUT->image_url('default-skins/section-score-step4', 'format_ludic')),
                         'imgalt'    => 'Premier trophée obtenu ! (600 points)'
                     ]
                 ],
                 [
                     'threshold' => 700,
                     'image' => [
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step5', 'format_ludic')->out(),
+                        'imgsrc'    => $fileapi->create_skin_file_from_url($COURSE->id, 'section-score', 11, 'image-4', $OUTPUT->image_url('default-skins/section-score-step5', 'format_ludic')),
                         'imgalt'    => 'Couronne obtenue ! (700 points)'
                     ]
                 ],
                 [
                     'threshold' => 800,
                     'image' => [
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-score-step6', 'format_ludic')->out(),
+                        'imgsrc'    => $fileapi->create_skin_file_from_url($COURSE->id, 'section-score', 11, 'image-5', $OUTPUT->image_url('default-skins/section-score-step6', 'format_ludic')),
                         'imgalt'    => 'Trophée obtenu ! (800 points)'
                     ]
                 ]
@@ -3026,7 +3028,9 @@ function format_ludic_get_default_collection_skins() {
 }
 
 function format_ludic_get_default_activity_score_skins() {
-    global $OUTPUT;
+    global $OUTPUT, $COURSE;
+
+    $fileapi = new \format_ludic\file_api();
 
     $scoreskins = [
         'id'          => 12,
@@ -3042,16 +3046,21 @@ function format_ludic_get_default_activity_score_skins() {
                     'scorepart' => 0,
                     'extratext' => '',
                     'extracss'  => '',
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step1', 'format_ludic')->out(),
-                    'imgalt'    => 'Pas de trophée'
+                    "background" => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'cm-score', 12, 'steps_background_0', $OUTPUT->image_url('default-skins/cm-score-step1', 'format_ludic')),
+                        'imgalt'    => 'Pas de trophée'
+                    ]
                 ],
                 [
                     'threshold' => 50,
                     'scorepart' => 10,
                     'extratext' => '',
                     'extracss'  => '',
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step2', 'format_ludic')->out(),
-                    'imgalt'    => 'Trophée d\'argent'
+                    "background" => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'cm-score', 12, 'steps_background_1', $OUTPUT->image_url('default-skins/cm-score-step2', 'format_ludic')),
+
+                        'imgalt'    => 'Trophée d\'argent'
+                    ]
                 ],
                 [
                     'threshold' => 100,
@@ -3059,8 +3068,10 @@ function format_ludic_get_default_activity_score_skins() {
                     'extratext' => '',
                     'extracss'  => '.skin-text.threshold{display:none;}
                                         .skin-text.score{bottom: 39%}',
-                    'imgsrc'    => $OUTPUT->image_url('default-skins/cm-score-step3', 'format_ludic')->out(),
-                    'imgalt'    => 'Trophée d\'or'
+                    'background' => [
+                        'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'cm-score', 12, 'steps_background_2', $OUTPUT->image_url('default-skins/cm-score-step3', 'format_ludic')),
+                        'imgalt'    => 'Trophée d\'or'
+                    ]
                 ]
             ],
             'linearscorepart' => 2,

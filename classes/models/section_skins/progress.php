@@ -34,25 +34,20 @@ class progress extends \format_ludic\skin {
     private $currentstep = null;
 
     public static function get_editor_config() {
+
         return [
             "settings"   => [
-                "name"        => "text",
-                "main-css"    => "css",
-                "description" => "text",
+                "title"        => "text",
+                "description" => "textarea",
             ],
-            "properties" => [
-                // TODO : demander à Daniel
-                "target" => "int",
-                // The Target score defines the 100% reference value for the section. If zero then the sum of activity scores will be used
-            ],
-            "steps"      => [
-                "threshold" => "int",
-                // Min percent of progress to display images
-                "images"    => [
-                    "imgsrc" => "image",
-                    "imgalt" => "image",
+            "properties"    => [
+                'css' => 'textarea',
+                'linearscorepart' => 'int',
+                "steps" => [
+                    'threshold' => 'int',
+                    'css'  => 'textarea',
+                    'images' => 'images'
                 ],
-                "css"       => "text",
 
             ]
         ];
@@ -68,7 +63,7 @@ class progress extends \format_ludic\skin {
             'location'    => 'section',
             'type'        => 'progress',
             'title'       => 'Récompenses de section',
-            'description' => 'Chaque réussites des activités de la section change l\'état.',
+            'description' => 'Chaque réussite des activités de la section change l\'état.',
             'settings'    => self::get_editor_config(),
         ]);
     }

@@ -334,6 +334,28 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         editSkinAddStep: function (element) {
             console.log('coucou', element)
             ludic.setFormChanged(true);
+
+            // On cherche le nouvel ID
+            let currentItemId = element.data('itemid');
+console.log('test current id ' , currentItemId);
+            currentItemId = currentItemId.split('_');
+
+            let groupname = currentItemId[0];
+            let index = parseInt(currentItemId[1]) + 1 ;
+console.log('test current id 2' , groupname, index);
+
+
+
+            // On récupére le groupe empty
+            $('.ludic-form-group.group-index-empty.' +groupname).each(function () {
+                console.log('element ', $(this));
+                let newElement = $(this).clone();
+                newElement.removeClass('.group-index-empty');
+                newElement.removeClass('.'+groupname+'_empty');
+            })
+
+            // on copie un à un les éléments en changeant le nom
+
         },
 
         editSkinDeleteStep: function (element) {
@@ -341,7 +363,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.setFormChanged(true);
 
             let itemid = element.data('itemid');
-            $('.ludic-form-group.' + itemid).remove();
+            $('.ludic-form-group.' + itemid + ', .ludic-form-separator.'+ itemid).remove();
             element.remove();
 
         },
