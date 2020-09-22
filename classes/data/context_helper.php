@@ -1108,7 +1108,6 @@ class context_helper {
     }
 
     public function add_new_skin($skindata){
-        // TODO check if skinid is not used
         $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
         $ludicconfig = json_decode($ludicconfig);
         $ludicconfig->skins[] = $skindata;
@@ -1119,12 +1118,24 @@ class context_helper {
 
     }
 
-    public function delete_skin(){
-
+    public function delete_skin($skinid){
+        $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
+        $ludicconfig = json_decode($ludicconfig);
+        foreach($ludicconfig->skins as $key => $skin){
+            if($skin->id == $skinid){
+                unset($ludicconfig->skins[$key]);
+            }
+        }
+        $ludicconfig->skins = array_values($ludicconfig->skins);
+        $this->update_course_format_options(['ludic_config' => json_encode($ludicconfig)]);
     }
 
     public function skin_is_used($skinid){
         $skin = $this->get_skin_by_id($skinid);
+
+        if(!$skin){
+            return true;
+        }
 
         if($skin->location == 'section'){
             $sections = $this->get_sections();
@@ -1135,7 +1146,11 @@ class context_helper {
             }
         }else{
             $coursemodules = $this->get_course_modules();
-            //print_object('nbcoursesmodules : ' . count($coursemodules));
+            foreach ($coursemodules as $cm){
+                if($cm->skinid == $skinid){
+                    return true;
+                }
+            }
         }
 
         return false;

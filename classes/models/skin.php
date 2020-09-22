@@ -360,33 +360,25 @@ abstract class skin extends model {
     public function get_edit_buttons() {
         global $COURSE;
 
-        return [
-            [
-                'identifier' => 'form-save',
-                'action'     => 'saveForm',
-                'order'      => 1
-            ],
-            //[
-            //    'identifier' => 'form-revert',
-            //    'action'     => 'revertForm',
-            //    'order'      => 2
-            //],
-            //[
-            //    'identifier' => 'form-duplicate-skin',
-            //    'action'     => 'confirmAndDuplicateSkin',
-            //    'order'      => 3,
-            //    'attributes' => [
-            //        'courseid' => $COURSE->id
-            //    ],
-            //],
-            [
+        $options = [];
+
+        $options[] = [
+            'identifier' => 'form-save',
+            'action'     => 'saveForm',
+            'order'      => 1
+        ];
+
+        if(is_numeric($this->id) && !$this->contexthelper->skin_is_used($this->id)){
+            $options[] = [
                 'identifier' => 'form-delete-skin',
                 'action'     => 'confirmAndDeleteSkin',
-                'order'      => 4,
+                'order'      => 2,
                 'attributes' => [
-                    'courseid' => $COURSE->id
+                    'data-courseid' => $COURSE->id
                 ],
-            ]
-        ];
+            ];
+        }
+
+        return $options;
     }
 }

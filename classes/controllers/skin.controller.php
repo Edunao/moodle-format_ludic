@@ -404,13 +404,24 @@ class skin_controller extends controller_base {
     }
 
     public function delete_skin($courseid, $skinid){
-        // Check if skin exist and load it
-        //print_object($this->contexthelper->get_skins_config());
+        if($this->contexthelper->skin_is_used($skinid)){
+            // Check if skin is used => if used, return errors with number of activities
+            return json_encode(array(
+                'success' => 0,
+                'value'   => 'Skin is used !'
 
-        // Check if skin is used => if used, return errors with number of activities
+            ));
+        }
 
+        $skin = $this->contexthelper->get_skin_by_id($skinid);
+        $this->contexthelper->delete_skin($skinid);
 
-        // If not used, purge course format option and file table
+        $return = array(
+            'success' => 1,
+            'value'   => 'ok',
+            'skintype' => $skin->skinid,
+        );
+        return json_encode($return);
     }
 
     /*********************************

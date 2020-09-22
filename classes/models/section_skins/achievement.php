@@ -34,23 +34,24 @@ class achievement extends \format_ludic\skin {
     public static function get_editor_config() {
         return [
             "settings"   => [
-                "name"        => "text",
-                "main-css"    => "css",
-                "description" => "text",
+                "title"        => "text",
+                "description" => "textarea",
             ],
             "properties" => [
+                'css' => 'textarea',
                 "background-image" => "image",
-                "final-image"      => "image"
+                "final-image"      => "image",
+                "steps"      => [
+                    "index"                    => "int",
+                    "completion-incomplete"    => "image",
+                    "completion-complete"      => "image",
+                    "completion-complete-pass" => "image",
+                    "completion-complete-fail" => "image",
+                    "step-text"                => "text",
+                    "step-css"                 => "css"
+                ]
             ],
-            "steps"      => [
-                "index"                    => "int",
-                "completion-incomplete"    => "image",
-                "completion-complete"      => "image",
-                "completion-complete-pass" => "image",
-                "completion-complete-fail" => "image",
-                "step-text"                => "text",
-                "step-css"                 => "css"
-            ]
+
         ];
     }
 

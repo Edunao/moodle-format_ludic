@@ -225,9 +225,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
                 case 'displayCourseModules':
                     result = ludic.displayCourseModules(id, itemId, callback);
                     break;
-                case 'editSkinAddStep':
-                    result = ludic.editSkinAddStep(item);
-                    break;
                 default:
                     result = eval('ludic.' + name + '(item)');
                     return result;
@@ -329,33 +326,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
         toggleFilepicker: function(element){
           console.log('toggle file picker', element);
           element.parent('.ludic-form-group').find('.ludic-filepicker-container').toggle();
-        },
-
-        editSkinAddStep: function (element) {
-            console.log('coucou', element)
-            ludic.setFormChanged(true);
-
-            // On cherche le nouvel ID
-            let currentItemId = element.data('itemid');
-console.log('test current id ' , currentItemId);
-            currentItemId = currentItemId.split('_');
-
-            let groupname = currentItemId[0];
-            let index = parseInt(currentItemId[1]) + 1 ;
-console.log('test current id 2' , groupname, index);
-
-
-
-            // On récupére le groupe empty
-            $('.ludic-form-group.group-index-empty.' +groupname).each(function () {
-                console.log('element ', $(this));
-                let newElement = $(this).clone();
-                newElement.removeClass('.group-index-empty');
-                newElement.removeClass('.'+groupname+'_empty');
-            })
-
-            // on copie un à un les éléments en changeant le nom
-
         },
 
         editSkinDeleteStep: function (element) {
@@ -556,9 +526,8 @@ console.log('test current id 2' , groupname, index);
                         params.id = $('.item.' + itemType + '[data-id="' + itemId + '"]').data('parentid');
                         params.itemId = itemId;
                     } else if (itemType === 'skin') {
-                        // TODO load
+                        // TODO select correct skin after reload
                         let skintype = json.skintype;
-                        console.log('skin type', skintype);
                         $('.item.skin[data-id="'+skintype+'"]').trigger('click');
                         return;
                     }
@@ -712,15 +681,17 @@ console.log('test current id 2' , groupname, index);
 
         confirmAndDeleteSkin: function (skin) {
             // Add confirmation before delete.
-            console.log('confirmation', skin.data());
             let context = {
-                skinid: $(skin).data('itemid') ? $(skin).data('itemid') : null,
+                itemid: $(skin).data('itemid') ? $(skin).data('itemid') : null,
                 courseid: $(skin).data('courseid') ? $(skin).data('courseid') : null
             };
+            console.log('confirmation', context);
+
             ludic.displayChoicePopup('confirmation-popup', 'deleteSkin', context);
         },
 
         deleteSkin: function (skin) {
+            console.log('skin to delete ', skin.data());
             let skinid = $(skin).data('itemid');
             let courseid = $(skin).data('courseid');
             ludic.ajaxCall({
@@ -728,8 +699,10 @@ console.log('test current id 2' , groupname, index);
                 action: 'delete_skin',
                 id: skinid,
                 courseid: courseid,
-                callback: function () {
-                    // TODO : recharger la liste de skin du skintype
+                callback: function (json) {
+                    json = $.parseJSON(json);
+                    let skintype = json.skintype;
+                    $('.item.skin[data-id="'+skintype+'"]').trigger('click');
                 }
             });
         },
