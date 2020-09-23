@@ -102,6 +102,24 @@ class format_ludic_course_module extends format_ludic_item {
 
                 $this->icons[] = $completionicon;
 
+            }else if($completioninfo->type != COMPLETION_DISABLED){
+                $completion     = $completioninfo->state == COMPLETION_INCOMPLETE ? 'completion-auto-n' : 'completion-y';
+                $targetstate    = $completioninfo->state ? 0 : 1;
+                $completionlink = "#";
+
+                $completionicon = [
+                    'imgsrc'   => $CFG->wwwroot . '/course/format/ludic/pix/' . $completion . '.svg',
+                    'imgalt'   => $completioninfo->completionstr,
+                    'position' => 'bottom',
+                    'classes'  => ' manual-completion '
+                ];
+
+                // Toggle completion on click.
+                if (!$contexthelper->is_student_view_forced()) {
+                    $completionicon['link'] = $completionlink;
+                }
+
+                $this->icons[] = $completionicon;
             }
 
         }

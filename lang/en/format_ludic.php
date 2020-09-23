@@ -48,6 +48,7 @@ $string['skins-types-list'] = 'Skins types';
 $string['skins-list'] = 'Skins';
 
 // Header bar.
+$string['header-bar-menu'] = 'L';
 $string['header-bar-preview-section'] = 'Preview section';
 $string['header-bar-student-view']    = 'Student view';
 $string['header-bar-teacher-view']    = 'Back to teacher view';
@@ -72,6 +73,7 @@ $string['label-course-module-visible']  = 'Visible';
 $string['label-select-weight']          = 'Weight';
 $string['label-select-access']          = 'Accessibility';
 $string['edit-title-coursemodule']      = 'Activités :';
+$string['addcm-button']      = 'Add activity';
 
 // Access.
 $string['access-accessible']      = 'Always accessible';
@@ -110,9 +112,14 @@ Le nombre de point dépend des réglages de l\'activité et du skin choisi :
  -  ';
 $string['skin-section-collection'] = "Ce motivateur affiche à l'utilisateur un ensemble d'images en fonction de ses réussites aux activités. 
 Il se base sur la complétion des activités uniquement : une activité complété = une image supplémentaire, en puisant aléatoirement dans la base des images.";
+$string['skin-avatar-notmoney'] = 'Not enough money !';
+$string['skin-avatar-buy'] = 'Buy now !';
+$string['skin-avatar-open-shop'] = 'Open shop';
+
 
 // Settings.
 $string['setting-weight-title']       = 'Poids des activités.';
+$string['setting-weight-description'] = 'Poids possibles pour les activités, séparés par une virgule.';
 $string['setting-weight-description'] = 'Poids possibles pour les activités, séparés par une virgule.';
 
 // Forms.
@@ -132,7 +139,7 @@ $string['form-revert']   = 'Revert';
 $string['form-delete-skin'] = "Delete skin";
 $string['form-duplicate-skin'] = "Duplicate skin";
 $string['item-preview']  = 'Preview';
-$string['item-open']     = 'Open';
+$string['item-open']     = 'Go to';
 $string['edit']          = 'Edit';
 $string['edit-settings'] = 'Settings';
 $string['duplicate']     = 'Duplicate';

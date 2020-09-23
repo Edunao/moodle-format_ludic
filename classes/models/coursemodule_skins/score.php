@@ -125,7 +125,11 @@ class score extends \format_ludic\skin {
         }
 
         // Get final score form grade, score part and linear part
-        $this->finalscore = ($currentscorepart + ($linearpart * $this->grade / $this->maxgrade)) * $weight / ($totalscorepart + $linearpart);
+        //$this->finalscore = ($currentscorepart + ($linearpart * $this->grade / $this->maxgrade)) * $weight / ($totalscorepart + $linearpart);
+
+        $rawscore = ($currentscorepart + ($linearpart * $this->grade / $this->maxgrade)) / ($totalscorepart + $linearpart);
+        $roundedscore = ceil($rawscore * 20) / 20;
+        $this->finalscore = $roundedscore * $weight;
 
         // Ensure step has an image.
         if (empty($this->currentstep->background)) {

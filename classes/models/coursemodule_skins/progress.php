@@ -213,14 +213,15 @@ class progress extends \format_ludic\skin {
             return 0;
         }
 
-        return $skinresults['score'] !== false ? $skinresults['score'] * 100 : $skinresults['completion'] * 100;
+        return $skinresults['rawscore'] !== false ? $skinresults['rawscore'] * 100 : $skinresults['completion'] * 100;
     }
 
     public function get_skin_results() {
 
         $skinresults = parent::get_skin_results();
-
-
+        $skinresults['rawscore'] = $skinresults['score'];
+        $skinresults['scorehasweight'] = true;
+        $skinresults['score'] = $skinresults['score'] * $skinresults['weight'];
         $skinresults['skin'] = 'progress';
 
         return $skinresults;

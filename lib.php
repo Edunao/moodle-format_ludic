@@ -477,88 +477,7 @@ function format_ludic_get_default_skins_settings() {
 
     $scoreskinstypes = [
 
-        [
-            'id'          => 16,
-            'location'    => 'section',
-            'type'        => 'achievement',
-            'title'       => 'Médaille',
-            'description' => 'Des médailles en fonction des réussites des activités !',
-            'properties'  => [
-                'background-image' => [
-                    'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-bg', 'format_ludic')->out(),
-                    'imgalt' => 'Fond de base'
-                ],
-                'final-image'      => [
-                    'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-final', 'format_ludic')->out(),
-                    'imgalt' => '100% de réussite !'
-                ],
-                'steps'            => [
-                    [
-                        'state'     => COMPLETION_INCOMPLETE,
-                        'statestr'  => 'completion-incomplete',
-                        'imgsrc'    => '',
-                        'imgalt'    => '',
-                        'scorepart' => 0,
-                    ],
-                    [
-                        'state'     => COMPLETION_COMPLETE_FAIL,
-                        'statestr'  => 'completion-complete-fail',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-fail', 'format_ludic')->out(),
-                        'imgalt'    => 'Médaillé ratée',
-                        'scorepart' => 0.25,
-                    ],
-                    [
-                        'state'     => COMPLETION_COMPLETE,
-                        'statestr'  => 'completion-complete',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-complete', 'format_ludic')->out(),
-                        'imgalt'    => 'Médaille bien',
-                        'scorepart' => 0.75,
-                    ],
-                    [
-                        'state'     => COMPLETION_COMPLETE_PASS,
-                        'statestr'  => 'completion-complete-pass',
-                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-completepass', 'format_ludic')->out(),
-                        'imgalt'    => 'Médaille très bien !',
-                        'scorepart' => 1,
-                    ],
-                ],
-                'css'              => '
-                    .skin-text.completion-count.sup-zero{    
-                                display: block !important;
-                                background: #1d1061;
-                                color: white !important;
-                                border-radius: 100%;
-                                position: absolute;
-                                font-size: 23px !important;
-                                width: 39px;
-                                padding: 2px 2px;
-                                text-align: center;
-                     } 
-                    .completion-incomplete{
-                        top: 31%;
-                        left: 55%;
-                    }
-                    .completion-complete{
-                        bottom: 13%;
-                        left: 55%;
-                    }
-                    .completion-complete-fail{
-                        bottom: 14%;
-                        left: 25%;
-                    }
-                    .completion-complete-pass{
-                        right: 6%;
-                        bottom: 14%;
-                    }
-                    .skin-text.completion-count.sup-zero.perfect{
-                        right: 24%;
-                        font-size: 40px !important;
-                        width: 65px;
-                     }
-                 
-                '
-            ]
-        ],
+
         [
             'id'          => 17,
             'skinid'      => 'section-progress',
@@ -686,9 +605,102 @@ function format_ludic_get_default_skins_settings() {
 
     ];
 
-    $scoreskinstypes = array_merge(format_ludic_get_default_collection_skins(), format_ludic_get_default_avatar_skins(), format_ludic_get_default_section_score_skins(), format_ludic_get_default_activity_score_skins(), format_ludic_get_default_not_ludic_skins(), $scoreskinstypes);
+    $scoreskinstypes = array_merge(format_ludic_get_default_collection_skins(), format_ludic_get_default_section_achievement(),format_ludic_get_default_avatar_skins(), format_ludic_get_default_section_score_skins(), format_ludic_get_default_activity_score_skins(), format_ludic_get_default_not_ludic_skins(), $scoreskinstypes);
 
     return ['skins' => $scoreskinstypes];
+}
+
+function format_ludic_get_default_section_achievement(){
+    global $OUTPUT;
+
+    $skin = [
+        'id'          => 16,
+        'location'    => 'section',
+        'type'        => 'achievement',
+        'title'       => 'Médaille',
+        'description' => 'Des médailles en fonction des réussites des activités !',
+        'properties'  => [
+            'background-image' => [
+                'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-bg', 'format_ludic')->out(),
+                'imgalt' => 'Fond de base'
+            ],
+            'final-image'      => [
+                'imgsrc' => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-final', 'format_ludic')->out(),
+                'imgalt' => '100% de réussite !'
+            ],
+            'steps'            => [
+                [
+                    'state'     => 'incomplete',
+                    'statestr'  => 'completion-incomplete',
+                    'image' => [
+                        'imgsrc'    => '',
+                        'imgalt'    => '',
+                    ],
+                ],
+                [
+                    'state'     => 'fail',
+                    'statestr'  => 'completion-complete-fail',
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-fail', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaillé ratée',
+                    ],
+                ],
+                [
+                    'state'     => 'complete',
+                    'statestr'  => 'completion-complete',
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-complete', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaille bien',
+                    ]
+                ],
+                [
+                    'state'     => 'perfect',
+                    'statestr'  => 'completion-complete-pass',
+                    'image' => [
+                        'imgsrc'    => $OUTPUT->image_url('default-skins/section-achievement/section-achievement-completepass', 'format_ludic')->out(),
+                        'imgalt'    => 'Médaille très bien !',
+                    ],
+                ],
+            ],
+            'css'              => '
+                    .skin-text.completion-count.sup-zero{    
+                                display: block !important;
+                                background: #1d1061;
+                                color: white !important;
+                                border-radius: 100%;
+                                position: absolute;
+                                font-size: 23px !important;
+                                width: 39px;
+                                padding: 2px 2px;
+                                text-align: center;
+                     } 
+                    .completion-incomplete{
+                        top: 31%;
+                        left: 55%;
+                    }
+                    .completion-complete{
+                        bottom: 13%;
+                        left: 55%;
+                    }
+                    .completion-fail{
+                        bottom: 14%;
+                        left: 25%;
+                    }
+                    .completion-perfect{
+                        right: 6%;
+                        bottom: 14%;
+                    }
+                    .skin-text.completion-count.sup-zero.perfect{
+                        right: 24%;
+                        font-size: 40px !important;
+                        width: 65px;
+                     }
+                 
+                '
+        ]
+    ];
+
+    return [$skin];
 }
 
 function format_ludic_get_default_avatar_skins() {
@@ -3059,10 +3071,9 @@ function format_ludic_get_default_activity_score_skins() {
             ],
             'linearscorepart' => 2,
             'css'             => '.sub-tile.skin-tile .skin-text {font-size:30px;} 
-                            .skin-text.score{display: block;position: absolute;left: 59%;bottom: 49%;font-size:1.5rem;font-weight:bold;} 
+                            .skin-text.score{display: block;position: absolute;left: 59%;bottom: 38%;font-size:1.5rem;font-weight:bold;} 
                             .skin-text.score::after{content: "pts";font-size:1rem;font-weight:normal;}
-                            .skin-text.threshold{display: inline-block;position: absolute;left: 43%;bottom: 17%;font-size:20px !important;font-weight:bold;}
-                            .skin-text.threshold::before{content: "SEUIL : ";font-size:20px;font-weight:normal;}'
+                            '
         ]
     ];
 
@@ -3106,25 +3117,8 @@ function format_ludic_get_default_not_ludic_skins() {
         ]
     ];
 
-    $cmnoludic2 = [
-        'id'          => 23,
-        'skinid'      => 'cm-inline',
-        'location'    => 'coursemodule',
-        'type'        => 'inline',
-        'title'       => 'Pas de motivateur mais il est rouge !',
-        'description' => 'Une image de cahier ROUGE ou l\'activité inline.',
-        'properties'  => [
-            'background' => [
-                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-noludic', 10, 'background', $OUTPUT->image_url('default-cm-rouge', 'format_ludic')),
-                'imgalt' => 'Not ludic',
-            ],
-            'css'        => ''
-        ]
-    ];
-
     return [
         $sectionnoludic,
         $cmnoludic,
-        $cmnoludic2
     ];
 }

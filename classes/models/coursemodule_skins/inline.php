@@ -94,5 +94,15 @@ class inline extends \format_ludic\skin {
             ]
         ];
     }
+
+    public function get_skin_results() {
+
+        $skinresults = parent::get_skin_results();
+
+        $skinresults['score'] = false;
+        $skinresults['completion'] = false;
+
+        return $skinresults;
+    }
 }
 

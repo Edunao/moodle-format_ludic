@@ -31,17 +31,19 @@ defined('MOODLE_INTERNAL') || die();
 
 class achievement extends \format_ludic\skin {
 
+    private $state = null;
+
     public static function get_editor_config() {
         return [
             "settings"   => [
-                "title"        => "text",
+                "title"       => "text",
                 "description" => "textarea",
             ],
             "properties" => [
-                'css' => 'textarea',
+                'css'              => 'textarea',
                 "background-image" => "image",
                 "final-image"      => "image",
-                "steps"      => [
+                "steps"            => [
                     "index"                    => "int",
                     "completion-incomplete"    => "image",
                     "completion-complete"      => "image",
@@ -114,16 +116,11 @@ class achievement extends \format_ludic\skin {
     public function get_images_to_render() {
         $images = [];
 
-        $completioninfo = $this->get_completion_info();
-
         // ​​If the activities have all been completed, then the final image is displayed.
-        if ($completioninfo['perfect']) {
+        if ($this->is_perfect()) {
             $images[] = $this->get_properties('final-image');
             return $images;
         }
-
-        // From now this indicator is useless.
-        unset($completioninfo['perfect']);
 
         // Background (optional)
         $baseimage        = $this->get_properties('background-image');
@@ -132,18 +129,14 @@ class achievement extends \format_ludic\skin {
 
         // Image for completion state
         $steps = $this->get_properties('steps');
-        foreach ($completioninfo as $completionkey => $completion) {
-            if ($completion['count'] > 0) {
-                foreach ($steps as $stepinfo) {
-                    if ($stepinfo->state == $completion['state']) {
-                        $image = $stepinfo;
-
-                        if (isset($image->imgsrc) && $image->imgsrc != '') {
-                            $image->class           = 'img-step img-step-' . $completionkey;
-                            $images[$completionkey] = $image;
-                            break;
-                        }
-                    }
+        $state = $this->get_state();
+        foreach($steps as $stepinfo){
+            if(isset($state[$stepinfo->state]) && $state[$stepinfo->state] > 0){
+                $image = $stepinfo->image;
+                if (isset($image->imgsrc) && $image->imgsrc != '') {
+                    $image->class           = 'img-step img-step-' . $stepinfo->state;
+                    $images[$stepinfo->state] = $image;
+                    continue;
                 }
             }
         }
@@ -152,30 +145,100 @@ class achievement extends \format_ludic\skin {
     }
 
     public function get_texts_to_render() {
-        $texts = [];
+        $texts          = [];
+        $state          = $this->get_state();
+        $steps          = $this->get_properties('steps');
+        $isperfect = $this->is_perfect();
 
-        $completioninfo = $this->get_completion_info();
-        $isperfect      = $completioninfo['perfect'];
-        unset($completioninfo['perfect']);
-        $steps = $this->get_properties('steps');
-        foreach ($completioninfo as $completionkey => $completion) {
-            foreach ($steps as $stepinfo) {
-                if ($stepinfo->state == $completion['state']) {
-                    $classes = ' number completion-count ' . $completionkey;
-                    if ($completion['count'] > 0) {
-                        $classes .= ' sup-zero ';
-                    }
-                    if ($isperfect) {
-                        $classes .= ' perfect ';
-                    }
-                    $texts[] = ['text'  => $completion['count'],
-                                'class' => $classes
-                    ];
-                    break;
+        foreach($steps as $stepinfo){
+            if(isset($state[$stepinfo->state]) && $state[$stepinfo->state] > 0){
+                $classes = ' number completion-count  completion-' . $stepinfo->state;
+                if ($state[$stepinfo->state] > 0) {
+                    $classes .= ' sup-zero ';
                 }
+                if ($isperfect) {
+                    $classes .= ' perfect ';
+                }
+                $texts[] = [
+                    'text'  => $state[$stepinfo->state],
+                    'class' => $classes
+                ];
+                continue;
             }
         }
 
         return $texts;
+    }
+
+    public function get_state() {
+
+        if (!is_null($this->state)) {
+            return $this->state;
+        }
+
+        $cms    = $this->item->get_course_modules();
+        $states = [
+            'incomplete' => 0,
+            'fail'       => 0,
+            'complete'   => 0,
+            'disable'    => 0,
+            'perfect'    => 0,
+        ];
+        foreach ($cms as $cm) {
+            $userresults = $cm->get_user_results();
+
+            // If cm has no completion and no grade, skip it
+            if ($userresults['gradeinfo']->grademax == 0 && $userresults['completioninfo']->type == 0) {
+                continue;
+            }
+
+            $cmstate         = 'incomplete';
+            $completionstate = 'incomplete';
+            if ($userresults['completioninfo']->type != 0) {
+                if ($userresults['completioninfo']->state == COMPLETION_COMPLETE || $userresults['completioninfo']->state == COMPLETION_COMPLETE_PASS) {
+                    $completionstate = 'complete';
+                } else if ($userresults['completioninfo']->state === COMPLETION_COMPLETE_FAIL) {
+                    $completionstate = 'failed';
+                }
+            } else {
+                $completionstate = 'disable';
+            }
+
+            if ($userresults['gradeinfo']->grademax == 0) {
+                $cmstate = $completionstate == 'complete' ? 'perfect' : $completionstate;
+                $states[$cmstate]++;
+                continue;
+            }
+
+            if ($userresults['gradeinfo']->grademax > 0) {
+                if ($userresults['gradeinfo']->proportion == 1) {
+                    $cmstate = $completionstate == 'disable' || $completionstate == 'complete' ? 'perfect' : $completionstate;
+                } else {
+                    $cmstate = $completionstate;
+                }
+            }
+
+            $states[$cmstate]++;
+        }
+
+        return $states;
+    }
+
+    public function is_perfect() {
+        $state     = $this->get_state();
+        if ($state['perfect'] == 0) {
+            return false;
+        }
+        foreach ($state as $name => $value) {
+            if ($name == 'perfect' || $name == 'disable') {
+                continue;
+            }
+
+            if($value > 0){
+                return false;
+            }
+        }
+
+        return true;
     }
 }

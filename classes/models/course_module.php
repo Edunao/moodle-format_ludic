@@ -274,9 +274,8 @@ class course_module extends model implements skinnable_interface {
 
         // Update skin id, weight or access if required.
         if (isset($data['skinid']) && $data['skinid'] != $this->skinid ||
-            isset($data['weight']) && $data['weight'] != $this->weight ||
-            isset($data['access']) && $data['access'] != $this->access) {
-            $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['access']);
+            isset($data['weight']) && $data['weight'] != $this->weight ) {
+            $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], 1);
         }
 
         // Update section
@@ -323,8 +322,8 @@ class course_module extends model implements skinnable_interface {
         $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
         $isinline = $modname ? plugin_supports('mod', $modname, FEATURE_NO_VIEW_LINK, false) : false;
         $coursemodulesskins = [];
-        foreach ($skins as $skin) {
-
+        foreach ($skins as $key => $skin) {
+//print_object('key : ' . $key);
             if($isinline && $skin->type != 'inline'){
                 continue;
             }
@@ -357,12 +356,13 @@ class course_module extends model implements skinnable_interface {
         $skins = $this->get_available_skins();
         // Search one skin available and return it.
         foreach ($skins as $skin) {
+
                 return $skin;
         }
 
         // No skins found, return inline by default.
         // TODO fix this, inline skin can't be call like that
-        return coursemodule\inline::get_instance();
+/*        return coursemodule\inline::ge;*/
     }
 
     /**
@@ -379,10 +379,14 @@ class course_module extends model implements skinnable_interface {
         $dbapi    = $this->contexthelper->get_database_api();
         $dbrecord = $dbapi->get_format_ludic_cm_by_cmid($this->id);
 
-        // TODO check if skin still exist !
-
-        // If we found relation record, return it.
         if ($dbrecord) {
+            // Check if skin exist and put default skin if needed
+            if(!$this->contexthelper->get_skin_by_id($dbrecord->skinid)){
+                $defaultskin = $this->get_default_skin();
+                $dbrecord->skinid = $defaultskin->id;
+                $dbapi->set_format_ludic_cm($dbrecord->courseid, $dbrecord->cmid, $dbrecord->skinid, $dbrecord->weight, $dbrecord->access);
+            }
+
             return $dbrecord;
         }
 

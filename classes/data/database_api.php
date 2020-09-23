@@ -180,7 +180,8 @@ class database_api {
         if ($dbrecord) {
             $dbrecord->skinid = $skinid;
             $dbrecord->weight = $weight;
-            $dbrecord->access = $access;
+            // Access is not used
+            $dbrecord->access = 1;
             return $this->db->update_record('format_ludic_cm', $dbrecord);
         }
 
@@ -190,7 +191,8 @@ class database_api {
         $dbrecord->cmid     = $cmid;
         $dbrecord->skinid   = $skinid;
         $dbrecord->weight   = $weight;
-        $dbrecord->access   = $access;
+        // Access is not used
+        $dbrecord->access   = 1;
         return $this->db->insert_record('format_ludic_cm', $dbrecord);
     }
 
