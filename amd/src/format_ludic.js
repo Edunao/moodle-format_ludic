@@ -477,6 +477,17 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             let form = $(formSelector);
             let serialize = form.serializeArray();
             let container = form.parent().find('.container-success');
+
+            /*if(itemType == 'skin'){
+                console.log('serialize value ', serialize);
+                for(let i = 0; i < serialize.length; i++){
+                    let element = serialize[i];
+                    if(element.name.substr(id.length - 4) == '-img'){
+
+                    }
+                }
+            }*/
+
             ludic.addLoading(container);
             ludic.ajaxCall({
                 controller: itemType,
@@ -519,12 +530,19 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
                         // Then select current course module.
                         params.callback = function () {
-                            $('.item.' + itemType + '[data-id="' + itemId + '"]').addClass('selected');
+                            // Select section if course module section has changed
+                            if($('.item.' + itemType + '[data-id="' + itemId + '"]').length === 0){
+                                $('.item.section[data-id="' + params.id + '"]').trigger("click");
+                            }else{
+                                $('.item.' + itemType + '[data-id="' + itemId + '"]').addClass('selected');
+                            }
+
                         };
 
                         // Params required to display course modules.
                         params.id = $('.item.' + itemType + '[data-id="' + itemId + '"]').data('parentid');
                         params.itemId = itemId;
+
                     } else if (itemType === 'skin') {
                         // TODO select correct skin after reload
                         let skintype = json.skintype;

@@ -81,10 +81,29 @@ class coursemodule_form extends form {
             ], ['options' => format_ludic_get_weight_options()]);
 
         // Course module access.
-        $elements[] = new select_form_element('access', 'coursemodule-access', $this->object->access, null, get_string('label-select-access', 'format_ludic'), [
-                'required' => true,
-                'multiple' => false
-            ], ['options' => format_ludic_get_access_options()]);
+        $elements[] = new checkbox_form_element('visible', 'coursemodule-visible', $this->object->visible, 1, get_string('label-section-visible', 'format_ludic'), [
+            'required' => true,
+        ]);
+
+        // Course module section
+        $sections = $this->contexthelper->get_course()->get_sections(true);
+        $options = [];
+        foreach ($sections as $section){
+            $options[] = [
+                'value'       => $section->id,
+                'name'        => $section->name,
+            ];
+        }
+        $elements[] = new select_form_element('section', 'coursemodule-section', $this->object->sectionid, null, 'Section', [
+            'required' => true,
+            'multiple' => false
+        ], ['options' => $options]);
+
+
+        //$elements[] = new select_form_element('access', 'coursemodule-access', $this->object->access, null, get_string('label-select-access', 'format_ludic'), [
+        //        'required' => true,
+        //        'multiple' => false
+        //    ], ['options' => format_ludic_get_access_options()]);
 
         return $elements;
     }

@@ -470,10 +470,10 @@ function format_ludic_require_files() {
 /*************  Prepare default skin data *************/
 require_once $CFG->dirroot . '/course/format/ludic/classes/data/file_api.php';
 
-// TODO il y a des problèmes de chargements multiples de la config qui mène à la création en boucle des files.... files qui ne fonctionnent pas
-
 function format_ludic_get_default_skins_settings() {
-    global $OUTPUT;
+    global $OUTPUT,$COURSE;
+
+    $fileapi = new \format_ludic\file_api();
 
     $scoreskinstypes = [
 
@@ -572,7 +572,7 @@ function format_ludic_get_default_skins_settings() {
                         'threshold' => 0,
                         "images"    => [
                             [
-                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-step1', 'format_ludic')->out(),
+                                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-progress', 17, 'steps_1_images_1', $OUTPUT->image_url('default-skins/section-progress/section-progress-step1', 'format_ludic')),
                                 'imgalt' => 'En bas des marches'
                             ]
                         ],
@@ -582,11 +582,11 @@ function format_ludic_get_default_skins_settings() {
                         'threshold' => 1,
                         "images"    => [
                             [
-                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-step2', 'format_ludic')->out(),
-                                'imgalt' => 'Ascension en cours'
+                                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-progress', 17, 'steps_2_images_1', $OUTPUT->image_url('default-skins/section-progress/section-progress-step2', 'format_ludic')),
+                                'imgalt' => 'Ascension en cours',
                             ],
                             [
-                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-step2-character', 'format_ludic')->out(),
+                                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-progress', 17, 'steps_2_images_2', $OUTPUT->image_url('default-skins/section-progress/section-progress-step2-character', 'format_ludic')),
                                 'imgalt' => 'Moi'
                             ],
                         ],
@@ -602,7 +602,7 @@ function format_ludic_get_default_skins_settings() {
                         'threshold' => 100,
                         "images"    => [
                             [
-                                'imgsrc' => $OUTPUT->image_url('default-skins/section-progress/section-progress-final', 'format_ludic')->out(),
+                                'imgsrc' => $fileapi->create_skin_file_from_url($COURSE->id, 'section-progress', 17, 'steps_3_images_1', $OUTPUT->image_url('default-skins/section-progress/section-progress-final', 'format_ludic')),
                                 'imgalt' => 'En haut des marches'
                             ]
                         ],
@@ -1304,7 +1304,7 @@ function format_ludic_get_default_avatar_skins() {
                             'zindex'  => '9',
                         ],
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-yellow-m-1-red', 'format_ludic')->out(),
+                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1-yellow', 'format_ludic')->out(),
                             'imgalt'  => 'Hair 1 - Yellow',
                             'classes' => 'gender-male',
                             'zindex'  => '11'
@@ -1394,7 +1394,7 @@ function format_ludic_get_default_avatar_skins() {
                             'zindex'  => '9',
                         ],
                         [
-                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-orange-m-1-red', 'format_ludic')->out(),
+                            'imgsrc'  => $OUTPUT->image_url('default-skins/section-avatar/items/section-avatar-hair-m-1-orange', 'format_ludic')->out(),
                             'imgalt'  => 'Hair 1 - Orange',
                             'classes' => 'gender-male',
                             'zindex'  => '11'
@@ -2799,23 +2799,6 @@ function format_ludic_get_default_avatar_skins() {
                             'imgalt'  => 'Game T-shirt',
                             'classes' => 'gender-male',
                             'zindex'  => '12',
-                        ],
-                    ],
-                    'css'       => ''
-                ],
-                // Empty
-                [
-                    'name'      => '',
-                    'cost'      => 0,
-                    'slot'      => '',
-                    'shopimage' => [
-                        'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/shop/', 'format_ludic')->out(),
-                        'imgalt' => ''
-                    ],
-                    'images'    => [
-                        [
-                            'imgsrc' => $OUTPUT->image_url('default-skins/section-avatar/items/', 'format_ludic')->out(),
-                            'imgalt' => ''
                         ],
                     ],
                     'css'       => ''

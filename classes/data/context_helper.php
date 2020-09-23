@@ -25,6 +25,7 @@
 namespace format_ludic;
 
 use core\session\file;
+use format_ludic\section\achievement;
 use format_ludic\section\noludic;
 use format_ludic\section\score;
 
@@ -991,31 +992,33 @@ class context_helper {
      */
     public function get_skins_format() {
         // Cm
-        $noludic                                                          = \format_ludic\coursemodule\inline::get_instance();
-        $skins[\format_ludic\coursemodule\inline::get_unique_name()]         = $noludic;
+        $noludic                                                     = \format_ludic\coursemodule\inline::get_instance();
+        $skins[\format_ludic\coursemodule\inline::get_unique_name()] = $noludic;
 
-        $score                                                            = \format_ludic\coursemodule\score::get_instance();
-        $skins[\format_ludic\coursemodule\score::get_unique_name()]       = $score;
+        $score                                                      = \format_ludic\coursemodule\score::get_instance();
+        $skins[\format_ludic\coursemodule\score::get_unique_name()] = $score;
 
-        $progress = \format_ludic\coursemodule\progress::get_instance();
-        $skins[\format_ludic\coursemodule\progress::get_unique_name()]       = $progress;
+        $progress                                                      = \format_ludic\coursemodule\progress::get_instance();
+        $skins[\format_ludic\coursemodule\progress::get_unique_name()] = $progress;
 
         // Section
-        $noludic                                                          = \format_ludic\section\noludic::get_instance();
-        $skins[\format_ludic\section\noludic::get_unique_name()]          = $noludic;
+        $noludic                                                 = \format_ludic\section\noludic::get_instance();
+        $skins[\format_ludic\section\noludic::get_unique_name()] = $noludic;
 
-        $sectionscore                                                     = \format_ludic\section\score::get_instance();
-        $skins[\format_ludic\section\score::get_unique_name()]            = $sectionscore;
+        $sectionscore                                          = \format_ludic\section\score::get_instance();
+        $skins[\format_ludic\section\score::get_unique_name()] = $sectionscore;
 
-        $sectioncollection                                                = \format_ludic\section\collection::get_instance();
-        $skins[\format_ludic\section\collection::get_unique_name()]       = $sectioncollection;
+        $sectioncollection                                          = \format_ludic\section\collection::get_instance();
+        $skins[\format_ludic\section\collection::get_unique_name()] = $sectioncollection;
 
-        $sectionprogress                                                = \format_ludic\section\progress::get_instance();
-        $skins[\format_ludic\section\progress::get_unique_name()]       = $sectionprogress;
+        $sectionprogress                                          = \format_ludic\section\progress::get_instance();
+        $skins[\format_ludic\section\progress::get_unique_name()] = $sectionprogress;
 
-        $sectionavatar                                                = \format_ludic\section\avatar::get_instance();
-        $skins[\format_ludic\section\avatar::get_unique_name()]       = $sectionavatar;
+        //$sectionavatar                                                = \format_ludic\section\avatar::get_instance();
+        //$skins[\format_ludic\section\avatar::get_unique_name()]       = $sectionavatar;
 
+        //$sectionachivements                                          = \format_ludic\section\achievement::get_instance();
+        //$skins[\format_ludic\section\achievement::get_unique_name()] = $sectionachivements;
 
         return $skins;
     }
@@ -1096,33 +1099,33 @@ class context_helper {
         return $coursemodulesskins;
     }
 
-    public function get_next_skinid(){
+    public function get_next_skinid() {
         $maxskinid = 0;
-        $skins = $this->get_skins();
-        foreach ($skins as $skin){
-            if($skin->id > $maxskinid){
+        $skins     = $this->get_skins();
+        foreach ($skins as $skin) {
+            if ($skin->id > $maxskinid) {
                 $maxskinid = $skin->id;
             }
         }
         return $maxskinid + 1;
     }
 
-    public function add_new_skin($skindata){
-        $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
-        $ludicconfig = json_decode($ludicconfig);
+    public function add_new_skin($skindata) {
+        $ludicconfig          = $this->get_course_format_option_by_name('ludic_config');
+        $ludicconfig          = json_decode($ludicconfig);
         $ludicconfig->skins[] = $skindata;
         $this->update_course_format_options(['ludic_config' => json_encode($ludicconfig)]);
     }
 
-    public function update_skin(){
+    public function update_skin() {
 
     }
 
-    public function delete_skin($skinid){
+    public function delete_skin($skinid) {
         $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
         $ludicconfig = json_decode($ludicconfig);
-        foreach($ludicconfig->skins as $key => $skin){
-            if($skin->id == $skinid){
+        foreach ($ludicconfig->skins as $key => $skin) {
+            if ($skin->id == $skinid) {
                 unset($ludicconfig->skins[$key]);
             }
         }
@@ -1130,24 +1133,24 @@ class context_helper {
         $this->update_course_format_options(['ludic_config' => json_encode($ludicconfig)]);
     }
 
-    public function skin_is_used($skinid){
+    public function skin_is_used($skinid) {
         $skin = $this->get_skin_by_id($skinid);
 
-        if(!$skin){
+        if (!$skin) {
             return true;
         }
 
-        if($skin->location == 'section'){
+        if ($skin->location == 'section') {
             $sections = $this->get_sections();
-            foreach ($sections as $section){
-                if($section->skinid == $skinid){
+            foreach ($sections as $section) {
+                if ($section->skinid == $skinid) {
                     return true;
                 }
             }
-        }else{
+        } else {
             $coursemodules = $this->get_course_modules();
-            foreach ($coursemodules as $cm){
-                if($cm->skinid == $skinid){
+            foreach ($coursemodules as $cm) {
+                if ($cm->skinid == $skinid) {
                     return true;
                 }
             }

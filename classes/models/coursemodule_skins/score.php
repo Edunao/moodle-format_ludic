@@ -208,7 +208,7 @@ class score extends \format_ludic\skin {
         $weight = $this->get_weight();
         return [
             [
-                'text'  => $score,
+                'text'  => round($score, 2),
                 'class' => 'score'
             ],
             [

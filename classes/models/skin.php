@@ -69,10 +69,30 @@ abstract class skin extends model {
         $this->item   = $item;
         $this->skinid = $this->get_unique_name();
 
-        $this->properties->title = $this->title;
+        $this->properties->title       = $this->title;
         $this->properties->description = $this->description;
 
+
+        if($this->skinid == 'section-progress'){
+            //print_object('----- skin section-progress');
+            //print_object($this->properties);
+        }
+        //if($this->skinid == 'section-progress'){
+        //    print_object($this->properties);
         $this->properties = $this->prepare_properties($this->properties);
+        //}
+
+
+
+        if($this->skinid == 'section-progress'){
+            //print_object('skin section-progress');
+            //print_object($this->properties);
+        }
+
+        if($this->skinid == 'section-collection'){
+            //print_object('skin section-collection');
+            //print_object($this->properties);
+        }
 
     }
 
@@ -82,8 +102,15 @@ abstract class skin extends model {
                 $properties->$key = $this->prepare_properties($value);
             }else if(is_object($value)){
                 if(isset($value->imgsrc) && is_numeric($value->imgsrc)){
-                    $properties->$key->imgfileid = $value->imgsrc;
-                    $properties->$key->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_fileid($value->imgsrc);
+                    //print_object($value);
+                    if(is_array($properties)){
+                        $properties[$key]->imgfileid = $value->imgsrc;
+                        $properties[$key]->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_fileid($value->imgsrc);
+                    }else{
+                        $properties->$key->imgfileid = $value->imgsrc;
+                        $properties->$key->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_fileid($value->imgsrc);
+                    }
+
                 }else{
                     if(is_array($properties)){
                         $properties[$key] = $this->prepare_properties($value);
@@ -362,11 +389,11 @@ abstract class skin extends model {
 
         $options = [];
 
-        $options[] = [
+       /* $options[] = [
             'identifier' => 'form-save',
             'action'     => 'saveForm',
             'order'      => 1
-        ];
+        ];*/
 
         if(is_numeric($this->id) && !$this->contexthelper->skin_is_used($this->id)){
             $options[] = [

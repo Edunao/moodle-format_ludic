@@ -65,23 +65,11 @@ class edit_skins_form extends form {
             foreach ($options as $elementname => $elementtype) {
                 if (is_array($elementtype)) {
 
-                    // Parcourir les settings et faire une enveloppe vide qu'on pourra copier
                     $index     = 0;
                     $groupname = $elementname;
                     $elements[] = new separator_form_element($groupname,$groupname,['groupclass' => 'group-separator']);
-                    //$elements[] = new separator_form_element($groupname . '_empty', $groupname . '_empty', ['groupclass' => 'group-index-empty']);
-                    //foreach ($elementtype as $subname => $subtype) {
-                    //
-                    //    $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, false));
-                    //}
-                    //$elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
-                    //    'action' => 'editSkinDeleteStep',
-                    //    'itemid' => $groupname . '_empty',
-                    //    'class'  => 'delete-group group group-index-empty',
-                    //]);
 
-
-                    // Parcourir les propriétés pour créer les enveloppes pleines, chaque enveloppe devra pouvoir être supprimés
+                    // Create element for each current value
                     $groupvalue = $this->skin->get_properties($groupname);
                     if($groupvalue){
                         foreach ($groupvalue as $index => $subelements) {
@@ -90,7 +78,8 @@ class edit_skins_form extends form {
                             ]);
 
                             foreach ($elementtype as $subname => $subtype) {
-                                $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
+                                    $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
+
                             }
                             // Delete step button
                             $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
@@ -102,29 +91,22 @@ class edit_skins_form extends form {
                     }
 
                     // Add empty groups
-                    //$index++;
-                    //if($index < 10){
-                    //    for($index; $index <= 10 ; $index++){
-                    //        $elements[] = new separator_form_element($groupname . '_' . $index, $groupname . '_' . $index,
-                    //            ['groupclass' => 'group-index-'. $index]);
-                    //        foreach ($elementtype as $subname => $subtype) {
-                    //
-                    //            $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
-                    //        }
-                    //        $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
-                    //            'action' => 'editSkinDeleteStep',
-                    //            'itemid' => $groupname . '_' . $index,
-                    //            'class'  => 'delete-group group group-index-' . $index,
-                    //        ]);
-                    //    }
-                    //}
+                    /*$index++;
+                    if($index < 8){
+                        for($index; $index <= 8 ; $index++){
+                            $elements[] = new separator_form_element($groupname . '_' . $index, $groupname . '_' . $index,
+                                ['groupclass' => 'group-index-'. $index]);
+                            foreach ($elementtype as $subname => $subtype) {
 
-                    //$elements[] = new button_form_element('addstep', 'addstep', '', '', 'Ajouter une étape', [
-                    //    'action' => 'editSkinAddStep',
-                    //    'itemid' => $groupname . '_' . $index . '_',
-                    //    'class'  => 'add-group'
-                    //]);
-
+                                $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
+                            }
+                            $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
+                                'action' => 'editSkinDeleteStep',
+                                'itemid' => $groupname . '_' . $index,
+                                'class'  => 'delete-group group group-index-' . $index,
+                            ]);
+                        }
+                    }*/
                 } else {
                     $elements = array_merge($elements, $this->get_element($elementname, $elementtype));
                 }
@@ -144,18 +126,11 @@ class edit_skins_form extends form {
         $currentvalue = '';
         if (isset($groupvalue[$index])) {
             $currentvalue = $groupvalue[$index]->$elementname;
-        } /*else {
-            $index = 'empty';
-        }*/
+        }
 
         $elementlabel = $elementname;
         $elementname = $groupname . '_' . $elementname . '_' . $index;
 
-        // Parcourir les settings et faire une enveloppe vide qu'on pourra copier
-
-        // Parcourir les propriétés pour créer les enveloppes pleines, chaque enveloppe devra pouvoir être supprimés
-
-        // On doit pouvoir ajouter une enveloppe vide
         $attributes = [
             'groupclass' => $groupname . ' ' . $groupname . '_' .$index . ' group-index-'.$index . ' ' . $class ,
         ];
@@ -174,9 +149,19 @@ class edit_skins_form extends form {
                 $imgsrc = isset($currentvalue->imgsrc) ? $currentvalue->imgsrc : '';
                 $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
                 $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementlabel, array_merge($attributes,[
-                    'required'  => true,
                 ]), ['previewsrc' => $imgsrc]);
                 $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementlabel . ' alt text',$attributes);
+                break;
+            case 'images':
+                foreach($currentvalue as $imgindex => $image){
+                    $imgsrc = isset($image->imgsrc) ? $image->imgsrc : '';
+                    $altvalue = isset($image->imgalt) ? $image->imgalt : '';
+                    $elementname .= '_' . $imgindex;
+                    $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementlabel, array_merge($attributes,[
+                    ]), ['previewsrc' => $imgsrc]);
+                    $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementlabel . ' alt text',$attributes);
+                }
+
                 break;
             default:
                 break;

@@ -267,9 +267,21 @@ class course_module extends model implements skinnable_interface {
             $dbapi->update_course_module_name($this->id, $data['name']);
         }
 
+        // Update visibility if needed
+        if (isset($data['visible']) && $data['visible'] !== $this->name) {
+            $dbapi->update_course_module_visible($this->id, $data['visible']);
+        }
+
         // Update skin id, weight or access if required.
-        if (isset($data['skinid']) && $data['skinid'] != $this->skinid || isset($data['weight']) && $data['weight'] != $this->weight || isset($data['access']) && $data['access'] != $this->access) {
+        if (isset($data['skinid']) && $data['skinid'] != $this->skinid ||
+            isset($data['weight']) && $data['weight'] != $this->weight ||
+            isset($data['access']) && $data['access'] != $this->access) {
             $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['access']);
+        }
+
+        // Update section
+        if (isset($data['section']) && $data['section'] !== $this->sectionid) {
+            $this->move_to_section($data['section']);
         }
 
         // Rebuild cache after update.

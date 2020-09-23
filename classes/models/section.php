@@ -56,7 +56,7 @@ class section extends model implements skinnable_interface {
         $this->dbrecord    = $section;
         $this->courseid    = $section->course;
         $this->section     = $section->section;
-        $this->name        = $section->name;
+        $this->name        = $section->name == '' ? get_string('sectionname', 'format_ludic') . ' ' . $section->section : $section->name ;
         $this->sequence    = array_filter(explode(',', $section->sequence));
         $this->visible     = $section->visible;
         $courseinfo        = $this->contexthelper->get_course_info();

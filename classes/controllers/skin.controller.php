@@ -274,6 +274,8 @@ class skin_controller extends controller_base {
         //print_object('setting');
         //print_object($skinsettings);
 
+
+
         //print_object($skindata);
         // New index for each group
         $indexesmap = [];
@@ -317,7 +319,8 @@ class skin_controller extends controller_base {
                     $skindata['properties'][$formname] = $formvalue;
                 }
             }else{
-
+                //print_object('exploded name ');
+                //print_object($explodedname);
                 $groupname = $explodedname[0];
                 // Check if group name exist in settings
                 if(!array_key_exists($groupname, $skinsettings['properties'])){
@@ -349,9 +352,10 @@ class skin_controller extends controller_base {
                     $skindata['properties'][$groupname][$newindex] = new \stdClass();
                 }
 
+
+                // Si le dernier segment est -alt ou -img, traitement particulier
                 if(substr($other, -4) == '-alt' || substr($other, -4) == '-img'){
-                    //print_object('exploded name ');
-                    //print_object($explodedname);
+
                     $imgname = substr($element['name'], -4) == '-alt' ? 'imgalt' : 'imgitemid';
                     if(!isset($skindata['properties'][$groupname][$newindex]->$attribute)){
                         $skindata['properties'][$groupname][$newindex]->$attribute = new \stdClass();
@@ -376,6 +380,11 @@ class skin_controller extends controller_base {
                             }
 
                         }
+
+                        // Pas d'image, on supprime l'entrée (cas où le filepicker est vide et sans valeur précédente
+                        if(!$fileid){
+
+                        }
                         $skindata['properties'][$groupname][$newindex]->$attribute->imgsrc = $fileid;
                     }
 
@@ -391,7 +400,7 @@ class skin_controller extends controller_base {
         // TODO : check if all required settings are set
 
         $skindata = (object) $skindata;
-        $this->contexthelper->add_new_skin($skindata);
+        //$this->contexthelper->add_new_skin($skindata);
         //print_object('------------');
         //print_object($skindata);
         $return = array(

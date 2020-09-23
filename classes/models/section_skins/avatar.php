@@ -36,13 +36,22 @@ class avatar extends \format_ludic\skin {
     public static function get_editor_config() {
         return [
             "settings"   => [
-                "name"        => "text",
-                "main-css"    => "css",
-                "description" => "text",
+                "title"        => "text",
+                "description" => "textarea",
             ],
             "properties" => [
-
-            ]
+                "css"         => "textarea",
+                "background"  => "image",
+                "slots" => [
+                    "name" => "text",
+                ],
+                "items" => [
+                    'name' => "text",
+                    'cost' => 'int',
+                    'images' => 'images',
+                    'css' => 'textarea',
+                ]
+            ],
         ];
     }
 
@@ -153,7 +162,7 @@ class avatar extends \format_ludic\skin {
 
             // Get score from grade and weight
             if($cmresults['score'] !== false){
-                $totalmoney += $cmresults['score'] * $cmresults['weight'] / 10;
+                $totalmoney += $cmresults['score'] ;
                 continue;
             }
 

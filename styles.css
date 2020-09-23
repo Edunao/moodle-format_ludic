@@ -540,7 +540,7 @@
     border-radius: 10px;
 }
 
-#ludic-main-container.editmode .item.section.is-not-visible .item-img-container{
+#ludic-main-container.editmode .item.is-not-visible .item-img-container{
     opacity: 0.4;
 }
 
