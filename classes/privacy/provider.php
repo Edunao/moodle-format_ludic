@@ -37,7 +37,9 @@ defined('MOODLE_INTERNAL') || die();
  *
  * @package format_summary\privacy
  */
-class provider implements \core_privacy\local\metadata\provider{
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider{
 
     /**
      * Returns metadata.
@@ -92,73 +94,84 @@ class provider implements \core_privacy\local\metadata\provider{
         return $contextlist;
     }
 
-    /**
-     * Get the list of users who have data within a context.
-     *
-     * @param   userlist    $userlist   The userlist containing the list of users who have data in this context/plugin combination.
-     *
-     */
-    public static function get_users_in_context(userlist $userlist) {
-        $context = $userlist->get_context();
+    public static function export_user_data(approved_contextlist $contextlist) {
+        $contexts = $contextlist->get_contexts();
 
-        if (!is_a($context, \context_course::class)) {
-            return;
+        foreach ($contexts as $context) {
+            $userdata = self::get_user_data_for_context($context);
+            writer::with_context($context)->export_data([], (object) $userdata);
         }
+    }
 
-        $params = [
-            'courselevel' => CONTEXT_COURSE,
-            'contextid' => $context->id,
-        ];
 
-        // Mapping of lesson tables which may contain user data.
-        $joins = [
-            'format_ludic_user_cs_state',
-        ];
+    /**
+     * Delete all data for all users in the specified context.
+     *
+     * @param context $context The specific context to delete data for.
+     * @throws \dml_exception
+     */
+    public static function delete_data_for_all_users_in_context(\context $context) {
+        global $DB;
 
-        foreach ($joins as $join) {
-            $sql = "
-                SELECT cx.userid
-                  FROM {course} c
-                  JOIN {context} ctx
-                    ON ctx.instanceid = c.id
-                   AND ctx.contextlevel = :courselevel
-                  JOIN {{$join}} cx
-                    ON cx.courseid = c.id
-                 WHERE ctx.id = :contextid";
+        $contextludicstate = $DB->get_records_sql('
+            SELECT
+              cs.*
+            FROM
+              {format_ludic_user_cs_state} cs
+            JOIN
+              {context} ct ON ct.instanceid = cs.courseid
+            WHERE
+              ct.id = :contextid
+        ', array('contextid' => $context->id));
 
-            $userlist->add_from_sql('userid', $sql, $params);
+        foreach ($contextludicstate as $state) {
+            $state->data = '';
+            $DB->update_record('format_ludic_user_cs_state', $state);
         }
     }
 
     /**
-     * Export all user data for the specified user, in the specified contexts.
+     * Delete all user data for the specified user, in the specified contexts.
      *
-     * @param approved_contextlist $contextlist The approved contexts to export information for.
+     * @param approved_contextlist $contextlist The approved contexts and user information to delete information for.
+     * @throws \dml_exception
      */
-    public static function export_user_data(approved_contextlist $contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
+        global $DB;
 
-        $user = $contextlist->get_user();
-        $userid = $user->id;
+        $userid = $contextlist->get_user()->id;
 
-        $courseids = array_reduce($contextlist->get_contexts(), function($carry, $context) {
-            if ($context->contextlevel == CONTEXT_COURSE) {
-                $carry[] = $context->instanceid;
+        $contexts = $contextlist->get_contexts();
+
+        foreach ($contexts as $context) {
+            $userdata = self::get_user_data_for_context($userid, $context);
+            // remove the userid from the cells edited by the user
+            foreach ($userdata as $data) {
+                $data->data = null;
+                $DB->update_record('format_ludic_user_cs_state', $data);
             }
-            return $carry;
-        }, []);
-        if (empty($courseids)) {
-            return;
         }
+    }
 
-        // If the context export was requested, then let's at least describe the course.
-        foreach ($courseids as $courseid){
-            $context = \context_course::instance($courseid);
-            $contextdata = helper::get_context_data($context, $user);
-            helper::export_context_files($context, $user);
-            writer::with_context($context)->export_data([], $contextdata);
-        }
+    /**
+     * @param $userid
+     * @param $context
+     * @return array
+     * @throws \dml_exception
+     */
+    public static function get_user_data_for_context($userid, $context) {
+        global $DB;
 
-        // Export section data
-
+        return $DB->get_records_sql('
+            SELECT 
+              cs.*
+            FROM
+              {format_ludic_user_cs_state} cs
+              JOIN {context} c ON c.instanceid = cs.courseid
+            WHERE
+              cs.userid = :userid
+              AND 
+              c.id = :contextid
+        ', array('userid' => $userid, 'contextid' => $context->id));
     }
 }

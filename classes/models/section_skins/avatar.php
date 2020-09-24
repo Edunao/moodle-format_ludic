@@ -143,7 +143,7 @@ class avatar extends \format_ludic\skin {
                 'class' => 'cash cash-' . $cash
             ],
             [
-                'text'  => get_string('skin-avatar-open-shop', 'format_ludic'),
+                'text'  => '',
                 'class' => 'no-ludic-event open-shop open-shop-' . $this->item->sectioninfo->id
             ],
         ];
