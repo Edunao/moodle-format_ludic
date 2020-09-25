@@ -65,7 +65,7 @@ class progress extends \format_ludic\skin {
             'id'          => self::get_unique_name(),
             'location'    => 'coursemodule',
             'type'        => 'progress',
-            'title'       => 'Progression d\'activité',
+            'title'       => get_string('skin-activity-progress-title', 'format_ludic'),
             'description' => get_string('skin-activity-progress', 'format_ludic'),
             'settings'    => self::get_editor_config(),
         ]);

@@ -40,10 +40,10 @@ class format_ludic_edit_ludic_config extends moodleform{
         $mform->setType('id', PARAM_INT);
 
         // Ludic images
-        $mform->addElement('filemanager', 'ludicimages', 'images', null, array('accepted_types' => array('image'),  'subdirs' => 0));
+        $mform->addElement('filemanager', 'ludicimages', get_string('edit-skin-images', 'format_ludic'), null, array('accepted_types' => array('image'),  'subdirs' => 0));
 
         // Ludic config
-        $mform->addElement('textarea', 'ludicconfig', 'Ludic config', 'rows="50"');
+        $mform->addElement('textarea', 'ludicconfig', get_string('edit-skin-config', 'format_ludic'), 'rows="50"');
 
         // Save and cancel buttons
         $buttonarray   = array();

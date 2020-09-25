@@ -50,6 +50,9 @@ $string['edit-skins-title'] = 'Edition des skins';
 $string['skins-types-list'] = 'Skins types';
 $string['skins-list'] = 'Skins';
 $string['edit-skin-form-error-config'] = 'La configuration est incorrecte, impossible d\'enregistrer les données.';
+$string['edit-skin-images'] = 'Bibliothèque d\'image';
+$string['edit-skin-config'] = 'Configuration des motivateurs';
+
 
 // Header bar.
 $string['header-bar-menu'] = 'L';
@@ -108,6 +111,7 @@ $string['cm-skin-stealth-description'] = 'Allows labels and other such activitie
 $string['cs-skin-noludic-title']       = 'No ludic';
 $string['cs-skin-noludic-description'] = 'No ludification.';
 $string['label-skin-selection']        = 'Appearance';
+$string['skin-activity-progress-title'] = 'Progression (Activité)';
 $string['skin-activity-progress'] = 'Ce motivateur affiche la progression de l\'utilisateur au sein de l\'activité. 
 Il se base sur la note (ratio entre la note de l\'utilisateur et celle qu\'il est possible d\'obtenir au maximum pour créer un pourcentage) ou sur la complétion si l\'activité n\'est pas noté (100% si l\'activité est complétée, 0% sinon).
 Il est possible de choisir des images différentes pour chaque pallier (ex : 1%, 50%, 100%), et d\afficher le pourcentage de progression.';

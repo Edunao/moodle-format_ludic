@@ -61,7 +61,7 @@ class achievement extends \format_ludic\skin {
             'location'    => 'coursemodule',
             'type'        => 'achievement',
             'title'       => 'Achievement de base',
-            'description' => 'des passages de steps à l\'autre et puis voilà',
+            'description' => 'Basé sur la completion',
             'settings'    => self::get_editor_config(),
         ]);
     }
