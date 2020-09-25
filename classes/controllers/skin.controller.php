@@ -244,12 +244,10 @@ class skin_controller extends controller_base {
         // if skin is not int, it's new skin (we have skin type id)
         $newskin = true;
         if(!is_numeric($skinid)){
-            //print_object('nouveau skin !');
             $skin = $this->contexthelper->get_skins_format()[$skinid];
         }else{
             $skin = $this->contexthelper->get_skin_by_id($skinid);
             $newskin = false;
-            //print_object($this->contexthelper->skin_is_used($skinid));
         }
 
         // Create form.
@@ -400,9 +398,7 @@ class skin_controller extends controller_base {
         // TODO : check if all required settings are set
 
         $skindata = (object) $skindata;
-        //$this->contexthelper->add_new_skin($skindata);
-        //print_object('------------');
-        //print_object($skindata);
+
         $return = array(
             'success' => 1,
             'value'   => 'ok',

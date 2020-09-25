@@ -174,8 +174,6 @@ class edit_skins_form extends form {
         $elements = [];
         // Get current value
         $currentvalue = $this->skin->get_properties($elementname);
-        //print_object('name ' . $elementname);
-        //print_object($currentvalue);
 
         switch ($elementtype) {
             case 'text':

@@ -357,13 +357,11 @@ class course_module extends model implements skinnable_interface {
 
         // Get available skins.
         $skins = $this->get_available_skins();
-        print_object('count : ' . count($skins));
         // Search one skin available and return it.
         foreach ($skins as $key => $skin) {
                 return $skin;
         }
 
-        print_object('on a rien trouvé ! ');
         // No skins found, return inline by default.
         // TODO fix this, inline skin can't be call like that
 

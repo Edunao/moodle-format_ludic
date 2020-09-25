@@ -47,6 +47,39 @@ class file_api {
         return $url = \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), false)->out();
     }
 
+    public function get_skin_img_from_name($fullimgname, $courseid){
+        global $OUTPUT, $DB;
+        // Explode full file name to get path
+        $explodedfilename = explode('/', $fullimgname);
+
+        // Check if file exist in database
+        // TODO fix filepath
+        $filepath = '/';
+
+        if(count($explodedfilename) == 1){
+            $fs = get_file_storage();
+
+            $fileinfo = array(
+                'contextid' => \context_course::instance($courseid)->id,
+                'component' => 'format_ludic',
+                'filearea'  => 'ludicimages',
+                'filepath'  => $filepath,
+                'itemid'    => 0,
+                'filename'  => end($explodedfilename),
+            );
+
+            $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
+                $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
+            if($file){
+                return \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), false)->out();
+            }
+        }
+
+        // Use plugin files
+        return $OUTPUT->image_url($fullimgname, 'format_ludic')->out();
+
+    }
+
     /**
      * Create moodle file for skin file with filame
      *

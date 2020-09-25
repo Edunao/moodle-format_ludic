@@ -617,6 +617,13 @@
     display: none;
 }
 
+/* -----------------------------------------
+    Edit Skin
+ */
+
+#page-course-format-ludic-edit_ludic_config #id_ludicconfig{
+    width: 100%;
+}
 
 /* -----------------------------------------
     Form

@@ -32,6 +32,9 @@ $string['topicoutline']    = 'Section';
 $string['no-section']      = 'Aucune section disponible';
 $string['no-section-help'] = 'Aucune section disponible. Passez en mode édition pour en ajouter.';
 
+// Permissions
+$string['ludic:editludicconfig'] = 'Can edit skin config';
+
 // Privacy.
 $string['privacy:metadata:format_ludic_user_cs_state'] = 'Informations à propos des choix de l\'utilisateur au sein des motivateurs de sections (par exemple, les achats effectués dans la magasin de l\'avatar)';
 $string['privacy:metadata:format_ludic_user_cs_state:userid'] = 'Identifiant unique de l\'utilisateur concerné.';
@@ -46,6 +49,7 @@ $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and b
 $string['edit-skins-title'] = 'Edition des skins';
 $string['skins-types-list'] = 'Skins types';
 $string['skins-list'] = 'Skins';
+$string['edit-skin-form-error-config'] = 'La configuration est incorrecte, impossible d\'enregistrer les données.';
 
 // Header bar.
 $string['header-bar-menu'] = 'L';

@@ -1,0 +1,2441 @@
+[
+  {
+    "id": 1,
+    "skinid": "cm-inline",
+    "location": "coursemodule",
+    "type": "inline",
+    "title": "Pas de motivateur",
+    "description": "Une image de cahier ou l'activité inline.",
+    "properties": {
+      "background": {
+        "imgname": "default-skins/cm-notludic",
+        "imgalt": "Not ludic"
+      }
+    }
+  },
+  {
+    "id": 4,
+    "skinid": "cm-score",
+    "location": "coursemodule",
+    "type": "score",
+    "title": "Troph\u00e9e",
+    "description": "Un troph\u00e9e en fonction de votre r\u00e9ussite.",
+    "properties": {
+      "steps": [
+        {
+          "threshold": 0,
+          "scorepart": 0,
+          "extratext": "",
+          "extracss": "",
+          "background": {
+            "imgname": "default-skins\/cm-score-step1",
+            "imgalt": "Pas de troph\u00e9e"
+          }
+        },
+        {
+          "threshold": 50,
+          "scorepart": 10,
+          "extratext": "",
+          "extracss": "",
+          "background": {
+            "imgname": "default-skins\/cm-score-step2",
+            "imgalt": "Troph\u00e9e d'argent"
+          }
+        },
+        {
+          "threshold": 100,
+          "scorepart": 20,
+          "extratext": "",
+          "extracss": ".skin-text.threshold{display:none;}\n .skin-text.score{bottom: 39%}",
+          "background": {
+            "imgname": "default-skins\/cm-score-step3",
+            "imgalt": "Troph\u00e9e d'or"
+          }
+        }
+      ],
+      "linearscorepart": 2,
+      "css": ".sub-tile.skin-tile .skin-text {font-size:30px;} \n .skin-text.score{display: block;position: absolute;left: 59%;bottom: 38%;font-size:1.5rem;font-weight:bold;} \n .skin-text.score::after{content: \"pts\";font-size:1rem;font-weight:normal;}\n "
+    }
+  },
+  {
+    "id": 5,
+    "skinid": "cm-progress",
+    "location": "coursemodule",
+    "type": "progress",
+    "title": "Gravir les marches !",
+    "description": "R\u00e9ussir au mieux pour arriver au bout de l'escalier (adapt\u00e9 aux activit\u00e9s \u00e0 score)",
+    "properties": {
+      "steps": [
+        {
+          "threshold": 0,
+          "images": [
+            {
+              "imgname": "default-skins\/cm-progress\/cm-progress-step1",
+              "imgalt": "En bas des marches"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "threshold": 1,
+          "images": [
+            {
+              "imgname": "default-skins\/cm-progress\/cm-progress-step2",
+              "imgalt": "Ascension en cours"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "threshold": 100,
+          "images": [
+            {
+              "imgname": "default-skins\/cm-progress\/cm-progress-step3",
+              "imgalt": "En haut des marches"
+            }
+          ],
+          "css": ""
+        }
+      ],
+      "css": " \n.skin-hidden-text.percent{\n display: block;\n position: absolute;\n right: 8%;\n bottom: 1%;\n font-size: 2.5rem;\n}\n.skin-hidden-text.percent:after {\n content: \"%\";\n font-weight: normal;\n font-family: 'Montserrat-Medium';\n} \n "
+    }
+  },
+  {
+    "id": 10,
+    "skinid": "section-noludic",
+    "location": "section",
+    "type": "noludic",
+    "title": "Pas de motivateur",
+    "description": "Rien d'autres qu'une jolie image.",
+    "properties": {
+      "background": {
+        "imgname": "default-skins/section-notludic",
+        "imgalt": "Not ludic"
+      }
+    }
+  },
+  {
+    "id": 11,
+    "skinid": "section-collection",
+    "location": "section",
+    "type": "collection",
+    "title": "Collection d'animaux",
+    "description": "La progression fait gagner des tampons animaux.",
+    "properties": {
+      "baseimage": {
+        "imgname": "default-skins\/collection\/section-collection-bg",
+        "imgalt": "Fond collection"
+      },
+      "stampimages": [
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-whale",
+            "imgalt": "Whale"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-frog",
+            "imgalt": "Frog"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-walrus",
+            "imgalt": "Walrus"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collecton-owl",
+            "imgalt": "Owl"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-pigeon",
+            "imgalt": "Pigeon"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-snake",
+            "imgalt": "Snake"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-cow",
+            "imgalt": "Cow"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-bear",
+            "imgalt": "Bear"
+          }
+        },
+        {
+          "image-off": {
+            "imgname": "default-skins\/collection\/section-collection-emptystamp",
+            "imgalt": "Empty"
+          },
+          "image-on": {
+            "imgname": "default-skins\/collection\/section-collection-mouse",
+            "imgalt": "Mouse"
+          }
+        }
+      ],
+      "css": "\n .img-step{top:2%; width:33% !important;}\n .img-step-2{left:33%;}\n .img-step-3{left:64%;}\n .img-step-4{top:32%;}\n .img-step-5{top:32%;left:33%;}\n .img-step-6{top:32%;left:64%;}\n .img-step-7{top:62%;}\n .img-step-8{top:62%;left:33%;}\n .img-step-9{top:62%;left:64%;}"
+    }
+  },
+  {
+    "id": 12,
+    "location": "section",
+    "type": "achievement",
+    "title": "M\u00e9daille",
+    "description": "Des m\u00e9dailles en fonction des r\u00e9ussites des activit\u00e9s !",
+    "properties": {
+      "background-image": {
+        "imgname": "default-skins\/section-achievement\/section-achievement-bg",
+        "imgalt": "Fond de base"
+      },
+      "final-image": {
+        "imgname": "default-skins\/section-achievement\/section-achievement-final",
+        "imgalt": "100% de r\u00e9ussite !"
+      },
+      "steps": [
+        {
+          "state": "incomplete",
+          "statestr": "completion-incomplete",
+          "image": {
+            "imgname": "",
+            "imgalt": ""
+          }
+        },
+        {
+          "state": "fail",
+          "statestr": "completion-complete-fail",
+          "image": {
+            "imgname": "default-skins\/section-achievement\/section-achievement-fail",
+            "imgalt": "M\u00e9daill\u00e9 rat\u00e9e"
+          }
+        },
+        {
+          "state": "complete",
+          "statestr": "completion-complete",
+          "image": {
+            "imgname": "default-skins\/section-achievement\/section-achievement-complete",
+            "imgalt": "M\u00e9daille bien"
+          }
+        },
+        {
+          "state": "perfect",
+          "statestr": "completion-complete-pass",
+          "image": {
+            "imgname": "default-skins\/section-achievement\/section-achievement-completepass",
+            "imgalt": "M\u00e9daille tr\u00e8s bien !"
+          }
+        }
+      ],
+      "css": "\n .skin-text.completion-count.sup-zero{ \n display: block !important;\n background: #1d1061;\n color: white !important;\n border-radius: 100%;\n position: absolute;\n font-size: 23px !important;\n width: 39px;\n padding: 2px 2px;\n text-align: center;\n } \n .completion-incomplete{\n top: 31%;\n left: 55%;\n }\n .completion-complete{\n bottom: 13%;\n left: 55%;\n }\n .completion-fail{\n bottom: 14%;\n left: 25%;\n }\n .completion-perfect{\n right: 6%;\n bottom: 14%;\n }\n .skin-text.completion-count.sup-zero.perfect{\n right: 24%;\n font-size: 40px !important;\n width: 65px;\n }\n \n "
+    }
+  },
+  {
+    "id": 13,
+    "skinid": "section-avatar",
+    "location": "section",
+    "type": "avatar",
+    "title": "Avatar",
+    "description": "Ach\u00e8te des objets pour am\u00e9liorer ta chambre",
+    "properties": {
+      "background": [
+        {
+          "imgname": "default-skins\/section-avatar\/section-avatar-background",
+          "imgalt": "Background"
+        }
+      ],
+      "slots": [
+        {
+          "name": "Gender"
+        },
+        {
+          "name": "Color"
+        },
+        {
+          "name": "Hair"
+        },
+        {
+          "name": "T-shirt"
+        },
+        {
+          "name": "Desk"
+        },
+        {
+          "name": "Ground"
+        },
+        {
+          "name": "Bedside table"
+        },
+        {
+          "name": "Bed"
+        },
+        {
+          "name": "Poster"
+        },
+        {
+          "name": "Equipment"
+        },
+        {
+          "name": "Banner"
+        },
+        {
+          "name": "Duvet"
+        }
+      ],
+      "items": [
+        {
+          "name": "Cube",
+          "cost": 10,
+          "slot": "Desk",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-desk-cube",
+            "imgalt": "Cube"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-desk-cube",
+              "imgalt": "Cube"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Lamp and phone",
+          "cost": 20,
+          "slot": "Desk",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-desk-lamp",
+            "imgalt": "Lamp and phone"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-desk-lamp",
+              "imgalt": "Lamp and phone"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Laptop",
+          "cost": 30,
+          "slot": "Desk",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-desk-laptop",
+            "imgalt": "Laptop"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-desk-laptop",
+              "imgalt": "Laptop"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Computer",
+          "cost": 40,
+          "slot": "Desk",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-desk-computer",
+            "imgalt": "Laptop"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-desk-computer",
+              "imgalt": "Laptop"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Tennis ball",
+          "cost": 10,
+          "slot": "Ground",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-ground-tennis",
+            "imgalt": "Tennis ball"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-ground-tennis",
+              "imgalt": "Tennis ball"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "American Football",
+          "cost": 20,
+          "slot": "Ground",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-ground-americanfootball",
+            "imgalt": "American Football"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-ground-americanfootball",
+              "imgalt": "American Football"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Volleyball",
+          "cost": 30,
+          "slot": "Ground",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-ground-volley",
+            "imgalt": "Volleyball"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-ground-volley",
+              "imgalt": "Volleyball"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Basketball",
+          "cost": 40,
+          "slot": "Ground",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-ground-basket",
+            "imgalt": "Basketball"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-ground-basket",
+              "imgalt": "Basketball"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Oldschool lamp",
+          "cost": 20,
+          "slot": "Bedside table",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-bedsidetable-oldschool",
+            "imgalt": ""
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-bedsidetable-oldschool",
+              "imgalt": ""
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Retro lamp",
+          "cost": 30,
+          "slot": "Bedside table",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-bedsidetable-retro",
+            "imgalt": "Retro lamp"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-bedsidetable-retro",
+              "imgalt": "Retro lamp"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Design lamp",
+          "cost": 40,
+          "slot": "Bedside table",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-bedsidetable-design",
+            "imgalt": "Design lamp"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-bedsidetable-design",
+              "imgalt": "Design lamp"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Female",
+          "cost": 0,
+          "slot": "Gender",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-gender-female",
+            "imgalt": "Female"
+          },
+          "images": [],
+          "css": ".skin-img.gender-male.img-object{display:none;}"
+        },
+        {
+          "name": "Male",
+          "cost": 0,
+          "slot": "Gender",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-gender-male",
+            "imgalt": "Male"
+          },
+          "images": [],
+          "css": ".skin-img.gender-female.img-object{display:none;}"
+        },
+        {
+          "name": "Color 1",
+          "cost": 0,
+          "slot": "Color",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-f-asian",
+              "imgalt": "Asian Female",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-m-asian",
+              "imgalt": "Asian Male",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-f-asian",
+              "imgalt": "Asian Female",
+              "classes": "gender-female",
+              "zindex": "10"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-m-asian",
+              "imgalt": "Asian Male",
+              "classes": "gender-male",
+              "zindex": "10"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Color 2",
+          "cost": 0,
+          "slot": "Color",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-f-african",
+              "imgalt": "African Female",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-m-african",
+              "imgalt": "African Male",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-f-african",
+              "imgalt": "African Female",
+              "classes": "gender-female",
+              "zindex": "10"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-m-african",
+              "imgalt": "African Male",
+              "classes": "gender-male",
+              "zindex": "10"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Color 3",
+          "cost": 0,
+          "slot": "Color",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-f-caucasian",
+              "imgalt": "Caucasian Female",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-m-caucasian",
+              "imgalt": "Caucasian Male",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-f-caucasian",
+              "imgalt": "Caucasian Female",
+              "classes": "gender-female",
+              "zindex": "10"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-m-caucasian",
+              "imgalt": "Caucasian Male",
+              "classes": "gender-male",
+              "zindex": "10"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Color 4",
+          "cost": 0,
+          "slot": "Color",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-f-oriental",
+              "imgalt": "Oriental Female",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-color-m-oriental",
+              "imgalt": "Oriental Male",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-f-oriental",
+              "imgalt": "Oriental Female",
+              "classes": "gender-female",
+              "zindex": "10"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-color-m-oriental",
+              "imgalt": "Oriental Male",
+              "classes": "gender-male",
+              "zindex": "10"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 1 - Black",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-short-black",
+              "imgalt": "Hair 1 - Black",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-1-black",
+              "imgalt": "Hair 1 - Black",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-black-1",
+              "imgalt": "Hair 1 - Black",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-black-2",
+              "imgalt": "Hair 1 - Black",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1",
+              "imgalt": "Hair 1 - Black",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1-black",
+              "imgalt": "Hair 1 - Black",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 1 - Purple",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-short-purple",
+              "imgalt": "Hair 1 - Purple",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-1-purple",
+              "imgalt": "Hair 1 - Purple",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-purple-1",
+              "imgalt": "Hair 1 - Purple",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-purple-2",
+              "imgalt": "Hair 1 - Purple",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1",
+              "imgalt": "Hair 1 - Purple",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1-purple",
+              "imgalt": "Hair 1 - Purple",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 1 - Green",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-short-green",
+              "imgalt": "Hair 1 - Green",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-1-green",
+              "imgalt": "Hair 1 - Green",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-green-1",
+              "imgalt": "Hair 1 - Green",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-green-2",
+              "imgalt": "Hair 1 - Green",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1",
+              "imgalt": "Hair 1 - Green",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1-green",
+              "imgalt": "Hair 1 - Green",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 1 - Blue",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-short-blue",
+              "imgalt": "Hair 1 - Blue",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-1-blue",
+              "imgalt": "Hair 1 - Blue",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-blue-1",
+              "imgalt": "Hair 1 - Blue",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-blue-2",
+              "imgalt": "Hair 1 - Blue",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1",
+              "imgalt": "Hair 1 - Blue",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1-blue",
+              "imgalt": "Hair 1 - Blue",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 1 - Yellow",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-short-yellow",
+              "imgalt": "Hair 1 - Yellow",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-1-yellow",
+              "imgalt": "Hair 1 - Yellow",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-yellow-1",
+              "imgalt": "Hair 1 - Yellow",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-yellow-2",
+              "imgalt": "Hair 1 - Yellow",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1",
+              "imgalt": "Hair 1 - Yellow",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1-yellow",
+              "imgalt": "Hair 1 - Yellow",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 1 - Red",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-short-red",
+              "imgalt": "Hair 1 - Red",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-1-red",
+              "imgalt": "Hair 1 - Red",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-red-1",
+              "imgalt": "Hair 1 - Red",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-red-2",
+              "imgalt": "Hair 1 - Red",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1",
+              "imgalt": "Hair 1 - Red",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1-red",
+              "imgalt": "Hair 1 - Red",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 1 - Orange",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-short-orange",
+              "imgalt": "Hair 1 - Orange",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-1-orange",
+              "imgalt": "Hair 1 - Orange",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-orange-1",
+              "imgalt": "Hair 1 - Orange",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-short-orange-2",
+              "imgalt": "Hair 1 - Orange",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1",
+              "imgalt": "Hair 1 - Orange",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-1-orange",
+              "imgalt": "Hair 1 - Orange",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 2 - Black",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-curly-black",
+              "imgalt": "Hair 2 - Black",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-3-black",
+              "imgalt": "Hair 2 - Black",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-black-1",
+              "imgalt": "Hair 2 - Black",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-black-2",
+              "imgalt": "Hair 2 - Black",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3",
+              "imgalt": "Hair 2 - Black",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3-black",
+              "imgalt": "Hair 2 - Black",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 2 - Purple",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-curly-purple",
+              "imgalt": "Hair 2 - Purple",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-3-purple",
+              "imgalt": "Hair 2 - Purple",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-purple-1",
+              "imgalt": "Hair 2 - Purple",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-purple-2",
+              "imgalt": "Hair 2 - Purple",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3",
+              "imgalt": "Hair 2 - Purple",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3-purple",
+              "imgalt": "Hair 2 - Purple",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 2 - Blue",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-curly-blue",
+              "imgalt": "Hair 2 - Blue",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-3-blue",
+              "imgalt": "Hair 2 - Blue",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-blue-1",
+              "imgalt": "Hair 2 - Blue",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-blue-2",
+              "imgalt": "Hair 2 - Blue",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3",
+              "imgalt": "Hair 2 - Blue",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3-blue",
+              "imgalt": "Hair 2 - Blue",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 2 - Green",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-curly-green",
+              "imgalt": "Hair 2 - Green",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-3-green",
+              "imgalt": "Hair 2 - Green",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-green-1",
+              "imgalt": "Hair 2 - Green",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-green-2",
+              "imgalt": "Hair 2 - Green",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3",
+              "imgalt": "Hair 2 - Green",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3-green",
+              "imgalt": "Hair 2 - Green",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 2 - Yellow",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-curly-yellow",
+              "imgalt": "Hair 2 - Yellow",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-3-yellow",
+              "imgalt": "Hair 2 - Yellow",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-yellow-1",
+              "imgalt": "Hair 2 - Yellow",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-yellow-2",
+              "imgalt": "Hair 2 - Yellow",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3",
+              "imgalt": "Hair 2 - Yellow",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3-yellow",
+              "imgalt": "Hair 2 - Yellow",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 2 - Red",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-curly-red",
+              "imgalt": "Hair 2 - Red",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-3-red",
+              "imgalt": "Hair 2 - Red",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-red-1",
+              "imgalt": "Hair 2 - Red",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-red-2",
+              "imgalt": "Hair 2 - Red",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3",
+              "imgalt": "Hair 2 - Red",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3-red",
+              "imgalt": "Hair 2 - Red",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 2 - Orange",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-curly-red",
+              "imgalt": "Hair 2 - Orange",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-3-red",
+              "imgalt": "Hair 2 - Orange",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-red-1",
+              "imgalt": "Hair 2 - Orange",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-curly-red-2",
+              "imgalt": "Hair 2 - Orange",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3",
+              "imgalt": "Hair 2 - Orange",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-3-red",
+              "imgalt": "Hair 2 - Orange",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 3 - Black",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-bunches-black",
+              "imgalt": "Hair 3 - Black",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-2-black",
+              "imgalt": "Hair 3 - Black",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-black-1",
+              "imgalt": "Hair 3 - Black",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-black-2",
+              "imgalt": "Hair 3 - Black",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2",
+              "imgalt": "Hair 3 - Black",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2-black",
+              "imgalt": "Hair 3 - Black",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 3 - Purple",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-bunches-purple",
+              "imgalt": "Hair 3 - Purple",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-2-purple",
+              "imgalt": "Hair 3 - Purple",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-purple-1",
+              "imgalt": "Hair 3 - Purple",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-purple-2",
+              "imgalt": "Hair 3 - Purple",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2",
+              "imgalt": "Hair 3 - Purple",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2-purple",
+              "imgalt": "Hair 3 - Purple",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 3 - Blue",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-bunches-blue",
+              "imgalt": "Hair 3 - Blue",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-2-blue",
+              "imgalt": "Hair 3 - Blue",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-blue-1",
+              "imgalt": "Hair 3 - Blue",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-blue-2",
+              "imgalt": "Hair 3 - Blue",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2",
+              "imgalt": "Hair 3 - Blue",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2-blue",
+              "imgalt": "Hair 3 - Blue",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 3 - Green",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-bunches-green",
+              "imgalt": "Hair 3 - Green",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-2-green",
+              "imgalt": "Hair 3 - Green",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-green-1",
+              "imgalt": "Hair 3 - Green",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-green-2",
+              "imgalt": "Hair 3 - Green",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2",
+              "imgalt": "Hair 3 - Green",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2-green",
+              "imgalt": "Hair 3 - Green",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 3 - Yellow",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-bunches-yellow",
+              "imgalt": "Hair 3 - Yellow",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-2-yellow",
+              "imgalt": "Hair 3 - Yellow",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-yellow-1",
+              "imgalt": "Hair 3 - Yellow",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-yellow-2",
+              "imgalt": "Hair 3 - Yellow",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2",
+              "imgalt": "Hair 3 - Yellow",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2-yellow",
+              "imgalt": "Hair 3 - Yellow",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 3 - Red",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-bunches-red",
+              "imgalt": "Hair 3 - Red",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-2-red",
+              "imgalt": "Hair 3 - Red",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-red-1",
+              "imgalt": "Hair 3 - Red",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-red-2",
+              "imgalt": "Hair 3 - Red",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2",
+              "imgalt": "Hair 3 - Red",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2-red",
+              "imgalt": "Hair 3 - Red",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 3 - Orange",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-bunches-orange",
+              "imgalt": "Hair 3 - Orange",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-2-orange",
+              "imgalt": "Hair 3 - Orange",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-orange-1",
+              "imgalt": "Hair 3 - Orange",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-bunches-orange-2",
+              "imgalt": "Hair 3 - Orange",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2",
+              "imgalt": "Hair 3 - Orange",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-2-orange",
+              "imgalt": "Hair 3 - Orange",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 4 - Black",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-long-black",
+              "imgalt": "Hair 4 - Black",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-4-black",
+              "imgalt": "Hair 4 - Black",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-black-1",
+              "imgalt": "Hair 4 - Black",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-black-2",
+              "imgalt": "Hair 4 - Black",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4",
+              "imgalt": "Hair 4 - Black",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4-black",
+              "imgalt": "Hair 4 - Black",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 4 - Purple",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-long-purple",
+              "imgalt": "Hair 4 - Purple",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-4-purple",
+              "imgalt": "Hair 4 - Purple",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-purple-1",
+              "imgalt": "Hair 4 - Purple",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-purple-2",
+              "imgalt": "Hair 4 - Purple",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4",
+              "imgalt": "Hair 4 - Purple",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4-purple",
+              "imgalt": "Hair 4 - Purple",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 4 - Green",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-long-green",
+              "imgalt": "Hair 4 - Green",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-4-green",
+              "imgalt": "Hair 4 - Green",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-green-1",
+              "imgalt": "Hair 4 - Green",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-green-2",
+              "imgalt": "Hair 4 - Green",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4",
+              "imgalt": "Hair 4 - Green",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4-green",
+              "imgalt": "Hair 4 - Green",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 4 - Blue",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-long-blue",
+              "imgalt": "Hair 4 - Blue",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-4-blue",
+              "imgalt": "Hair 4 - Blue",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-blue-1",
+              "imgalt": "Hair 4 - Blue",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-blue-2",
+              "imgalt": "Hair 4 - Blue",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4",
+              "imgalt": "Hair 4 - Blue",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4-blue",
+              "imgalt": "Hair 4 - Blue",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 4 - Yellow",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-long-yellow",
+              "imgalt": "Hair 4 - Yellow",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-4-yellow",
+              "imgalt": "Hair 4 - Yellow",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-yellow-1",
+              "imgalt": "Hair 4 - Yellow",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-yellow-2",
+              "imgalt": "Hair 4 - Yellow",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4",
+              "imgalt": "Hair 4 - Yellow",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4-yellow",
+              "imgalt": "Hair 4 - Yellow",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 4 - Red",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-long-red",
+              "imgalt": "Hair 4 - Red",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-4-red",
+              "imgalt": "Hair 4 - Red",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-red-1",
+              "imgalt": "Hair 4 - Red",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-red-2",
+              "imgalt": "Hair 4 - Red",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4",
+              "imgalt": "Hair 4 - Red",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4-red",
+              "imgalt": "Hair 4 - Red",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Hair 4 - Orange",
+          "cost": 0,
+          "slot": "Hair",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-f-long-orange",
+              "imgalt": "Hair 4 - Orange",
+              "classes": "gender-female"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-hair-m-4-orange",
+              "imgalt": "Hair 4 - Orange",
+              "classes": "gender-male"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-orange-1",
+              "imgalt": "Hair 4 - Orange",
+              "classes": "gender-female",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-f-long-orange-2",
+              "imgalt": "Hair 4 - Orange",
+              "classes": "gender-female",
+              "zindex": "11"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4",
+              "imgalt": "Hair 4 - Orange",
+              "classes": "gender-male",
+              "zindex": "9"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-hair-m-4-orange",
+              "imgalt": "Hair 4 - Orange",
+              "classes": "gender-male",
+              "zindex": "11"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Game poster",
+          "cost": 10,
+          "slot": "Poster",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-poster-game",
+            "imgalt": "Game poster"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-poster-game",
+              "imgalt": "Game poster"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Sport poster",
+          "cost": 20,
+          "slot": "Poster",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-poster-sport",
+            "imgalt": "Sport poster"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-poster-sport",
+              "imgalt": "Sport poster"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Star poster",
+          "cost": 30,
+          "slot": "Poster",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-poster-star",
+            "imgalt": "Star poster"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-poster-star",
+              "imgalt": "Star poster"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Unicorn poster",
+          "cost": 40,
+          "slot": "Poster",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-poster-unicorn",
+            "imgalt": "Unicorn poster"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-poster-unicorn",
+              "imgalt": "Unicorn poster"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Roller",
+          "cost": 10,
+          "slot": "Equipment",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-equipment-roller",
+            "imgalt": "Roller"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-equipment-roller",
+              "imgalt": "Roller"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Skate",
+          "cost": 20,
+          "slot": "Equipment",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-equipment-skate",
+            "imgalt": "Skate"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-equipment-skate",
+              "imgalt": "Skate"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Trotinette",
+          "cost": 30,
+          "slot": "Equipment",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-equipment-trotinette",
+            "imgalt": "Trotinette"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-equipment-trotinette",
+              "imgalt": "Trotinette"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Pigeon",
+          "cost": 10,
+          "slot": "Bed",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-bed-pigeon",
+            "imgalt": "Pigeon"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-bed-pigeon",
+              "imgalt": "Pigeon",
+              "zindex": "5"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Teddy",
+          "cost": 20,
+          "slot": "Bed",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-bed-teddy",
+            "imgalt": "Teddy"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-bed-teddy",
+              "imgalt": "Teddy",
+              "zindex": "5"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Pingouin",
+          "cost": 30,
+          "slot": "Bed",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-bed-pingouin",
+            "imgalt": "Pingouin"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-bed-pingouin",
+              "imgalt": "Pingouin",
+              "zindex": "5"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Snake",
+          "cost": 40,
+          "slot": "Bed",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-bed-snake",
+            "imgalt": "Snake"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-bed-snake",
+              "imgalt": "Snake",
+              "zindex": "5"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Party banner",
+          "cost": 10,
+          "slot": "Banner",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-banner-party",
+            "imgalt": "Party banner"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-banner-party",
+              "imgalt": "Party banner"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Origami banner",
+          "cost": 20,
+          "slot": "Banner",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-banner-origami",
+            "imgalt": "Origami banner"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-banner-origami",
+              "imgalt": "Origami banner"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Lamp banner",
+          "cost": 30,
+          "slot": "Banner",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-banner-lamp",
+            "imgalt": "Lamp banner"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-banner-lamp",
+              "imgalt": "Lamp banner"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Sport duvet",
+          "cost": 10,
+          "slot": "Duvet",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-duvet-sport",
+            "imgalt": "Sport duvet"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-duvet-sport",
+              "imgalt": "Sport duvet"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Game duvet",
+          "cost": 20,
+          "slot": "Duvet",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-duvet-game",
+            "imgalt": "Game duvet"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-duvet-game",
+              "imgalt": "Game duvet"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Cloud duvet",
+          "cost": 30,
+          "slot": "Duvet",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-duvet-cloud",
+            "imgalt": "Cloud duvet"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-duvet-cloud",
+              "imgalt": "Cloud duvet"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Star duvet",
+          "cost": 40,
+          "slot": "Duvet",
+          "shopimage": {
+            "imgname": "default-skins\/section-avatar\/shop\/section-avatar-duvet-star",
+            "imgalt": "Star duvet"
+          },
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-duvet-star",
+              "imgalt": "Star duvet"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Cube T-shirt",
+          "cost": 10,
+          "slot": "T-shirt",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-tshirt-cube",
+              "imgalt": "Cube T-shirt"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-f-cube",
+              "imgalt": "Cube T-shirt",
+              "classes": "gender-female",
+              "zindex": "12"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-m-cube",
+              "imgalt": "Cube T-shirt",
+              "classes": "gender-male",
+              "zindex": "12"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Snake T-shirt",
+          "cost": 20,
+          "slot": "T-shirt",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-tshirt-snake",
+              "imgalt": "Snake T-shirt"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-f-snake",
+              "imgalt": "Snake T-shirt",
+              "classes": "gender-female",
+              "zindex": "12"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-m-snake",
+              "imgalt": "Snake T-shirt",
+              "classes": "gender-male",
+              "zindex": "12"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Pigeon T-shirt",
+          "cost": 30,
+          "slot": "T-shirt",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-tshirt-pigeon",
+              "imgalt": "Pigeon T-shirt"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-f-pigeon",
+              "imgalt": "Pigeon T-shirt",
+              "classes": "gender-female",
+              "zindex": "12"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-m-pigeon",
+              "imgalt": "Pigeon T-shirt",
+              "classes": "gender-male",
+              "zindex": "12"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Unicorn T-shirt",
+          "cost": 40,
+          "slot": "T-shirt",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-tshirt-unicorn",
+              "imgalt": "Unicorn T-shirt"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-f-unicorn",
+              "imgalt": "Unicorn T-shirt",
+              "classes": "gender-female",
+              "zindex": "12"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-m-unicorn",
+              "imgalt": "Unicorn T-shirt",
+              "classes": "gender-male",
+              "zindex": "12"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Star T-shirt",
+          "cost": 50,
+          "slot": "T-shirt",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-tshirt-star",
+              "imgalt": "Star T-shirt"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-f-star",
+              "imgalt": "Star T-shirt",
+              "classes": "gender-female",
+              "zindex": "12"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-m-star",
+              "imgalt": "Star T-shirt",
+              "classes": "gender-male",
+              "zindex": "12"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "name": "Game T-shirt",
+          "cost": 60,
+          "slot": "T-shirt",
+          "shopimage": [
+            {
+              "imgname": "default-skins\/section-avatar\/shop\/section-avatar-tshirt-game",
+              "imgalt": "Game T-shirt"
+            }
+          ],
+          "images": [
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-f-game",
+              "imgalt": "Game T-shirt",
+              "classes": "gender-female",
+              "zindex": "12"
+            },
+            {
+              "imgname": "default-skins\/section-avatar\/items\/section-avatar-tshirt-m-game",
+              "imgalt": "Game T-shirt",
+              "classes": "gender-male",
+              "zindex": "12"
+            }
+          ],
+          "css": ""
+        }
+      ],
+      "css": "\n .slot-item-price:before{\n content: \"$\"\n }\n "
+    }
+  },
+  {
+    "id": 14,
+    "skinid": "section-score",
+    "location": "section",
+    "type": "score",
+    "title": "M\u00e9daille",
+    "description": "Des points avec une m\u00e9daille \u00e0 la fin !",
+    "properties": {
+      "steps": [
+        {
+          "threshold": 0,
+          "image": {
+            "imgname": "default-skins\/section-score-step1",
+            "imgalt": "Aucune r\u00e9compense"
+          }
+        },
+        {
+          "threshold": 300,
+          "image": {
+            "imgname": "default-skins\/section-score-step2",
+            "imgalt": "Palier des 300 points !"
+          }
+        },
+        {
+          "threshold": 500,
+          "image": {
+            "imgname": "default-skins\/section-score-step3",
+            "imgalt": "M\u00e9daille obtenue ! (500 points)"
+          }
+        },
+        {
+          "threshold": 600,
+          "image": {
+            "imgname": "default-skins\/section-score-step4",
+            "imgalt": "Premier troph\u00e9e obtenu ! (600 points)"
+          }
+        },
+        {
+          "threshold": 700,
+          "image": {
+            "imgname": "default-skins\/section-score-step5",
+            "imgalt": "Couronne obtenue ! (700 points)"
+          }
+        },
+        {
+          "threshold": 800,
+          "image": {
+            "imgname": "default-skins\/section-score-step6",
+            "imgalt": "Troph\u00e9e obtenu ! (800 points)"
+          }
+        }
+      ],
+      "css": " \n .skin-text.score{display: block;position: absolute;bottom: 0px;width: 100%;text-align: center;} \n \n "
+    }
+  },
+  {
+    "id": 15,
+    "skinid": "section-progress",
+    "location": "section",
+    "type": "progress",
+    "title": "Gravir les marches !",
+    "description": "Plus on r\u00e9ussit, plus on monte des marches",
+    "properties": {
+      "steps": [
+        {
+          "threshold": 0,
+          "images": [
+            {
+              "imgname": "default-skins\/section-progress\/section-progress-step1",
+              "imgalt": "En bas des marches"
+            }
+          ],
+          "css": ""
+        },
+        {
+          "threshold": 1,
+          "images": [
+            {
+              "imgname": "default-skins\/section-progress\/section-progress-step2",
+              "imgalt": "Ascension en cours"
+            },
+            {
+              "imgname": "default-skins\/section-progress\/section-progress-step2-character",
+              "imgalt": "Moi"
+            }
+          ],
+          "css": "\n .img-step-1{\n left: calc((43% \/ 98) * [percent] + (1819% \/ 98));\n top: calc((452% \/ 7) - (4% \/ 7) * [percent]);\n width: 16%; \n \n }"
+        },
+        {
+          "threshold": 100,
+          "images": [
+            {
+              "imgname": "default-skins\/section-progress\/section-progress-final",
+              "imgalt": "En haut des marches"
+            }
+          ],
+          "css": ""
+        }
+      ],
+      "css": " \n.skin-hidden-text.percent{\n display: block;\n position: absolute;\n right: 8%;\n bottom: 1%;\n font-size: 4.5rem;\n}\n.skin-hidden-text.percent:after {\n content: \"%\";\n font-weight: normal;\n font-family: 'Montserrat-Medium';\n} \n "
+    }
+  }
+]

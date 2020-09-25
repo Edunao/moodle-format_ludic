@@ -311,10 +311,10 @@ class format_ludic_header_bar implements renderable {
                 }
 
                 // Edit skins
-                /*if (strpos($PAGE->pagetype, 'edit_skins') === false) {
+                if (strpos($PAGE->pagetype, 'edit_ludic_config') === false) {
                     $editname   = get_string('editskins', 'format_ludic');
                     $editicon   = $OUTPUT->image_url('i/settings')->out();
-                    $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_skins.php?id=' . $courseid;
+                    $editlink   = $CFG->wwwroot . '/course/format/ludic/edit_ludic_config.php?id=' . $courseid;
                     $editoption = [
                         'action'  => 'getDataLinkAndRedirectTo',
                         'link'    => $editlink,
@@ -324,7 +324,7 @@ class format_ludic_header_bar implements renderable {
                     ];
 
                     $list[] = $editoption;
-                }*/
+                }
 
             }
 

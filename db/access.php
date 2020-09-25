@@ -24,9 +24,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = array(
-    // Allow to share the skins definitions of the course and regenerate a sharing link.
-    'format/ludic:copyludicskins' => array(
-        'captype'      => 'read',
+    'format/ludic:editludicconfig' => array(
+        'captype'      => 'write',
         'contextlevel' => CONTEXT_COURSE,
         'archetypes'   => array(
             'editingteacher' => CAP_ALLOW,

@@ -926,7 +926,7 @@ class context_helper {
             $ludicconfig = json_decode($ludicconfig);
 
             if (!$ludicconfig) {
-                $defaultconfig = format_ludic_get_default_skins_settings();
+                $defaultconfig = ['skins' => $this->get_default_skin_config()];
                 $this->update_course_format_options(['ludic_config' => json_encode($defaultconfig)]);
                 $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
                 $ludicconfig = json_decode($ludicconfig);
@@ -935,6 +935,13 @@ class context_helper {
 
         }
         return $this->ludicconfig;
+    }
+
+    public function get_default_skin_config(){
+        global $CFG;
+        $defaultfile = $CFG->dirroot . '/course/format/ludic/default_ludic_config.json';
+        $defaultconfig = file_get_contents($defaultfile);
+        return json_decode($defaultconfig);
     }
 
     /**

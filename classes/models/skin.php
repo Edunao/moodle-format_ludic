@@ -72,27 +72,7 @@ abstract class skin extends model {
         $this->properties->title       = $this->title;
         $this->properties->description = $this->description;
 
-
-        if($this->skinid == 'section-progress'){
-            //print_object('----- skin section-progress');
-            //print_object($this->properties);
-        }
-        //if($this->skinid == 'section-progress'){
-        //    print_object($this->properties);
         $this->properties = $this->prepare_properties($this->properties);
-        //}
-
-
-
-        if($this->skinid == 'section-progress'){
-            //print_object('skin section-progress');
-            //print_object($this->properties);
-        }
-
-        if($this->skinid == 'section-collection'){
-            //print_object('skin section-collection');
-            //print_object($this->properties);
-        }
 
     }
 
@@ -101,14 +81,11 @@ abstract class skin extends model {
             if(is_array($value)){
                 $properties->$key = $this->prepare_properties($value);
             }else if(is_object($value)){
-                if(isset($value->imgsrc) && is_numeric($value->imgsrc)){
-                    //print_object($value);
+                if(isset($value->imgname)){
                     if(is_array($properties)){
-                        $properties[$key]->imgfileid = $value->imgsrc;
-                        $properties[$key]->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_fileid($value->imgsrc);
+                        $properties[$key]->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_name($value->imgname, $this->contexthelper->get_course_id());
                     }else{
-                        $properties->$key->imgfileid = $value->imgsrc;
-                        $properties->$key->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_fileid($value->imgsrc);
+                        $properties->$key->imgsrc = $this->contexthelper->fileapi->get_skin_img_from_name($value->imgname, $this->contexthelper->get_course_id());
                     }
 
                 }else{

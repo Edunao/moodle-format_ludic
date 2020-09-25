@@ -110,11 +110,55 @@ class format_ludic extends \format_base {
                     'type'         => PARAM_RAW,
                     'label'        => get_string('ludicsharingkeylabel', 'format_ludic'),
                     'element_type' => 'hidden',
-                ],
+                ]
             ];
         }
 
         return $courseformatoptions;
+    }
+
+    public function create_edit_form_elements(&$mform, $forsection = false) {
+        $elements = array();
+
+        $options = $this->course_format_options(true);
+
+        foreach ($options as $optionname => $option) {
+            if (!isset($option['element_type'])) {
+                $option['element_type'] = 'text';
+            }
+            if (!isset($option['label'])) {
+                $option['label'] = null;
+            }
+            $args = array(
+                $option['element_type'],
+                $optionname,
+                $option['label']
+            );
+            if (!empty($option['element_attributes'])) {
+                $args = array_merge($args, $option['element_attributes']);
+            }
+            $elements[] = call_user_func_array(array(
+                $mform,
+                'addElement'
+            ), $args);
+            if (isset($option['help'])) {
+                $helpcomponent = 'format_' . $this->get_format();
+                if (isset($option['help_component'])) {
+                    $helpcomponent = $option['help_component'];
+                }
+                $mform->addHelpButton($optionname, $option['help'], $helpcomponent);
+            }
+            if (isset($option['type'])) {
+                $mform->setType($optionname, $option['type']);
+            }
+            if (is_null($mform->getElementValue($optionname)) && isset($option['default'])) {
+                $mform->setDefault($optionname, $option['default']);
+            }
+        }
+
+
+
+        return $elements;
     }
 
     function page_set_course(\moodle_page $page) {
@@ -287,7 +331,7 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
 
     // Retrieve the file from the Files API.
     $fs = get_file_storage();
-    if ($filearea == 'skin') {
+    if ($filearea == 'skin' || $filearea == 'ludicimages') {
         $file = $fs->get_file($context->id, 'format_ludic', $filearea, $itemid, $filepath, $filename);
     } else {
         $file = $fs->get_file($context->id, 'course', 'section', $itemid, $filepath, $filename);
