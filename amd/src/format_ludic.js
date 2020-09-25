@@ -29,6 +29,7 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
     let userId = null;
     let editMode = null;
     let formChanged = false;
+    let avatarselecteditem = false;
     let ludic = {
 
         /**
@@ -102,8 +103,6 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             // Click on element with data-action attribute.
             // Exclude not ludic element, because plugin like quiz use data-action
             $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar, #page-course-format-ludic-edit_skins').on('click', '[data-action]', function (e) {
-                console.log('test : ', $(this), $(e.target), $(this).is(e.target))
-
                 if (!$(this).is(e.target)) {
                     if ($(e.target).hasClass('no-ludic-event') || $(e.target).parents('.no-ludic-event').length > 0
                         || ($(e.target).parents('.no-ludic-event').length > 0 && $(e.target).data('action') === undefined)
@@ -400,6 +399,9 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
 
             this.initAvatar(selectorId);
             $('#avatar-shop-' + sectionid).modal('show')
+
+            let scrollvalue = $('#avatar-shop-' + sectionid + ' .slot-item.selected').position().top;
+            $('#avatar-shop-' + sectionid + ' .shop-content').animate({scrollTop: scrollvalue - 30},0);
         },
 
         /**

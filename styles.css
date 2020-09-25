@@ -309,12 +309,15 @@
 
 .skin-text.skin-hidden-text.cash {
     position: absolute;
-    top: -2px;
-    left: 35%;
+    min-width: 130px;
     font-size: 35px;
     background: rgb(255, 255, 255);
     padding: 0px 23px;
     border-radius: 37px;
+    top: -1.5em;
+    left: 5px;
+    right: 5px;
+    text-align: center;
 }
 
 .skin-extra-html.shop .modal-dialog {
@@ -356,7 +359,7 @@
 
 @media (max-width: 1050px) {
     .shop-container .avatar-preview {
-        flex-basis: 350px;
+        flex-basis: 350px;margin-top: 2.5em;
     }
 }
 

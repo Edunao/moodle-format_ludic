@@ -905,7 +905,13 @@ class context_helper {
      */
     public function update_course_format_options($courseformatoptions) {
         $courseformat = $this->get_course_format();
-        return $courseformat->update_course_format_options($courseformatoptions);
+        $courseformat->update_course_format_options($courseformatoptions);
+
+        $this->courseformat = null;
+        $this->courseformatoptions = null;
+        $this->get_course_format_options();
+        $this->get_course_format();
+        return true;
     }
 
     /**
@@ -915,10 +921,10 @@ class context_helper {
      */
     public function get_ludic_config() {
         if ($this->ludicconfig == null) {
-
             // Get ludic config (json).
             $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
             $ludicconfig = json_decode($ludicconfig);
+
             if (!$ludicconfig) {
                 $defaultconfig = format_ludic_get_default_skins_settings();
                 $this->update_course_format_options(['ludic_config' => json_encode($defaultconfig)]);
@@ -926,6 +932,7 @@ class context_helper {
                 $ludicconfig = json_decode($ludicconfig);
             }
             $this->ludicconfig = (array) $ludicconfig;
+
         }
         return $this->ludicconfig;
     }
@@ -1052,6 +1059,10 @@ class context_helper {
         // Keep only section skin.
         $sectionskins = [];
         foreach ($skins as $skinid => $skin) {
+            if($skin->type == 'noludic'){
+                $sectionskins[$skin->id] = $skin;
+                continue;
+            }
             if ($skin->location == 'section') {
                 $sectionskins[$skin->id] = $skin;
             }

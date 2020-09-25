@@ -32,6 +32,7 @@ defined('MOODLE_INTERNAL') || die();
 class avatar extends \format_ludic\skin {
 
     private $itemsdata = null;
+    public $selecteditem = null;
 
     public static function get_editor_config() {
         return [
@@ -210,6 +211,7 @@ class avatar extends \format_ludic\skin {
     }
 
     public function buy_item($slotname, $itemname) {
+        $this->selecteditem = $itemname;
         $currentitems = $this->get_items_data();
         $useritems    = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
 
@@ -243,6 +245,7 @@ class avatar extends \format_ludic\skin {
     }
 
     public function toggle_item($slotname, $itemname) {
+        $this->selecteditem = $itemname;
         $useritems     = $this->item->get_user_skin_data($this->contexthelper->get_user_id());
         $currentitemid = $slotname . '-' . $itemname;
 
@@ -337,7 +340,17 @@ class avatar extends \format_ludic\skin {
                 $itemdata->cantbuy = true;
             }
 
+            if($itemdata->cost == 0){
+                $itemdata->isfree = true;
+            }
+
             $itemdata->sectionid               = $this->item->dbrecord->id;
+            if($itemdata->name == $this->selecteditem){
+                $itemdata->isselected = ' selected ';
+            }else{
+                $itemdata->isselected = ' passelected';
+            }
+
             $slots[$itemdata->slot]['items'][] = (array) $itemdata;
         }
 

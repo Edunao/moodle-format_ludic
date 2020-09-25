@@ -343,6 +343,12 @@ class section extends model implements skinnable_interface {
 
         // If we found relation record, return it.
         if ($dbrecord) {
+            if(!$this->contexthelper->get_skin_by_id($dbrecord->skinid)){
+                $defaultskin = $this->get_default_skin();
+                $dbrecord->skinid = $defaultskin->id;
+                $dbapi->set_section_skin_id($dbrecord->courseid, $dbrecord->sectionid, $dbrecord->skinid);
+            }
+
             return $dbrecord;
         }
 

@@ -47,6 +47,7 @@ class format_ludic extends \format_base {
         global $PAGE;
         parent::__construct($format, $courseid);
         $this->contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+        //$this->contexthelper->get_ludic_config();
     }
 
     /**
