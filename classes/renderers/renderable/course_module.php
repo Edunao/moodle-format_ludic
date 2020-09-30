@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/item.php');
+
 class format_ludic_course_module extends format_ludic_item {
 
     public $parentid;
@@ -81,16 +83,16 @@ class format_ludic_course_module extends format_ludic_item {
             $this->content = $coursemodule->skin->render_skinned_tile();
 
             // If completion is manual add an icon for completion.
-            $completioninfo = $coursemodule->get_user_results()['completioninfo'];
-            if ($completioninfo->type == COMPLETION_TRACKING_MANUAL) {
-                $completion     = $completioninfo->state == COMPLETION_INCOMPLETE ? 'completion-n' : 'completion-y';
-                $targetstate    = $completioninfo->state ? 0 : 1;
+            $userresults = $coursemodule->get_user_results();
+            if ($userresults->type == COMPLETION_TRACKING_MANUAL) {
+                $completion     = $userresults->state == COMPLETION_INCOMPLETE ? 'completion-n' : 'completion-y';
+                $targetstate    = $userresults->state ? 0 : 1;
                 $completionlink = $CFG->wwwroot . '/course/togglecompletion.php?id=' . $coursemodule->id;
                 $completionlink .= '&sesskey=' . sesskey() . '&completionstate=' . $targetstate;
 
                 $completionicon = [
                     'imgsrc'   => $CFG->wwwroot . '/course/format/ludic/pix/' . $completion . '.svg',
-                    'imgalt'   => $completioninfo->completionstr,
+                    'imgalt'   => $userresults->completionstr,
                     'position' => 'bottom',
                     'classes'  => ' manual-completion '
                 ];
@@ -102,14 +104,14 @@ class format_ludic_course_module extends format_ludic_item {
 
                 $this->icons[] = $completionicon;
 
-            }else if($completioninfo->type != COMPLETION_DISABLED){
-                $completion     = $completioninfo->state == COMPLETION_INCOMPLETE ? 'completion-auto-n' : 'completion-y';
-                $targetstate    = $completioninfo->state ? 0 : 1;
+            }else if($userresults->type != COMPLETION_DISABLED){
+                $completion     = $userresults->state == COMPLETION_INCOMPLETE ? 'completion-auto-n' : 'completion-y';
+                $targetstate    = $userresults->state ? 0 : 1;
                 $completionlink = "#";
 
                 $completionicon = [
                     'imgsrc'   => $CFG->wwwroot . '/course/format/ludic/pix/' . $completion . '.svg',
-                    'imgalt'   => $completioninfo->completionstr,
+                    'imgalt'   => $userresults->completionstr,
                     'position' => 'bottom',
                     'classes'  => ' manual-completion '
                 ];
@@ -121,7 +123,6 @@ class format_ludic_course_module extends format_ludic_item {
 
                 $this->icons[] = $completionicon;
             }
-
         }
 
         // Mod icon for edition or teacher.

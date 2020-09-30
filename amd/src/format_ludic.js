@@ -373,35 +373,35 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             });
         },
         initAvatar: function (selector) {
-            $(selector + ' .skin-type-avatar .open-shop').on('click', function (e) {
-                let shopid = $(this).attr('class').split(' open-shop-')[1];
-                shopid = shopid.split(' ')[0];
-                $('#avatar-shop-' + shopid).modal('show');
+            $(selector + ' .skin-type-avatar .open-inventory').on('click', function (e) {
+                let inventoryid = $(this).attr('class').split(' open-inventory-')[1];
+                inventoryid = inventoryid.split(' ')[0];
+                $('#avatar-inventory-' + inventoryid).modal('show');
             });
 
             // Put avatar content in popup
-            $(selector + ' .skin-type-avatar .open-shop').each(function () {
-                let shopid = $(this).attr('class').split(' open-shop-')[1];
-                shopid = shopid.split(' ')[0];
+            $(selector + ' .skin-type-avatar .open-inventory').each(function () {
+                let inventoryid = $(this).attr('class').split(' open-inventory-')[1];
+                inventoryid = inventoryid.split(' ')[0];
 
-                $('#avatar-shop-' + shopid + ' .avatar-preview').html($('#skin-section-' + shopid + ' .skin-tile').prop('outerHTML'));
-                $('#avatar-shop-' + shopid + ' .avatar-preview .open-shop').remove();
+                $('#avatar-inventory-' + inventoryid + ' .avatar-preview').html($('#skin-section-' + inventoryid + ' .skin-tile').prop('outerHTML'));
+                $('#avatar-inventory-' + inventoryid + ' .avatar-preview .open-inventory').remove();
             });
         },
 
         updateAvatar: function (selectorId, sectionid, html) {
-            $('#avatar-shop-' + sectionid).modal('hide');
+            $('#avatar-inventory-' + sectionid).modal('hide');
             $(selectorId).each(function () {
                 $(this).html(html);
             })
-            // Remove header shop popup to avoid duplicate
+            // Remove header inventory popup to avoid duplicate
             $('.header-sections-list ' + selectorId + ' .skin-extra-html').remove();
 
             this.initAvatar(selectorId);
-            $('#avatar-shop-' + sectionid).modal('show')
+            $('#avatar-inventory-' + sectionid).modal('show')
 
-            let scrollvalue = $('#avatar-shop-' + sectionid + ' .slot-item.selected').position().top;
-            $('#avatar-shop-' + sectionid + ' .shop-content').animate({scrollTop: scrollvalue - 30},0);
+            let scrollvalue = $('#avatar-inventory-' + sectionid + ' .slot-item.selected').position().top;
+            $('#avatar-inventory-' + sectionid + ' .inventory-content').animate({scrollTop: scrollvalue - 30},0);
         },
 
         /**
@@ -781,13 +781,19 @@ define(['jquery', 'jqueryui', 'core/templates'], function ($, ui, templates) {
             ludic.setFormChanged(true);
 
             // Update image url with selected image url.
-            let newImgUrl = selectedItem.find('.item-img-container').attr('src');
+            let newImgUrl = selectedItem.find('.item-img-container').attr('style');
+            console.log("selectedItem",selectedItem);
+            console.log("newImgUrl",newImgUrl);
             if (newImgUrl) {
-                $(inputSelectorId + '-overview .overview-img-container').attr('src', newImgUrl);
+                console.log("Applying new background to image div");
+                $(inputSelectorId + '-overview .overview-img-container').attr('style', newImgUrl);
             }
 
             // Close popup.
             ludic.closeClosestPopup(popup);
+
+            // automtically trigger the form save action to persist the change
+            $('button.form-save').click();
         },
 
         /**

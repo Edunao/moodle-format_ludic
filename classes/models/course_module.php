@@ -26,6 +26,14 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+// define an addition constant for the 'perfect' completion state
+define('COMPLETION_COMPLETE_PERFECT', 100);
+
+require_once(__DIR__ . '/model.php');
+require_once(__DIR__ . '/../data/skin_manager.php');
+require_once(__DIR__ . '/skinnable_interface.php');
+require_once(__DIR__ . '/course_module_skin_types/menubar.php');
+
 class course_module extends model implements skinnable_interface {
 
     public  $name;
@@ -64,7 +72,7 @@ class course_module extends model implements skinnable_interface {
         $this->skinid = $skinrelation->skinid;
         $this->weight = $skinrelation->weight;
         $this->access = $skinrelation->access;
-        $this->skin   = skin::get_by_id($this->skinid, $this);
+        $this->skin   = skin_manager::get_instance()->skin_course_module($this->skinid, $this);
     }
 
     /**
@@ -80,7 +88,7 @@ class course_module extends model implements skinnable_interface {
         if ($sectionid == $this->sectionid) {
             return;
         }
-        $this->section   = $section;
+        //$this->section   = $section;
         $this->sectionid = $sectionid;
         $movetosection   = (object) [
             'id'      => $section->id,
@@ -100,7 +108,8 @@ class course_module extends model implements skinnable_interface {
      * @throws \moodle_exception
      */
     public function move_on_section($cmidtomove, $aftercmid) {
-        $sequence    = $this->section->sequence;
+        $section = $this->contexthelper->get_section_by_id($this->sectionid);
+        $sequence    = $section->sequence;
         $newsequence = [];
         foreach ($sequence as $key => $id) {
             if ($id != $cmidtomove) {
@@ -110,11 +119,13 @@ class course_module extends model implements skinnable_interface {
                 $newsequence[] = $cmidtomove;
             }
         }
-        $this->section->update_sequence($newsequence);
+        $section->update_sequence($newsequence);
     }
 
     public function update_cm_order($cmidtomove, $newindex){
-        $sequence    = $this->section->sequence;
+        $section = $this->contexthelper->get_section_by_id($this->sectionid);
+
+        $sequence    = $section->sequence;
         $newsequence = [];
         $newsequence[$newindex] = $cmidtomove;
         foreach ($sequence as $index => $cmid) {
@@ -131,7 +142,7 @@ class course_module extends model implements skinnable_interface {
             }
         }
         ksort($newsequence);
-        $this->section->update_sequence($newsequence);
+        $section->update_sequence($newsequence);
     }
 
     /**
@@ -164,7 +175,8 @@ class course_module extends model implements skinnable_interface {
 
         // Move course module to end.
         if ($movetoend) {
-            $sequence = $this->section->sequence;
+            $section = $this->contexthelper->get_section_by_id($this->sectionid);
+            $sequence = $section->sequence;
             $lastcmid = end($sequence);
             $this->move_on_section($newcm->id, $lastcmid);
         }
@@ -191,10 +203,10 @@ class course_module extends model implements skinnable_interface {
      */
     public function get_edit_buttons() {
         global $CFG;
-
+        $section = $this->contexthelper->get_section_by_id($this->sectionid);
         // Defines url here.
         $editcmurl   = $CFG->wwwroot . '/course/modedit.php?update=' . $this->id . '&return=0';
-        $deletecmurl = $CFG->wwwroot . '/course/mod.php?sesskey=' . sesskey() . '&sr=' . $this->section->section . '&delete=' . $this->id . '&confirm=1';
+        $deletecmurl = $CFG->wwwroot . '/course/mod.php?sesskey=' . sesskey() . '&sr=' . $section->section . '&delete=' . $this->id . '&confirm=1';
         $assignurl   = $CFG->wwwroot . '/admin/roles/assign.php?contextid=' . $this->cminfo->context->id;
 
         return [
@@ -311,7 +323,8 @@ class course_module extends model implements skinnable_interface {
      * @throws \moodle_exception
      */
     public function get_available_skins() {
-        if ($this->section->section == 0) {
+        $section = $this->contexthelper->get_section_by_id($this->sectionid);
+        if ($section->section == 0) {
             return $this->contexthelper->get_global_section_skins();
         }
 
@@ -319,7 +332,6 @@ class course_module extends model implements skinnable_interface {
         $skins = $this->contexthelper->get_course_module_skins();
 
         // Filter skins is cm has no grade or is inline activity
-        $isgraded = $modname ? plugin_supports('mod', $modname, FEATURE_GRADE_HAS_GRADE, false) : false;
         $isinline = $modname ? plugin_supports('mod', $modname, FEATURE_NO_VIEW_LINK, false) : false;
         $coursemodulesskins = [];
         foreach ($skins as $key => $skin) {
@@ -331,40 +343,10 @@ class course_module extends model implements skinnable_interface {
                 continue;
             }
 
-            if ($skin->require_grade() && !$isgraded) {
-                continue;
-            }
             $coursemodulesskins[$skin->id] = $skin;
         }
 
         return $coursemodulesskins;
-    }
-
-    /**
-     * Get the first available skin for a course module.
-     *
-     * @return mixed
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    public function get_default_skin() {
-
-        // Default skin for section 0 is inline for resources and menubar for activities.
-        if ($this->section->section == 0) {
-            return coursemodule\menubar::get_instance();
-        }
-
-        // Get available skins.
-        $skins = $this->get_available_skins();
-        // Search one skin available and return it.
-        foreach ($skins as $key => $skin) {
-                return $skin;
-        }
-
-        // No skins found, return inline by default.
-        // TODO fix this, inline skin can't be call like that
-
     }
 
     /**
@@ -377,14 +359,17 @@ class course_module extends model implements skinnable_interface {
      * @throws \moodle_exception
      */
     public function get_skin_relation() {
+
         // Get data.
         $dbapi    = $this->contexthelper->get_database_api();
         $dbrecord = $dbapi->get_format_ludic_cm_by_cmid($this->id);
 
         if ($dbrecord) {
+
             // Check if skin exist and put default skin if needed
-            if(!$this->contexthelper->get_skin_by_id($dbrecord->skinid)){
-                $defaultskin = $this->get_default_skin();
+            if(!skin_manager::get_instance()->get_course_module_skin($dbrecord->skinid)){
+                $section = $this->contexthelper->get_section_by_id($this->sectionid);
+                $defaultskin = skin_manager::get_instance()->get_course_module_default_skin($section->section, $this->cminfo->modname);
                 $dbrecord->skinid = $defaultskin->id;
                 $dbapi->set_format_ludic_cm($dbrecord->courseid, $dbrecord->cmid, $dbrecord->skinid, $dbrecord->weight, $dbrecord->access);
             }
@@ -393,7 +378,8 @@ class course_module extends model implements skinnable_interface {
         }
 
         // Create one record with default values.
-        $skin               = $this->get_default_skin();
+        $section = $this->contexthelper->get_section_by_id($this->sectionid);
+        $skin               = skin_manager::get_instance()->get_course_module_default_skin($section->section, $this->cminfo->modname);
         $dbrecord           = new \stdClass();
         $dbrecord->courseid = $this->courseid;
         $dbrecord->cmid     = $this->id;
@@ -430,11 +416,32 @@ class course_module extends model implements skinnable_interface {
         // Get completion.
         $state = $dataapi->get_course_module_user_completion($this->cminfo);
 
+        // if the grademax is 0 then base the grade on the completion
+        if ($grade->grademax == 0 && $state->type != COMPLETION_DISABLED) {
+            $grade->grademax   = 1;
+            $grade->grade      = ($state->state == COMPLETION_COMPLETE || $state->state == COMPLETION_COMPLETE_PASS) ? 1 : 0;
+            $grade->proportion = $grade->grade;
+        }
+
+        // if achievement tracking is dissabled then try to base the achievement on the grade
+        if ($state->type == COMPLETION_DISABLED && $grade->grademax != 0){
+            $state->state = ($grade->grade == $grade->grademax) ? COMPLETION_COMPLETE : COMPLETION_INCOMPLETE;
+        }
+
+        // add a default score value to the result as WEIGHT * proprtion, rounded to a nice round number
+        $grade->score = ceil($grade->proportion * 20) * $this->weight / 20;
+
+        // determine whether we have a perfect result
+        $state->richstate = $state->state;
+        if ($state->richstate == COMPLETION_COMPLETE) {
+            $state->richstate = COMPLETION_COMPLETE_PASS;
+        }
+        if ($state->richstate == COMPLETION_COMPLETE_PASS && $grade->grade == $grade->grademax) {
+            $state->richstate = COMPLETION_COMPLETE_PERFECT;
+        }
+
         // Return data.
-        $this->results = [
-            'gradeinfo'      => $grade,
-            'completioninfo' => $state
-        ];
+        $this->results = (object)((array) $grade + (array) $state);
 
         return $this->results;
     }

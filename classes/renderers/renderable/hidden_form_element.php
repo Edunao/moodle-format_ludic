@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/form_element.php');
+
 /**
  * Class format_ludic_hidden_form_element (required for render() function)
  */

@@ -31,18 +31,20 @@ $editmode  = $contexthelper->is_editing();
 $sectionid = $contexthelper->get_section_id();
 
 $PAGE->set_context($context);
-
 // Display course.
 $renderer = $PAGE->get_renderer('format_ludic');
 if ($editmode) {
     format_ludic_init_edit_mode($context);
+    $contexthelper->prefetch_data_edit_mode();
     echo $renderer->render_edit_page();
 } else {
     if ($sectionid) {
         // Section view.
+        $contexthelper->prefetch_data_section_page_mode();
         echo $renderer->render_section_page($sectionid);
     } else {
         // Course view.
+        $contexthelper->prefetch_data_course_page_mode();
         echo $renderer->render_page();
     }
 }

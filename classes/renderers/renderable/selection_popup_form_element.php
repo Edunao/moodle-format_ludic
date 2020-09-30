@@ -25,6 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/form_element.php');
+
 class format_ludic_selection_popup_form_element extends format_ludic_form_element {
 
     public $imgsrc;

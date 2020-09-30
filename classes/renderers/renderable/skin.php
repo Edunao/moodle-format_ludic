@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/item.php');
+
 class format_ludic_skin extends format_ludic_item {
 
     public $selected;
@@ -33,7 +35,7 @@ class format_ludic_skin extends format_ludic_item {
      *
      * @param \format_ludic\skin $skin
      */
-    public function __construct(\format_ludic\skin $skin) {
+    public function __construct(\format_ludic\skin_template $skin) {
 
         // General data.
         $this->selectorid = 'ludic-skin-' . $skin->id;
@@ -48,9 +50,9 @@ class format_ludic_skin extends format_ludic_item {
         $this->propertiesaction = 'get_description';
 
         // Image.
-        $imageobject  = $skin->get_edit_image();
-        $this->imgsrc = $imageobject->imgsrc;
-        $this->imgalt = $imageobject->imgalt;
+        $imagename  = $skin->get_edit_image();
+        $this->imgsrc = format_ludic_get_skin_image_url($imagename);
+        $this->imgalt = '';
 
     }
 

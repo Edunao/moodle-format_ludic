@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/item.php');
+
 class format_ludic_course_module_inline extends format_ludic_item {
 
     public $modname;
@@ -49,7 +51,7 @@ class format_ludic_course_module_inline extends format_ludic_item {
         $this->title      = $coursemodule->name;
         $this->parentid   = $coursemodule->sectionid;
         $this->skinid     = $coursemodule->skinid;
-        $this->skintype   = $coursemodule->skin->type;
+        $this->skintype   = $coursemodule->skin->get_type_name();
 
         $icon          = $coursemodule->get_mod_icon();
         $this->iconsrc = $icon->imgsrc;

@@ -26,6 +26,8 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/form.php');
+
 class section_form extends form {
 
     /**
@@ -52,6 +54,11 @@ class section_form extends form {
      * @throws \coding_exception
      */
     public function get_definition() {
+        require_once(__DIR__ . '/elements/hidden_form_element.php');
+        require_once(__DIR__ . '/elements/text_form_element.php');
+        require_once(__DIR__ . '/elements/selection_popup_form_element.php');
+        require_once(__DIR__ . '/elements/checkbox_form_element.php');
+
         $elements = [];
 
         // Disabled some fiels for section 0.

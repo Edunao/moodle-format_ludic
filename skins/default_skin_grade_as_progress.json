@@ -1,0 +1,40 @@
+{
+    "domain": "course_module",
+    "skintype": "progress",
+    "skinname": "climb the stairs",
+    "title": "progression",
+    "description": "Represents the student's grade as a postion onn the staircase",
+    "css": ".skin-hidden-text.percent{\n display: block;\n position: absolute;\n right: 8%;\n bottom: 1%;\n font-size: 2.5rem;\n}\n.skin-hidden-text.percent:after {\n content: \"%\";\n font-weight: normal;\n font-family: 'Montserrat-Medium';\n}",
+    "steps": [
+        {
+            "threshold": 0,
+            "image0": "default-user-skins\/staircase-stills\/staircase-1",
+            "image1": "",
+            "image2": "",
+            "image3": "",
+            "image4": "",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 1,
+            "image0": "default-user-skins\/staircase-stills\/staircase-2",
+            "image1": "",
+            "image2": "",
+            "image3": "",
+            "image4": "",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 100,
+            "image0": "default-user-skins\/staircase-stills\/staircase-3",
+            "image1": "",
+            "image2": "",
+            "image3": "",
+            "image4": "",
+            "text": "",
+            "css": ""
+        }
+    ]
+}

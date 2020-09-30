@@ -26,6 +26,9 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/model.php');
+require_once(__DIR__ . '/skinnable_interface.php');
+
 class section extends model implements skinnable_interface {
 
     private $course = null;
@@ -56,7 +59,7 @@ class section extends model implements skinnable_interface {
         $this->dbrecord    = $section;
         $this->courseid    = $section->course;
         $this->section     = $section->section;
-        $this->name        = $section->name == '' ? get_string('sectionname', 'format_ludic') . ' ' . $section->section : $section->name ;
+        $this->name        = $section->name == '' ? get_string('sectionname', 'format_ludic') . ' ' . $section->section : $section->name;
         $this->sequence    = array_filter(explode(',', $section->sequence));
         $this->visible     = $section->visible;
         $courseinfo        = $this->contexthelper->get_course_info();
@@ -64,10 +67,10 @@ class section extends model implements skinnable_interface {
 
         // Ludic properties.
         // Section 0 has no skin.
-        if ($section->section != 0) {
+        if ($this->section != 0) {
             $skinrelation = $this->get_section_skin_relation();
             $this->skinid = $skinrelation->skinid;
-            $this->skin   = skin::get_by_id($this->skinid, $this);
+            $this->skin   = skin_manager::get_instance()->skin_section($this->skinid, $this);
         }
     }
 
@@ -297,6 +300,7 @@ class section extends model implements skinnable_interface {
      * @throws \restore_controller_exception
      */
     public function duplicate() {
+
         // Get data.
         $dbapi      = $this->contexthelper->get_database_api();
         $course     = $this->contexthelper->get_course();
@@ -317,8 +321,13 @@ class section extends model implements skinnable_interface {
         // Copy course modules.
         $coursemodules = $this->get_course_modules();
         $course        = $this->get_moodle_course();
+
+        $newcms = [];
         foreach ($coursemodules as $coursemodule) {
-            $newcm = $coursemodule->duplicate($course);
+            $newcms[] = $coursemodule->duplicate($course);
+        }
+
+        foreach ($newcms as $newcm) {
             $newcm->move_to_section($newsection->id);
         }
 
@@ -337,14 +346,15 @@ class section extends model implements skinnable_interface {
      * @throws \dml_exception
      */
     public function get_section_skin_relation() {
+
         // Get data.
         $dbapi    = $this->contexthelper->get_database_api();
         $dbrecord = $dbapi->get_format_ludic_cs_by_sectionid($this->id);
 
         // If we found relation record, return it.
         if ($dbrecord) {
-            if(!$this->contexthelper->get_skin_by_id($dbrecord->skinid)){
-                $defaultskin = $this->get_default_skin();
+            if(!skin_manager::get_instance()->get_section_skin($dbrecord->skinid)){
+                $defaultskin = skin_manager::get_instance()->get_section_default_skin();
                 $dbrecord->skinid = $defaultskin->id;
                 $dbapi->set_section_skin_id($dbrecord->courseid, $dbrecord->sectionid, $dbrecord->skinid);
             }
@@ -353,7 +363,7 @@ class section extends model implements skinnable_interface {
         }
 
         // Create one record with default values.
-        $skin                = $this->get_default_skin();
+        $skin                = skin_manager::get_instance()->get_section_default_skin();
         $dbrecord            = new \stdClass();
         $dbrecord->courseid  = $this->courseid;
         $dbrecord->sectionid = $this->id;
@@ -369,9 +379,10 @@ class section extends model implements skinnable_interface {
      *
      * @return skin
      */
-    public function get_default_skin() {
-        return current($this->contexthelper->get_section_skins());
-    }
+    //public function get_default_skin() {
+    //    $skinname = "course_module/non_ludic_section" ;
+    //    return skin_manager::get_instance()->get_skin_by_name($skinname);
+    //}
 
     /**
      * Return section description.
@@ -397,73 +408,15 @@ class section extends model implements skinnable_interface {
             return $this->results;
         }
 
-        // The section completion is a summary of all these course modules.
-        $coursemodules = $this->get_course_modules();
-
-        // Initialize completion info.
-        $completioninfo = [
-            'completion-incomplete'    => [
-                'state'    => COMPLETION_INCOMPLETE,
-                'count'    => 0,
-                'sequence' => []
-            ],
-            'completion-complete'      => [
-                'state'    => COMPLETION_COMPLETE,
-                'count'    => 0,
-                'sequence' => []
-            ],
-            'completion-complete-pass' => [
-                'state'    => COMPLETION_COMPLETE_PASS,
-                'count'    => 0,
-                'sequence' => []
-            ],
-            'completion-complete-fail' => [
-                'state'    => COMPLETION_COMPLETE_FAIL,
-                'count'    => 0,
-                'sequence' => []
-            ],
-            'perfect'                  => count($coursemodules) > 0
-        ];
-
-        $resultsdetails = [
-
-        ];
-
-        $score    = 0;
-        $scoremax = 0;
-        foreach ($coursemodules as $coursemodule) {
-            if (method_exists($coursemodule->skin, 'get_score')) {
-                $score    += $coursemodule->skin->get_score();
-                $scoremax += $coursemodule->skin->get_weight();
-            }
-
-            // Update completion info.
-            $results          = $coursemodule->get_user_results();
-            $resultsdetails[] = [
-                "cmid"    => $coursemodule->id,
-                "results" => $results,
-            ];
-
-            $data = $results['completioninfo'];
-            if (!isset($completioninfo[$data->completion])) {
+        // iterate over children asking each for it's results in order
+        $this->results = [];
+        foreach ($this->get_course_modules() as $coursemodule) {
+            $cmresults = $coursemodule->skin->get_skin_results();
+            if($cmresults->skintype == 'inline'){
                 continue;
             }
-            $completioninfo['perfect'] = $completioninfo['perfect'] && $completioninfo[$data->completion]['state'] == COMPLETION_COMPLETE_PASS;
-            $completioninfo[$data->completion]['count']++;
-            $completioninfo[$data->completion]['sequence'][] = $coursemodule->id;
+            $this->results[] = $cmresults;
         }
-
-        // Return data.
-        $this->results = [
-            'gradeinfo'      => (object) [
-                'score'      => $score,
-                'scoremax'   => $scoremax,
-                'proportion' => $scoremax > 0 ? ($score / $scoremax) : 0
-            ],
-            'completioninfo' => $completioninfo,
-            'resultsdetails' => $resultsdetails,
-        ];
-
         return $this->results;
     }
 

@@ -1,0 +1,9 @@
+{
+    "domain": "section",
+    "skintype": "fixed_image",
+    "skinname": "non_ludic_section",
+    "title": "Fixed Image",
+    "description": "A fixed image for a secondary sections with no notion of progress, grades or achievements",
+    "css": "",
+    "background": "system-skins\/non-gamified-section"
+}

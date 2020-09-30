@@ -29,7 +29,6 @@ class format_ludic_skinned_tile implements renderable {
     public $skinid;
     public $skintype;
     public $weight;
-    public $classes;
     public $images;
     public $texts;
     public $title;
@@ -46,13 +45,31 @@ class format_ludic_skinned_tile implements renderable {
      * @throws dml_exception
      * @throws moodle_exception
      */
-    public function __construct(\format_ludic\skin $skin) {
-        $this->skinid      = 'skin-' . $skin->location . '-' . $skin->item->id;
-        $this->skintype    = $skin->type;
-        $this->title       = $skin->item->get_skinned_tile_title();
-        $this->weight      = $skin->get_weight();
-        $this->classes     = $skin->get_classes();
-        $this->images      = $skin->get_images_to_render();
+    public function __construct(\format_ludic\skinned_item $skin) {
+        $this->images = [];
+        $images = $skin->get_images_to_render();
+        foreach ($images as $index => $image){
+            if(is_string($image)){
+                $this->images[] = (object)[
+                    'imgsrc' => format_ludic_get_skin_image_url($image),
+                    'imgalt' => "",
+                    'class' => "image-$index"
+                ];
+            }else{
+                $class = isset($image->class) ? $image->class : '';
+                $class .= " image-$index";
+                $this->images[] = (object)[
+                    'imgsrc' => format_ludic_get_skin_image_url($image->src),
+                    'imgalt' => '',
+                    'class' => $class,
+                    'css' => isset($image->css) ? $image->css : ''
+                ];
+            }
+        }
+
+        $this->skinid      = 'skin-' . $skin->get_instance_name();
+        $this->skintype    = $skin->get_type_name();
+        $this->title       = $skin->get_instance_title();
         $this->hiddentexts = $skin->get_texts_to_render();
         $this->css         = $skin->get_css($this->skinid);
         $this->emptydiv    = [
@@ -69,5 +86,4 @@ class format_ludic_skinned_tile implements renderable {
         ];
         $this->extrahtml   = $skin->get_extra_html_to_render();
     }
-
 }

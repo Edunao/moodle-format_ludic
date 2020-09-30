@@ -31,19 +31,16 @@ use format_ludic\section\score;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/data_api.php');
+require_once(__DIR__ . '/file_api.php');
+require_once(__DIR__ . '/database_api.php');
+require_once(__DIR__ . '/../models/course.php');
+require_once(__DIR__ . '/../models/course_module.php');
+require_once(__DIR__ . '/../models/section.php');
+require_once(__DIR__ . '/skin_manager.php');
+
+
 // Define all format globals here.
-
-// Skin inline id.
-define('FORMAT_LUDIC_CM_SKIN_INLINE_ID', 1);
-
-// Skin menubar id.
-define('FORMAT_LUDIC_CM_SKIN_MENUBAR_ID', 2);
-
-// Skin menubar id.
-define('FORMAT_LUDIC_CM_SKIN_STEALTH_ID', 3);
-
-// Skin inline id.
-define('FORMAT_LUDIC_CS_SKIN_NOLUDIC_ID', 10);
 
 // Always accessible.
 define('FORMAT_LUDIC_ACCESS_ACCESSIBLE', 1);
@@ -65,6 +62,7 @@ define('FORMAT_LUDIC_ACCESS_GROUPED', 5);
 // The item will become visible at the same moment as it's predecessor
 // but will only become available after the predecessor has been completed.
 define('FORMAT_LUDIC_ACCESS_CHAINED_AND_GROUPED', 6);
+
 
 /**
  * Class context_helper
@@ -169,6 +167,8 @@ class context_helper {
      */
     private $sections = null;
 
+    private $sectionsbyid = [];
+
     /**
      * Current course section.
      *
@@ -231,11 +231,11 @@ class context_helper {
      *
      * @param \moodle_page $page
      */
-    public function __construct(\moodle_page $page) {
-        global $USER;
-        $this->page     = $page;
+    public function __construct() {
+        global $USER, $PAGE;
+        $this->page     = $PAGE;
         $this->user     = $USER;
-        $this->courseid = $page->course->id;
+        $this->courseid = $this->page->course->id;
         $this->dbapi    = new database_api($this);
         $this->dataapi  = new data_api($this);
         $this->fileapi  = new file_api();
@@ -245,9 +245,9 @@ class context_helper {
      * @param \moodle_page $page
      * @return context_helper
      */
-    public static function get_instance(\moodle_page $page) {
+    public static function get_instance() {
         if (!(self::$instance instanceof self)) {
-            self::$instance = new self($page);
+            self::$instance = new self();
         }
         return self::$instance;
     }
@@ -437,25 +437,25 @@ class context_helper {
      * @throws \dml_exception
      * @throws \coding_exception
      */
-    public function get_location() {
+    public function get_domain() {
         $cmid       = $this->get_course_module_id();
         $sectionidx = $this->get_section_idx();
 
         // On course page by default.
-        $location = 'course';
+        $domain = 'course';
 
         if ($cmid > 0) {
 
             // We are in course module.
-            $location = 'coursemodule';
+            $domain = 'coursemodule';
 
         } else if ($sectionidx > 0) {
 
             // We are in course section.
-            $location = 'section';
+            $domain = 'section';
         }
 
-        return $location;
+        return $domain;
     }
 
     /**
@@ -467,8 +467,8 @@ class context_helper {
      * @throws \moodle_exception
      */
     public function get_current_url() {
-        $location = $this->get_location();
-        switch ($location) {
+        $domain = $this->get_domain();
+        switch ($domain) {
             case 'section':
                 $url = new \moodle_url('/course/view.php', array(
                     'id'      => $this->get_course_id(),
@@ -742,8 +742,36 @@ class context_helper {
      * @throws \moodle_exception
      */
     public function get_section_by_id($sectionid) {
-        $sectionrecord = $this->dbapi->get_section_by_id($sectionid);
-        return $sectionrecord ? new section($sectionrecord) : false;
+        if(isset($this->sectionsbyid[$sectionid])) {
+            return $this->sectionsbyid[$sectionid];
+        }
+
+        $sectionrecord  = $this->get_database_api()->get_section_by_id($sectionid);
+        $newsection     = new section($sectionrecord);
+        $this->sectionsbyid[$sectionid] = $newsection;
+        return $newsection;
+    }
+
+    public function prefetch_data_edit_mode(){
+        $sectionsrecords = $this->get_database_api()->get_course_sections_by_courseid($this->get_course_id());
+        foreach ($sectionsrecords as $sectionrecord){
+            $sectionid = $sectionrecord->id;
+            $this->sectionsbyid[$sectionid] = new section($sectionrecord);
+        }
+    }
+
+    public function prefetch_data_section_page_mode(){
+        $sectionid     = $this->get_section_id();
+        $sectionrecord = $this->get_database_api()->get_section_by_id($sectionid);
+        $this->sectionsbyid[$sectionid] = new section($sectionrecord);
+    }
+
+    public function prefetch_data_course_page_mode(){
+        $sectionsrecords = $this->get_database_api()->get_course_sections_by_courseid($this->get_course_id());
+        foreach ($sectionsrecords as $sectionrecord){
+            $sectionid = $sectionrecord->id;
+            $this->sectionsbyid[$sectionid] = new section($sectionrecord);
+        }
     }
 
     /**
@@ -765,7 +793,8 @@ class context_helper {
      */
     public function get_global_section() {
         // Return section 0.
-        return $this->get_section_by_id($this->get_global_section_id());
+        $globalsectionid = $this->get_global_section_id();
+        return $this->get_section_by_id($globalsectionid);
     }
 
     /**
@@ -801,7 +830,6 @@ class context_helper {
             foreach ($coursemodulesinfo as $courseinfocm) {
                 $coursemodules[] = new course_module($courseinfocm);
             }
-
             // Set coursemodules in cache.
             $this->coursemodules = $coursemodules;
         }
@@ -914,48 +942,7 @@ class context_helper {
         return true;
     }
 
-    /**
-     * Get ludic config from course format options.
-     *
-     * @return array
-     */
-    public function get_ludic_config() {
-        if ($this->ludicconfig == null) {
-            // Get ludic config (json).
-            $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
-            $ludicconfig = json_decode($ludicconfig);
 
-            if (!$ludicconfig) {
-                $defaultconfig = ['skins' => $this->get_default_skin_config()];
-                $this->update_course_format_options(['ludic_config' => json_encode($defaultconfig)]);
-                $ludicconfig = $this->get_course_format_option_by_name('ludic_config');
-                $ludicconfig = json_decode($ludicconfig);
-            }
-            $this->ludicconfig = (array) $ludicconfig;
-
-        }
-        return $this->ludicconfig;
-    }
-
-    public function get_default_skin_config(){
-        global $CFG;
-        $defaultfile = $CFG->dirroot . '/course/format/ludic/default_ludic_config.json';
-        $defaultconfig = file_get_contents($defaultfile);
-        return json_decode($defaultconfig);
-    }
-
-    /**
-     * Get skins from ludic config.
-     *
-     * @return array
-     */
-    public function get_skins_config() {
-        // Get ludic config.
-        $ludicconfig = $this->get_ludic_config();
-
-        // Ensure to return an array.
-        return isset($ludicconfig['skins']) ? $ludicconfig['skins'] : [];
-    }
 
     /**
      * Get all skins.
@@ -965,36 +952,34 @@ class context_helper {
      * @throws \dml_exception
      * @throws \moodle_exception
      */
-    public function get_skins() {
-        // Skins that don't depend on the ludic config.
-        //$defaultskins = $this->get_default_skins();
-        $defaultskins = [];
+    //public function get_skins() {
+    //    static $skins = [];
+    //    if ($skins) {
+    //        return $skins;
+    //    }
+    //
+    //    // Skins from ludic config.
+    //    $skinsconfig = $this->get_skins_config();
+    //
+    //    // Merge and instanciate all skins.
+    //    foreach ($skinsconfig as $skin) {
+    //        $skins[$skin->id] = skin_manager::build_from_config($skin);
+    //    }
+    //
+    //    // Return the constructed container
+    //    return $skins;
+    //}
 
-        // Skins from ludic config.
-        $skinsconfig = $this->get_skins_config();
-
-        // Merge and instance all skins.
-        $skins    = [];
-        $allskins = array_merge($defaultskins, $skinsconfig);
-        foreach ($allskins as $skin) {
-            $skin             = (object) $skin;
-            $skins[$skin->id] = skin::get_by_instance($skin);
-        }
-
-        // Return all skins.
-        return $skins;
-    }
-
-    public function get_skin_by_id($skintypeid) {
-        $allskinstypes = $this->get_skins();
-        foreach ($allskinstypes as $skintype) {
-            if ($skintype->id == $skintypeid) {
-                return $skintype;
-            }
-        }
-
-        return false;
-    }
+    //public function get_skin_by_id($skinid) {
+    //    $allskins = $this->get_skins();
+    //    foreach ($allskins as $skin) {
+    //        if ($skin->id == $skinid) {
+    //            return $skin;
+    //        }
+    //    }
+    //
+    //    return false;
+    //}
 
     /**
      * Return all skins that can be applied
@@ -1070,7 +1055,7 @@ class context_helper {
                 $sectionskins[$skin->id] = $skin;
                 continue;
             }
-            if ($skin->location == 'section') {
+            if ($skin->domain == 'section') {
                 $sectionskins[$skin->id] = $skin;
             }
         }
@@ -1108,7 +1093,7 @@ class context_helper {
         $coursemodulesskins = [];
         foreach ($skins as $skin) {
 
-            if ($skin->location === 'coursemodule') {
+            if ($skin->domain === 'coursemodule') {
                 $coursemodulesskins[$skin->id] = $skin;
             }
         }
@@ -1158,7 +1143,7 @@ class context_helper {
             return true;
         }
 
-        if ($skin->location == 'section') {
+        if ($skin->domain == 'section') {
             $sections = $this->get_sections();
             foreach ($sections as $section) {
                 if ($section->skinid == $skinid) {

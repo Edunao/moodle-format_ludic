@@ -48,7 +48,7 @@ class file_api {
     }
 
     public function get_skin_img_from_name($fullimgname, $courseid){
-        global $OUTPUT, $DB;
+        global $OUTPUT;
         // Explode full file name to get path
         $explodedfilename = explode('/', $fullimgname);
 

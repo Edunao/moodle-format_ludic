@@ -78,6 +78,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string
      */
     public function render_popup($id, $title = '', $content = '') {
+        require_once(__DIR__ . '/classes/renderers/renderable/popup.php');
         $popup = new format_ludic_popup($id, $title, $content);
         return $this->render($popup);
     }
@@ -88,9 +89,10 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @param array $slots
      * @return string
      */
-    public function render_avatar_shop($slots = []) {
-        $avatarshop = new format_ludic_avatar_shop($slots);
-        return $this->render($avatarshop);
+    public function render_avatar_inventory($slots = []) {
+        require_once(__DIR__ . '/classes/renderers/renderable/avatar_inventory.php');
+        $avatarinventory = new format_ludic_avatar_inventory($slots);
+        return $this->render($avatarinventory);
     }
 
     /**
@@ -100,6 +102,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string
      */
     public function render_modchooser($course, $sectionidx, $order) {
+        require_once(__DIR__ . '/classes/renderers/renderable/modchooser.php');
         $this->page->course->id = $course->id;
         $modchooser             = $this->courserenderer->course_section_add_cm_control($course, $sectionidx);
         $modchooser             = new format_ludic_modchooser($modchooser, $sectionidx, $order);
@@ -114,6 +117,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_section_form($sectionid) {
+        require_once(__DIR__ . '/classes/forms/section_form.php');
         $form = new \format_ludic\section_form($sectionid);
         return $form->render();
     }
@@ -126,6 +130,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_course_module_form($cmid) {
+        require_once(__DIR__ . '/classes/forms/coursemodule_form.php');
         $form = new \format_ludic\coursemodule_form($cmid);
         return $form->render();
     }
@@ -138,11 +143,13 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_edit_skins_form($courseid, $skin) {
-        $output = '';
+        require_once(__DIR__ . '/classes/forms/edit_skins_form.php');
         $form = new \format_ludic\edit_skins_form($courseid, $skin);
-        $output .= $form->render();
+
+        $output      = '';
+        $output      .= $form->render();
         $editbuttons = $skin->get_edit_buttons();
-        $output .= $this->render_buttons($editbuttons, $skin->id, 'skin');
+        $output      .= $this->render_buttons($editbuttons, $skin->id, 'skin');
 
         return $output;
     }
@@ -155,6 +162,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws coding_exception
      */
     public function render_buttons($buttons, $itemid = null, $type = null) {
+        require_once(__DIR__ . '/classes/renderers/renderable/buttons.php');
         $buttons = new format_ludic_buttons($buttons, $itemid, $type);
         return $this->render($buttons);
     }
@@ -172,6 +180,7 @@ class format_ludic_renderer extends format_section_renderer_base {
 
         $button = [
             'buttonclass' => 'ludic-add-button',
+            'haswrapper' => true,
             'action'      => 'getDataLinkAndRedirectTo',
             'order'       => $order,
             'link'        => $addsectionurl,
@@ -182,11 +191,13 @@ class format_ludic_renderer extends format_section_renderer_base {
     }
 
     public function render_skins_list($skinsinfo) {
+        require_once(__DIR__ . '/classes/renderers/renderable/skin_list.php');
         $skinslist = new format_ludic_skins_list($skinsinfo);
         return $this->render($skinslist);
     }
 
     public function render_skin_skin_types_list($skinid, $skintypes) {
+        require_once(__DIR__ . '/classes/renderers/renderable/skin_types_list.php');
         $skintypeslist = new format_ludic_skins_types_list($skinid, $skintypes);
         return $this->render($skintypeslist);
     }
@@ -198,6 +209,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws dml_exception
      */
     public function render_section($section) {
+        require_once(__DIR__ . '/classes/renderers/renderable/section.php');
         $section = new format_ludic_section($section);
         return $this->render($section);
     }
@@ -207,6 +219,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string
      */
     public function render_skin($skin) {
+        require_once(__DIR__ . '/classes/renderers/renderable/skin.php');
         $skin = new format_ludic_skin($skin);
         return $this->render($skin);
     }
@@ -219,6 +232,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_skinned_tile($skin) {
+        require_once(__DIR__ . '/classes/renderers/renderable/skinned_tile.php');
         $skinnedtile = new format_ludic_skinned_tile($skin);
         return $this->render($skinnedtile);
     }
@@ -228,6 +242,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string
      */
     public function render_form($form) {
+        require_once(__DIR__ . '/classes/renderers/renderable/form.php');
         $form = new format_ludic_form($form);
         return $this->render($form);
     }
@@ -237,6 +252,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string
      */
     public function render_course_module($coursemodule) {
+        require_once(__DIR__ . '/classes/renderers/renderable/course_module.php');
         $coursemodule = new format_ludic_course_module($coursemodule);
         return $this->render($coursemodule);
     }
@@ -246,12 +262,13 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return string
      */
     public function render_course_module_inline($coursemodule) {
+        require_once(__DIR__ . '/classes/renderers/renderable/course_module_inline.php');
         $coursemodule = new format_ludic_course_module_inline($coursemodule);
         return $this->render($coursemodule);
     }
 
     /**
-     * @param format_ludic_modchooser $popup
+     * @param format_ludic_modchooser $modchooser
      * @return bool|string
      * @throws moodle_exception
      */
@@ -259,8 +276,8 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render_from_template('format_ludic/modchooser', $modchooser);
     }
 
-    protected function render_format_ludic_avatar_shop(format_ludic_avatar_shop $avatarshop) {
-        return $this->render_from_template('format_ludic/avatar_shop', $avatarshop);
+    protected function render_format_ludic_avatar_inventory(format_ludic_avatar_inventory $avatarinventory) {
+        return $this->render_from_template('format_ludic/avatar_inventory', $avatarinventory);
     }
 
     /**
@@ -434,6 +451,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_header_bar() {
+        require_once(__DIR__ . '/classes/renderers/renderable/header_bar.php');
         $headerbar = new format_ludic_header_bar();
         return $this->render($headerbar);
     }
@@ -574,11 +592,11 @@ class format_ludic_renderer extends format_section_renderer_base {
 
         // Render sections.
         $output = '';
-        if($this->contexthelper->is_editing()){
-            $output .= '<div class="sections-container-title">'.get_string('edit-title-section', 'format_ludic').'</div>';
+        if ($this->contexthelper->is_editing()) {
+            $output .= '<div class="sections-container-title">' . get_string('edit-title-section', 'format_ludic') . '</div>';
         }
         foreach ($sections as $section) {
-            if(!$this->contexthelper->is_editing() && !$section->visible){
+            if (!$this->contexthelper->is_editing() && !$section->visible) {
                 continue;
             }
             $output .= $this->render_section($section);
@@ -629,6 +647,9 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_course_modules($sectionid, $selectedcmid = false) {
+        require_once(__DIR__ . '/classes/renderers/renderable/course_module.php');
+        require_once(__DIR__ . '/classes/renderers/renderable/course_module_inline.php');
+
         // Get data.
         $section       = $this->contexthelper->get_section_by_id($sectionid);
         $coursemodules = $section->get_course_modules();
@@ -646,21 +667,19 @@ class format_ludic_renderer extends format_section_renderer_base {
                     continue;
                 }
 
-                // In course module skin type is "inline", render it inline.
-                $hasnolink = plugin_supports('mod', $coursemodule->cminfo->modname, FEATURE_NO_VIEW_LINK, false);
-                if ($coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_INLINE_ID && $hasnolink) {
-                    $renderable = new format_ludic_course_module_inline($coursemodule);
+                // deal with special cases for rendering in student view
+                switch ($coursemodule->skin->get_type_name()) {
+                    case 'stealth':
+                    case 'menubar':
+                        continue 2;
+                    case 'inline':
+                        $renderable = new format_ludic_course_module_inline($coursemodule);
+                        break;
                 }
-
-                // Skins menubar and stealth are render differently.
-                if ($coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_MENUBAR_ID || $coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_STEALTH_ID) {
-                    continue;
-                }
-
             }
 
             // In the edit view or if the skin is not inline, render it normally.
-            $renderable = $renderable ? $renderable : new \format_ludic_course_module($coursemodule);
+            $renderable = $renderable ?: new \format_ludic_course_module($coursemodule);
 
             // Add class "selected" on selected course module.
             if ($selectedcmid && $selectedcmid == $coursemodule->id) {

@@ -1,0 +1,9 @@
+{
+    "visible": 1,
+    "domain": "course_module",
+    "skintype": "inline",
+    "skinname": "inline",
+    "title": "inline",
+    "description": "Content is displayed using default Moodle rendering mehods, directly in the course page.",
+    "css":""
+}

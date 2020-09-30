@@ -26,6 +26,8 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/form_element.php');
+
 class number_form_element extends form_element {
 
     public $min;

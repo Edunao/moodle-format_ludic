@@ -1,0 +1,9 @@
+{
+    "domain": "course_module",
+    "skintype": "fixed_image",
+    "skinname": "fixed content book",
+    "title": "Fixed Image",
+    "description": "A fixed image",
+    "css": "",
+    "background": "default-user-skins\/book"
+}

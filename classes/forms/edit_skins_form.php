@@ -44,6 +44,9 @@ class edit_skins_form extends form {
     }
 
     public function get_definition() {
+        require_once(__DIR__ . '/elements/hidden_form_element.php');
+        require_once(__DIR__ . '/elements/separator_form_element.php');
+        require_once(__DIR__ . '/elements/button_form_element.php');
 
         // Course id.
         $courseid   = $this->courseid;
@@ -120,6 +123,11 @@ class edit_skins_form extends form {
     }
 
     private function get_group_element($groupname, $elementname, $elementtype, $index, $class = '') {
+        require_once(__DIR__ . '/elements/text_form_element.php');
+        require_once(__DIR__ . '/elements/textarea_form_element.php');
+        require_once(__DIR__ . '/elements/number_form_element.php');
+        require_once(__DIR__ . '/elements/filepicker_form_element.php');
+
         $elements   = [];
         $groupvalue = $this->skin->get_properties($groupname);
 
@@ -171,6 +179,11 @@ class edit_skins_form extends form {
     }
 
     private function get_element($elementname, $elementtype) {
+        require_once(__DIR__ . '/elements/text_form_element.php');
+        require_once(__DIR__ . '/elements/textarea_form_element.php');
+        require_once(__DIR__ . '/elements/number_form_element.php');
+        require_once(__DIR__ . '/elements/filepicker_form_element.php');
+
         $elements = [];
         // Get current value
         $currentvalue = $this->skin->get_properties($elementname);

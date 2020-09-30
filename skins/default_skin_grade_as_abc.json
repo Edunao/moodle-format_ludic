@@ -1,0 +1,38 @@
+{
+    "domain": "course_module",
+    "skintype": "score",
+    "skinname": "ABC",
+    "title": "ABC grade",
+    "description": "A set of letters for grade thresholds.",
+    "css": ".sub-tile.skin-tile .skin-text {display:none} .sub-tile.skin-tile .skin-text.extratext{display:block;position: absolute;left: 48%;bottom: 11%;font-size:5.5rem;font-weight:bold;font-family:'sf-action-man'}",
+    "steps": [
+        {
+            "threshold": 0,
+            "score": 0,
+            "text": "",
+            "css": "",
+            "background": "default-user-skins\/letter-grade\/letter-grade-bg-0"
+        },
+        {
+            "threshold": 50,
+            "score": "100",
+            "text": "C",
+            "css": "",
+            "background": "default-user-skins\/letter-grade\/letter-grade-bg-1"
+        },
+        {
+            "threshold": 65,
+            "score": "200",
+            "text": "B",
+            "css": "",
+            "background": "default-user-skins\/letter-grade\/letter-grade-bg-1"
+        },
+        {
+            "threshold": 80,
+            "score": 300,
+            "text": "A",
+            "css": "",
+            "background": "default-user-skins\/letter-grade\/letter-grade-bg-2"
+        }
+    ]
+}

@@ -31,6 +31,12 @@ defined('MOODLE_INTERNAL') || die;
 require_once($CFG->libdir . '/formslib.php');
 
 class format_ludic_edit_ludic_config extends moodleform{
+    private $oldconfig = null;
+
+    public function __construct($oldconfig) {
+        $this->oldconfig = $oldconfig;
+        parent::__construct();
+    }
 
     public function definition() {
         $mform      = $this->_form;
@@ -43,7 +49,13 @@ class format_ludic_edit_ludic_config extends moodleform{
         $mform->addElement('filemanager', 'ludicimages', get_string('edit-skin-images', 'format_ludic'), null, array('accepted_types' => array('image'),  'subdirs' => 0));
 
         // Ludic config
-        $mform->addElement('textarea', 'ludicconfig', get_string('edit-skin-config', 'format_ludic'), 'rows="50"');
+//         $mform->addElement('textarea', 'ludicconfig', get_string('edit-skin-config', 'format_ludic'), 'rows="5"');
+        foreach($this->oldconfig as $skin) {
+            $name = $skin->skinname;
+            $id   = $skin->id;
+            $mform->addElement('textarea', 'ludicconfig' . $id, $name, 'rows="10"');
+        }
+        $mform->addElement('textarea', 'ludicconfig-new', get_string('edit-skin-new', 'format_ludic'), 'rows="10"');
 
         // Save and cancel buttons
         $buttonarray   = array();

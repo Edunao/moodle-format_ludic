@@ -23,7 +23,6 @@
  */
 
 require_once(__DIR__ . '/../../../../config.php');
-require_once($CFG->dirroot . '/course/format/ludic/lib.php');
 
 $courseid = required_param('courseid', PARAM_INT);
 
@@ -31,6 +30,7 @@ $courseid = required_param('courseid', PARAM_INT);
 require_login($courseid);
 
 // The front controller will execute the action defined in post/get parameter with the controller defined in post/get parameter.
+require_once(__DIR__ . '/../classes/controllers/front_controller.php');
 $frontcontroller = new \format_ludic\front_controller();
 
 // Call the controller method and print the result.

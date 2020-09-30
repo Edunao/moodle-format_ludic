@@ -24,6 +24,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/item.php');
+
 class format_ludic_section extends format_ludic_item {
 
     /**
@@ -42,7 +44,7 @@ class format_ludic_section extends format_ludic_item {
      * @throws moodle_exception
      */
     public function __construct(\format_ludic\section $section) {
-        global $PAGE, $CFG;
+        global $PAGE, $CFG, $OUTPUT;
 
         // General data.
         $contexthelper      = \format_ludic\context_helper::get_instance($PAGE);
@@ -56,8 +58,8 @@ class format_ludic_section extends format_ludic_item {
         $this->skinid       = $section->skinid;
 
         // Action.
-        $location = $contexthelper->get_location();
-        if (($location === 'course' || $location === 'section') && !$contexthelper->is_student_view_forced()) {
+        $domain = $contexthelper->get_domain();
+        if (($domain === 'course' || $domain === 'section') && !$contexthelper->is_student_view_forced()) {
             $this->action = 'getDataLinkAndRedirectTo';
             $this->link   = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
         }
@@ -84,7 +86,12 @@ class format_ludic_section extends format_ludic_item {
                 $this->imgsrc = $imageobject->imgsrc;
                 $this->imgalt = $imageobject->imgalt;
 
-            } else if ($contexthelper->count_sections() == 0) {
+            }else{
+                $this->imgsrc = $OUTPUT->image_url('system-skins/section-zero', 'format_ludic')->out();
+                $this->imgalt = '';
+            }
+
+            if ($contexthelper->count_sections() == 0) {
 
                 // Select section 0 if there is no other section in course.
                 $this->selected = true;

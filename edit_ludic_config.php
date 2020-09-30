@@ -28,6 +28,7 @@
 
 require_once '../../../config.php';
 require_once $CFG->dirroot . '/course/format/ludic/classes/forms/edit_ludic_config.php';
+require_once $CFG->dirroot . '/course/format/ludic/classes/data/skin_manager.php';
 
 $courseid = required_param('id', PARAM_INT);
 $course = get_course($courseid);
@@ -46,16 +47,18 @@ $title = get_string('edit-skins-title', 'format_ludic');
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
-
 $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
 $renderer = $PAGE->get_renderer('format_ludic');
 
+// fetch the existing configuration
+$skinmanager = \format_ludic\skin_manager::get_instance();
+$oldconfig   = $skinmanager->get_user_config();
+
 $error = '';
 
-$form = new format_ludic_edit_ludic_config();
+$form = new format_ludic_edit_ludic_config($oldconfig);
 
 if ($newdata = $form->get_data()) {
-
     // Store images
     $fs = get_file_storage();
     if ($newdata->ludicimages) {
@@ -63,62 +66,47 @@ if ($newdata = $form->get_data()) {
             0, array('accepted_types' => array('image'), 'subdirs' => 1));
     }
 
-    // Prepare ludic config and store if
-    $newludicconfig = $newdata->ludicconfig;
-    if($newludicconfig == ''){
-        $defaultconfig = $contexthelper->get_default_skin_config();
-        $defaultconfig = ['skins' => $defaultconfig];
-        $contexthelper->update_course_format_options(['ludic_config' => json_encode($defaultconfig)]);
-    }else{
-        $newludicconfig = json_decode($newludicconfig);
-
-        if($newludicconfig == '' || json_last_error() > 0){
-            $error = get_string('edit-skin-form-error-config', 'format_ludic');
-        }else{
-
-            $hassectiondefault = false;
-            $hascmdefault = false;
-            foreach ($newludicconfig as $config){
-                if($config->location == 'section' && $config->type == 'noludic'){
-                    $hassectiondefault = true;
-                    continue;
-                }
-
-                if($config->location == 'coursemodule' && $config->type == 'inline'){
-                    $hascmdefault = true;
-                    continue;
-                }
-            }
-
-            if(!$hassectiondefault){
-                $defaultconfig = $contexthelper->get_default_skin_config();
-                foreach ($defaultconfig as $config){
-                    if($config->location == 'section' && $config->type == 'noludic'){
-                        $newludicconfig[] = $config;
-                    }
-                }
-
-            }
-
-            if(!$hascmdefault){
-                $defaultconfig = $contexthelper->get_default_skin_config();
-                foreach ($defaultconfig as $config){
-                    if($config->location == 'coursemodule' && $config->type == 'inline'){
-                        $newludicconfig[] = $config;
-                    }
-                }
-            }
-
-            $newludicconfig = ['skins' => $newludicconfig];
-            $contexthelper->update_course_format_options(['ludic_config' => json_encode($newludicconfig)]);
+    // construct the new skin set
+    $newskins   = [];
+    $maxid      = 0;
+    foreach($oldconfig as $skin) {
+        $id             = $skin->id;
+        $maxid          = max($id, $maxid);
+        $rawskin        = $newdata->{'ludicconfig' . $id};
+        if (!$rawskin) {
+            // the skin has no definition so we are going to skip it (in other words - delete it)
+            continue;
         }
+        $newskin        = json_decode($rawskin);
+        if (!is_object($newskin)){
+            $error .= get_string('edit-skin-form-error-config', 'format_ludic') . ': ' . $skin->skinname . '<br>';
+            continue;
+        }
+        $newskin->id    = $id;
+        $newskins[]     = $newskin;
     }
 
+    // add the 'new skin' to the container (if there is one)
+    // use a while loop for this if() case to make a breakable construct to facilitate error handling
+    while ($newdata->{'ludicconfig-new'}) {
+        $rawdata    = $newdata->{'ludicconfig-new'};
+        $newskin    = json_decode($rawdata);
+        if (!is_object($newskin)){
+            $error .= get_string('edit-skin-form-error-config', 'format_ludic') . ': ' . get_string('edit-skin-new', 'format_ludic');
+            break;
+        }
+        $newskin->id = $maxid + 1;
+        $newskins[]  = $newskin;
+        break;
+    }
+
+    // if there were no erros then we're done
     if($error == ''){
+        $skinmanager->set_user_config($newskins);
         redirect($url);
     }
 
-}else if ($form->is_cancelled()) {
+} else if ($form->is_cancelled()) {
     redirect($CFG->wwwroot . '/course/view.php?id=' . $course->id);
 }
 
@@ -136,15 +124,14 @@ $draftitemid = file_get_submitted_draft_itemid('ludicimages');
 file_prepare_draft_area($draftitemid, $context->id, 'format_ludic', 'ludicimages', 0);
 $data->ludicimages = $draftitemid;
 
-// Prepare ludic config
-if(isset($newdata)){
-    $data->ludicconfig = $newdata->ludicconfig;
-}else{
-    $ludicconfig = $contexthelper->get_course_format_option_by_name('ludic_config');
-    $ludicconfig = json_encode(json_decode($ludicconfig)->skins, JSON_PRETTY_PRINT);
-    $data->ludicconfig = $ludicconfig;
+// Populate the form with data
+foreach($oldconfig as $skin) {
+    $id         = $skin->id;
+    $skincopy   = clone($skin);
+    unset($skincopy->id);
+    $skintext   = json_encode($skincopy, JSON_PRETTY_PRINT);
+    $data->{'ludicconfig' . $id} = $skintext;
 }
-
 
 $form->set_data($data);
 $form->display();

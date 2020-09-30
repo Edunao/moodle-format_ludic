@@ -17,6 +17,9 @@
 }}
 
 {{^isdropdown}}
+    {{#haswrapper}}
+        <div class="button-wrapper">
+    {{/haswrapper}}
     <button type="button" class="btn btn-default {{#buttonclass}}{{buttonclass}}{{/buttonclass}} {{identifier}}"
         data-identifier="{{identifier}}"
         {{#buttonid}} id="{{buttonid}}"{{/buttonid}}
@@ -32,6 +35,9 @@
         >
     {{#name}}{{name}}{{/name}}
     </button>
+    {{#haswrapper}}
+    </div>
+    {{/haswrapper}}
 {{/isdropdown}}
 
 {{#isdropdown}}

@@ -1,0 +1,63 @@
+{
+  "domain": "section",
+  "skintype": "collection",
+  "skinname": "animal collection",
+  "title": "Cute animal set collection",
+  "description": "Completed activities are rewarded with animal stamps.",
+  "css": ".skin-tile .skin-img:not(.image-0){position:absolute}",
+  "stamps": [
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-whale"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-frog"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-walrus"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-owl"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-pigeon"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-snake"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-cow"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-bear"
+    },
+    {
+      "todo": "default-user-skins\/animal-collection\/animal-collection-emptystamp",
+      "done": "default-user-skins\/animal-collection\/animal-collection-mouse"
+    }
+  ],
+  "layouts": [
+    {
+      "nbactivities": 0,
+      "background": "default-user-skins\/animal-collection\/animal-collection-bg-large",
+      "css": ".skin-tile .skin-img:not(.image-0){width:50%}.image-1{top:3%}.image-2{left:50%;top:3%}.image-3{left:25%;bottom:8%}"
+    },
+    {
+      "nbactivities": 4,
+      "background": "default-user-skins\/animal-collection\/animal-collection-bg-large",
+      "css": ".skin-tile .skin-img:not(.image-0){width:50%}.image-1{top:3%}.image-2{left:50%;top:3%}.image-3{bottom:8%}.image-4{left:50%;bottom:8%}"
+    },
+    {
+      "nbactivities": 5,
+      "background": "default-user-skins\/animal-collection\/animal-collection-bg",
+      "css": "\n .img-step{top:2%; width:33% !important;}\n .img-step-2{left:33%;}\n .img-step-3{left:64%;}\n .img-step-4{top:32%;}\n .img-step-5{top:32%;left:33%;}\n .img-step-6{top:32%;left:64%;}\n .img-step-7{top:62%;}\n .img-step-8{top:62%;left:33%;}\n .img-step-9{top:62%;left:64%;}"
+    }
+  ]
+}

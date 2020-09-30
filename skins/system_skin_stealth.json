@@ -1,0 +1,9 @@
+{
+    "visible": 0,
+    "domain": "course_module",
+    "skintype": "stealth",
+    "skinname": "stealth",
+    "title": "stealth",
+    "description": "Content is hidden but available for the students if the teacher provides direct links.",
+    "css": ""
+}

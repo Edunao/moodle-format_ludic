@@ -29,13 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 interface skinnable_interface {
 
     /**
-     * Get default skin to use after item creation.
-     *
-     * @return \stdClass[]
-     */
-    public function get_default_skin();
-
-    /**
      * Return an array of stdClass with grade and completion state.
      *
      * @return \stdClass[]

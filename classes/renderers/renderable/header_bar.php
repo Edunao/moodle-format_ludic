@@ -64,14 +64,22 @@ class format_ludic_header_bar implements renderable {
         // Sections
         if(!$editmode){
             $course         = $this->contexthelper->get_course();
-            $this->sections = array_values($course->get_sections());
+            $this->sections = array_values($course->get_sections(true));
             foreach ($this->sections as $key => $section) {
+
                 if (!$editmode && !$section->visible) {
                     unset($this->sections[$key]);
                     continue;
                 }
-                $section->name = $section->name != '' ? $section->name : get_string('default-section-title', 'format_ludic', $section->section);
-                $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
+                
+                if($section->section == 0){
+                    $section->name = get_string('section0name', 'format_ludic');
+                    $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid;
+                }else{
+                    $section->name = $section->name != '' ? $section->name : get_string('default-section-title', 'format_ludic', $section->section);
+                    $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
+
+                }
             }
 
             $this->sections = array_values($this->sections);
@@ -133,11 +141,10 @@ class format_ludic_header_bar implements renderable {
         // Keep course modules with menu bar skin.
         $this->coursemodules = [];
         foreach ($coursemodules as $coursemodule) {
-            if ($coursemodule->skin->id === FORMAT_LUDIC_CM_SKIN_MENUBAR_ID) {
+            if ($coursemodule->skin->get_type_name() === 'menubar') {
                 $this->coursemodules[] = $coursemodule;
             }
         }
-
         // Store course modules, then return them.
         return $this->coursemodules;
     }
@@ -188,7 +195,6 @@ class format_ludic_header_bar implements renderable {
 
         // Return list.
         return $list;
-
     }
 
     /**
@@ -206,7 +212,7 @@ class format_ludic_header_bar implements renderable {
         $list = [];
 
         // Exit in different cases.
-        if (!$this->contexthelper->user_has_student_role() || $this->contexthelper->get_location() != 'coursemodule' || $this->contexthelper->get_section_idx() <= 0) {
+        if (!$this->contexthelper->user_has_student_role() || $this->contexthelper->get_domain() != 'coursemodule' || $this->contexthelper->get_section_idx() <= 0) {
 
             // If current user is not student, don't show options.
             // Add an option only in course module.
@@ -233,7 +239,6 @@ class format_ludic_header_bar implements renderable {
 
         // Return list.
         return $list;
-
     }
 
     /**
@@ -332,6 +337,5 @@ class format_ludic_header_bar implements renderable {
 
         // Return list.
         return $list;
-
     }
 }

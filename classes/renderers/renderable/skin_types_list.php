@@ -27,6 +27,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/item.php');
+
 class format_ludic_skins_types_list extends format_ludic_item {
 
     public $selected;

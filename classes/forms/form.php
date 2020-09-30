@@ -26,6 +26,8 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/../data/context_helper.php');
+
 abstract class form {
 
     public $id;

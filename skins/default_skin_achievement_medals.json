@@ -1,0 +1,14 @@
+{
+    "domain": "section",
+    "skintype": "achievement",
+    "skinname": "achievement medals",
+    "title": "Achievement Overview",
+    "description": "Highlights how many activities have been successfully completed and how many are left to be attempted",
+    "background": "default-user-skins\/achievement-medal-set\/achievement-medal-set-bg",
+    "finalimage": "default-user-skins\/achievement-medal-set\/achievement-medal-set-final",
+    "incomplete": "",
+    "fail": "default-user-skins\/achievement-medal-set\/achievement-medal-set-fail",
+    "complete": "default-user-skins\/achievement-medal-set\/achievement-medal-set-complete",
+    "perfect": "default-user-skins\/achievement-medal-set\/achievement-medal-set-completepass",
+    "css": "\n .skin-text.completion-count.sup-zero{ \n display: block !important;\n background: #1d1061;\n color: white !important;\n border-radius: 100%;\n position: absolute;\n font-size: 23px !important;\n width: 39px;\n padding: 2px 2px;\n text-align: center;\n } \n .completion-incomplete{\n top: 31%;\n left: 55%;\n }\n .completion-complete{\n bottom: 13%;\n left: 55%;\n }\n .completion-fail{\n bottom: 14%;\n left: 25%;\n }\n .completion-perfect{\n right: 6%;\n bottom: 14%;\n }\n .skin-text.completion-count.sup-zero.perfect{\n right: 24%;\n font-size: 40px !important;\n width: 65px;\n }\n \n "
+}s

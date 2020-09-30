@@ -26,6 +26,8 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
+require_once(__DIR__ . '/form.php');
+
 class coursemodule_form extends form {
 
     /**
@@ -53,7 +55,14 @@ class coursemodule_form extends form {
      * @throws \dml_exception
      */
     public function get_definition() {
-        $elements = [];
+        require_once(__DIR__ . '/elements/hidden_form_element.php');
+        require_once(__DIR__ . '/elements/text_form_element.php');
+        require_once(__DIR__ . '/elements/selection_popup_form_element.php');
+        require_once(__DIR__ . '/elements/select_form_element.php');
+        require_once(__DIR__ . '/elements/checkbox_form_element.php');
+
+        $sectionidx = $this->object->section->dbrecord->section;
+        $elements   = [];
 
         // Course module id.
         $id         = $this->object->id;
@@ -63,16 +72,19 @@ class coursemodule_form extends form {
         $elements[] = new text_form_element('name', 'course-module-title', $this->object->name, '', get_string('label-course-module-title', 'format_ludic'), ['required' => true]);
 
         // Course module skin id.
-        $elements[] = new selection_popup_form_element('skinid', 'course-module-skinid', $this->object->skinid, 0, get_string('label-skin-selection', 'format_ludic'), [
+        $isinlineonly = plugin_supports('mod', $this->object->cminfo->modname, FEATURE_NO_VIEW_LINK, false);
+        if(!$isinlineonly){
+            $elements[] = new selection_popup_form_element('skinid', 'course-module-skinid', $this->object->skinid, 0, get_string('label-skin-selection', 'format_ludic'), [
                 'required' => true,
                 'multiple' => false
             ], [
                 'icon'           => $this->object->skin->get_edit_image(),
                 'itemid'         => $id,
                 'itemcontroller' => 'skin',
-                'itemaction'     => 'get_course_module_skin_selector',
+                'itemaction'     => ($sectionidx == 0) ? 'get_course_module_skin_selector_section_zero' : 'get_course_module_skin_selector_main',
                 'popuptitle'     => get_string('course-module-skin-selection', 'format_ludic')
             ]);
+        }
 
         // Course module weight.
         $elements[] = new select_form_element('weight', 'coursemodule-weight', $this->object->get_weight(), null, get_string('label-select-weight', 'format_ludic'), [

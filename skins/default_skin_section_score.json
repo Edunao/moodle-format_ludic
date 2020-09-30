@@ -1,0 +1,46 @@
+{
+    "domain": "section",
+    "skintype": "score",
+    "skinname": "trophy",
+    "title": "Score wand Trophy",
+    "description": "Des points avec une m\u00e9daille \u00e0 la fin !",
+    "css": " \n .skin-text.score{display: block;position: absolute;bottom: 0px;width: 100%;text-align: center;} \n \n ",
+    "steps": [
+        {
+            "threshold": 0,
+            "background": "default-user-skins\/score_and_trophies\/score_and_trophies-1",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 300,
+            "background": "default-user-skins\/score_and_trophies\/score_and_trophies-2",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 500,
+            "background": "default-user-skins\/score_and_trophies\/score_and_trophies-3",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 600,
+            "background": "default-user-skins\/score_and_trophies\/score_and_trophies-4",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 700,
+            "background": "default-user-skins\/score_and_trophies\/score_and_trophies-5",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 800,
+            "background": "default-user-skins\/score_and_trophies\/score_and_trophies-6",
+            "text": "",
+            "css": ""
+        }
+    ]
+}

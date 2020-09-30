@@ -88,8 +88,11 @@ abstract class form_element {
     public function render() {
         global $PAGE;
         $renderer = $PAGE->get_renderer('format_ludic');
+
+        require_once(__DIR__ . '/../../renderers/renderable/' . $this->type . '_form_element.php');
         $class    = '\\format_ludic_' . $this->type . '_form_element';
         $element  = new $class($this);
+
         return $renderer->render($element);
     }
 
@@ -101,5 +104,4 @@ abstract class form_element {
      * @return array
      */
     public abstract function validate_value($value);
-
 }
