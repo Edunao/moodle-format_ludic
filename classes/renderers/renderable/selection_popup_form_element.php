@@ -36,6 +36,8 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
     public $itemcontroller;
     public $itemaction;
     public $popuptitle;
+    public $skintitle;
+    public $skindescription;
 
     /**
      * format_ludic_selection_popup_form_element constructor.
@@ -53,11 +55,12 @@ class format_ludic_selection_popup_form_element extends format_ludic_form_elemen
             $this->imgalt = $specific['icon']->imgalt;
         }
 
-        $this->action         = 'selectAndUpdateInput';
-        $this->itemid         = isset($specific['itemid']) ? $specific['itemid'] : null;
-        $this->itemaction     = isset($specific['itemaction']) ? $specific['itemaction'] : null;
-        $this->itemcontroller = isset($specific['itemcontroller']) ? $specific['itemcontroller'] : null;
-        $this->popuptitle     = isset($specific['popuptitle']) ? $specific['popuptitle'] : null;
-
+        $this->action           = 'selectAndUpdateInput';
+        $this->itemid           = isset($specific['itemid']) ? $specific['itemid'] : null;
+        $this->itemaction       = isset($specific['itemaction']) ? $specific['itemaction'] : null;
+        $this->itemcontroller   = isset($specific['itemcontroller']) ? $specific['itemcontroller'] : null;
+        $this->popuptitle       = isset($specific['popuptitle']) ? $specific['popuptitle'] : null;
+        $this->skintitle        = isset($specific['skintitle']) ? $specific['skintitle'] : "";
+        $this->skindescription  = isset($specific['skindescription']) ? $specific['skindescription'] : "";
     }
 }

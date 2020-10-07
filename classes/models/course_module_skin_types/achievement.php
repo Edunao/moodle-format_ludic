@@ -31,7 +31,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_course_module_achievement extends \format_ludic\skinned_course_module {
-    public function __construct(skin_template_course_module_achievement $template){
+    public function __construct(skin_template_course_module_achievement $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_course_module_achievement();
@@ -58,56 +58,66 @@ class skin_type_course_module_achievement extends \format_ludic\course_module_sk
 
 class skin_template_course_module_achievement extends \format_ludic\course_module_skin_template {
 
-    private $steps = [null, null, null, null];
+    private $steps = [null, null, null, null, null];
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // iterate over steps
-        $lowest = 4;
-        foreach($config->steps as $step) {
-            // identify which achievement level the step belongs to
-            switch(strlower($step->state)) {
-                case ""             :
-                case "none"         :
-                case "incomplete"   : $idx = 0; break;
-                case "fail"         : $idx = 1; break;
-                case "pass"         :
-                case "complete"     : $idx = 2; break;
-                case "perfect"      : $idx = 3; break;
+        // Iterate over steps.
+        $lowest = count($this->steps);
+        foreach ($config->steps as $step) {
+            // Identify which achievement level the step belongs to.
+            switch(\strtolower($step->state)) {
+                case "" :
+                case "none" :
+                case "incomplete" :
+                    $idx = 0;
+                    break;
+                case "fail" :
+                    $idx = 1;
+                    break;
+                case "pass" :
+                    $idx = 2;
+                    break;
+                case "complete" :
+                    $idx = 3;
+                    break;
+                case "perfect" :
+                    $idx = 4;
+                    break;
                 default:
-                    // TODO : Display a friendly error before ignoring this entry
-                    continue;
+                    // TODO : Display a friendly error before ignoring this entry.
+                    continue 2;
             }
             $lowest = min($lowest, $idx);
             $this->steps[$idx] = (object)[
-                "score" => isset($step->score) ? $step->score : 0,
-                "image" => isset($step->image) ? $step->image : "default",
-                "text"  => isset($step->text)  ? $step->text  : "",
-                "css"   => isset($step->css)   ? $step->css   : "",
+                "score"      => isset($step->score) ? $step->score : 0,
+                "background" => isset($step->background) ? $step->background : "default",
+                "text"       => isset($step->text) ? $step->text : "",
+                "css"        => isset($step->css) ? $step->css : "",
             ];
-            // clamp the score to the 0..100 range
-            $this->steps[$idx]->score = max($this->steps[$idx], 0);
-            $this->steps[$idx]->score = min($this->steps[$idx], 100);
+            // Clamp the score to the 0..100 range.
+            $this->steps[$idx]->score = max($this->steps[$idx]->score, 0);
+            $this->steps[$idx]->score = min($this->steps[$idx]->score, 100);
         }
 
-        // if no steps were found at all then just put in a default one
-        if ($lowest == 4) {
-            $this->steps[3] = (object)[
-                "score" => 0,
-                "image" => "default",
-                "text"  => "",
-                "css"   => "",
+        // If no steps were found at all then just put in a default one.
+        if ($lowest == count($this->steps)) {
+            --$lowest;
+            $this->steps[$lowest] = (object)[
+                "score"      => 0,
+                "background" => "default",
+                "text"       => "",
+                "css"        => "",
             ];
-            $lowest = 3;
         }
 
-        // fill in any missing steps
-        for($i = 0; $i < $lowest; ++$i){
+        // Fill in any missing steps.
+        for ($i = 0; $i < $lowest; ++$i) {
             $this->steps[$i] = $this->steps[$lowest];
         }
-        for($i = $lowest + 1; $i < 4; ++$i){
+        for ($i = $lowest + 1; $i < 4; ++$i) {
             $this->steps[$i] = $this->steps[$i] ?: $this->steps[$i - 1];
         }
     }
@@ -118,7 +128,7 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
      * @return \stdClass
      */
     public function get_edit_image() {
-        return $this->steps[3];
+        return $this->steps[3]->background;
     }
 
 
@@ -131,7 +141,7 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
      * @throws \moodle_exception
      */
     public function get_images_to_render($skindata) {
-        return [ $skindata->image ];
+        return [ $skindata->background ];
     }
 
     public function get_css($skindata) {
@@ -149,10 +159,6 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
     public function get_texts_to_render($skindata) {
         return [
             [
-                'text'  => $skindata->score,
-                'class' => 'score'
-            ],
-            [
                 'text'  => $skindata->text,
                 'class' => 'extratext'
             ]
@@ -160,26 +166,38 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
     }
 
     public function setup_skin_data($skindata, $skinresults, $userdata) {
-        // determine which step to use
+        // Determine which step to use.
         switch($userdata->richstate) {
-            case COMPLETION_INCOMPLETE       : $idx = 0; break;
-            case COMPLETION_COMPLETE_FAIL    : $idx = 1; break;
-            case COMPLETION_COMPLETE_PASS    : $idx = 2; break;
-            case COMPLETION_COMPLETE         : $idx = 2; break;
-            case COMPLETION_COMPLETE_PERFECT : $idx = 3; break;
-            default: $idx = 0;
+            case COMPLETION_INCOMPLETE :
+                $idx = 0;
+                break;
+            case COMPLETION_COMPLETE_FAIL :
+                $idx = 1;
+                break;
+            case COMPLETION_COMPLETE_PASS :
+                $idx = 2;
+                break;
+            case COMPLETION_COMPLETE :
+                $idx = 3;
+                break;
+            case COMPLETION_COMPLETE_PERFECT :
+                $idx = 4;
+                break;
+            default :
+                $idx = 0;
+                break;
         }
         $step = $this->steps[$idx];
 
-        // calculate the result score
+        // Calculate the result score.
         $score = $step->score * $this->weight / 100;
 
-        // Store away the results
-        $skindata->score    = $score;
-        $skindata->image    = $step->background;
-        $skindata->text     = $step->text;
-        $skindata->css      = $step->css;
-        $skinresults->score = $score;
+        // Store away the results.
+        $skindata->score        = $score;
+        $skindata->background   = $step->background;
+        $skindata->text         = $step->text;
+        $skindata->css          = $step->css;
+        $skinresults->score     = $score;
     }
 }
 

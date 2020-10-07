@@ -38,7 +38,7 @@ class format_ludic_header_bar implements renderable {
      *
      * @var \format_ludic\course_module[]
      */
-    private $coursemodules = null;
+    private $coursemodules;
 
     public $notstudentview;
     public $optionslist;
@@ -61,8 +61,8 @@ class format_ludic_header_bar implements renderable {
         $this->notstudentview = !$this->contexthelper->is_student_view_forced();
         $editmode             = $this->contexthelper->is_editing();
 
-        // Sections
-        if(!$editmode){
+        // Sections.
+        if (!$editmode) {
             $course         = $this->contexthelper->get_course();
             $this->sections = array_values($course->get_sections(true));
             foreach ($this->sections as $key => $section) {
@@ -71,20 +71,20 @@ class format_ludic_header_bar implements renderable {
                     unset($this->sections[$key]);
                     continue;
                 }
-                
-                if($section->section == 0){
+
+                if ($section->section == 0) {
                     $section->name = get_string('section0name', 'format_ludic');
                     $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid;
-                }else{
-                    $section->name = $section->name != '' ? $section->name : get_string('default-section-title', 'format_ludic', $section->section);
+                } else {
+                    $section->name = $section->name != '' ?
+                        $section->name :
+                        get_string('default-section-title', 'format_ludic', $section->section);
                     $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
-
                 }
             }
 
             $this->sections = array_values($this->sections);
         }
-
 
         // Javascript parameters.
         $params = [
@@ -212,7 +212,9 @@ class format_ludic_header_bar implements renderable {
         $list = [];
 
         // Exit in different cases.
-        if (!$this->contexthelper->user_has_student_role() || $this->contexthelper->get_domain() != 'coursemodule' || $this->contexthelper->get_section_idx() <= 0) {
+        if (!$this->contexthelper->user_has_student_role()
+            || $this->contexthelper->get_domain() != 'coursemodule'
+            || $this->contexthelper->get_section_idx() <= 0) {
 
             // If current user is not student, don't show options.
             // Add an option only in course module.
@@ -270,18 +272,20 @@ class format_ludic_header_bar implements renderable {
         // Options for editing teacher and teacher.
         if ($isadmin || $iseditingteacher || $isteacher) {
 
-            // To student interface
+            // To student interface.
             if (!$isstudent) {
                 $name       = get_string('header-bar-student-view', 'format_ludic');
                 $roleid     = $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
-                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole=' . $roleid . '&sesskey=' . sesskey() . '&edit=on';
+                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole='
+                    . $roleid . '&sesskey=' . sesskey() . '&edit=on';
             }
 
-            // To edition interface
+            // To edition interface.
             if ($isstudent) {
                 $name       = get_string('header-bar-teacher-view', 'format_ludic');
                 $roleid     = 0;
-                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole=' . $roleid . '&sesskey=' . sesskey() . '&edit=on';
+                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole='
+                    . $roleid . '&sesskey=' . sesskey() . '&edit=on';
             }
 
             $switchoption = [
@@ -299,9 +303,8 @@ class format_ludic_header_bar implements renderable {
             $list[] = $switchoption;
 
             if (!$isstudent) {
-
-                if(strpos($PAGE->pagetype, 'view-ludic') === false){
-                    // Edit course
+                if (strpos($PAGE->pagetype, 'view-ludic') === false) {
+                    // Edit course.
                     $editname   = get_string('editcourse', 'format_ludic');
                     $editicon   = $OUTPUT->image_url('i/settings')->out();
                     $editlink   = $CFG->wwwroot . '/course/view.php?id=' . $courseid;
@@ -315,7 +318,7 @@ class format_ludic_header_bar implements renderable {
                     $list[]     = $editoption;
                 }
 
-                // Edit skins
+                // Edit skins.
                 if (strpos($PAGE->pagetype, 'edit_ludic_config') === false) {
                     $editname   = get_string('editskins', 'format_ludic');
                     $editicon   = $OUTPUT->image_url('i/settings')->out();
@@ -330,9 +333,7 @@ class format_ludic_header_bar implements renderable {
 
                     $list[] = $editoption;
                 }
-
             }
-
         }
 
         // Return list.

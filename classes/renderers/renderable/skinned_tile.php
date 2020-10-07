@@ -48,14 +48,14 @@ class format_ludic_skinned_tile implements renderable {
     public function __construct(\format_ludic\skinned_item $skin) {
         $this->images = [];
         $images = $skin->get_images_to_render();
-        foreach ($images as $index => $image){
-            if(is_string($image)){
+        foreach ($images as $index => $image) {
+            if (is_string($image)) {
                 $this->images[] = (object)[
                     'imgsrc' => format_ludic_get_skin_image_url($image),
                     'imgalt' => "",
                     'class' => "image-$index"
                 ];
-            }else{
+            } else {
                 $class = isset($image->class) ? $image->class : '';
                 $class .= " image-$index";
                 $this->images[] = (object)[

@@ -31,7 +31,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_section_fixed_image extends \format_ludic\skinned_section {
-    public function __construct(skin_template_section_fixed_image $template){
+    public function __construct(skin_template_section_fixed_image $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_section_fixed_image();
@@ -55,7 +55,7 @@ class skin_template_section_fixed_image extends \format_ludic\section_skin_templ
     protected $background;
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
         $this->background = isset($config->background) ? $config->background : "";

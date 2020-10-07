@@ -82,11 +82,11 @@ class format_ludic_section extends format_ludic_item {
             // Section 0 has no image.
             if ($isnotglobalsection) {
                 // Image.
-                $imageobject  = $section->skin->get_edit_image();
-                $this->imgsrc = $imageobject->imgsrc;
-                $this->imgalt = $imageobject->imgalt;
+                $skininfo     = $section->skin->get_edit_info();
+                $this->imgsrc = $skininfo->imgsrc;
+                $this->imgalt = '';
 
-            }else{
+            } else {
                 $this->imgsrc = $OUTPUT->image_url('system-skins/section-zero', 'format_ludic')->out();
                 $this->imgalt = '';
             }

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -33,7 +32,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_section_progress extends \format_ludic\skinned_section  {
-    public function __construct(skin_template_section_progress $template){
+    public function __construct(skin_template_section_progress $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_section_progress();
@@ -68,24 +67,23 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
     protected $steps;
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // setup the target score
+        // Setup the target score.
         $this->targetscore = isset($config->targetscore) ? $config->targetscore : 1000;
 
-        // Copy steps into an associative array, indexed by threshold and sort it
-        $sortedsteps = [];
+        // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step)){
+            if (!array_key_exists('threshold', $step)) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;
         }
 
-        // make sure that there is a first step starting at 0
+        // Make sure that there is a first step starting at 0.
         if (!array_key_exists(0, $stepsbythreshod)) {
-            // Add first step to start of array.s
+            // Add first step to start of array.
             $stepsbythreshod[0] = [
                 'threshold'  => 0,
                 'image0'     => '',
@@ -98,7 +96,7 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
             ];
         }
 
-        // sort the steps into threshold order and reindex them starting at 0
+        // Sort the steps into threshold order and reindex them starting at 0.
         ksort($stepsbythreshod, SORT_NUMERIC);
         $this->steps = array_values($stepsbythreshod);
     }
@@ -139,7 +137,7 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
 
     public function setup_skin_data($skindata, $userdata, $section) {
 
-        // aggregate the course section scores
+        // Aggregate the course section scores.
         $score    = 0;
         $maxscore = 0;
         foreach ($userdata as $cmdata) {
@@ -148,7 +146,7 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
         }
         $maxscore = max($maxscore, 1);
 
-        // derive the target score for the top end of the progression scale
+        // Derive the target score for the top end of the progression scale.
         if ($this->targetscore <= 0 ) {
             $targetscore   = $maxscore;
             $laststepscore = max(1, end($this->steps)->threshold);
@@ -160,7 +158,7 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
         }
         $progress = min(1, $score / $targetscore);
 
-        // Find current step
+        // Find current step.
         $currentstep = $this->steps[0];
         foreach ($this->steps as $step) {
             if ($progress < $step->threshold * $stepfactor) {
@@ -169,12 +167,12 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
             $currentstep = $step;
         }
 
-        // Store away the results
+        // Store away the results.
         $progress           = min($score / $targetscore, 1);
         $skindata->images   = [];
-        for ($i = 0; $i< 5; ++$i) {
+        for ($i = 0; $i < 5; ++$i) {
             $image = $currentstep->{'image' . $i};
-            if (! $image) {
+            if (!$image) {
                 continue;
             }
             $skindata->images[] = $image;

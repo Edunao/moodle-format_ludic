@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
- *
  * @package    TODO
  * @subpackage TODO
  * @copyright  2020 Edunao SAS (contact@edunao.com)
@@ -29,7 +26,7 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once 'form.php';
+require_once('form.php');
 
 class edit_skins_form extends form {
     private $skin;
@@ -52,74 +49,61 @@ class edit_skins_form extends form {
         $courseid   = $this->courseid;
         $elements[] = new hidden_form_element('courseid', 'course-id', $courseid, 0);
 
-        // Skin type id
+        // Skin type id.
         $skintypeid = $this->skin->get_unique_name();
         $elements[] = new hidden_form_element('skintypeid', 'skintype-id', $skintypeid, 0);
 
-        // Skin id
+        // Skin id.
         $skinid     = $this->skin->id;
         $elements[] = new hidden_form_element('id', 'id', $skinid, 0);
 
-        // Skin settings
+        // Skin settings.
         $settings = $this->skin->get_editor_config();
 
         foreach ($settings as $section => $options) {
 
             foreach ($options as $elementname => $elementtype) {
                 if (is_array($elementtype)) {
-
-                    $index     = 0;
                     $groupname = $elementname;
-                    $elements[] = new separator_form_element($groupname,$groupname,['groupclass' => 'group-separator']);
+                    $elements[] = new separator_form_element($groupname, $groupname, ['groupclass' => 'group-separator']);
 
-                    // Create element for each current value
+                    // Create element for each current value.
                     $groupvalue = $this->skin->get_properties($groupname);
-                    if($groupvalue){
+                    if ($groupvalue) {
                         foreach ($groupvalue as $index => $subelements) {
-                            $elements[] = new separator_form_element($groupname . ' '. $index ,$groupname . ' '. $index, [
+                            $elements[] = new separator_form_element($groupname . ' '. $index , $groupname . ' '. $index, [
                                 'groupclass' => $groupname . ' ' . $groupname . '_' .$index . ' group-index-'.$index,
                             ]);
 
                             foreach ($elementtype as $subname => $subtype) {
-                                    $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
-
+                                $elements = array_merge(
+                                    $elements,
+                                    $this->get_group_element($groupname, $subname, $subtype, $index)
+                                );
                             }
-                            // Delete step button
-                            $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
-                                'action' => 'editSkinDeleteStep',
-                                'itemid' => $groupname . '_' . $index,
-                                'class'  => 'delete-group ' . $groupname . '_' .$index . ' ' . $groupname
-                            ]);
+
+                            // Delete step button.
+                            $elements[] = new button_form_element(
+                                'deletestep',
+                                'deletestep',
+                                '',
+                                '',
+                                'Supprimer l\'étape',
+                                [
+                                    'action' => 'editSkinDeleteStep',
+                                    'itemid' => $groupname . '_' . $index,
+                                    'class'  => 'delete-group ' . $groupname . '_' .$index . ' ' . $groupname,
+                                ]
+                            );
                         }
                     }
-
-                    // Add empty groups
-                    /*$index++;
-                    if($index < 8){
-                        for($index; $index <= 8 ; $index++){
-                            $elements[] = new separator_form_element($groupname . '_' . $index, $groupname . '_' . $index,
-                                ['groupclass' => 'group-index-'. $index]);
-                            foreach ($elementtype as $subname => $subtype) {
-
-                                $elements = array_merge($elements, $this->get_group_element($groupname, $subname, $subtype, $index));
-                            }
-                            $elements[] = new button_form_element('deletestep', 'deletestep', '', '', 'Supprimer l\'étape', [
-                                'action' => 'editSkinDeleteStep',
-                                'itemid' => $groupname . '_' . $index,
-                                'class'  => 'delete-group group group-index-' . $index,
-                            ]);
-                        }
-                    }*/
                 } else {
                     $elements = array_merge($elements, $this->get_element($elementname, $elementtype));
                 }
-
             }
-
         }
 
         return $elements;
-
     }
 
     private function get_group_element($groupname, $elementname, $elementtype, $index, $class = '') {
@@ -145,29 +129,78 @@ class edit_skins_form extends form {
 
         switch ($elementtype) {
             case 'text':
-                $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementlabel, $attributes);
+                $elements[] = new text_form_element(
+                    $elementname,
+                    $elementname,
+                    $currentvalue,
+                    '',
+                    $elementlabel,
+                    $attributes
+                );
                 break;
             case 'textarea':
-                $elements[] = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementlabel, array_merge($attributes, ['rows' => 5]));
+                $elements[] = new textarea_form_element(
+                    $elementname,
+                    $elementname,
+                    $currentvalue,
+                    '',
+                    $elementlabel,
+                    array_merge($attributes, ['rows' => 5])
+                );
                 break;
             case 'int':
-                $elements[] = new number_form_element($elementname, $elementname, $currentvalue, 1, $elementlabel, $attributes);
+                $elements[] = new number_form_element(
+                    $elementname,
+                    $elementname,
+                    $currentvalue,
+                    1,
+                    $elementlabel,
+                    $attributes
+                );
                 break;
             case 'image':
                 $imgsrc = isset($currentvalue->imgsrc) ? $currentvalue->imgsrc : '';
                 $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
-                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementlabel, array_merge($attributes,[
-                ]), ['previewsrc' => $imgsrc]);
-                $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementlabel . ' alt text',$attributes);
+                $elements[] = new filepicker_form_element(
+                    $elementname . '-img',
+                    $elementname . '-img',
+                    '',
+                    '',
+                    $elementlabel,
+                    array_merge($attributes, []),
+                    ['previewsrc' => $imgsrc]
+                );
+                $elements[] = new text_form_element(
+                    $elementname . '-alt',
+                    $elementname . '-alt',
+                    $altvalue,
+                    '',
+                    $elementlabel . ' alt text',
+                    $attributes
+                );
                 break;
             case 'images':
-                foreach($currentvalue as $imgindex => $image){
+                foreach ($currentvalue as $imgindex => $image) {
                     $imgsrc = isset($image->imgsrc) ? $image->imgsrc : '';
                     $altvalue = isset($image->imgalt) ? $image->imgalt : '';
                     $elementname .= '_' . $imgindex;
-                    $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', '', '', $elementlabel, array_merge($attributes,[
-                    ]), ['previewsrc' => $imgsrc]);
-                    $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementlabel . ' alt text',$attributes);
+                    $elements[] = new filepicker_form_element(
+                        $elementname . '-img',
+                        $elementname . '-img',
+                        '',
+                        '',
+                        $elementlabel,
+                        array_merge($attributes, []),
+                        ['previewsrc' => $imgsrc]
+                    );
+                    $elements[] = new text_form_element(
+                        $elementname . '-alt',
+                        $elementname . '-alt',
+                        $altvalue,
+                        '',
+                        $elementlabel . ' alt text',
+                        $attributes
+                    );
                 }
 
                 break;
@@ -185,32 +218,65 @@ class edit_skins_form extends form {
         require_once(__DIR__ . '/elements/filepicker_form_element.php');
 
         $elements = [];
-        // Get current value
+        // Get current value.
         $currentvalue = $this->skin->get_properties($elementname);
 
         switch ($elementtype) {
             case 'text':
-                $elements[] = new text_form_element($elementname, $elementname, $currentvalue, '', $elementname);
+                $elements[] = new text_form_element(
+                    $elementname,
+                    $elementname,
+                    $currentvalue,
+                    '',
+                    $elementname
+                );
                 break;
             case 'textarea':
-                $elements[] = new textarea_form_element($elementname, $elementname, $currentvalue, '', $elementname, ['rows' => 5]);
+                $elements[] = new textarea_form_element(
+                    $elementname,
+                    $elementname,
+                    $currentvalue,
+                    '',
+                    $elementname,
+                    ['rows' => 5]
+                );
                 break;
             case 'int':
-                $elements[] = new number_form_element($elementname, $elementname, $currentvalue, '', $elementname);
+                $elements[] = new number_form_element(
+                    $elementname,
+                    $elementname,
+                    $currentvalue,
+                    '',
+                    $elementname
+                );
                 break;
             case 'image':
                 $itemid = '';
-                if(isset($currentvalue->imgfileid)){
+                if (isset($currentvalue->imgfileid)) {
                     $itemid = $this->contexthelper->fileapi->get_draft_itemid_from_fileid($currentvalue->imgfileid);
                 }
 
                 $imgsrc = isset($currentvalue->imgsrc) ? $currentvalue->imgsrc : '';
                 $altvalue = isset($currentvalue->imgalt) ? $currentvalue->imgalt : '';
-                $elements[] = new filepicker_form_element($elementname . '-img', $elementname . '-img', $itemid, '', $elementname, [
-                    'accepted_types' => 'png, jpg, gif, svg, jpeg',
-                    'required'       => true,
-                ],['previewsrc' => $imgsrc]);
-                $elements[] = new text_form_element($elementname . '-alt', $elementname . '-alt', $altvalue, '', $elementname . ' alt text');
+                $elements[] = new filepicker_form_element(
+                    $elementname . '-img',
+                    $elementname . '-img',
+                    $itemid,
+                    '',
+                    $elementname,
+                    [
+                        'accepted_types' => 'png, jpg, gif, svg, jpeg',
+                        'required'       => true,
+                    ],
+                    ['previewsrc' => $imgsrc]
+                );
+                $elements[] = new text_form_element(
+                    $elementname . '-alt',
+                    $elementname . '-alt',
+                    $altvalue,
+                    '',
+                    $elementname . ' alt text'
+                );
                 break;
             default:
                 break;

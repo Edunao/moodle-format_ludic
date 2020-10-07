@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -16,8 +15,6 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- *
- *
  * @package    TODO
  * @subpackage TODO
  * @copyright  2020 Edunao SAS (contact@edunao.com)
@@ -25,8 +22,8 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once '../../../config.php';
-require_once $CFG->dirroot . '/course/format/ludic/classes/forms/edit_skins_form.php';
+require_once('../../../config.php');
+require_once($CFG->dirroot . '/course/format/ludic/classes/forms/edit_skins_form.php');
 
 $courseid = required_param('id', PARAM_INT);
 

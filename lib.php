@@ -46,7 +46,6 @@ class format_ludic extends \format_base {
         global $PAGE;
         parent::__construct($format, $courseid);
         $this->contexthelper = \format_ludic\context_helper::get_instance($PAGE);
-        //$this->contexthelper->get_ludic_config();
     }
 
     /**
@@ -155,17 +154,18 @@ class format_ludic extends \format_base {
             }
         }
 
-
-
         return $elements;
     }
 
-    function page_set_course(\moodle_page $page) {
+    public function page_set_course(\moodle_page $page) {
         global $CFG, $USER;
 
-        // Put teacher in edition mode by defaut
+        // Put teacher in edition mode by defaut.
         $context = context_course::instance($page->course->id);
-        if (!$page->user_is_editing() && has_capability('moodle/course:manageactivities', $context) && $page->pagetype == 'course-view') {
+        if (!$page->user_is_editing()
+            && has_capability('moodle/course:manageactivities', $context)
+            && $page->pagetype == 'course-view'
+        ) {
             $USER->editing = 1;
             redirect($CFG->wwwroot . '/course/view.php?id=' . $page->course->id . '&sesskey=' . sesskey() . '&edit=on');
         }
@@ -231,7 +231,10 @@ class format_ludic extends \format_base {
         // If section is specified in course/view.php, make sure it is expanded in navigation.
         if ($navigation->includesectionnum === false) {
             $selectedsection = $this->contexthelper->get_section_id();
-            if ($selectedsection !== null && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0') && $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)) {
+            if ($selectedsection !== null
+                && (!defined('AJAX_SCRIPT') || AJAX_SCRIPT == '0')
+                && $PAGE->url->compare(new moodle_url('/course/view.php'), URL_MATCH_BASE)
+            ) {
                 $navigation->includesectionnum = $selectedsection;
             }
         }
@@ -353,18 +356,23 @@ function format_ludic_pluginfile($course, $cm, $context, $filearea, $args, $forc
  * @return string result text with constants in place of range texts
  */
 function format_ludic_resolve_ranges_in_text($txtwithranges, $factor) {
-    // split the string into parts, separating out any range texts that will need to be replaced
-    $parts = preg_split("/([0123456789]+(?:\.[0123456789]+)?\.\.[0123456789]+(?:\.[0123456789]+)?)/", $txtwithranges, -1, PREG_SPLIT_DELIM_CAPTURE);
+    // Split the string into parts, separating out any range texts that will need to be replaced.
+    $parts = preg_split(
+        "/([0123456789]+(?:\.[0123456789]+)?\.\.[0123456789]+(?:\.[0123456789]+)?)/",
+        $txtwithranges,
+        -1,
+        PREG_SPLIT_DELIM_CAPTURE
+    );
 
-    // prime the result with the text part that precedes the first range code
+    // Prime the result with the text part that precedes the first range code.
     $result = $parts[0];
 
-    // iterate over remaining text parts treating them 2 by 2 as a range sequence followed by a non-range text
-    for($i = 1; $i < count($parts); $i += 2) {
+    // Iterate over remaining text parts treating them 2 by 2 as a range sequence followed by a non-range text.
+    for ($i = 1; $i < count($parts); $i += 2) {
             $rangetxt       = $parts[$i];
-            $nonrangetxt    = $parts[$i+1];
+            $nonrangetxt    = $parts[$i + 1];
 
-            // break up the range text and evaluate the interpolated result
+            // Break up the range text and evaluate the interpolated result.
             $rangeparts     = preg_split("/\.\./", $rangetxt);
             $rangefrom      = $rangeparts[0];
             $rangeto        = $rangeparts[1];
@@ -372,7 +380,7 @@ function format_ludic_resolve_ranges_in_text($txtwithranges, $factor) {
             $delta          = $fulldelta * $factor;
             $rangeresult    = $rangefrom + $delta;
 
-            // aggregate the interpolation result into the result accumulator allong with subsequent arbitrary text part
+            // Aggregate the interpolation result into the result accumulator allong with subsequent arbitrary text part.
             $result .= $rangeresult . $nonrangetxt;
     }
 
@@ -414,16 +422,16 @@ function format_ludic_get_default_weight() {
     return isset($weightoptions[$defaultkey]) ? $weightoptions[$defaultkey] : 0;
 }
 
-function format_ludic_get_skin_image_url($fullimgname){
+function format_ludic_get_skin_image_url($fullimgname) {
     global $OUTPUT, $COURSE;
-    // Explode full file name to get path
+    // Explode full file name to get path.
     $explodedfilename = explode('/', $fullimgname);
 
-    // Check if file exist in database
-    // TODO fix filepath
+    // Check if file exist in database.
+    // TODO fix filepath.
     $filepath = '/';
 
-    if(count($explodedfilename) == 1){
+    if (count($explodedfilename) == 1) {
         $fs = get_file_storage();
 
         $fileinfo = array(
@@ -437,12 +445,20 @@ function format_ludic_get_skin_image_url($fullimgname){
 
         $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
             $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-        if($file){
-            return \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), false)->out();
+        if ($file) {
+            return \moodle_url::make_pluginfile_url(
+                $file->get_contextid(),
+                $file->get_component(),
+                $file->get_filearea(),
+                $file->get_itemid(),
+                $file->get_filepath(),
+                $file->get_filename(),
+                false
+            )->out();
         }
     }
 
-    // Use plugin files
+    // Use plugin files.
     return $OUTPUT->image_url($fullimgname, 'format_ludic')->out();
 
 }
@@ -486,7 +502,7 @@ function format_ludic_get_access_options() {
 function format_ludic_init_edit_mode($context) {
     global $PAGE, $CFG;
 
-    require_once $CFG->dirroot . '/repository/lib.php';
+    require_once($CFG->dirroot . '/repository/lib.php');
 
     // Require filepicker js.
     $args                 = new \stdClass();
@@ -499,13 +515,21 @@ function format_ludic_init_edit_mode($context) {
     $PAGE->requires->js('/repository/filepicker.js');
     $PAGE->requires->js('/lib/form/filepicker.js');
 
-    // Require modchooser js.
-    $PAGE->requires->yui_module('moodle-course-modchooser', 'M.course.init_chooser', array(
-        array(
-            'courseid'         => $context->instanceid,
-            'closeButtonTitle' => null
-        )
-    ));
+    if ($CFG->version < '2020061502') {
+        // Require modchooser js.
+        $PAGE->requires->yui_module('moodle-course-modchooser', 'M.course.init_chooser', array(
+            array(
+                'courseid' => $context->instanceid,
+                'closeButtonTitle' => null
+            )
+        ));
+    } else {
+        // Build an object of config settings that we can then hook into in the Activity Chooser.
+        $chooserconfig = (object)[
+            'tabmode' => get_config('core', 'activitychoosertabmode'),
+        ];
+        $PAGE->requires->js_call_amd('core_course/activitychooser', 'init', [$context->instanceid, $chooserconfig]);
+    }
 }
 
 /**

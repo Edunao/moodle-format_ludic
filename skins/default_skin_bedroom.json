@@ -1,9 +1,9 @@
 {
     "domain": "section",
     "skintype": "avatar",
-    "skinname": "bedroom",
-    "title": "Avatar",
-    "description": "Ach\u00e8te des objets pour am\u00e9liorer ta chambre",
+    "skinname": "",
+    "title": "Bedroom Avatar",
+    "description": "A customisable avatar winning cash for new gear by completing activities",
     "css": "\n .slot-item-price:before{\n content: \"$\"\n }\n ",
     "background": "default-user-skins\/bedroom-avatar\/bedroom-avatar-background",
     "slots": [

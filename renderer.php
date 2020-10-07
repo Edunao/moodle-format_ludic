@@ -176,7 +176,8 @@ class format_ludic_renderer extends format_section_renderer_base {
     public function render_add_section_button($courseid, $order) {
         global $CFG;
 
-        $addsectionurl = $CFG->wwwroot . '/course/changenumsections.php?courseid=' . $courseid . '&insertsection=0&sesskey=' . sesskey() . '&sectionreturn=' . ($order - 1) . '&numsections=1';
+        $addsectionurl = $CFG->wwwroot . '/course/changenumsections.php?courseid='
+            . $courseid . '&insertsection=0&sesskey=' . sesskey() . '&sectionreturn=' . ($order - 1) . '&numsections=1';
 
         $button = [
             'buttonclass' => 'ludic-add-button',
@@ -368,7 +369,14 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_container_items($type, $editmode, $parentscontent = '', $propertiescontent = '', $helpcontent = '', $parenttitle = '') {
+    public function render_container_items(
+        $type,
+        $editmode,
+        $parentscontent = '',
+        $propertiescontent = '',
+        $helpcontent = '',
+        $parenttitle = ''
+    ) {
         return $this->render_from_template('format_ludic/container_items', [
             'parentstype'       => $type,
             'parenttitle'       => $parenttitle,
@@ -667,7 +675,7 @@ class format_ludic_renderer extends format_section_renderer_base {
                     continue;
                 }
 
-                // deal with special cases for rendering in student view
+                // Deal with special cases for rendering in student view.
                 switch ($coursemodule->skin->get_type_name()) {
                     case 'stealth':
                     case 'menubar':

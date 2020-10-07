@@ -32,7 +32,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_section_collection extends \format_ludic\skinned_section  {
-    public function __construct(skin_template_section_collection $template){
+    public function __construct(skin_template_section_collection $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_section_collection();
@@ -65,7 +65,7 @@ class skin_template_section_collection extends \format_ludic\section_skin_templa
     protected $stamps  = [];
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
         $this->stamps     = $config->stamps;
@@ -77,26 +77,28 @@ class skin_template_section_collection extends \format_ludic\section_skin_templa
     }
 
     public function get_images_to_render($skindata) {
-        // Prime the images array with the background image
+        // Prime the images array with the background image.
         $images = [];
         $images[] = (object)[
             'src'   => $skindata->background,
             'class' => 'img-0'
         ];
 
-        // Randomize stamp order
+        // Randomize stamp order.
         global $COURSE;
         $stamps = $this->stamps;
         srand($COURSE->id);
         shuffle($stamps);
 
-        // Get stamp for each completed activity activity
-        foreach ($skindata->cmstates as $idx=>$cmstate) {
+        // Get stamp for each completed activity activity.
+        foreach ($skindata->cmstates as $idx => $cmstate) {
             switch ($cmstate) {
-                case COMPLETION_COMPLETE:
-                    $imagename = "done"; break;
-                default:
+                case COMPLETION_COMPLETE :
+                    $imagename = "done";
+                    break;
+                default :
                     $imagename = "todo";
+                    break;
             }
             $images[] = (object)[
                 'src'   => $stamps[$idx % count($stamps)]->$imagename,
@@ -104,7 +106,7 @@ class skin_template_section_collection extends \format_ludic\section_skin_templa
             ];
         }
 
-        // return the result
+        // Return the result.
         return $images;
     }
 
@@ -117,7 +119,7 @@ class skin_template_section_collection extends \format_ludic\section_skin_templa
     }
 
     public function setup_skin_data($skindata, $userdata, $section) {
-        // select the best layout based on the number of activities in the section
+        // Select the best layout based on the number of activities in the section.
         $nbactivities = count($userdata);
         $bestlayout = (object)[
             'nbactivities'  => -1,
@@ -125,28 +127,34 @@ class skin_template_section_collection extends \format_ludic\section_skin_templa
             'css'           => '',
         ];
 
-        foreach($this->layouts as $layout) {
+        foreach ($this->layouts as $layout) {
             if ($layout->nbactivities <= $nbactivities && $layout->nbactivities > $bestlayout->nbactivities) {
                 $bestlayout = $layout;
             }
         }
 
-        // extract the background and css from the layout
+        // Extract the background and css from the layout.
         $skindata->background = $bestlayout->background;
         $skindata->css = $bestlayout->css;
 
-        // scan the state records, extracting their properties as required
+        // Scan the state records, extracting their properties as required.
         $cmstates = [];
-        //print_object($userdata);
         foreach ($userdata as $cmdata) {
             switch($cmdata->state) {
-                case COMPLETION_COMPLETE            :
-                case COMPLETION_COMPLETE_PASS       :;
-                case COMPLETION_COMPLETE_PERFECT    : $state = COMPLETION_COMPLETE; break;
-                case COMPLETION_DISABLED            : $state = COMPLETION_DISABLED; break;
-                default                             : $state = COMPLETION_INCOMPLETE; break;
+                case COMPLETION_COMPLETE :
+                case COMPLETION_COMPLETE_PASS :
+                    break;
+                case COMPLETION_COMPLETE_PERFECT :
+                    $state = COMPLETION_COMPLETE;
+                    break;
+                case COMPLETION_DISABLED :
+                    $state = COMPLETION_DISABLED;
+                    break;
+                default :
+                    $state = COMPLETION_INCOMPLETE;
+                    break;
             }
-            // If not visible, then mark it as not to be displayed but keep it in the sequence to stabilise ordering
+            // If not visible, then mark it as not to be displayed but keep it in the sequence to stabilise ordering.
             if ($cmdata->visible != 1) {
                 $state = COMPLETION_DISABLED;
             }

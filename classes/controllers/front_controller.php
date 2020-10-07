@@ -26,7 +26,7 @@ namespace format_ludic;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once __DIR__ . '/front_controller_interface.php';
+require_once(__DIR__ . '/front_controller_interface.php');
 
 class front_controller implements front_controller_interface {
 
@@ -84,7 +84,7 @@ class front_controller implements front_controller_interface {
 
         $controller = strtolower($controller) . "_controller";
 
-        include_once __DIR__ . '/' . $controller . '.php';
+        include_once(__DIR__ . '/' . $controller . '.php');
         if (!class_exists($this->namespace . $controller)) {
             throw new \InvalidArgumentException("The action controller '$controller' has not been defined.");
         }
@@ -121,7 +121,7 @@ class front_controller implements front_controller_interface {
      * @return mixed
      */
     public function execute() {
-        require_once __DIR__ . '/' . $this->controller . '.php';
+        require_once(__DIR__ . '/' . $this->controller . '.php');
         $class      = $this->namespace . $this->controller;
         $controller = new $class($this->params);
         return $controller->execute();

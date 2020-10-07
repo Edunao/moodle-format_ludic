@@ -142,7 +142,6 @@ abstract class controller_base {
             // Add cases for new types here .
             default :
                 return $value;
-                break;
         }
     }
 

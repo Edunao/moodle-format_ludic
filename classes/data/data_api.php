@@ -61,7 +61,7 @@ class data_api {
         ];
 
         // When activity max grade is updated to 0, grademax of grade_items and grade_grades are not updated.
-        // We need to change gradetype
+        // We need to change gradetype.
         $gradeinfo = grade_get_grade_items_for_activity($cminfo);
         if ($gradeinfo && end($gradeinfo)->gradetype == 0) {
             return $return;
@@ -153,7 +153,7 @@ class data_api {
                 $completionstr = 'completion-n';
                 break;
             case COMPLETION_COMPLETE:
-                // If cm is not graded, activity is considered as complete and pass
+                // If cm is not graded, activity is considered as complete and pass.
                 if ($this->cm_is_graded($cminfo)) {
                     $completion    = 'completion-complete';
                     $completionstr = 'completion-y';

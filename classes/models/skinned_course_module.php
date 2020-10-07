@@ -33,10 +33,10 @@ abstract class skinned_course_module extends \format_ludic\skinned_item {
     protected $weight       = 0;
 
     public function get_editor_config() {
-        // delegate to specialisation to declare what they need
+        // Delegate to specialisation to declare what they need.
         $config = $this->skintype->get_editor_config() ?: [];
 
-        // add in common fields (prepending them to the array)
+        // Add in common fields (prepending them to the array).
         $config["title"]        = "text";
         $config["description"]  = "textarea";
         $config["css"]          = "textarea";
@@ -45,22 +45,22 @@ abstract class skinned_course_module extends \format_ludic\skinned_item {
         return $config;
     }
 
-    public function initialise($coursemodule){
+    public function initialise($coursemodule) {
         $this->coursemodule = $coursemodule;
         $this->weight = $coursemodule->get_weight();
     }
 
-    private function ensure_initialised(){
-        // if we're already initialised then there's nothing to do
-        if ($this->skindata !== null){
+    private function ensure_initialised() {
+        // If we're already initialised then there's nothing to do.
+        if ($this->skindata !== null) {
             return;
         }
 
-        // lookup user results for activities in the section
+        // Lookup user results for activities in the section.
         $userresults = $this->coursemodule->get_user_results();
         $userresults->weight = $this->weight;
 
-        // setup default values for the result record to be escaladed to the section skin upon request
+        // Setup default values for the result record to be escaladed to the section skin upon request.
         $this->skinresults = (object)[
             'score'         => $userresults->score,
             'state'         => $userresults->richstate,
@@ -71,15 +71,16 @@ abstract class skinned_course_module extends \format_ludic\skinned_item {
             'skintype'      => $this->get_type_name(),
         ];
 
-        // setup skindata
+        // Setup skindata.
         $this->skindata = new \stdClass();
         $this->template->setup_skin_data($this->skindata, $this->skinresults, $userresults);
     }
 
-    public function get_edit_image() {
+    public function get_edit_info() {
         return (object)[
-            'imgsrc' => format_ludic_get_skin_image_url($this->template->get_edit_image($this->skindata)),
-            'imgalt' => ''
+            'imgsrc'      => format_ludic_get_skin_image_url($this->template->get_edit_image($this->skindata)),
+            'title'       => $this->template->get_skin_title(),
+            'description' => $this->template->get_skin_description(),
         ];
     }
 
@@ -107,11 +108,11 @@ abstract class skinned_course_module extends \format_ludic\skinned_item {
         return $this->skinresults;
     }
 
-    public function get_instance_title(){
+    public function get_instance_title() {
         return $this->coursemodule->name;
     }
 
-    public function get_instance_name(){
+    public function get_instance_name() {
         return 'cm-' . $this->coursemodule->id;
     }
 }

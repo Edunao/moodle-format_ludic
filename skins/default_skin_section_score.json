@@ -1,9 +1,9 @@
 {
     "domain": "section",
     "skintype": "score",
-    "skinname": "trophy",
+    "skinname": "",
     "title": "Score wand Trophy",
-    "description": "Des points avec une m\u00e9daille \u00e0 la fin !",
+    "description": "Accumulated points from activities rewarded with varying trophies",
     "css": " \n .skin-text.score{display: block;position: absolute;bottom: 0px;width: 100%;text-align: center;} \n \n ",
     "steps": [
         {

@@ -102,8 +102,6 @@ class course extends model {
             return false;
         }
 
-        //rebuild_course_cache($courseid, true);
-
         return $this->contexthelper->get_section_by_id($newsection->id);
     }
 

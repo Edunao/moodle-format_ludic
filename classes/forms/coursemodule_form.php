@@ -69,53 +69,86 @@ class coursemodule_form extends form {
         $elements[] = new hidden_form_element('id', 'course-module-id', $id, 0);
 
         // Course module name.
-        $elements[] = new text_form_element('name', 'course-module-title', $this->object->name, '', get_string('label-course-module-title', 'format_ludic'), ['required' => true]);
+        $elements[] = new text_form_element(
+            'name',
+            'course-module-title',
+            $this->object->name, '',
+            get_string('label-course-module-title', 'format_ludic'),
+            ['required' => true]
+        );
 
         // Course module skin id.
         $isinlineonly = plugin_supports('mod', $this->object->cminfo->modname, FEATURE_NO_VIEW_LINK, false);
-        if(!$isinlineonly){
-            $elements[] = new selection_popup_form_element('skinid', 'course-module-skinid', $this->object->skinid, 0, get_string('label-skin-selection', 'format_ludic'), [
-                'required' => true,
-                'multiple' => false
-            ], [
-                'icon'           => $this->object->skin->get_edit_image(),
-                'itemid'         => $id,
-                'itemcontroller' => 'skin',
-                'itemaction'     => ($sectionidx == 0) ? 'get_course_module_skin_selector_section_zero' : 'get_course_module_skin_selector_main',
-                'popuptitle'     => get_string('course-module-skin-selection', 'format_ludic')
-            ]);
+        if (!$isinlineonly) {
+            $editinfo = $this->object->skin->get_edit_info();
+            $elements[] = new selection_popup_form_element(
+                'skinid',
+                'course-module-skinid',
+                $this->object->skinid,
+                0,
+                get_string('label-skin-selection', 'format_ludic'),
+                [
+                    'required' => true,
+                    'multiple' => false],
+                [
+                    'icon'            => (object)[ 'imgsrc' => $editinfo->imgsrc, 'imgalt' => '' ],
+                    'itemid'          => $id,
+                    'itemcontroller'  => 'skin',
+                    'itemaction'      => ($sectionidx == 0) ?
+                        'get_course_module_skin_selector_section_zero'
+                        : 'get_course_module_skin_selector_main',
+                    'popuptitle'      => get_string('course-module-skin-selection', 'format_ludic'),
+                    'skintitle'       => $editinfo->title,
+                    'skindescription' => $editinfo->description,
+                ]
+            );
         }
 
         // Course module weight.
-        $elements[] = new select_form_element('weight', 'coursemodule-weight', $this->object->get_weight(), null, get_string('label-select-weight', 'format_ludic'), [
+        $elements[] = new select_form_element(
+            'weight',
+            'coursemodule-weight',
+            $this->object->get_weight(),
+            null,
+            get_string('label-select-weight', 'format_ludic'),
+            [
                 'required' => true,
                 'multiple' => false
-            ], ['options' => format_ludic_get_weight_options()]);
+            ],
+            ['options' => format_ludic_get_weight_options()]
+        );
 
         // Course module access.
-        $elements[] = new checkbox_form_element('visible', 'coursemodule-visible', $this->object->visible, 1, get_string('label-section-visible', 'format_ludic'), [
-            'required' => true,
-        ]);
+        $elements[] = new checkbox_form_element(
+            'visible',
+            'coursemodule-visible',
+            $this->object->visible,
+            1,
+            get_string('label-section-visible', 'format_ludic'),
+            ['required' => true]
+        );
 
-        // Course module section
+        // Course module section.
         $sections = $this->contexthelper->get_course()->get_sections(true);
         $options = [];
-        foreach ($sections as $section){
+        foreach ($sections as $section) {
             $options[] = [
                 'value'       => $section->id,
                 'name'        => $section->name,
             ];
         }
-        $elements[] = new select_form_element('section', 'coursemodule-section', $this->object->sectionid, null, 'Section', [
-            'required' => true,
-            'multiple' => false
-        ], ['options' => $options]);
-
-
-        //$elements[] = new select_form_element('access', 'coursemodule-access', $this->object->access, null, get_string('label-select-access', 'format_ludic'), [
-        //        'required' => true,
-        //        'multiple' => false
-        //    ], ['options' => format_ludic_get_access_options()]);
+        $elements[] = new select_form_element(
+            'section',
+            'coursemodule-section',
+            $this->object->sectionid,
+            null,
+            'Section',
+            [
+                'required' => true,
+                'multiple' => false
+            ],
+            ['options' => $options]
+        );
 
         return $elements;
     }

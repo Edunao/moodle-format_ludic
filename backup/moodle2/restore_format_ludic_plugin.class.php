@@ -1,6 +1,4 @@
 <?php
-
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -27,9 +25,12 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class restore_format_ludic_plugin
+ */
 class restore_format_ludic_plugin extends restore_format_plugin {
 
-
+    /** @var int  */
     protected $originalnumsections = 0;
 
     /**
@@ -81,7 +82,9 @@ class restore_format_ludic_plugin extends restore_format_plugin {
         return $paths; // And we return the interesting paths.
     }
 
-
+    /**
+     * @param $data
+     */
     public function process_ludicsection($data) {
         global $DB;
 
@@ -113,6 +116,9 @@ class restore_format_ludic_plugin extends restore_format_plugin {
         return $paths; // And we return the interesting paths.
     }
 
+    /**
+     * @param $data
+     */
     public function process_ludicmodule($data) {
         global $DB;
 
@@ -126,6 +132,4 @@ class restore_format_ludic_plugin extends restore_format_plugin {
                     'A configuration already exists for the course module ' . $data->cmid);
         }
     }
-
-
 }

@@ -59,7 +59,9 @@ class section extends model implements skinnable_interface {
         $this->dbrecord    = $section;
         $this->courseid    = $section->course;
         $this->section     = $section->section;
-        $this->name        = $section->name == '' ? get_string('sectionname', 'format_ludic') . ' ' . $section->section : $section->name;
+        $this->name        = $section->name == '' ?
+            get_string('sectionname', 'format_ludic') . ' ' . $section->section
+            : $section->name;
         $this->sequence    = array_filter(explode(',', $section->sequence));
         $this->visible     = $section->visible;
         $courseinfo        = $this->contexthelper->get_course_info();
@@ -176,7 +178,8 @@ class section extends model implements skinnable_interface {
         if (!isset($data['id']) || $data['id'] != $this->id) {
             return false;
         }
-        if (isset($data['name']) && $data['name'] != $this->dbrecord->name || isset($data['visible']) && $data['visible'] != $this->dbrecord->visible) {
+        if (isset($data['name']) && $data['name'] != $this->dbrecord->name
+            || isset($data['visible']) && $data['visible'] != $this->dbrecord->visible) {
             $dbapi->update_section($moodlecourse, $this->dbrecord, $data);
         }
 
@@ -353,7 +356,7 @@ class section extends model implements skinnable_interface {
 
         // If we found relation record, return it.
         if ($dbrecord) {
-            if(!skin_manager::get_instance()->get_section_skin($dbrecord->skinid)){
+            if (!skin_manager::get_instance()->get_section_skin($dbrecord->skinid)) {
                 $defaultskin = skin_manager::get_instance()->get_section_default_skin();
                 $dbrecord->skinid = $defaultskin->id;
                 $dbapi->set_section_skin_id($dbrecord->courseid, $dbrecord->sectionid, $dbrecord->skinid);
@@ -373,16 +376,6 @@ class section extends model implements skinnable_interface {
         // Return record.
         return $dbrecord;
     }
-
-    /**
-     * Return the first section skin.
-     *
-     * @return skin
-     */
-    //public function get_default_skin() {
-    //    $skinname = "course_module/non_ludic_section" ;
-    //    return skin_manager::get_instance()->get_skin_by_name($skinname);
-    //}
 
     /**
      * Return section description.
@@ -408,11 +401,11 @@ class section extends model implements skinnable_interface {
             return $this->results;
         }
 
-        // iterate over children asking each for it's results in order
+        // Iterate over children asking each for it's results in order.
         $this->results = [];
         foreach ($this->get_course_modules() as $coursemodule) {
             $cmresults = $coursemodule->skin->get_skin_results();
-            if($cmresults->skintype == 'inline'){
+            if ($cmresults->skintype == 'inline') {
                 continue;
             }
             $this->results[] = $cmresults;

@@ -1,9 +1,9 @@
 {
     "domain": "course_module",
     "skintype": "progress",
-    "skinname": "climb the stairs",
+    "skinname": "",
     "title": "progression",
-    "description": "Represents the student's grade as a postion onn the staircase",
+    "description": "Grade-based image rewarding a perfect score",
     "css": ".skin-hidden-text.percent{\n display: block;\n position: absolute;\n right: 8%;\n bottom: 1%;\n font-size: 2.5rem;\n}\n.skin-hidden-text.percent:after {\n content: \"%\";\n font-weight: normal;\n font-family: 'Montserrat-Medium';\n}",
     "steps": [
         {

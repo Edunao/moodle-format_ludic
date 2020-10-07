@@ -30,13 +30,13 @@ require_once(__DIR__ . '/model.php');
 
 abstract class skinned_item extends model {
 
-    // properties accessed directly by controllers and renderers
-    protected   $domain;
-    protected   $skintype;
-    protected   $skinname;
-    protected   $title;
-    protected   $description;
-    protected   $template;
+    // Properties accessed directly by controllers and renderers.
+    protected $domain;
+    protected $skintype;
+    protected $skinname;
+    protected $title;
+    protected $description;
+    protected $template;
 
     /**
      * skin constructor.
@@ -47,24 +47,24 @@ abstract class skinned_item extends model {
     public function __construct($skin) {
         parent::__construct($skin);
         $this->skin = $skin;
-        foreach(['domain', 'skintype', 'skinname', 'title', 'description'] as $propname) {
+        foreach (['domain', 'skintype', 'skinname', 'title', 'description'] as $propname) {
             $this->$propname = $skin->$propname;
         }
     }
 
-    public function get_skin_id(){
+    public function get_skin_id() {
         return $this->template->id;
     }
 
-    public function get_title(){
+    public function get_title() {
         return $this->title;
     }
 
-    public function get_type_name(){
+    public function get_type_name() {
         return $this->skintype->get_name();
     }
 
-    public function get_domain_name(){
+    public function get_domain_name() {
         return $this->domain;
     }
 
@@ -109,7 +109,7 @@ abstract class skinned_item extends model {
      *
      * @return \stdClass
      */
-    abstract public function get_edit_image();
+    abstract public function get_edit_info();
 
     /**
      * Return all images to render.
@@ -145,14 +145,7 @@ abstract class skinned_item extends model {
         global $COURSE;
 
         $options = [];
-
-       /* $options[] = [
-            'identifier' => 'form-save',
-            'action'     => 'saveForm',
-            'order'      => 1
-        ];*/
-
-        if(is_numeric($this->id) && !$this->contexthelper->skin_is_used($this->id)){
+        if (is_numeric($this->id) && !$this->contexthelper->skin_is_used($this->id)) {
             $options[] = [
                 'identifier' => 'form-delete-skin',
                 'action'     => 'confirmAndDeleteSkin',

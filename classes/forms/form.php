@@ -183,7 +183,9 @@ abstract class form {
                     'id'    => $element->id,
                     'label' => $element->label,
                     'name'  => $element->name,
-                    'error' => isset($elementvalidation['value']) ? $elementvalidation['value'] : get_string('default-error', 'format_ludic')
+                    'error' => isset($elementvalidation['value']) ?
+                        $elementvalidation['value'] :
+                        get_string('default-error', 'format_ludic')
                 ];
 
                 // Form is not valid.

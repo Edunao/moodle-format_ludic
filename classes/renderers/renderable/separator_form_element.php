@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -30,15 +29,5 @@ defined('MOODLE_INTERNAL') || die();
 require_once(__DIR__ . '/form_element.php');
 
 class format_ludic_separator_form_element extends format_ludic_form_element {
-
-
-    /**
-     * format_ludic_text_form_element constructor.
-     *
-     * @param \format_ludic\form_element $element
-     */
-    public function __construct(\format_ludic\form_element $element) {
-        parent::__construct($element);
-    }
 
 }

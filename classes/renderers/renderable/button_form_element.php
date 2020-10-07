@@ -1,6 +1,4 @@
 <?php
-
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -35,7 +33,6 @@ class format_ludic_button_form_element extends format_ludic_form_element {
 
     public $action;
     public $itemid;
-
 
     /**
      * format_ludic_text_form_element constructor.

@@ -31,7 +31,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_course_module_fixed_image extends \format_ludic\skinned_course_module {
-    public function __construct(skin_template_course_module_fixed_image $template){
+    public function __construct(skin_template_course_module_fixed_image $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_course_module_fixed_image();
@@ -57,10 +57,10 @@ class skin_template_course_module_fixed_image extends \format_ludic\course_modul
     private $text       = null;
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // store away out own bits
+        // Store away out own bits.
         $this->background = property_exists($config, 'background') ? $config->background : '';
         $this->text       = property_exists($config, 'text') ? $config->text : '';
     }

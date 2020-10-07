@@ -85,8 +85,8 @@ class skin_manager {
 
     private function get_section_skin_config($skinid) {
         $container = $this->get_section_ludic_config();
-        foreach($container as $config){
-            if($config->id == $skinid){
+        foreach ($container as $config) {
+            if ($config->id == $skinid) {
                 return $config;
             }
         }
@@ -98,7 +98,6 @@ class skin_manager {
         include_once(__DIR__ . '/../models/section_skin_types/' . $config->skintype . '.php');
         $templateclassname = '\format_ludic\\skin_template_section_' . $config->skintype;
         if (!class_exists($templateclassname)) {
-            //throw new \Exception("Failed to find class: $templateclassname");
             return null;
         }
 
@@ -120,7 +119,7 @@ class skin_manager {
     }
 
     public function get_section0_course_module_skins() {
-        // for section 0 we only allow specific reserved options.
+        // For section 0 we only allow specific reserved options.
         return [
             $this->get_course_module_skin_by_name('inline'),
             $this->get_course_module_skin_by_name('menubar'),
@@ -159,10 +158,10 @@ class skin_manager {
         return $this->cmskins[$skinid];
     }
 
-    private function get_course_module_skin_config($skinid){
+    private function get_course_module_skin_config($skinid) {
         $container = $this->get_course_module_ludic_config();
-        foreach($container as $config){
-            if($config->id == $skinid){
+        foreach ($container as $config) {
+            if ($config->id == $skinid) {
                 return $config;
             }
         }
@@ -179,7 +178,6 @@ class skin_manager {
         include_once(__DIR__ . '/../models/course_module_skin_types/' . $config->skintype . '.php');
         $templateclassname = '\format_ludic\\skin_template_course_module_' . $config->skintype;
         if (!class_exists($templateclassname)) {
-            //throw new \Exception("Failed to find class: $templateclassname");
             return null;
         }
 
@@ -197,8 +195,13 @@ class skin_manager {
         context_helper::get_instance()->update_course_format_options(['ludic_config' => json_encode($ludicconfig)]);
     }
 
+    public function get_default_user_skin_config() {
+        $defaultconfig = $this->get_default_ludic_config();
+        return $defaultconfig->userskins;
+    }
+
     private function fetch_ludic_config() {
-        // if we have already fetched it then just return it
+        // If we have already fetched it then just return it.
         if ($this->sectionludicconfig !== null) {
             return $this->ludicconfig;
         }
@@ -238,67 +241,73 @@ class skin_manager {
      */
     private function fetch_raw_ludic_config() {
 
-        // Try fetching from the database
+        // Try fetching from the database.
         $ludicconfig = context_helper::get_instance()->get_course_format_option_by_name('ludic_config');
         $ludicconfig = json_decode($ludicconfig);
         if ($ludicconfig && isset($ludicconfig->systemskins) && isset($ludicconfig->userskins) && $ludicconfig->userskins) {
-           $this->ludicconfig = (object) $ludicconfig;
-           return $this->ludicconfig;
+            $this->ludicconfig = (object) $ludicconfig;
+            return $this->ludicconfig;
         }
 
-        // prime the result container
+        // config was not found in the database so fetch the default config and write it to the database.
+        $ludicconfig = $this->get_default_ludic_config();
+        context_helper::get_instance()->update_course_format_options(['ludic_config' => json_encode($ludicconfig)]);
+        return $ludicconfig;
+    }
+
+    private function get_default_ludic_config() {
+        // Construct the system skin set and default user skin set from files on disk.
+        $systemskins = $this->read_system_skin_definition_set(1);
+        $userskins   = $this->read_default_user_skin_definition_set(count($systemskins) + 1);
+
+        // Construct the result container.
         $ludicconfig = (object) [
-            'systemskins' => [],
-            'userskins'   => [],
-            'nextid'      => 1
+            'systemskins' => $systemskins,
+            'userskins'   => $userskins,
+            'nextid'      => count($systemskins) + count($userskins) + 1
         ];
 
-        // construct the system skin set from files on disk
+        return $ludicconfig;
+    }
+
+    private function read_system_skin_definition_set($firstid) {
         $systemskinnames = [
-            'inline',
-            'menubar',
-            'non_ludic_course_module',
-            'non_ludic_section',
-            'stealth',
+            'system_skin_inline',
+            'system_skin_menubar',
+            'system_skin_stealth',
         ];
-        foreach ($systemskinnames as $skinname) {
-            $filename = __DIR__ . '/../../skins/system_skin_' . $skinname . '.json';
-            $json     = file_get_contents($filename);
-            $record   = $this->prepare_skin_definition((object) json_decode($json), $ludicconfig->nextid++);
-            if (!$record) {
-                throw new \Exception("Error reading definition file for system skin: $skinname");
-            }
-            $ludicconfig->systemskins[] = $record;
-        }
+        return $this->read_pre_defined_skin_definition_set($systemskinnames, $firstid);
+    }
 
-        // add the remaining 'off the shelf' skin set from disk files
+    private function read_default_user_skin_definition_set($firstid) {
         $defaultskinnames = [
-            'fixed_content_book',
-            'grade_as_score',
-            'grade_as_abc',
-            'grade_as_progress',
-            'fixed_section_blue',
-            'progress_as_stairs',
-            'achievement_medals',
-            'animal_collection',
-            'section_score',
-            'bedroom',
+            'default_skin_achievement_page',
+            'default_skin_non_ludic_course_module',
+            'default_skin_grade_as_score',
+            'default_skin_grade_as_abc',
+            'default_skin_grade_as_progress',
+            'default_skin_progress_as_stairs',
+            'default_skin_non_ludic_section',
+            'default_skin_achievement_medals',
+            'default_skin_animal_collection',
+            'default_skin_section_score',
+            'default_skin_bedroom',
         ];
-        foreach ($defaultskinnames as $skinname) {
-            $filename = __DIR__ . '/../../skins/default_skin_' . $skinname . '.json';
+        return $this->read_pre_defined_skin_definition_set($defaultskinnames, $firstid);
+    }
+
+    private function read_pre_defined_skin_definition_set($skinset, $nextid) {
+        $result = [];
+        foreach ($skinset as $skindefinition) {
+            $filename = __DIR__ . '/../../skins/' . $skindefinition . '.json';
             $json     = file_get_contents($filename);
-            $record   = $this->prepare_skin_definition((object) json_decode($json), $ludicconfig->nextid++);
+            $record   = $this->prepare_skin_definition((object) json_decode($json), $nextid++);
             if (!$record) {
                 continue;
             }
-            $ludicconfig->userskins[] = $record;
+            $result[] = $record;
         }
-
-        // Update the course format options
-        context_helper::get_instance()->update_course_format_options(['ludic_config' => json_encode($ludicconfig)]);
-
-        // store and return the result
-        return $ludicconfig;
+        return $result;
     }
 
     private function prepare_skin_definition($record, $id) {
@@ -328,26 +337,37 @@ class skin_manager {
         $config   = $this->get_course_module_skin_config($skinid);
         $template = $this->build_course_module_skin($config);
 
-        // prepare to instantiate the object
+        // Prepare to instantiate the object.
         include_once(__DIR__ . '/../models/course_module_skin_types/' . $config->skintype . '.php');
         $classname = '\format_ludic\\skinned_course_module_' . $config->skintype;
         if (!class_exists($classname)) {
             return null;
         }
 
-        // instantiate and initialise the object
+        // Instantiate and initialise the object.
         $result = new $classname($template);
         $result->initialise($cm);
 
-        // return the new object
+        // Return the new object.
         return $result;
     }
 
     public function get_course_module_default_skin($section, $modname) {
+        // look for a course module skin by name
         $isinlineonly = plugin_supports('mod', $modname, FEATURE_NO_VIEW_LINK, false);
-        $skinname = $section == 0 ? "menubar" : "non_ludic_course_module";
+        $skinname = $section == 0 ? "menubar" : "default";
         $skinname = $isinlineonly ? "inline" : $skinname;
-        return self::get_course_module_skin_by_name($skinname);
+        $result = $this->get_course_module_skin_by_name($skinname);
+        if ($result) {
+            return $result;
+        }
+
+        // no default skin was found so return the first skin that we find instead
+        $ludicconfig = $this->get_course_module_ludic_config();
+        $firstskin   = reset($ludicconfig);
+        $firstskinid = $firstskin->id;
+        $result      = $this->get_course_module_skin($firstskinid);
+        return $result;
     }
 
     /**
@@ -361,24 +381,33 @@ class skin_manager {
         $config   = $this->get_section_skin_config($skinid);
         $template = $this->build_section_skin($config);
 
-        // prepare to instantiate the object
+        // Prepare to instantiate the object.
         include_once(__DIR__ . '/../models/section_skin_types/' . $config->skintype . '.php');
         $classname = '\format_ludic\\skinned_section_' . $config->skintype;
         if (!class_exists($classname)) {
             return null;
         }
 
-        // instantiate and initialise the object
+        // Instantiate and initialise the object.
         $result = new $classname($template);
         $result->set_section($section);
 
-        // return the new object
+        // Return the new object.
         return $result;
     }
 
     public function get_section_default_skin() {
-        return self::get_section_skin_by_name("non_ludic_section");
+        // look for a section skin named 'default'
+        $result = $this->get_section_skin_by_name("default");
+        if ($result) {
+            return $result;
+        }
+
+        // no default skin was found so return the first skin that we find instead
+        $ludicconfig = $this->get_section_ludic_config();
+        $firstskin   = reset($ludicconfig);
+        $firstskinid = $firstskin->id;
+        $result      = $this->get_section_skin($firstskinid);
+        return $result;
     }
-
-
 }

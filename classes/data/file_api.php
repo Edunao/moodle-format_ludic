@@ -29,11 +29,11 @@ defined('MOODLE_INTERNAL') || die();
 class file_api {
 
 
-    public function get_skin_img_from_fileid($fileid){
-        global $DB, $CFG;
+    public function get_skin_img_from_fileid($fileid) {
+        global $DB;
         $filerecord = $DB->get_record('files', ['id' => $fileid]);
 
-        if(!$filerecord){
+        if (!$filerecord) {
             // TODO maybe return default image ?
             return '';
         }
@@ -41,22 +41,30 @@ class file_api {
         $fs = get_file_storage();
         $file = $fs->get_file($filerecord->contextid, $filerecord->component, $filerecord->filearea,
             $filerecord->itemid, $filerecord->filepath, $filerecord->filename);
-        if(!$file){
+        if (!$file) {
             return '';
         }
-        return $url = \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), false)->out();
+        return \moodle_url::make_pluginfile_url(
+            $file->get_contextid(),
+            $file->get_component(),
+            $file->get_filearea(),
+            $file->get_itemid(),
+            $file->get_filepath(),
+            $file->get_filename(),
+            false
+        )->out();
     }
 
-    public function get_skin_img_from_name($fullimgname, $courseid){
+    public function get_skin_img_from_name($fullimgname, $courseid) {
         global $OUTPUT;
-        // Explode full file name to get path
+        // Explode full file name to get path.
         $explodedfilename = explode('/', $fullimgname);
 
-        // Check if file exist in database
-        // TODO fix filepath
+        // Check if file exist in database.
+        // TODO fix filepath.
         $filepath = '/';
 
-        if(count($explodedfilename) == 1){
+        if (count($explodedfilename) == 1) {
             $fs = get_file_storage();
 
             $fileinfo = array(
@@ -70,12 +78,20 @@ class file_api {
 
             $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
                 $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-            if($file){
-                return \moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), false)->out();
+            if ($file) {
+                return \moodle_url::make_pluginfile_url(
+                    $file->get_contextid(),
+                    $file->get_component(),
+                    $file->get_filearea(),
+                    $file->get_itemid(),
+                    $file->get_filepath(),
+                    $file->get_filename(),
+                    false
+                )->out();
             }
         }
 
-        // Use plugin files
+        // Use plugin files.
         return $OUTPUT->image_url($fullimgname, 'format_ludic')->out();
 
     }
@@ -92,9 +108,9 @@ class file_api {
      * @throws \file_exception
      * @throws \stored_file_creation_exception
      */
-    public function create_skin_file_from_url($courseid, $skintype, $skinid, $attribute, $imgmoodleurl){
+    public function create_skin_file_from_url($courseid, $skintype, $skinid, $attribute, $imgmoodleurl) {
 
-        // Prepare file data based on moodleurl
+        // Prepare file data based on moodleurl.
         $filename = basename($imgmoodleurl->get_path());
         $content = file_get_contents($imgmoodleurl->out());
 
@@ -109,27 +125,27 @@ class file_api {
             'filename'  => basename($filename),
         );
 
-        // Check if file exist
+        // Check if file exist.
         $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
             $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-        if($file){
+        if ($file) {
             $file->delete();
         }
 
-        // Create file
+        // Create file.
         return $fs->create_file_from_string($fileinfo, $content)->get_id();
     }
 
-    public function create_skin_file_from_draft($courseid, $skintype, $skinid, $attribute,$itemid){
+    public function create_skin_file_from_draft($courseid, $skintype, $skinid, $attribute, $itemid) {
         global $DB;
 
         $draftrecord = $DB->get_record_sql('
-            SELECT * 
-            FROM {files} 
+            SELECT *
+            FROM {files}
             WHERE itemid = :itemid AND filearea = :filearea AND mimetype IS NOT NULL
             ', ['itemid' => $itemid, 'filearea' => 'draft']);
 
-        if(!$draftrecord){
+        if (!$draftrecord) {
             return false;
         }
 
@@ -149,27 +165,25 @@ class file_api {
             'filename'  => $draftfile->get_filename(),
         );
 
-        // Check if file exist
+        // Check if file exist.
         $file = $fs->get_file($fileinfo['contextid'], $fileinfo['component'], $fileinfo['filearea'],
             $fileinfo['itemid'], $fileinfo['filepath'], $fileinfo['filename']);
-        if($file){
+        if ($file) {
             $file->delete();
         }
 
-        // Create file
+        // Create file.
         return $fs->create_file_from_string($fileinfo, $content)->get_id();
     }
 
-    public function get_draft_itemid_from_fileid($fileid){
+    public function get_draft_itemid_from_fileid($fileid) {
         global $DB;
         $file = $DB->get_record('files', ['id' => $fileid]);
         $draftitemid = file_get_submitted_draft_itemid('background');
 
-        file_prepare_draft_area($draftitemid, $file->contextid, $file->component,'background', 0);
+        file_prepare_draft_area($draftitemid, $file->contextid, $file->component, 'background', 0);
 
         return $draftitemid;
     }
-
-
 }
 

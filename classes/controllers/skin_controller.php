@@ -83,7 +83,7 @@ class skin_controller extends controller_base {
                 $courseid = $this->get_param('courseid', PARAM_INT);
                 return $this->delete_skin($courseid, $skinid);
 
-            // Avatar action
+            // Avatar action.
             case 'avatar_buy_item' :
                 $sectionid = $this->get_param('sectionid');
                 $slotname  = $this->get_param('slotname');
@@ -266,7 +266,7 @@ class skin_controller extends controller_base {
     public function validate_form($courseid, $skinid, $data) {
         global $DB, $USER, $COURSE;
 
-        // if skin is not int, it's new skin (we have skin type id)
+        // If skin is not int, it's new skin (we have skin type id).
         $newskin = true;
         if (!is_numeric($skinid)) {
             $skin = $this->contexthelper->get_skins_format()[$skinid];
@@ -275,13 +275,9 @@ class skin_controller extends controller_base {
             $newskin = false;
         }
 
-        // Create form.
-        //require_once(__DIR__ . '/../forms/skins_form.php');
-        //$form = new edit_skins_form($courseid, $skin);
-
         $skinsettings = $skin->get_editor_config();
 
-        // Prepare base skin data
+        // Prepare base skin data.
         $skindata = [
             'id'         => !$newskin ? $skin->id : $this->contexthelper->get_next_skinid(),
             'skinid'     => $skin->skinid,
@@ -290,7 +286,7 @@ class skin_controller extends controller_base {
             'properties' => []
         ];
 
-        // New index for each group
+        // New index for each group.
         $indexesmap  = [];
         $groupsindex = [];
 
@@ -301,11 +297,11 @@ class skin_controller extends controller_base {
             $explodedname = explode('_', $formname);
 
             if (count($explodedname) == 1) {
-                // First layers
+                // First layers.
                 if (array_key_exists($formname, $skinsettings['settings'])) {
                     $skindata[$formname] = $formvalue;
                 } else if (substr($element['name'], -4) == '-alt' || substr($element['name'], -4) == '-img') {
-                    // Image attribute
+                    // Image attribute.
                     $realname = substr($element['name'], 0, -4);
                     $imgname  = substr($element['name'], -4) == '-alt' ? 'imgalt' : 'imgitemid';
                     if (!array_key_exists($realname, $skindata['properties'])) {
@@ -315,9 +311,15 @@ class skin_controller extends controller_base {
                     $skindata['properties'][$realname]->$imgname = $element['value'];
 
                     if ($imgname == 'imgitemid') {
-                        $fileid = $this->contexthelper->fileapi->create_skin_file_from_draft($this->contexthelper->get_course_id(), $skindata['skinid'], $skindata['id'], $realname, $element['value']);
+                        $fileid = $this->contexthelper->fileapi->create_skin_file_from_draft(
+                            $this->contexthelper->get_course_id(),
+                            $skindata['skinid'],
+                            $skindata['id'],
+                            $realname,
+                            $element['value']
+                        );
                         if (!$fileid) {
-                            // Draft not found, use previous image
+                            // Draft not found, use previous image.
                             if (!$newskin) {
                                 $previousproperty = $skin->get_properties($realname);
                                 if (isset($previousproperty->imgfileid)) {
@@ -332,7 +334,7 @@ class skin_controller extends controller_base {
                 }
             } else {
                 $groupname = $explodedname[0];
-                // Check if group name exist in settings
+                // Check if group name exist in settings.
                 if (!array_key_exists($groupname, $skinsettings['properties'])) {
                     continue;
                 }
@@ -347,7 +349,7 @@ class skin_controller extends controller_base {
                 }
 
                 $other = $explodedname[2];
-                // Ignored false data
+                // Ignored false data.
                 if (strpos($other, 'empty') === 0) {
                     continue;
                 }
@@ -362,7 +364,7 @@ class skin_controller extends controller_base {
                     $skindata['properties'][$groupname][$newindex] = new \stdClass();
                 }
 
-                // Si le dernier segment est -alt ou -img, traitement particulier
+                // If segment is -alt or -img, particular treatment.
                 if (substr($other, -4) == '-alt' || substr($other, -4) == '-img') {
 
                     $imgname = substr($element['name'], -4) == '-alt' ? 'imgalt' : 'imgitemid';
@@ -373,9 +375,16 @@ class skin_controller extends controller_base {
                     $skindata['properties'][$groupname][$newindex]->$attribute->$imgname = $element['value'];
 
                     if ($imgname == 'imgitemid') {
-                        $fileid = $this->contexthelper->fileapi->create_skin_file_from_draft($this->contexthelper->get_course_id(), $skindata['skinid'], $skindata['id'], $attribute, $element['value']);
+                        $fileid = $this->contexthelper->fileapi->create_skin_file_from_draft(
+                            $this->contexthelper->get_course_id(),
+                            $skindata['skinid'],
+                            $skindata['id'],
+                            $attribute,
+                            $element['value']
+                        );
+
                         if (!$fileid) {
-                            // Draft not found, use previous image
+                            // Draft not found, use previous image.
                             if (!$newskin) {
                                 $groupproperty = $skin->get_properties($groupname);
                                 if (isset($groupproperty[$currentindex]->$attribute->imgfileid)) {
@@ -385,13 +394,8 @@ class skin_controller extends controller_base {
 
                         }
 
-                        // Pas d'image, on supprime l'entrée (cas où le filepicker est vide et sans valeur précédente
-                        if (!$fileid) {
-
-                        }
                         $skindata['properties'][$groupname][$newindex]->$attribute->imgsrc = $fileid;
                     }
-
                 } else {
                     $skindata['properties'][$groupname][$newindex][$attribute] = $formvalue;
                 }
@@ -400,7 +404,7 @@ class skin_controller extends controller_base {
 
         $skindata['properties'] = (object) $skindata['properties'];
 
-        // TODO : check if all required settings are set
+        // TODO : check if all required settings are set.
 
         $skindata = (object) $skindata;
 
@@ -415,7 +419,7 @@ class skin_controller extends controller_base {
 
     public function delete_skin($courseid, $skinid) {
         if ($this->contexthelper->skin_is_used($skinid)) {
-            // Check if skin is used => if used, return errors with number of activities
+            // Check if skin is used => if used, return errors with number of activities.
             return json_encode(array(
                 'success' => 0,
                 'value'   => 'Skin is used !'

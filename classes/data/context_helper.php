@@ -742,7 +742,7 @@ class context_helper {
      * @throws \moodle_exception
      */
     public function get_section_by_id($sectionid) {
-        if(isset($this->sectionsbyid[$sectionid])) {
+        if (isset($this->sectionsbyid[$sectionid])) {
             return $this->sectionsbyid[$sectionid];
         }
 
@@ -752,23 +752,23 @@ class context_helper {
         return $newsection;
     }
 
-    public function prefetch_data_edit_mode(){
+    public function prefetch_data_edit_mode() {
         $sectionsrecords = $this->get_database_api()->get_course_sections_by_courseid($this->get_course_id());
-        foreach ($sectionsrecords as $sectionrecord){
+        foreach ($sectionsrecords as $sectionrecord) {
             $sectionid = $sectionrecord->id;
             $this->sectionsbyid[$sectionid] = new section($sectionrecord);
         }
     }
 
-    public function prefetch_data_section_page_mode(){
+    public function prefetch_data_section_page_mode() {
         $sectionid     = $this->get_section_id();
         $sectionrecord = $this->get_database_api()->get_section_by_id($sectionid);
         $this->sectionsbyid[$sectionid] = new section($sectionrecord);
     }
 
-    public function prefetch_data_course_page_mode(){
+    public function prefetch_data_course_page_mode() {
         $sectionsrecords = $this->get_database_api()->get_course_sections_by_courseid($this->get_course_id());
-        foreach ($sectionsrecords as $sectionrecord){
+        foreach ($sectionsrecords as $sectionrecord) {
             $sectionid = $sectionrecord->id;
             $this->sectionsbyid[$sectionid] = new section($sectionrecord);
         }
@@ -942,45 +942,6 @@ class context_helper {
         return true;
     }
 
-
-
-    /**
-     * Get all skins.
-     *
-     * @return skin[]
-     * @throws \coding_exception
-     * @throws \dml_exception
-     * @throws \moodle_exception
-     */
-    //public function get_skins() {
-    //    static $skins = [];
-    //    if ($skins) {
-    //        return $skins;
-    //    }
-    //
-    //    // Skins from ludic config.
-    //    $skinsconfig = $this->get_skins_config();
-    //
-    //    // Merge and instanciate all skins.
-    //    foreach ($skinsconfig as $skin) {
-    //        $skins[$skin->id] = skin_manager::build_from_config($skin);
-    //    }
-    //
-    //    // Return the constructed container
-    //    return $skins;
-    //}
-
-    //public function get_skin_by_id($skinid) {
-    //    $allskins = $this->get_skins();
-    //    foreach ($allskins as $skin) {
-    //        if ($skin->id == $skinid) {
-    //            return $skin;
-    //        }
-    //    }
-    //
-    //    return false;
-    //}
-
     /**
      * Return all skins that can be applied
      *
@@ -990,7 +951,7 @@ class context_helper {
      * @throws \moodle_exception
      */
     public function get_skins_format() {
-        // Cm
+        // Cm.
         $noludic                                                     = \format_ludic\coursemodule\inline::get_instance();
         $skins[\format_ludic\coursemodule\inline::get_unique_name()] = $noludic;
 
@@ -1000,7 +961,7 @@ class context_helper {
         $progress                                                      = \format_ludic\coursemodule\progress::get_instance();
         $skins[\format_ludic\coursemodule\progress::get_unique_name()] = $progress;
 
-        // Section
+        // Section.
         $noludic                                                 = \format_ludic\section\noludic::get_instance();
         $skins[\format_ludic\section\noludic::get_unique_name()] = $noludic;
 
@@ -1012,12 +973,6 @@ class context_helper {
 
         $sectionprogress                                          = \format_ludic\section\progress::get_instance();
         $skins[\format_ludic\section\progress::get_unique_name()] = $sectionprogress;
-
-        //$sectionavatar                                                = \format_ludic\section\avatar::get_instance();
-        //$skins[\format_ludic\section\avatar::get_unique_name()]       = $sectionavatar;
-
-        //$sectionachivements                                          = \format_ludic\section\achievement::get_instance();
-        //$skins[\format_ludic\section\achievement::get_unique_name()] = $sectionachivements;
 
         return $skins;
     }
@@ -1051,7 +1006,7 @@ class context_helper {
         // Keep only section skin.
         $sectionskins = [];
         foreach ($skins as $skinid => $skin) {
-            if($skin->type == 'noludic'){
+            if ($skin->type == 'noludic') {
                 $sectionskins[$skin->id] = $skin;
                 continue;
             }

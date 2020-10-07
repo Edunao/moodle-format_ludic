@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,8 +25,6 @@
 
 namespace format_ludic;
 
-use format_ludic\form_element;
-
 defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../skinned_section.php');
@@ -35,7 +32,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_section_achievement extends \format_ludic\skinned_section  {
-    public function __construct(skin_template_section_achievement $template){
+    public function __construct(skin_template_section_achievement $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_section_achievement();
@@ -53,7 +50,7 @@ class skin_type_section_achievement extends \format_ludic\section_skin_type {
                 "finalimage"  => "image",
                 "incomplete"  => "image",
                 "fail"        => "image",
-                "complete"    => "image", // also for "pass"
+                "complete"    => "image", // Also for "pass".
                 "perfect"     => "image",
         ];
     }
@@ -73,18 +70,18 @@ class skin_template_section_achievement extends \format_ludic\section_skin_templ
     ];
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
         $propnames = [
             "background",
             "finalimage",
         ];
-        foreach($propnames as $propname) {
+        foreach ($propnames as $propname) {
             $this->$propname = (isset($config->$propname)) ? $config->$propname : "";
         }
 
-        foreach($this->statenames as $idx => $propname) {
+        foreach ($this->statenames as $idx => $propname) {
             $this->stateimages[$idx] = (isset($config->$propname)) ? $config->$propname : "";
         }
         $this->editorimage = $this->finalimage ?: $this->background;
@@ -95,12 +92,12 @@ class skin_template_section_achievement extends \format_ludic\section_skin_templ
     }
 
     public function get_images_to_render($skindata) {
-        // if we have a 'final' image defined and we have reached then end then display it
+        // If we have a 'final' image defined and we have reached then end then display it.
         if ($skindata->counts[3] == $skindata->globalcount && $skindata->globalcount > 0 && $this->finalimage) {
             return [ $this->finalimage ];
         }
 
-        // we're not all done so send the background and whichever parts are active
+        // We're not all done so send the background and whichever parts are active.
         $result = [ (object)[ "src" => $this->background, "class" => 'img-0' ] ];
         for ($i = 0; $i < 4; ++$i) {
             if ($skindata->counts[$i] == 0) {
@@ -108,7 +105,7 @@ class skin_template_section_achievement extends \format_ludic\section_skin_templ
             }
 
             $imagesrc = $this->stateimages[$i];
-            if($imagesrc == ''){
+            if ($imagesrc == '') {
                 continue;
             }
             $result[] = (object)[ "src" => $imagesrc, "class" => 'img-step img-step-' . ($i + 1) ];
@@ -129,7 +126,9 @@ class skin_template_section_achievement extends \format_ludic\section_skin_templ
             $class = $this->statenames[$i];
             $texts[] = [
                 'text'  => $skindata->counts[$i],
-                'class' => "number completion-count  completion-" . $class . (($i==3 && $skindata->counts[3] == $skindata->globalcount) ? ' perfect' : ' sup-zero'),
+                'class' => "number completion-count  completion-"
+                    . $class
+                    . (($i == 3 && $skindata->counts[3] == $skindata->globalcount) ? ' perfect' : ' sup-zero'),
             ];
         }
 
@@ -139,15 +138,26 @@ class skin_template_section_achievement extends \format_ludic\section_skin_templ
     public function setup_skin_data($skindata, $userdata, $section) {
         $counts = [ 0, 0, 0, 0 ];
         $globalcount = 0;
-        foreach($userdata as $cmdata) {
-            // determine which slot to use
+        foreach ($userdata as $cmdata) {
+            // Determine which slot to use.
             switch($cmdata->state) {
-                case COMPLETION_INCOMPLETE       : $idx = 0; break;
-                case COMPLETION_COMPLETE_FAIL    : $idx = 1; break;
-                case COMPLETION_COMPLETE_PASS    : $idx = 2; break;
-                case COMPLETION_COMPLETE         : $idx = 2; break;
-                case COMPLETION_COMPLETE_PERFECT : $idx = 3; break;
-                default: continue;
+                case COMPLETION_INCOMPLETE :
+                    $idx = 0;
+                    break;
+                case COMPLETION_COMPLETE_FAIL :
+                    $idx = 1;
+                    break;
+                case COMPLETION_COMPLETE_PASS :
+                    $idx = 2;
+                    break;
+                case COMPLETION_COMPLETE :
+                    $idx = 2;
+                    break;
+                case COMPLETION_COMPLETE_PERFECT :
+                    $idx = 3;
+                    break;
+                default :
+                    continue 2;
             }
             ++$counts[$idx];
             ++$globalcount;

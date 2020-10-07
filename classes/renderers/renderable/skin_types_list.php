@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -62,7 +61,5 @@ class format_ludic_skins_types_list extends format_ludic_item {
                 'callback'         => 'displaySkinTypesForm'
             ];
         }
-
     }
-
 }

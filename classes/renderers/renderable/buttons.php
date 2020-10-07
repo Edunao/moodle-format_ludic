@@ -51,10 +51,10 @@ class format_ludic_buttons implements renderable {
             $button['order'] = isset($button['order']) ? $button['order'] : $key + 1;
             $button['name']  = get_string($button['identifier'], 'format_ludic');
 
-            // Prepare button attributes
+            // Prepare button attributes.
             $button['attributesstr'] = '';
-            if(isset($button['attributes'])){
-                foreach ($button['attributes'] as $name => $value){
+            if (isset($button['attributes'])) {
+                foreach ($button['attributes'] as $name => $value) {
                     $button['attributesstr'] .= ' ' . $name . '="' . $value . '" ';
                 }
             }

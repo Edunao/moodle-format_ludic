@@ -1,0 +1,45 @@
+{
+    "domain": "course_module",
+    "skintype": "achievement",
+    "skinname": "default",
+    "title": "Achievement",
+    "description": "Image reflecting difference between incomplete, failed, passed, complete, and perfect activity results",
+    "css": ".sub-tile.skin-tile .skin-text.extratext{display:block;position: absolute;left: 48%;bottom: 11%;font-size:5.5rem;font-weight:bold;font-family:'sf-action-man'}",
+    "steps": [
+        {
+            "state": "incomplete",
+            "score": 0,
+            "background": "default-user-skins\/achievement-page\/achievement-page-0",
+            "text": "",
+            "css": ""
+        },
+        {
+            "state": "fail",
+            "score": 0,
+            "background": "default-user-skins\/achievement-page\/achievement-page-0",
+            "text": "X",
+            "css": ""
+        },
+        {
+            "state": "pass",
+            "score": 100,
+            "background": "default-user-skins\/achievement-page\/achievement-page-1",
+            "text": "&#x2713;",
+            "css": "color:blue"
+        },
+        {
+            "state": "complete",
+            "score": 100,
+            "background": "default-user-skins\/achievement-page\/achievement-page-1",
+            "text": "&#x2714;",
+            "css": ""
+        },
+        {
+            "state": "perfect",
+            "score": 100,
+            "background": "default-user-skins\/achievement-page\/achievement-page-2",
+            "text": "&#x2714;",
+            "css": ".sub-tile.skin-tile .skin-text.extratext{color:green}"
+        }
+    ]
+}

@@ -1,9 +1,0 @@
-{
-    "domain": "section",
-    "skintype": "fixed_image",
-    "skinname": "fixed section blue",
-    "title": "Fixed Image",
-    "description": "A fixed image",
-    "css": "",
-    "background": "default-user-skins\/blue"
-}

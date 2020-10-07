@@ -1,6 +1,4 @@
 <?php
-
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -41,23 +39,28 @@ class format_ludic_edit_ludic_config extends moodleform{
     public function definition() {
         $mform      = $this->_form;
 
-        // Courseid
+        // Courseid.
         $mform->addElement('hidden', 'id', null);
         $mform->setType('id', PARAM_INT);
 
-        // Ludic images
-        $mform->addElement('filemanager', 'ludicimages', get_string('edit-skin-images', 'format_ludic'), null, array('accepted_types' => array('image'),  'subdirs' => 0));
+        // Ludic images.
+        $mform->addElement(
+            'filemanager',
+            'ludicimages',
+            get_string('edit-skin-images', 'format_ludic'),
+            null,
+            array('accepted_types' => array('image'),  'subdirs' => 0)
+        );
 
-        // Ludic config
-//         $mform->addElement('textarea', 'ludicconfig', get_string('edit-skin-config', 'format_ludic'), 'rows="5"');
-        foreach($this->oldconfig as $skin) {
-            $name = $skin->skinname;
+        // Ludic config.
+        foreach ($this->oldconfig as $skin) {
+            $name = $skin->title . ((isset($skin->skinname) && $skin->skinname) ? ' (' . $skin->skinname . ')' : '');
             $id   = $skin->id;
             $mform->addElement('textarea', 'ludicconfig' . $id, $name, 'rows="10"');
         }
         $mform->addElement('textarea', 'ludicconfig-new', get_string('edit-skin-new', 'format_ludic'), 'rows="10"');
 
-        // Save and cancel buttons
+        // Save and cancel buttons.
         $buttonarray   = array();
         $buttonarray[] = &$mform->createElement('submit', 'saveanddisplay', get_string('savechangesanddisplay'));
         $buttonarray[] = &$mform->createElement('cancel');

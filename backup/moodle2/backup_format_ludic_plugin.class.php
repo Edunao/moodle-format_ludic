@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Specialised backup for Ludic course format.
  *
@@ -28,6 +25,9 @@ defined('MOODLE_INTERNAL') || die();
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Class backup_format_ludic_plugin
+ */
 class backup_format_ludic_plugin extends backup_format_plugin {
 
     /**
@@ -37,7 +37,6 @@ class backup_format_ludic_plugin extends backup_format_plugin {
 
         // Define the virtual plugin element with the condition to fulfill.
         $plugin = $this->get_plugin_element(null, '/course/format', 'ludic');
-
 
         $pluginwrapper = new backup_nested_element('images',  array('id'), null);
 
@@ -52,7 +51,9 @@ class backup_format_ludic_plugin extends backup_format_plugin {
         return $plugin;
     }
 
-
+    /**
+     * @return backup_plugin_element
+     */
     protected function define_section_plugin_structure() {
 
         // Define the virtual plugin element with the condition to fulfill.
@@ -75,6 +76,9 @@ class backup_format_ludic_plugin extends backup_format_plugin {
         return $plugin;
     }
 
+    /**
+     * @return backup_plugin_element
+     */
     protected function define_module_plugin_structure() {
 
         // Define the virtual plugin element with the condition to fulfill.
@@ -100,6 +104,4 @@ class backup_format_ludic_plugin extends backup_format_plugin {
         // Don't need to annotate ids nor files.
         return $plugin;
     }
-
-
 }

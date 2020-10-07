@@ -1,0 +1,9 @@
+{
+    "domain": "section",
+    "skintype": "fixed_image",
+    "skinname": "",
+    "title": "fixed image",
+    "description": "Fixed image for a non-gamified course section",
+    "css": "",
+    "background": "default-user-skins\/non-gamified-section"
+}

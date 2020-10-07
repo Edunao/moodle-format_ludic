@@ -1,9 +1,9 @@
 {
     "domain": "course_module",
     "skintype": "score",
-    "skinname": "trophy",
+    "skinname": "",
     "title": "grade-based score",
-    "description": "The score is derived from the grade with grades below 50% scoring 0 and a bonus for a maximum possible grade",
+    "description": "Points award for good grades (starting at 50%)",
     "css": ".sub-tile.skin-tile .skin-text {font-size:30px;} \n .sub-tile.skin-tile .skin-text.score{display: block;position: absolute;left: 59%;bottom: 38%;font-size:1.5rem;font-weight:bold;} \n .sub-tile.skin-tile .skin-text.score::after{content: \"pts\";font-size:1rem;font-weight:normal;}\n ",
     "steps": [
         {

@@ -207,7 +207,7 @@ class section_controller extends controller_base {
         // Get section to move.
         $sectiontomove = $this->contexthelper->get_section_by_id($sectionidtomove);
 
-        if($newindex == 0){
+        if ($newindex == 0) {
             $newindex++;
         }
 

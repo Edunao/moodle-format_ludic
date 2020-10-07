@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
 
 class database_api {
 
-    private   $db;
+    private $db;
     protected $contexthelper;
 
     /**
@@ -180,7 +180,7 @@ class database_api {
         if ($dbrecord) {
             $dbrecord->skinid = $skinid;
             $dbrecord->weight = $weight;
-            // Access is not used
+            // Access is not used.
             $dbrecord->access = 1;
             return $this->db->update_record('format_ludic_cm', $dbrecord);
         }
@@ -191,7 +191,7 @@ class database_api {
         $dbrecord->cmid     = $cmid;
         $dbrecord->skinid   = $skinid;
         $dbrecord->weight   = $weight;
-        // Access is not used
+        // Access is not used.
         $dbrecord->access   = 1;
         return $this->db->insert_record('format_ludic_cm', $dbrecord);
     }
@@ -406,10 +406,11 @@ class database_api {
      */
     public function get_course_last_section($courseid) {
         return $this->db->get_record_sql('
-            SELECT * 
-            FROM {course_sections} 
-            WHERE course = :courseid 
-            ORDER BY section DESC LIMIT 1', ['courseid' => $courseid]);
+            SELECT *
+            FROM {course_sections}
+            WHERE course = :courseid
+            ORDER BY section DESC LIMIT 1', ['courseid' => $courseid]
+        );
     }
 
     /**

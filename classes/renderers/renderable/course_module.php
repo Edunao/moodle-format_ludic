@@ -60,9 +60,9 @@ class format_ludic_course_module extends format_ludic_item {
             $this->propertiesaction = 'get_properties';
 
             // Image.
-            $imageobject  = $coursemodule->skin->get_edit_image();
-            $this->imgsrc = $imageobject->imgsrc;
-            $this->imgalt = $imageobject->imgalt;
+            $skininfo     = $coursemodule->skin->get_edit_info();
+            $this->imgsrc = $skininfo->imgsrc;
+            $this->imgalt = '';
 
             // Title.
             $this->title = $coursemodule->name;
@@ -104,7 +104,7 @@ class format_ludic_course_module extends format_ludic_item {
 
                 $this->icons[] = $completionicon;
 
-            }else if($userresults->type != COMPLETION_DISABLED){
+            } else if ($userresults->type != COMPLETION_DISABLED) {
                 $completion     = $userresults->state == COMPLETION_INCOMPLETE ? 'completion-auto-n' : 'completion-y';
                 $targetstate    = $userresults->state ? 0 : 1;
                 $completionlink = "#";

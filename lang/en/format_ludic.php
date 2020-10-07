@@ -27,12 +27,12 @@ $string['pluginname']      = 'Ludic';
 $string['hidefromothers']  = 'Hide section';
 $string['showfromothers']  = 'Show section';
 $string['sectionname']     = 'Section';
-$string['section0name']    = 'Course Overview​';
+$string['section0name']    = 'Overview​';
 $string['topicoutline']    = 'Section';
 $string['no-section']      = 'No sections available';
 $string['no-section-help'] = 'No sections available.';
 
-// Permissions
+// Permissions.
 $string['ludic:editludicconfig'] = 'Can customize skins';
 
 // Privacy.
@@ -45,7 +45,7 @@ $string['privacy:metadata:format_ludic_user_cs_state:sectionid'] = 'Unique ident
 $string['ludicconfiglabel']     = 'Ludic course configuration data';
 $string['ludicsharingkeylabel'] = 'Value for management of sharing of skin and bravo definitions';
 
-// Skins editing
+// Skins editing.
 $string['edit-skins-title'] = 'Skin customization';
 $string['skins-types-list'] = 'Skins types';
 $string['skins-list']       = 'Skins';
@@ -113,21 +113,8 @@ $string['cs-skin-noludic-title']        = 'Static';
 $string['cs-skin-noludic-description']  = 'No gamification';
 $string['label-skin-selection']         = 'Skin';
 
-// $string['skin-activity-progress-title'] = 'Activity - Progression';
-// $string['skin-activity-progress']       = 'Ce motivateur affiche la progression de l\'utilisateur au sein de l\'activité.
-// Il se base sur la note (ratio entre la note de l\'utilisateur et celle qu\'il est possible d\'obtenir au maximum pour créer un pourcentage) ou sur la complétion si l\'activité n\'est pas noté (100% si l\'activité est complétée, 0% sinon).
-// Il est possible de choisir des images différentes pour chaque pallier (ex : 1%, 50%, 100%), et d\afficher le pourcentage de progression.';
-
-// $string['skin-activity-score'] = 'Ce motivateur affiche un nombre de points gagnés par l\'utilisateur au sein de l\'activite.
-// Le nombre de point dépend des réglages de l\'activité et du skin choisi :
-//  -  ';
-// $string['skin-section-collection'] = "Ce motivateur affiche à l'utilisateur un ensemble d'images en fonction de ses réussites aux activités.
-// Il se base sur la complétion des activités uniquement : une activité complété = une image supplémentaire, en puisant aléatoirement dans la base des images.";
-//
- $string['skin-avatar-notmoney'] = 'Not enough money !';
- $string['skin-avatar-buy'] = 'Buy now !';
-// $string['skin-avatar-open-inventory'] = 'Open inventory';
-
+$string['skin-avatar-notmoney'] = 'Not enough money !';
+$string['skin-avatar-buy'] = 'Buy now !';
 
 // Settings.
 $string['setting-weight-title']       = 'Activity Values';

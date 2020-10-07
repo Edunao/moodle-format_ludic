@@ -31,7 +31,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_course_module_score extends \format_ludic\skinned_course_module {
-    public function __construct(skin_template_course_module_score $template){
+    public function __construct(skin_template_course_module_score $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_course_module_score();
@@ -61,19 +61,18 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
     protected $steps;
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // Copy steps into an associative array, indexed by threshold and sort it
-        $sortedsteps = [];
+        // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step)){
+            if (!array_key_exists('threshold', $step)) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;
         }
 
-        // make sure that there is a first step starting at 0
+        // Make sure that there is a first step starting at 0.
         if (!array_key_exists(0, $stepsbythreshod)) {
 
             // Add first step to start of array.
@@ -85,7 +84,7 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
             ];
         }
 
-        // sort the steps into threshold order and reindex them starting at 0
+        // Sort the steps into threshold order and reindex them starting at 0.
         ksort($stepsbythreshod, SORT_NUMERIC);
         $this->steps = array_values($stepsbythreshod);
     }
@@ -95,7 +94,7 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
     }
 
     public function get_images_to_render($skindata) {
-        return [ $skindata->image ];
+        return [$skindata->image];
     }
 
     public function get_css($skindata) {
@@ -133,13 +132,13 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
     }
 
     public function setup_skin_data($skindata, $skinresults, $userdata) {
-        // Get user score
+        // Get user score.
         $grade = ceil($userdata->proportion * 100);
 
-        // Find current step
+        // Find current step.
         $currentidx = 0;
-        //print_object($this->steps);
-        for($i = 0; $i < count($this->steps); ++$i) {
+        $cnt = count($this->steps);
+        for ($i = 0; $i < $cnt; ++$i) {
             if ($grade < $this->steps[$i]->threshold) {
                 break;
             }
@@ -147,15 +146,16 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
         }
         $step = $this->steps[$currentidx];
         $thisthreshold = $step->threshold;
-        $nextthreshold = ($currentidx + 1 < count($this->steps)) ? $this->steps[$currentidx + 1]->threshold : \max($currentidx + 1, 100);
+        $nextthreshold = ($currentidx + 1 < count($this->steps)) ?
+            $this->steps[$currentidx + 1]->threshold :
+            \max($currentidx + 1, 100);
         $diff0         = $grade - $thisthreshold;
         $diff1         = $nextthreshold - $thisthreshold;
         $rawfactor     = ($diff1 > 0) ? $diff0 / $diff1 : 0;
         $cleanfactor   = ceil($rawfactor * 20) / 20;
 
-
-        $score         = format_ludic_resolve_ranges_in_text($step->score, $cleanfactor) * $userdata->weight / 100;
-        // Store away the results
+        $score = format_ludic_resolve_ranges_in_text($step->score, $cleanfactor) * $userdata->weight / 100;
+        // Store away the results.
         $skindata->grade    = $grade;
         $skindata->score    = $score;
         $skindata->image    = $step->background;

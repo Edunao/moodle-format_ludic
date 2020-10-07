@@ -25,7 +25,13 @@ namespace format_ludic;
 defined('MOODLE_INTERNAL') || die();
 
 abstract class skin_template {
-    // grant public read access to our properties
+    // Common properties.
+    protected $id;
+    protected $title;
+    protected $description;
+    protected $css;
+
+    // Grant public read access to our properties.
     public function __get($property) {
         if (property_exists($this, $property)) {
             return $this->$property;
@@ -36,49 +42,40 @@ abstract class skin_template {
     abstract public function get_images_to_render($skindata);
     abstract public function get_css($skindata);
     abstract public function get_texts_to_render($skindata);
-    public function get_extra_html_to_render($skindata){
+    public function get_extra_html_to_render($skindata) {
         return [];
+    }
+
+    public function get_skin_title() {
+        return $this->title;
+    }
+    public function get_skin_description() {
+        return $this->description;
     }
 }
 
 abstract class course_module_skin_template extends skin_template {
-    // common properties
-    protected $id;
-    protected $title;
-    protected $description;
-    protected $css;
-
     public function __construct($config) {
-        // copy out base parameter set
-        foreach(['id', 'title', 'description', 'css'] as $propname){
-            $this->$propname = property_exists($config, $propname) ? $config->$propname: "";
+        // Copy out base parameter set.
+        foreach (['id', 'title', 'description', 'css'] as $propname) {
+            $this->$propname = property_exists($config, $propname) ? $config->$propname : "";
         }
     }
 
     abstract public function setup_skin_data($skindata, $skinresults, $userdata);
-
 }
 
 abstract class section_skin_template extends skin_template {
-    // common properties
-    protected $id;
-    protected $title;
-    protected $description;
-    protected $css;
-
     public function __construct($config) {
-        // copy out base paramater set
-        foreach(['id', 'title', 'description', 'css'] as $propname){
-            $this->$propname = property_exists($config, $propname)? $config->$propname: "";
+        // Copy out base paramater set.
+        foreach (['id', 'title', 'description', 'css'] as $propname) {
+            $this->$propname = property_exists($config, $propname) ? $config->$propname : "";
         }
     }
 
     abstract public function setup_skin_data($skindata, $userdata, $section);
 
-    public function execute_special_action($skindata, $action){
+    public function execute_special_action($skindata, $action) {
         debugging('Action called on bad object ' . get_class($this) . ' : '. json_encode($action));
-        return;
     }
-
-
 }

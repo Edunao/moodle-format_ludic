@@ -140,7 +140,7 @@ class format_ludic_item implements renderable {
     public $skintype;
 
     /**
-     * Called function (php) which returns its result on the right side (.container-properties).
+     * Called function(php) which returns its result on the right side (.container-properties).
      * Called on the controller which has the name equal to the type of the article.
      *
      * @var string
@@ -148,7 +148,7 @@ class format_ludic_item implements renderable {
     public $propertiesaction;
 
     /**
-     * Called function (php) which returns its result on the left side (.container-parents).
+     * Called function(php) which returns its result on the left side (.container-parents).
      *
      * @var string
      */

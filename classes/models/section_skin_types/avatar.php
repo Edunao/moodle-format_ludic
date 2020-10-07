@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -33,7 +32,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_section_avatar extends \format_ludic\skinned_section {
-    function __construct(skin_template_section_avatar $template) {
+    public function __construct(skin_template_section_avatar $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_section_avatar();
@@ -75,14 +74,14 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
     protected $slots      = [];
     protected $items      = [];
 
-    function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+    public function __construct($config) {
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // process background configuration
+        // Process background configuration.
         $this->background = isset($config->background) ? $config->background : "";
 
-        // process slots configuration
+        // Process slots configuration.
         $slotsdata = $config->slots;
         $slots     = [];
         foreach ($slotsdata as $slotindex => $slotdata) {
@@ -93,7 +92,7 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
         }
         $this->slots = $slots;
 
-        // process items configuration
+        // Process items configuration.
         $itemsdata = $config->items;
         $items     = [];
         foreach ($itemsdata as $itemdata) {
@@ -119,7 +118,7 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
             'class' => 'img-background img-background-0',
         ];
 
-        // User images
+        // User images.
         global $USER;
         $useritems = $skindata->section->get_user_skin_data($USER->id);
         $skinitems = $this->items;
@@ -132,8 +131,6 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
                 continue;
             }
 
-            //$skinimage = $skinitems[$itemid]['images'];
-            //print_object( $skinitems[$itemid]);
             for ($i = 0; $i < 5; ++$i) {
                 if ($skinitems[$itemid]['image' . $i] == '') {
                     continue;
@@ -142,26 +139,15 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
                 $imageinfo->src   = $skinitems[$itemid]['image' . $i];
                 $cleanitemid      = str_replace(' ', '', $itemid);
                 $imageinfo->class = 'filter-' . $skinitems[$itemid]['filter'];
-                $imageinfo->class = ' img-object img-slot-' . $useritem->slot . ' img-object-' . $cleanitemid . ' ' . $skinitems[$itemid]['filter'];
+                $imageinfo->class = ' img-object img-slot-' . $useritem->slot
+                    . ' img-object-' . $cleanitemid . ' '
+                    . $skinitems[$itemid]['filter'];
                 $imageinfo->css   = '';
                 if (isset($skinitems[$itemid]['zbias' . $i])) {
                     $imageinfo->css .= ' z-index:' . $skinitems[$itemid]['zbias' . $i] . ';';
                 }
                 $images[] = $imageinfo;
             }
-
-            /*foreach ($skinimage as $imageinfo) {
-                $imageinfo->classes = isset($imageinfo->classes) ? $imageinfo->classes : '';
-                $cleanitemid        = str_replace(' ', '', $itemid);
-                $imageinfo->class   = $imageinfo->classes . ' img-object img-slot-' . $useritem->slot . ' img-object-' . $cleanitemid;
-
-                $imageinfo->css = '';
-                if (isset($imageinfo->zindex)) {
-                    $imageinfo->css .= 'z-index:' . $imageinfo->zindex . ';';
-                }
-
-                $images[] = $imageinfo;
-            }*/
         }
         return $images;
     }
@@ -200,14 +186,14 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
     }
 
     public function setup_skin_data($skindata, $userdata, $section) {
-        // store the user id for later use
+        // Store the user id for later use.
         global $USER;
         $skindata->userid = $USER->id;
 
-        // fetch additional user data from the database covering items purchased and equipped by the user
+        // Fetch additional user data from the database covering items purchased and equipped by the user.
         $skindata->useritems = $section->get_user_skin_data($skindata->userid);
 
-        // Add free items to user items list as required
+        // Add free items to user items list as required.
         foreach ($this->items as $itemid => $item) {
             if ($item['cost'] > 0) {
                 continue;
@@ -224,23 +210,24 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
             }
         }
 
-        // calculate the user's total score and use it as the 'earned cash' value
+        // Calculate the user's total score and use it as the 'earned cash' value.
         $skindata->earnedcash = 0;
         foreach ($userdata as $cmdata) {
             $skindata->earnedcash += $cmdata->score;
         }
 
-        // figure out how much cash the user has earned and spent
+        // Figure out how much cash the user has earned and spent.
         $totalcost = 0;
         foreach ($skindata->useritems as $itemid => $useritem) {
             $totalcost += $useritem->cost;
         }
         $skindata->cash = max(0, $skindata->earnedcash - $totalcost);
 
-        // store away a refernce to the section required for database interaction  for buy_item() and toggle_item()
+        // Store away a refernce to the section required for database interaction  for buy_item() and toggle_item().
         $skindata->section = $section;
 
-        // prime the 'selected item' marker - it can be modified in actions such as 'buy item' or 'togge item' and subsequently used at display time
+        // Prime the 'selected item' marker - it can be modified in actions such as 'buy item'
+        // or 'togge item' and subsequently used at display time.
         $skindata->selecteditem = '';
     }
 
@@ -249,21 +236,20 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
         $currentitems           = $this->items;
         $useritems              = $skindata->useritems;
 
-        // Get item
-        //$itemid = $slotname . '-' . $itemname;
+        // Get item.
         $itemid = $itemname;
         if (!array_key_exists($itemid, $currentitems)) {
             return false;
         }
         $item = $currentitems[$itemid];
 
-        // Check is user can buy this item
+        // Check is user can buy this item.
         $currentmoney = $skindata->cash;
         if ($currentmoney < $item['cost']) {
             return false;
         }
 
-        // add the item to the user's inventory
+        // Add the item to the user's inventory.
         $useritem           = [
             'itemname' => $item['name'],
             'slot'     => $item['slot'],
@@ -274,7 +260,7 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
         $skindata->section->update_user_skin_data($skindata->userid, $useritems);
         $skindata->useritems[$itemname] = (object) $useritem;
 
-        // equip the item
+        // Equip the item.
         $this->toggle_item($skindata, $slotname, $itemname);
 
         return true;
@@ -291,7 +277,7 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
 
         $useritems[$currentitemid]->equipped = !$useritems[$currentitemid]->equipped;
 
-        // Disabled all others slots items
+        // Disabled all others slots items.
         foreach ($useritems as $itemid => $itemdata) {
             if ($currentitemid == $itemid) {
                 continue;
@@ -306,7 +292,7 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
 
     public function get_extra_html_to_render($skindata) {
 
-        // Don't print inventory popup if we display skin in header bar and it's the current section
+        // Don't print inventory popup if we display skin in header bar and it's the current section.
         if ($skindata->section->contextview == 'header') {
             return [];
         }
@@ -316,7 +302,7 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
 
         $htmls = [];
 
-        // Prepare inventory
+        // Prepare inventory.
         $money     = $skindata->cash;
         $useritems = $skindata->useritems;
         $slotsdata = $this->slots;
@@ -358,7 +344,7 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
                 $itemdata->isselected = ' passelected';
             }
 
-            // Prepare inventory icon
+            // Prepare inventory icon.
             $iconimg        = $itemdata->icon;
             $icon           = new \stdClass();
             $icon->src      = format_ludic_get_skin_image_url($iconimg);
@@ -372,15 +358,17 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
 
         $htmls[] = [
             'classes' => 'inventory no-ludic-event ',
-            'content' => $renderer->render_popup('avatar-inventory-' . $skindata->section->sectioninfo->id, "Magasin", $inventorycontent),
+            'content' => $renderer->render_popup(
+                'avatar-inventory-' . $skindata->section->sectioninfo->id,
+                "Magasin",
+                $inventorycontent
+            ),
         ];
 
         return $htmls;
     }
 
     public function execute_special_action($skindata, $action) {
-        //print_object('action : ');
-        //print_object($action);
         switch ($action->type) {
             case 'toggle_item':
                 return $this->toggle_item($skindata, $action->slotname, $action->itemname);

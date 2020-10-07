@@ -31,7 +31,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_course_module_progress extends \format_ludic\skinned_course_module {
-    public function __construct(skin_template_course_module_progress $template){
+    public function __construct(skin_template_course_module_progress $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_course_module_progress();
@@ -64,19 +64,18 @@ class skin_template_course_module_progress extends \format_ludic\course_module_s
     protected $steps;
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // Copy steps into an associative array, indexed by threshold and sort it
-        $sortedsteps = [];
+        // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step)){
+            if (!array_key_exists('threshold', $step)) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;
         }
 
-        // make sure that there is a first step starting at 0
+        // Make sure that there is a first step starting at 0.
         if (!array_key_exists(0, $stepsbythreshod)) {
             // Add first step to start of array.
             $stepsbythreshod[0] = [
@@ -91,7 +90,7 @@ class skin_template_course_module_progress extends \format_ludic\course_module_s
             ];
         }
 
-        // sort the steps into threshold order and reindex them starting at 0
+        // Sort the steps into threshold order and reindex them starting at 0.
         ksort($stepsbythreshod, SORT_NUMERIC);
         $this->steps = array_values($stepsbythreshod);
     }
@@ -127,12 +126,13 @@ class skin_template_course_module_progress extends \format_ludic\course_module_s
     }
 
     public function setup_skin_data($skindata, $skinresults, $userdata) {
-        // determine the progress value in the 0..100 range
+        // Determine the progress value in the 0..100 range.
         $progress = ceil($userdata->proportion * 100);
 
-        // Find current step
+        // Find current step.
         $currentidx = 0;
-        for($i = 0; $i < count($this->steps); ++$i) {
+        $cnt = count($this->steps);
+        for ($i = 0; $i < $cnt; ++$i) {
             if ($progress < $this->steps[$i]->threshold) {
                 break;
             }
@@ -140,13 +140,11 @@ class skin_template_course_module_progress extends \format_ludic\course_module_s
         }
         $step = $this->steps[$currentidx];
 
-        // store away the bits that we need in the skindata container
-
-        // Store away the results
+        // Store away the results.
         $skindata->images = [];
-        for ($i = 0; $i< 5; ++$i) {
+        for ($i = 0; $i < 5; ++$i) {
             $image = $step->{'image' . $i};
-            if (! $image) {
+            if (!$image) {
                 continue;
             }
             $skindata->images[] = $image;

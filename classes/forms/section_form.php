@@ -69,30 +69,54 @@ class section_form extends form {
         $elements[] = new hidden_form_element('id', 'section-id', $id, 0);
 
         // Section name.
-        $elements[] = new text_form_element('name', 'section-title', $this->object->name, $this->object->get_title(), get_string('label-section-title', 'format_ludic'), [
+        $elements[] = new text_form_element(
+            'name',
+            'section-title',
+            $this->object->name,
+            $this->object->get_title(),
+            get_string('label-section-title', 'format_ludic'),
+            [
                 'required' => true,
                 'disabled' => $disabled
-            ]);
+            ]
+        );
 
         // Section visibility.
-        $elements[] = new checkbox_form_element('visible', 'section-visible', $this->object->visible, 1, get_string('label-section-visible', 'format_ludic'), [
+        $elements[] = new checkbox_form_element(
+            'visible',
+            'section-visible',
+            $this->object->visible,
+            1,
+            get_string('label-section-visible', 'format_ludic'),
+            [
                 'required' => true,
                 'disabled' => $disabled
-            ]);
+            ]
+        );
 
         // There is no skin for section 0.
         if (!$disabled) {
-            // Section skin id.
-            $elements[] = new selection_popup_form_element('skinid', 'section-skinid', $this->object->skinid, 0, get_string('label-skin-selection', 'format_ludic'), [
+            $editinfo = $this->object->skin->get_edit_info();
+            $elements[] = new selection_popup_form_element(
+                'skinid',
+                'section-skinid',
+                $this->object->skinid,
+                0,
+                get_string('label-skin-selection', 'format_ludic'),
+                [
                     'required' => true,
                     'multiple' => false
-                ], [
-                    'icon'           => $this->object->skin->get_edit_image(),
+                ],
+                [
+                    'icon'           => (object)[ 'imgsrc' => $editinfo->imgsrc, 'imgalt' => '' ],
                     'itemid'         => $id,
                     'itemcontroller' => 'skin',
                     'itemaction'     => 'get_section_skin_selector',
-                    'popuptitle'     => get_string('section-skin-selection', 'format_ludic')
-                ]);
+                    'popuptitle'     => get_string('section-skin-selection', 'format_ludic'),
+                    'skintitle'       => $editinfo->title,
+                    'skindescription' => $editinfo->description,
+                ]
+            );
         }
 
         return $elements;

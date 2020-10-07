@@ -1,0 +1,10 @@
+{
+    "domain": "course_module",
+    "skintype": "fixed_image",
+    "skinname": "",
+    "title": "non-gamified course module",
+    "description": "Fixed image for non-gamified content",
+    "css": "",
+    "text": "",
+    "background": "default-user-skins\/non-gamified-content"
+}

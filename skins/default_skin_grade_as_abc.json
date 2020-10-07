@@ -1,9 +1,9 @@
 {
     "domain": "course_module",
     "skintype": "score",
-    "skinname": "ABC",
+    "skinname": "",
     "title": "ABC grade",
-    "description": "A set of letters for grade thresholds.",
+    "description": "Grade diaplyed as a letter",
     "css": ".sub-tile.skin-tile .skin-text {display:none} .sub-tile.skin-tile .skin-text.extratext{display:block;position: absolute;left: 48%;bottom: 11%;font-size:5.5rem;font-weight:bold;font-family:'sf-action-man'}",
     "steps": [
         {

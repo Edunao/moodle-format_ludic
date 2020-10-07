@@ -31,7 +31,7 @@ require_once(__DIR__ . '/../skin_type.php');
 require_once(__DIR__ . '/../skin_template.php');
 
 class skinned_section_score extends \format_ludic\skinned_section {
-    public function __construct(skin_template_section_score $template){
+    public function __construct(skin_template_section_score $template) {
         parent::__construct($template);
         $this->template = $template;
         $this->skintype = new skin_type_section_score();
@@ -60,19 +60,18 @@ class skin_template_section_score extends \format_ludic\section_skin_template {
     protected $steps;
 
     public function __construct($config) {
-        // leave the job of extracting common parameters such as title and description to the parent class
+        // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // Copy steps into an associative array, indexed by threshold and sort it
-        $sortedsteps = [];
+        // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step)){
+            if (!array_key_exists('threshold', $step)) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;
         }
 
-        // make sure that there is a first step starting at 0
+        // Make sure that there is a first step starting at 0.
         if (!array_key_exists(0, $stepsbythreshod)) {
             $stepsbythreshod[0] = [
                 'threshold'  => 0,
@@ -82,7 +81,7 @@ class skin_template_section_score extends \format_ludic\section_skin_template {
             ];
         }
 
-        // sort the steps into threshold order and reindex them starting at 0
+        // Sort the steps into threshold order and reindex them starting at 0.
         ksort($stepsbythreshod, SORT_NUMERIC);
         $this->steps = array_values($stepsbythreshod);
     }
@@ -118,13 +117,13 @@ class skin_template_section_score extends \format_ludic\section_skin_template {
     }
 
     public function setup_skin_data($skindata, $userdata, $section) {
-        // aggregate the course section scores
+        // Aggregate the course section scores.
         $score = 0;
         foreach ($userdata as $cmdata) {
             $score += $cmdata->score;
         }
 
-        // Find current step
+        // Find current step.
         $currentstep = $this->steps[0];
         foreach ($this->steps as $step) {
             if ($score < $step->threshold) {
@@ -133,7 +132,7 @@ class skin_template_section_score extends \format_ludic\section_skin_template {
             $currentstep = $step;
         }
 
-        // Store away the results
+        // Store away the results.
         $skindata->score    = $score;
         $skindata->image    = $currentstep->background;
         $skindata->text     = $currentstep->text;

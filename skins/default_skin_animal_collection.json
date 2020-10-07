@@ -1,9 +1,9 @@
 {
   "domain": "section",
   "skintype": "collection",
-  "skinname": "animal collection",
-  "title": "Cute animal set collection",
-  "description": "Completed activities are rewarded with animal stamps.",
+  "skinname": "",
+  "title": "Animal Collection",
+  "description": "A bookcase of trophies for completed activities",
   "css": ".skin-tile .skin-img:not(.image-0){position:absolute}",
   "stamps": [
     {
