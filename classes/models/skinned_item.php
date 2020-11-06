@@ -82,12 +82,24 @@ abstract class skinned_item extends model {
         $css      = $this->get_additional_css();
         $css      = str_replace("\n", "", $css);
         $cssarray = [];
-        $success  = preg_match_all('/.*?{.*?}/', $css, $cssarray);
+        $success  = preg_match_all('/[ \t\n\r]*(@keyframe.*?{.*?({.*?}.*?)*})|[ \t\n\r]*(.*?{.*?})/', $css, $cssarray);
+
         if (!$success) {
             return $output;
         }
-        foreach ($cssarray[0] as $cssline) {
-            $output .= ' .format-ludic .item #' . $selectorid . ' ' . $cssline;
+
+        // add keyframe rules to output
+        foreach ($cssarray[1] as $cssline) {
+            if ($cssline) {
+                $output .= ' ' . $cssline;
+            }
+        }
+
+        // add all other rules to output
+        foreach ($cssarray[3] as $cssline) {
+            if ($cssline) {
+                $output .= ' .format-ludic .item #' . $selectorid . ' ' . $cssline;
+            }
         }
 
         return $output;

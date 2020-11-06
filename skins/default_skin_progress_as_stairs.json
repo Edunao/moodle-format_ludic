@@ -4,8 +4,7 @@
     "skinname": "default",
     "title": "track progress",
     "description": "Representation of progress",
-    "css": " \n.skin-hidden-text.percent{\n display: block;\n position: absolute;\n right: 8%;\n bottom: 1%;\n font-size: 4.5rem;\n}\n.skin-hidden-text.percent:after {\n content: \"%\";\n font-weight: normal;\n font-family: 'Montserrat-Medium';\n} \n ",
-    "targetscore": 0,
+    "css": " \n.skin-hidden-text.percent{\n display: block;\n position: absolute;\n right: 12%;\n bottom: 1%;\n font-size: 450%;\n}\n.skin-hidden-text.percent:after {\n content: \"%\";\n font-weight: normal;\n font-family: 'Montserrat-Medium';\n} \n ",
     "steps": [
         {
             "threshold": 0,
@@ -25,7 +24,7 @@
             "image3": "",
             "image4": "",
             "text": "",
-            "css": ".image-1{left: 19..62%; top: 65..7%; width: 16%;}"
+            "css": ".image-1{left: 21..65%; top: 67..9%; width: 13.7%;height: 32.4%}"
         },
         {
             "threshold": 1000,

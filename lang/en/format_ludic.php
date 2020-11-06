@@ -58,8 +58,6 @@ $string['edit-skin-new']    = 'New Skin';
 // Header bar.
 $string['header-bar-menu']            = 'Useful links';
 $string['header-bar-preview-section'] = 'Preview section';
-$string['header-bar-student-view']    = 'Student view';
-$string['header-bar-teacher-view']    = 'Back to edit mode';
 $string['header-no-content']          = 'No content available';
 
 // Section edition.
@@ -67,7 +65,7 @@ $string['default-section-title']  = 'Section {$a}';
 $string['label-section-title']    = 'Title';
 $string['label-section-visible']  = 'Visible';
 $string['duplicate-suffix']       = ' (copy)';
-$string['section-skin-selection'] = 'Select a skin for the section';
+$string['section-skin-selection'] = 'Select an appearance for the section';
 $string['section-preview']        = 'Section preview';
 $string['section-no-cm']          = 'No content available';
 $string['edit-title-section']     = 'Sections :';
@@ -75,10 +73,11 @@ $string['addsection-button']      = 'Add section';
 
 
 // Course module edition.
-$string['course-module-skin-selection'] = 'Select a skin for the course module';
+$string['course-module-skin-selection'] = 'Select an appearance for the course module';
 $string['label-course-module-title']    = 'Title';
 $string['label-course-module-visible']  = 'Visible';
-$string['label-select-weight']          = 'Value';
+$string['label-weight']                 = 'Value';
+$string['label-move-section']           = 'Move to section';
 $string['label-select-access']          = 'Accessibility';
 $string['edit-title-coursemodule']      = 'Content :';
 $string['addcm-button']                 = 'Add content';
@@ -111,7 +110,13 @@ $string['cm-skin-stealth-title']        = 'Stealth';
 $string['cm-skin-stealth-description']  = 'Allows labels and other such content to be stealth in course';
 $string['cs-skin-noludic-title']        = 'Static';
 $string['cs-skin-noludic-description']  = 'No gamification';
-$string['label-skin-selection']         = 'Skin';
+$string['label-skin-selection']         = 'Appearance';
+$string['cs-progress-target-title']     = 'Target Value (Or 0 for none)';
+$string['cs-progress-target-help']      = 'If the value of thie field is non-zero then it can be used to set the target value explicitly, for ues when students are not required to complete all possible activities';
+$string['cm-score-targetmin-title']     = 'Lowest grade pass [0..100]';
+$string['cm-score-targetmin-help']      = 'If the value of this field is non-zero then it overrides the default lowest grade pass threshold';
+$string['cm-score-targetmax-title']     = 'Highest grade pass [0..100]';
+$string['cm-score-targetmax-help']      = 'If the value of this field is non-zero then it overrides the default highest grade pass threshold';
 
 $string['skin-avatar-notmoney'] = 'Not enough money !';
 $string['skin-avatar-buy'] = 'Buy now !';
@@ -121,7 +126,7 @@ $string['setting-weight-title']       = 'Activity Values';
 $string['setting-weight-description'] = 'A comma separated list of values for activities to populate teacher menus.';
 
 // Forms.
-$string['form-success']         = 'Success';
+$string['form-success']         = 'Changes saved';
 $string['errors']               = 'Errors';
 $string['default-error']        = 'An error has occurred.';
 $string['error-required']       = 'You must supply a value here.';

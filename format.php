@@ -24,27 +24,55 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$contexthelper = \format_ludic\context_helper::get_instance($PAGE);
+function format_ludic_display_page() {
+    global $PAGE;
 
-$context   = $contexthelper->get_course_context();
-$editmode  = $contexthelper->is_editing();
-$sectionid = $contexthelper->get_section_id();
+    $contexthelper = \format_ludic\context_helper::get_instance($PAGE);
 
-$PAGE->set_context($context);
-// Display course.
-$renderer = $PAGE->get_renderer('format_ludic');
-if ($editmode) {
-    format_ludic_init_edit_mode($context);
-    $contexthelper->prefetch_data_edit_mode();
-    echo $renderer->render_edit_page();
-} else {
+    $context   = $contexthelper->get_course_context();
+    $editmode  = $contexthelper->is_editing();
+    $sectionid = $contexthelper->get_section_id();
+
+    $PAGE->set_context($context);
+
+    $renderer = $PAGE->get_renderer('format_ludic');
+
+    // Course editing view.
+    if ($editmode) {
+	$contexthelper->set_viewmode('courseedit');
+        format_ludic_init_edit_mode($context);
+        $contexthelper->prefetch_data_edit_mode();
+        echo $renderer->render_edit_page();
+        return;
+    }
+
+    // Section view.
     if ($sectionid) {
-        // Section view.
+        $contexthelper->set_viewmode('section');
         $contexthelper->prefetch_data_section_page_mode();
         echo $renderer->render_section_page($sectionid);
-    } else {
-        // Course view.
-        $contexthelper->prefetch_data_course_page_mode();
-        echo $renderer->render_page();
+        return;
     }
+
+    // Determine the number of sections in the course.
+    $course   = $contexthelper->get_course();
+    $sections = $course->get_sections(false);
+
+    // Single section view (combining section view and course overview).
+    if (count($sections) == 1) {
+        $contexthelper->set_viewmode('section');
+        $sectionid = $contexthelper->get_section_id(1);
+        $contexthelper->prefetch_data_course_page_mode();
+        $contexthelper->prefetch_data_section_page_mode();
+        echo $renderer->render_single_section_page($sectionid);
+        return;
+    }
+
+    // Course overview.
+    $contexthelper->set_viewmode('overview');
+    $contexthelper->prefetch_data_course_page_mode();
+    echo $renderer->render_overview_page();
 }
+
+// Display an appropriate page.
+format_ludic_display_page();

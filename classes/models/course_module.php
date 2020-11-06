@@ -47,6 +47,8 @@ class course_module extends model implements skinnable_interface {
     public $skinid;
     public $skin;
     private $weight;
+    private $targetmin;
+    private $targetmax;
     private $results;
 
     /**
@@ -69,10 +71,12 @@ class course_module extends model implements skinnable_interface {
 
         // Ludic properties.
         $skinrelation = $this->get_skin_relation();
-        $this->skinid = $skinrelation->skinid;
-        $this->weight = $skinrelation->weight;
-        $this->access = $skinrelation->access;
-        $this->skin   = skin_manager::get_instance()->skin_course_module($this->skinid, $this);
+        $this->skinid    = $skinrelation->skinid;
+        $this->weight    = $skinrelation->weight;
+        $this->targetmin = $skinrelation->targetmin;
+        $this->targetmax = $skinrelation->targetmax;
+        $this->access    = $skinrelation->access;
+        $this->skin      = skin_manager::get_instance()->skin_course_module($this->skinid, $this);
     }
 
     /**
@@ -169,8 +173,8 @@ class course_module extends model implements skinnable_interface {
         // Duplicate course module.
         $newcm = duplicate_module($course, $coursemodule);
 
-        // Copy skin, weight and access from this course module.
-        $dbapi->set_format_ludic_cm($this->courseid, $newcm->id, $this->skinid, $this->weight, $this->access);
+        // Copy skin, weight, target weights and access from this course module.
+        $dbapi->set_format_ludic_cm($this->courseid, $newcm->id, $this->skinid, $this->weight, $this->targetmin, $this->targetmax, $this->access);
 
         // Move course module to end.
         if ($movetoend) {
@@ -270,24 +274,28 @@ class course_module extends model implements skinnable_interface {
         $dbapi = $this->contexthelper->get_database_api();
 
         // Check if data id is current id.
-        if (!isset($data['id']) || $data['id'] != $this->id) {
+        if ($data['id'] != $this->id) {
             return false;
         }
 
         // Update name if required.
-        if (isset($data['name']) && $data['name'] !== $this->name) {
+        if ($data['name'] !== $this->name) {
             $dbapi->update_course_module_name($this->id, $data['name']);
         }
 
         // Update visibility if needed.
-        if (isset($data['visible']) && $data['visible'] !== $this->name) {
+        if ($data['visible'] !== $this->name) {
             $dbapi->update_course_module_visible($this->id, $data['visible']);
         }
 
-        // Update skin id, weight or access if required.
-        if (isset($data['skinid']) && $data['skinid'] != $this->skinid ||
-            isset($data['weight']) && $data['weight'] != $this->weight ) {
-            $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], 1);
+        // Update parameters if required.
+        $havechanges = false;
+        $havechanges = $havechanges || ($data['skinid'] != $this->skinid);
+        $havechanges = $havechanges || ($data['weight'] != $this->weight);
+        $havechanges = $havechanges || ($data['targetmin'] != $this->targetmin);
+        $havechanges = $havechanges || ($data['targetmax'] != $this->targetmax);
+        if ($havechanges === true) {
+            $dbapi->set_format_ludic_cm($this->courseid, $this->id, $data['skinid'], $data['weight'], $data['targetmin'], $data['targetmax'], 1);
         }
 
         // Update section.
@@ -379,6 +387,8 @@ class course_module extends model implements skinnable_interface {
                     $dbrecord->cmid,
                     $dbrecord->skinid,
                     $dbrecord->weight,
+                    $dbrecord->targetmin,
+                    $dbrecord->targetmax,
                     $dbrecord->access
                 );
             }
@@ -389,12 +399,14 @@ class course_module extends model implements skinnable_interface {
         // Create one record with default values.
         $section = $this->contexthelper->get_section_by_id($this->sectionid);
         $skin = skin_manager::get_instance()->get_course_module_default_skin($section->section, $this->cminfo->modname);
-        $dbrecord           = new \stdClass();
-        $dbrecord->courseid = $this->courseid;
-        $dbrecord->cmid     = $this->id;
-        $dbrecord->skinid   = $skin->id;
-        $dbrecord->weight   = format_ludic_get_default_weight();
-        $dbrecord->access   = 1;
+        $dbrecord            = new \stdClass();
+        $dbrecord->courseid  = $this->courseid;
+        $dbrecord->cmid      = $this->id;
+        $dbrecord->skinid    = $skin->id;
+        $dbrecord->weight    = format_ludic_get_default_weight();
+        $dbrecord->targetmin = 0;
+        $dbrecord->targetmax = 0;
+        $dbrecord->access    = 1;
         $dbapi->add_format_ludic_cm_record($dbrecord);
 
         // Return record.
@@ -465,6 +477,24 @@ class course_module extends model implements skinnable_interface {
     }
 
     /**
+     * Get course module target min value.
+     *
+     * @return int
+     */
+    public function get_targetmin() {
+        return (int) $this->targetmin;
+    }
+
+    /**
+     * Get course module target max value.
+     *
+     * @return int
+     */
+    public function get_targetmax() {
+        return (int) $this->targetmax;
+    }
+
+    /**
      * Get skin title.
      *
      * @return string
@@ -491,5 +521,4 @@ class course_module extends model implements skinnable_interface {
     public function get_collection_sequence() {
         return [];
     }
-
 }

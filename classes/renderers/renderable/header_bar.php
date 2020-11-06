@@ -272,36 +272,6 @@ class format_ludic_header_bar implements renderable {
         // Options for editing teacher and teacher.
         if ($isadmin || $iseditingteacher || $isteacher) {
 
-            // To student interface.
-            if (!$isstudent) {
-                $name       = get_string('header-bar-student-view', 'format_ludic');
-                $roleid     = $this->contexthelper->get_database_api()->get_role_id_by_role_shortname('student');
-                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole='
-                    . $roleid . '&sesskey=' . sesskey() . '&edit=on';
-            }
-
-            // To edition interface.
-            if ($isstudent) {
-                $name       = get_string('header-bar-teacher-view', 'format_ludic');
-                $roleid     = 0;
-                $switchlink = $CFG->wwwroot . '/course/view.php?id=' . $courseid . '&switchrole='
-                    . $roleid . '&sesskey=' . sesskey() . '&edit=on';
-            }
-
-            $switchoption = [
-                'iconsrc' => $CFG->wwwroot . '/course/format/ludic/pix/student-view.svg',
-                'iconalt' => $name,
-                'name'    => $name,
-            ];
-
-            // Don't add action in preview student view.
-            if (!$this->contexthelper->is_student_view_forced()) {
-                $switchoption['link']   = $switchlink;
-                $switchoption['action'] = 'getDataLinkAndRedirectTo';
-            }
-
-            $list[] = $switchoption;
-
             if (!$isstudent) {
                 if (strpos($PAGE->pagetype, 'view-ludic') === false) {
                     // Edit course.

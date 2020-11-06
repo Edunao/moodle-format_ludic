@@ -158,17 +158,7 @@ class format_ludic extends \format_base {
     }
 
     public function page_set_course(\moodle_page $page) {
-        global $CFG, $USER;
 
-        // Put teacher in edition mode by defaut.
-        $context = context_course::instance($page->course->id);
-        if (!$page->user_is_editing()
-            && has_capability('moodle/course:manageactivities', $context)
-            && $page->pagetype == 'course-view'
-        ) {
-            $USER->editing = 1;
-            redirect($CFG->wwwroot . '/course/view.php?id=' . $page->course->id . '&sesskey=' . sesskey() . '&edit=on');
-        }
     }
 
     /**
@@ -388,38 +378,13 @@ function format_ludic_resolve_ranges_in_text($txtwithranges, $factor) {
 }
 
 /**
- * Return weight setting by default.
- *
- * @return string
- */
-function format_ludic_get_default_weight_setting() {
-    return '0, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000';
-}
-
-/**
- * Get weight options for select element.
- *
- * @return array
- * @throws \dml_exception
- */
-function format_ludic_get_weight_options() {
-    global $PAGE;
-    $config        = \format_ludic\context_helper::get_instance($PAGE)->get_course_format_config();
-    $weightoptions = isset($config->weight) ? $config->weight : format_ludic_get_default_weight_setting();
-    $weightoptions = explode(',', $weightoptions);
-    return array_map('trim', $weightoptions);
-}
-
-/**
  * Get default weight (set by default after adding an activity)
  *
  * @return int
  * @throws \dml_exception
  */
 function format_ludic_get_default_weight() {
-    $weightoptions = format_ludic_get_weight_options();
-    $defaultkey    = round(count($weightoptions) / 2, 0, PHP_ROUND_HALF_DOWN);
-    return isset($weightoptions[$defaultkey]) ? $weightoptions[$defaultkey] : 0;
+    return 1000;
 }
 
 function format_ludic_get_skin_image_url($fullimgname) {

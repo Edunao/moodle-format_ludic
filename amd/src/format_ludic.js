@@ -373,6 +373,7 @@ define(['jquery', 'jqueryui', 'core/templates', 'core/log'], function($, ui, tem
         },
 
         updateAvatar: function(selectorId, sectionid, html) {
+            selectorId = '.section' + selectorId;
             $('#avatar-inventory-' + sectionid).modal('hide');
             $(selectorId).each(function() {
                 $(this).html(html);

@@ -57,8 +57,10 @@ abstract class skinned_course_module extends \format_ludic\skinned_item {
         }
 
         // Lookup user results for activities in the section.
-        $userresults = $this->coursemodule->get_user_results();
-        $userresults->weight = $this->weight;
+        $userresults            = $this->coursemodule->get_user_results();
+        $userresults->weight    = $this->weight;
+        $userresults->targetmin = $this->coursemodule->get_targetmin();
+        $userresults->targetmax = $this->coursemodule->get_targetmax();
 
         // Setup default values for the result record to be escaladed to the section skin upon request.
         $this->skinresults = (object)[
@@ -114,5 +116,13 @@ abstract class skinned_course_module extends \format_ludic\skinned_item {
 
     public function get_instance_name() {
         return 'cm-' . $this->coursemodule->id;
+    }
+
+    public function get_targetmin_string_id() {
+        return $this->skintype->get_targetmin_string_id();
+    }
+
+    public function get_targetmax_string_id() {
+        return $this->skintype->get_targetmax_string_id();
     }
 }

@@ -1,32 +1,31 @@
-
 {
     "domain": "course_module",
     "skintype": "score",
     "skinname": "",
-    "title": "grade-based score",
-    "description": "Points award derived directly from grade",
+    "title": "discrete grade-based score",
+    "description": "Points award for passing key grade thresholds",
     "css": ".sub-tile.skin-tile .skin-text {font-size:200%;} \n .sub-tile.skin-tile .skin-text.score{display: block;position: absolute;left: 59%;bottom: 38%;font-size:150%;font-weight:bold;} \n .sub-tile.skin-tile .skin-text.score::after{content: \"pts\";font-size:100%;font-weight:normal;}\n ",
     "steps": [
         {
             "threshold": 0,
-            "score": "0",
+            "score": 0,
             "text": "",
             "css": "",
-            "background": "default-user-skins\/cup-score\/cup-score-1-1"
+            "background": "default-user-skins\/cup-score\/cup-score-2-1"
         },
         {
-            "threshold": 1,
-            "score": "1..99",
+            "threshold": 50,
+            "score": "50",
             "text": "",
             "css": "",
-            "background": "default-user-skins\/cup-score\/cup-score-1-2"
+            "background": "default-user-skins\/cup-score\/cup-score-2-2"
         },
         {
-            "threshold": 100,
+            "threshold": 80,
             "score": 100,
             "text": "",
             "css": ".skin-text.threshold{display:none;}\n .skin-text.score{bottom: 39%}",
-            "background": "default-user-skins\/cup-score\/cup-score-1-3"
+            "background": "default-user-skins\/cup-score\/cup-score-2-3"
         }
     ]
 }

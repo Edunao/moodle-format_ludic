@@ -43,6 +43,7 @@ class section extends model implements skinnable_interface {
     public $visible;
     public $coursemodules;
     public $skinid;
+    public $target;
     public $skin;
     public $contextview;
 
@@ -72,6 +73,7 @@ class section extends model implements skinnable_interface {
         if ($this->section != 0) {
             $skinrelation = $this->get_section_skin_relation();
             $this->skinid = $skinrelation->skinid;
+            $this->target = $skinrelation->target;
             $this->skin   = skin_manager::get_instance()->skin_section($this->skinid, $this);
         }
     }
@@ -175,16 +177,19 @@ class section extends model implements skinnable_interface {
         $dbapi        = $this->contexthelper->get_database_api();
         $moodlecourse = $this->get_moodle_course();
 
-        if (!isset($data['id']) || $data['id'] != $this->id) {
+        if ($data['id'] != $this->id) {
             return false;
         }
-        if (isset($data['name']) && $data['name'] != $this->dbrecord->name
+        if ($data['name'] != $this->dbrecord->name
             || isset($data['visible']) && $data['visible'] != $this->dbrecord->visible) {
             $dbapi->update_section($moodlecourse, $this->dbrecord, $data);
         }
 
-        if (isset($data['skinid']) && $data['skinid'] != $this->skinid) {
-            $dbapi->set_section_skin_id($this->courseid, $this->id, $data['skinid']);
+        $havechanges = false;
+        $havechanges = $havechanges || ($data['skinid'] != $this->skinid);
+        $havechanges = $havechanges || ($data['target'] != $this->target);
+        if ($havechanges === true) {
+            $dbapi->set_format_ludic_section($this->courseid, $this->id, $data['skinid'], $data['target']);
         }
 
         return true;
@@ -316,8 +321,9 @@ class section extends model implements skinnable_interface {
 
         // Copy skin.
         if ($this->skinid) {
-            $dbapi->set_section_skin_id($this->courseid, $newsection->id, $this->skinid);
+            $dbapi->set_format_ludic_section($this->courseid, $newsection->id, $this->skinid, $this->target);
             $newsection->skinid = $this->skinid;
+            $newsection->target = $this->target;
             $newsection->skin   = $this->skin;
         }
 
@@ -356,10 +362,11 @@ class section extends model implements skinnable_interface {
 
         // If we found relation record, return it.
         if ($dbrecord) {
-            if (!skin_manager::get_instance()->get_section_skin($dbrecord->skinid)) {
+            if (!skin_manager::get_instance()->get_section_skin($dbrecord->skinid, $dbrecord->target)) {
                 $defaultskin = skin_manager::get_instance()->get_section_default_skin();
                 $dbrecord->skinid = $defaultskin->id;
-                $dbapi->set_section_skin_id($dbrecord->courseid, $dbrecord->sectionid, $dbrecord->skinid);
+                $dbrecord->target = 0;
+                $dbapi->set_format_ludic_section($dbrecord->courseid, $dbrecord->sectionid, $dbrecord->skinid, $dbrecord->target);
             }
 
             return $dbrecord;
@@ -371,6 +378,7 @@ class section extends model implements skinnable_interface {
         $dbrecord->courseid  = $this->courseid;
         $dbrecord->sectionid = $this->id;
         $dbrecord->skinid    = $skin->id;
+        $dbrecord->target    = 0;
         $newid               = $dbapi->add_format_ludic_cs_record($dbrecord);
 
         // Return record.
@@ -419,6 +427,13 @@ class section extends model implements skinnable_interface {
 
     public function update_user_skin_data($userid, $data) {
         return $this->contexthelper->get_database_api()->update_section_user_skin_data($this->courseid, $this->id, $userid, $data);
+    }
+
+    /**
+     * @return int
+     */
+    public function get_target() {
+        return $this->target;
     }
 
     /**

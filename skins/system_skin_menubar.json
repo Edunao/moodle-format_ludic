@@ -3,7 +3,7 @@
     "domain": "course_module",
     "skintype": "menubar",
     "skinname": "menubar",
-    "title": "menubar",
-    "description": "Content is made accessible via the menu bar instead of in the page body.",
+    "title": "Useful link",
+    "description": "Content is included in the Useful links menu instead of in the page body.",
     "css": ""
 }

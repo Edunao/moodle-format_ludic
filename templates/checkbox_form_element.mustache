@@ -16,13 +16,6 @@
 }}
 <div class="ludic-form-group {{groupclass}}" data-type="checkbox">
 
-<label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
-    {{label}}
-    {{#required}}
-        {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
-    {{/required}}
-</label>
-
     <input type="checkbox"
         {{#id}}id="{{id}}" {{/id}}
         {{#name}}name="{{name}}" {{/name}}
@@ -33,5 +26,13 @@
         {{#disabled}}disabled {{/disabled}}
         {{#readonly}}readonly {{/readonly}}
     >
+
+    <label for="{{id}}"{{#labelclass}} class="{{labelclass}}"{{/labelclass}}>
+        {{label}}
+        {{#required}}
+            {{#pix}}req, core, {{# str }}error-required, format_ludic{{/ str }}{{/pix}}
+        {{/required}}
+    </label>
+
 </div>
 

@@ -62,7 +62,7 @@ class format_ludic_skinned_tile implements renderable {
                     'imgsrc' => format_ludic_get_skin_image_url($image->src),
                     'imgalt' => '',
                     'class' => $class,
-                    'css' => isset($image->css) ? $image->css : ''
+                    'imgcss' => isset($image->css) ? $image->css : ''
                 ];
             }
         }

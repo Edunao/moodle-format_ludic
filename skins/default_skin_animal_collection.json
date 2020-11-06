@@ -47,17 +47,17 @@
     {
       "nbactivities": 0,
       "background": "default-user-skins\/animal-collection\/animal-collection-bg-large",
-      "css": ".skin-tile .skin-img:not(.image-0){width:50%}.image-1{top:3%}.image-2{left:50%;top:3%}.image-3{left:25%;bottom:8%}"
+      "css": ".skin-tile .skin-img:not(.image-0){width:50%; height:50%}.image-1{top:3%}.image-2{left:50%;top:3%}.image-3{left:25%;bottom:8%}"
     },
     {
       "nbactivities": 4,
       "background": "default-user-skins\/animal-collection\/animal-collection-bg-large",
-      "css": ".skin-tile .skin-img:not(.image-0){width:50%}.image-1{top:3%}.image-2{left:50%;top:3%}.image-3{bottom:8%}.image-4{left:50%;bottom:8%}"
+      "css": ".skin-tile .skin-img:not(.image-0){width:50%; height:50%}.image-1{top:3%}.image-2{left:50%;top:3%}.image-3{bottom:8%}.image-4{left:50%;bottom:8%}"
     },
     {
       "nbactivities": 5,
       "background": "default-user-skins\/animal-collection\/animal-collection-bg",
-      "css": "\n .img-step{top:2%; width:33% !important;}\n .img-step-2{left:33%;}\n .img-step-3{left:64%;}\n .img-step-4{top:32%;}\n .img-step-5{top:32%;left:33%;}\n .img-step-6{top:32%;left:64%;}\n .img-step-7{top:62%;}\n .img-step-8{top:62%;left:33%;}\n .img-step-9{top:62%;left:64%;}"
+      "css": "\n .img-step{top:2%; width:33% !important; height:33% !important}\n .img-step-2{left:33%;}\n .img-step-3{left:64%;}\n .img-step-4{top:32%;}\n .img-step-5{top:32%;left:33%;}\n .img-step-6{top:32%;left:64%;}\n .img-step-7{top:62%;}\n .img-step-8{top:62%;left:33%;}\n .img-step-9{top:62%;left:64%;}"
     }
   ]
 }

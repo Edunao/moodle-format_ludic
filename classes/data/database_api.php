@@ -117,16 +117,18 @@ class database_api {
      * @param $courseid
      * @param $sectionid
      * @param $skinid
+     * @param $target
      * @return bool|int
      * @throws \dml_exception
      */
-    public function set_section_skin_id($courseid, $sectionid, $skinid) {
+    public function set_format_ludic_section($courseid, $sectionid, $skinid, $target) {
         // Search record in database.
         $dbrecord = $this->db->get_record('format_ludic_cs', ['sectionid' => $sectionid]);
 
         // If we have record, update skin id.
         if ($dbrecord) {
             $dbrecord->skinid = $skinid;
+            $dbrecord->target = $target;
             return $this->db->update_record('format_ludic_cs', $dbrecord);
         }
 
@@ -135,6 +137,7 @@ class database_api {
         $dbrecord->courseid  = $courseid;
         $dbrecord->sectionid = $sectionid;
         $dbrecord->skinid    = $skinid;
+        $dbrecord->target    = $target;
         return $this->db->insert_record('format_ludic_cs', $dbrecord);
     }
 
@@ -168,31 +171,35 @@ class database_api {
      * @param $cmid
      * @param $skinid
      * @param $weight
+     * @param $targetmin
+     * @param $targetmax
      * @param $access
      * @return bool|int
      * @throws \dml_exception
      */
-    public function set_format_ludic_cm($courseid, $cmid, $skinid, $weight, $access) {
+    public function set_format_ludic_cm($courseid, $cmid, $skinid, $weight, $targetmin, $targetmax, $access) {
         // Search record in database.
         $dbrecord = $this->db->get_record('format_ludic_cm', ['cmid' => $cmid]);
 
         // If we have record, update skin id.
         if ($dbrecord) {
-            $dbrecord->skinid = $skinid;
-            $dbrecord->weight = $weight;
-            // Access is not used.
-            $dbrecord->access = 1;
+            $dbrecord->skinid    = $skinid;
+            $dbrecord->weight    = $weight;
+            $dbrecord->targetmin = $targetmin;
+            $dbrecord->targetmax = $targetmax;
+            $dbrecord->access    = $access ?: 1;
             return $this->db->update_record('format_ludic_cm', $dbrecord);
         }
 
         // If we does not have record, add it.
-        $dbrecord           = new \stdClass();
-        $dbrecord->courseid = $courseid;
-        $dbrecord->cmid     = $cmid;
-        $dbrecord->skinid   = $skinid;
-        $dbrecord->weight   = $weight;
-        // Access is not used.
-        $dbrecord->access   = 1;
+        $dbrecord            = new \stdClass();
+        $dbrecord->courseid  = $courseid;
+        $dbrecord->cmid      = $cmid;
+        $dbrecord->skinid    = $skinid;
+        $dbrecord->weight    = $weight;
+        $dbrecord->targetmin = $targetmin;
+        $dbrecord->targetmax = $targetmax;
+        $dbrecord->access    = $access ?: 1;
         return $this->db->insert_record('format_ludic_cm', $dbrecord);
     }
 

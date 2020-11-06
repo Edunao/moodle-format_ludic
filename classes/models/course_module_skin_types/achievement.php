@@ -64,42 +64,37 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
         // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
+        // a lookup table of state names to achievement levels
+        $statemappings = [
+            ""              => 0,
+            "none"          => 0,
+            "incomplete"    => 0,
+            "fail"          => 1,
+            "pass"          => 2,
+            "complete"      => 3,
+            "perfect"       => 4,
+        ];
+
         // Iterate over steps.
         $lowest = count($this->steps);
         foreach ($config->steps as $step) {
             // Identify which achievement level the step belongs to.
-            switch(\strtolower($step->state)) {
-                case "" :
-                case "none" :
-                case "incomplete" :
-                    $idx = 0;
-                    break;
-                case "fail" :
-                    $idx = 1;
-                    break;
-                case "pass" :
-                    $idx = 2;
-                    break;
-                case "complete" :
-                    $idx = 3;
-                    break;
-                case "perfect" :
-                    $idx = 4;
-                    break;
-                default:
-                    // TODO : Display a friendly error before ignoring this entry.
-                    continue 2;
+            $cleanstepstate = \strtolower($step->state);
+            if (!isset($statemappings[$cleanstepstate])) {
+                // TODO : Display a friendly error before ignoring this entry.
+                continue;
             }
-            $lowest = min($lowest, $idx);
-            $this->steps[$idx] = (object)[
+            $achievementlevel = $statemappings[$cleanstepstate];
+            $lowest = min($lowest, $achievementlevel);
+            $this->steps[$achievementlevel] = (object)[
                 "score"      => isset($step->score) ? $step->score : 0,
                 "background" => isset($step->background) ? $step->background : "default",
                 "text"       => isset($step->text) ? $step->text : "",
                 "css"        => isset($step->css) ? $step->css : "",
             ];
             // Clamp the score to the 0..100 range.
-            $this->steps[$idx]->score = max($this->steps[$idx]->score, 0);
-            $this->steps[$idx]->score = min($this->steps[$idx]->score, 100);
+            $this->steps[$achievementlevel]->score = max($this->steps[$achievementlevel]->score, 0);
+            $this->steps[$achievementlevel]->score = min($this->steps[$achievementlevel]->score, 100);
         }
 
         // If no steps were found at all then just put in a default one.
@@ -128,7 +123,7 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
      * @return \stdClass
      */
     public function get_edit_image() {
-        return $this->steps[3]->background;
+        return $this->steps[4]->background;
     }
 
 
@@ -141,7 +136,7 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
      * @throws \moodle_exception
      */
     public function get_images_to_render($skindata) {
-        return [ $skindata->background ];
+        return [$skindata->background];
     }
 
     public function get_css($skindata) {
@@ -190,7 +185,7 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
         $step = $this->steps[$idx];
 
         // Calculate the result score.
-        $score = $step->score * $this->weight / 100;
+        $score = $step->score * $userdata->weight / 100;
 
         // Store away the results.
         $skindata->score        = $score;

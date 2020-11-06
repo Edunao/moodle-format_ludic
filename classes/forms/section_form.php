@@ -117,6 +117,24 @@ class section_form extends form {
                     'skindescription' => $editinfo->description,
                 ]
             );
+
+            // Course module target value (if there is one).
+            $targetid = $this->object->skin->get_target_string_id();
+            if ($targetid) {
+                $elements[] = new text_form_element(
+                    'target',
+                    'section-target',
+                    $this->object->get_target(),
+                    '',
+                    get_string($targetid . '-title', 'format_ludic'),
+                    []
+                );
+            } else {
+                $elements[] = new hidden_form_element('target', 'section-target', $this->object->get_target(), 0);
+            }
+        } else {
+            $elements[] = new hidden_form_element('skinid', 'section-skinid', $this->object->skinid, 0);
+            $elements[] = new hidden_form_element('target', 'section-target', $this->object->get_target(), 0);
         }
 
         return $elements;
@@ -138,6 +156,12 @@ class section_form extends form {
      * @return bool
      */
     public function validate_child() {
+        // start by verifying that we have all of the properties that we expect
+        foreach(['id', 'name', 'skinid', 'target'] as $fieldname) {
+            if (!array_key_exists($fieldname, $this->formvalues)) {
+                throw new \Exception('Missing field in inpout data: '. $fieldname);
+            }
+        }
         return true;
     }
 }

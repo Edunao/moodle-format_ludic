@@ -104,4 +104,8 @@ abstract class skinned_section extends \format_ludic\skinned_item {
         $this->ensure_initialised();
         return $this->template->execute_special_action($this->skindata, $action);
     }
+
+    public function get_target_string_id() {
+        return $this->skintype->get_target_string_id();
+    }
 }

@@ -18,9 +18,11 @@
 <div id="{{skinid}}" class="full-tile skin skin-type-{{skintype}}{{#classes}} {{class}}{{/classes}}">
 
     <div class="sub-tile skin-tile" >
-        {{#images}}
-            <img class="skin-img{{#class}} {{class}}{{/class}}" src="{{imgsrc}}" aria-label="{{imgalt}}" style="{{css}}"></img>
-        {{/images}}
+        <div class="skin-img-container viewmode-{{viewmode}}">
+            {{#images}}
+                <div class="skin-img{{#class}} {{class}}{{/class}}" style="background-image: url({{imgsrc}});{{imgcss}}" aria-label="{{imgalt}}"></div>
+            {{/images}}
+        </div>
         {{#texts}}
             <div class="skin-text{{#class}} {{class}}{{/class}}">{{{text}}}</div>
         {{/texts}}

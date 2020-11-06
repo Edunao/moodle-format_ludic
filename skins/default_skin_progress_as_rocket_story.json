@@ -1,0 +1,60 @@
+{
+    "domain": "section",
+    "skintype": "progress",
+    "skinname": "default",
+    "title": "rocket story",
+    "description": "Representation of progress as a story that unfolds as the student progresses",
+    "css": "@keyframes ludic-rocket-story-move-x4{ from{background-position-x:0px;} to{background-position-x:-2320px;} } @keyframes ludic-rocket-story-move-y2{ from{background-position-y:0px;} to{background-position-y:-900px;} } @keyframes ludic-rocket-story-move-x5{ from{background-position-x:0px;} to{background-position-x:-2900px;} } @keyframes ludic-rocket-story-move-y4{ from{background-position-y:0px;} to{background-position-y:-1800px;} } @keyframes ludic-rocket-story-pulsate{ from{opacity:20%;} to{opacity:100%;} }",
+    "steps": [
+        {
+            "threshold": 0,
+            "image0": "default-user-skins\/rocket-story\/rocket-story-1-bg",
+            "image1": "default-user-skins\/rocket-story\/rocket-story-1-scafold-animation",
+            "image2": "default-user-skins\/rocket-story\/rocket-story-1-rocket-stopped",
+            "image3": "default-user-skins\/rocket-story\/rocket-story-1-fg",
+            "image4": "",
+            "text": "",
+            "css": ""
+        },
+        {
+            "threshold": 1,
+            "image0": "default-user-skins\/rocket-story\/rocket-story-1-bg",
+            "image1": "default-user-skins\/rocket-story\/rocket-story-1-scafold-animation",
+            "image2": "default-user-skins\/rocket-story\/rocket-story-1-rocket-launch",
+            "image3": "default-user-skins\/rocket-story\/rocket-story-1-fg",
+            "image4": "default-user-skins\/rocket-story\/rocket-story-1-smoke-animation",
+            "text": "",
+            "css": ".image-1{background-position-x: -2900px} .image-4{background-size:2320px} .viewmode-section .image-4{animation: ludic-rocket-story-move-x4 0.5s steps(4) infinite, ludic-rocket-story-move-y2 1s steps(2) infinite}"
+        },
+        {
+            "threshold": 251,
+            "image0": "default-user-skins\/rocket-story\/rocket-story-2-bg",
+            "image1": "default-user-skins\/rocket-story\/rocket-story-2-rocket-animation",
+            "image2": "",
+            "image3": "",
+            "image4": "",
+            "text": "",
+            "css": ".image-0{background-size:580..1740px;background-position: 83% 7%} .viewmode-section .image-1{animation: ludic-rocket-story-move-x5 1s steps(5) infinite}"
+        },
+        {
+            "threshold": 749,
+            "image0": "default-user-skins\/rocket-story\/rocket-story-3-bg",
+            "image1": "default-user-skins\/rocket-story\/rocket-story-3-rocket-landing",
+            "image2": "default-user-skins\/rocket-story\/rocket-story-3-smoke-animation",
+            "image3": "",
+            "image4": "",
+            "text": "",
+            "css": ".image-2{background-size:2320px} .viewmode-section .image-2{animation: ludic-rocket-story-move-x4 1s steps(4) infinite, ludic-rocket-story-move-y2 2s steps(2) infinite}"
+        },
+        {
+            "threshold": 1000,
+            "image0": "default-user-skins\/rocket-story\/rocket-story-3-bg",
+            "image1": "default-user-skins\/rocket-story\/rocket-story-3-rocket-landed",
+            "image2": "default-user-skins\/rocket-story\/rocket-story-3-end-highlight",
+            "image3": "",
+            "image4": "",
+            "text": "",
+            "css": ".viewmode-section .image-2{animation: ludic-rocket-story-pulsate ease-in-out 2s infinite alternate}"
+        }
+    ]
+}

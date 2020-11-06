@@ -46,7 +46,6 @@ class skin_type_section_progress extends \format_ludic\section_skin_type {
 
     public static function get_editor_config() {
         return [
-            "targetscore" => "int",
             "steps" => [
                 "threshold" => "int",
                 "image0"    => "image",
@@ -59,19 +58,19 @@ class skin_type_section_progress extends \format_ludic\section_skin_type {
             ]
         ];
     }
+
+    public static function get_target_string_id() {
+        return 'cs-progress-target';
+    }
 }
 
 class skin_template_section_progress extends \format_ludic\section_skin_template {
 
-    protected $targetscore;
     protected $steps;
 
     public function __construct($config) {
         // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
-
-        // Setup the target score.
-        $this->targetscore = isset($config->targetscore) ? $config->targetscore : 1000;
 
         // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
@@ -147,16 +146,10 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
         $maxscore = max($maxscore, 1);
 
         // Derive the target score for the top end of the progression scale.
-        if ($this->targetscore <= 0 ) {
-            $targetscore   = $maxscore;
-            $laststepscore = max(1, end($this->steps)->threshold);
-            $stepfactor    = 1 / $laststepscore;
-        } else {
-            $targetscore = max(1, $this->targetscore);
-            $laststepscore = max(1, end($this->steps)->threshold);
-            $stepfactor  = 1 / $laststepscore;
-        }
-        $progress = min(1, $score / $targetscore);
+        $targetscore   = ($section->target + 0 <= 0) ? $maxscore : max(1, $section->target);
+        $laststepscore = max(1, end($this->steps)->threshold);
+        $stepfactor    = 1 / $laststepscore;
+        $progress      = min(1, $score / $targetscore);
 
         // Find current step.
         $currentstep = $this->steps[0];
@@ -168,7 +161,6 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
         }
 
         // Store away the results.
-        $progress           = min($score / $targetscore, 1);
         $skindata->images   = [];
         for ($i = 0; $i < 5; ++$i) {
             $image = $currentstep->{'image' . $i};

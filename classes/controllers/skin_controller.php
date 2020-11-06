@@ -443,6 +443,7 @@ class skin_controller extends controller_base {
      */
 
     public function avatar_buy_item($sectionid, $slotname, $itemname) {
+	$this->contexthelper->set_viewmode('item-buy');
         $section = $this->contexthelper->get_section_by_id($sectionid);
         if ($section->skin->get_full_typename() != 'section-avatar') {
             return false;
@@ -458,6 +459,7 @@ class skin_controller extends controller_base {
     }
 
     public function avatar_toggle_item($sectionid, $slotname, $itemname) {
+	$this->contexthelper->set_viewmode('item-toggle');
         $section = $this->contexthelper->get_section_by_id($sectionid);
         if ($section->skin->get_full_typename() != 'section-avatar') {
             return false;

@@ -39,10 +39,19 @@ abstract class course_module_skin_type extends skin_type {
     public static function get_domain() {
         return 'coursemodule';
     }
+    public static function get_targetmin_string_id() {
+        return '';
+    }
+    public static function get_targetmax_string_id() {
+        return '';
+    }
 }
 
 abstract class section_skin_type extends skin_type {
     public static function get_domain() {
         return 'section';
+    }
+    public static function get_target_string_id() {
+        return '';
     }
 }

@@ -54,6 +54,14 @@ class skin_type_course_module_score extends \format_ludic\course_module_skin_typ
             ]
         ];
     }
+
+    public static function get_targetmin_string_id() {
+        return 'cm-score-targetmin';
+    }
+
+    public static function get_targetmax_string_id() {
+        return 'cm-score-targetmax';
+    }
 }
 
 class skin_template_course_module_score extends \format_ludic\course_module_skin_template {
@@ -66,7 +74,7 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
 
         // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step)) {
+            if (!array_key_exists('threshold', $step) || $step->threshold < 0 || $step->threshold > 100) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;
@@ -76,11 +84,12 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
         if (!array_key_exists(0, $stepsbythreshod)) {
 
             // Add first step to start of array.
-            $stepsbythreshod[0] = [
+            $stepsbythreshod[0] = (object)[
                 'threshold'  => 0,
                 'background' => '',
                 'text'       => '',
                 'css'        => '',
+                'score'      => 0,
             ];
         }
 
@@ -132,29 +141,47 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
     }
 
     public function setup_skin_data($skindata, $skinresults, $userdata) {
-        // Get user score.
+        // Evaluate the min and max target values.
+        $numsteps         = count($this->steps);
+        $stepthresholdmin = $this->steps[min($numsteps - 1,1)]->threshold;
+        $stepthresholdmax = $this->steps[$numsteps - 1]->threshold;
+        $thresholdmin     = $userdata->targetmin ?: $stepthresholdmin;
+        $thresholdmax     = $userdata->targetmax ?: $stepthresholdmax;
+        $thresholdscale   = ($thresholdmax > $thresholdmin && $stepthresholdmax > $stepthresholdmin) ? ($thresholdmax - $thresholdmin) / ($stepthresholdmax - $stepthresholdmin) : 0;
+
+        // calculate the updated threshold values, scaling them to fit the provided threshold range.
+        $thresholds[0] = 0;
+        for ($i = 1; $i < $numsteps; ++$i) {
+            $thresholds[$i] = ($this->steps[$i]->threshold - $stepthresholdmin) * $thresholdscale + $thresholdmin;
+        }
+        $thresholds[$numsteps] = 100;
+
+        // Lookup the user score.
         $grade = ceil($userdata->proportion * 100);
 
         // Find current step.
-        $currentidx = 0;
-        $cnt = count($this->steps);
-        for ($i = 0; $i < $cnt; ++$i) {
-            if ($grade < $this->steps[$i]->threshold) {
+        $currentidx     = 0;
+        for ($i = 0; $i < $numsteps; ++$i) {
+            if ($grade < $thresholds[$i]) {
                 break;
             }
             $currentidx = $i;
         }
-        $step = $this->steps[$currentidx];
-        $thisthreshold = $step->threshold;
-        $nextthreshold = ($currentidx + 1 < count($this->steps)) ?
-            $this->steps[$currentidx + 1]->threshold :
-            \max($currentidx + 1, 100);
+
+        // Determine how far through the step the usre's score is situated.
+        $step          = $this->steps[$currentidx];
+        $thisthreshold = $thresholds[$currentidx];
+        $nextthreshold = $thresholds[$currentidx + 1];
         $diff0         = $grade - $thisthreshold;
         $diff1         = $nextthreshold - $thisthreshold;
         $rawfactor     = ($diff1 > 0) ? $diff0 / $diff1 : 0;
         $cleanfactor   = ceil($rawfactor * 20) / 20;
 
-        $score = format_ludic_resolve_ranges_in_text($step->score, $cleanfactor) * $userdata->weight / 100;
+        // Evaluate out the score from the step, interpolating a value range if one is provided
+        $rawscore    = format_ludic_resolve_ranges_in_text($step->score, $cleanfactor);
+        $maxscore    = format_ludic_resolve_ranges_in_text($this->steps[$numsteps - 1]->score, 1.0);
+        $score       = $maxscore ? $rawscore / $maxscore * $userdata->weight : 0;
+
         // Store away the results.
         $skindata->grade    = $grade;
         $skindata->score    = $score;
@@ -163,6 +190,5 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
         $skindata->css      = $step->css;
         $skindata->weight   = $userdata->weight;
         $skinresults->score = $score;
-
     }
 }

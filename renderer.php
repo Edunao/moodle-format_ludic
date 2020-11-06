@@ -235,6 +235,7 @@ class format_ludic_renderer extends format_section_renderer_base {
     public function render_skinned_tile($skin) {
         require_once(__DIR__ . '/classes/renderers/renderable/skinned_tile.php');
         $skinnedtile = new format_ludic_skinned_tile($skin);
+        $skinnedtile->viewmode = $this->contexthelper->get_viewmode();
         return $this->render($skinnedtile);
     }
 
@@ -427,7 +428,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @return bool|string
      * @throws moodle_exception
      */
-    public function render_page() {
+    public function render_overview_page() {
         return $this->render_from_template('format_ludic/page', [
             'globaldescription'   => $this->contexthelper->get_global_description(),
             'parentstype'         => 'section',
@@ -448,6 +449,24 @@ class format_ludic_renderer extends format_section_renderer_base {
             'section'       => $this->render_section($sectionobj),
             'coursemodules' => $this->render_course_modules($sectionid),
             'description'   => $sectionobj->get_description()
+        ]);
+    }
+
+    /**
+     * @param $sectionid int
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    public function render_single_section_page($sectionid) {
+        $sectionobj = $this->contexthelper->get_section_by_id($sectionid);
+        return $this->render_from_template('format_ludic/single_section_page', [
+            'globaldescription'   => $this->contexthelper->get_global_description(),
+            'parentstype'         => 'section',
+            'parenttitle'         => get_string('edit-title-section', 'format_ludic'),
+            'globalcoursemodules' => $this->render_course_modules($this->contexthelper->get_global_section_id()),
+            'section'             => $this->render_section($sectionobj),
+            'coursemodules'       => $this->render_course_modules($sectionid),
+            'description'         => $sectionobj->get_description()
         ]);
     }
 

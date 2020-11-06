@@ -72,7 +72,8 @@ class coursemodule_form extends form {
         $elements[] = new text_form_element(
             'name',
             'course-module-title',
-            $this->object->name, '',
+            $this->object->name,
+            '',
             get_string('label-course-module-title', 'format_ludic'),
             ['required' => true]
         );
@@ -87,9 +88,7 @@ class coursemodule_form extends form {
                 $this->object->skinid,
                 0,
                 get_string('label-skin-selection', 'format_ludic'),
-                [
-                    'required' => true,
-                    'multiple' => false],
+                [],
                 [
                     'icon'            => (object)[ 'imgsrc' => $editinfo->imgsrc, 'imgalt' => '' ],
                     'itemid'          => $id,
@@ -105,18 +104,44 @@ class coursemodule_form extends form {
         }
 
         // Course module weight.
-        $elements[] = new select_form_element(
+        $elements[] = new text_form_element(
             'weight',
             'coursemodule-weight',
             $this->object->get_weight(),
-            null,
-            get_string('label-select-weight', 'format_ludic'),
-            [
-                'required' => true,
-                'multiple' => false
-            ],
-            ['options' => format_ludic_get_weight_options()]
+            format_ludic_get_default_weight(),
+            get_string('label-weight', 'format_ludic'),
+            ['required' => true]
         );
+
+        // Course module target min value (if there is one).
+        $targetminid = $this->object->skin->get_targetmin_string_id();
+        if ($targetminid) {
+            $elements[] = new text_form_element(
+                'targetmin',
+                'coursemodule-target-min',
+                $this->object->get_targetmin(),
+                '',
+                get_string($targetminid . '-title', 'format_ludic'),
+                []
+            );
+        } else {
+            $elements[] = new hidden_form_element('targetmin', 'coursemodule-target-min', $this->object->get_targetmin(), 0);
+        }
+
+        // Course module target max value (if there is one).
+        $targetmaxid = $this->object->skin->get_targetmax_string_id();
+        if ($targetmaxid) {
+            $elements[] = new text_form_element(
+                'targetmax',
+                'coursemodule-target-max',
+                $this->object->get_targetmax(),
+                '',
+                get_string($targetmaxid . '-title', 'format_ludic'),
+                []
+            );
+        } else {
+            $elements[] = new hidden_form_element('targetmax', 'coursemodule-target-max', $this->object->get_targetmax(), 0);
+        }
 
         // Course module access.
         $elements[] = new checkbox_form_element(
@@ -125,7 +150,7 @@ class coursemodule_form extends form {
             $this->object->visible,
             1,
             get_string('label-section-visible', 'format_ludic'),
-            ['required' => true]
+            []
         );
 
         // Course module section.
@@ -142,11 +167,8 @@ class coursemodule_form extends form {
             'coursemodule-section',
             $this->object->sectionid,
             null,
-            'Section',
-            [
-                'required' => true,
-                'multiple' => false
-            ],
+            get_string('label-move-section', 'format_ludic'),
+            [],
             ['options' => $options]
         );
 
@@ -161,8 +183,7 @@ class coursemodule_form extends form {
      * @throws \moodle_exception
      */
     public function update_child() {
-        $this->object->update($this->formvalues);
-        return true;
+        return $this->object->update($this->formvalues);
     }
 
     /**
@@ -171,6 +192,12 @@ class coursemodule_form extends form {
      * @return bool
      */
     public function validate_child() {
+        // start by verifying that we have all of the properties that we expect
+        foreach(['id', 'name', 'visible', 'skinid', 'weight', 'targetmin', 'targetmax'] as $fieldname) {
+            if (!array_key_exists($fieldname, $this->formvalues)) {
+                throw new \Exception('Missing field in inpout data: '. $fieldname);
+            }
+        }
         return true;
     }
 }

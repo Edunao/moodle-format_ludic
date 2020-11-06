@@ -268,7 +268,6 @@ class section_controller extends controller_base {
 
         // Update successful or errors ?
         $success = $form->validate_and_update($data);
-
         // Define return.
         if ($success) {
             $return = array(

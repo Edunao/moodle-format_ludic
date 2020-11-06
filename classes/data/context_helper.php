@@ -227,6 +227,13 @@ class context_helper {
     private $studentview = false;
 
     /**
+     * View mode for section
+     *
+     * @var string
+     */
+    private $viewmode = '';
+
+    /**
      * context_helper constructor.
      *
      * @param \moodle_page $page
@@ -306,6 +313,7 @@ class context_helper {
     }
 
     /**
+    /**
      * Return current course.
      *
      * @return \stdClass
@@ -342,20 +350,35 @@ class context_helper {
     }
 
     /**
+     * @return string
+     */
+    public function get_viewmode(){
+        return $this->viewmode;
+    }
+
+    /**
+     * @param $viewmode
+     */
+    public function set_viewmode($viewmode){
+        $this->viewmode = $viewmode;
+    }
+
+    /**
      * Return current section id or 0.
      *
+     * @param $forcedsectionidx int
      * @return int|mixed|null
      */
-    public function get_section_id() {
+    public function get_section_id($forcedsectionidx = 0) {
 
         // We have a stored section id then return it.
-        if ($this->sectionid !== null) {
+        if ($this->sectionid !== null && !$forcedsectionidx) {
             return $this->sectionid;
         }
 
         // We haven't got a stored section id then try generating one.
         try {
-            $sectionidx = optional_param('section', 0, PARAM_INT);
+            $sectionidx = $forcedsectionidx ?: optional_param('section', 0, PARAM_INT);
         } catch (\coding_exception $e) {
             $sectionidx = 0;
         }
@@ -655,19 +678,6 @@ class context_helper {
      */
     public function rebuild_course_info() {
         $this->courseinfo = $this->get_course()->get_course_info();
-    }
-
-    /**
-     * Return course format moodle config.
-     *
-     * @return \stdClass
-     * @throws \dml_exception
-     */
-    public function get_course_format_config() {
-        if ($this->config == null) {
-            $this->config = get_config('format_ludic');
-        }
-        return $this->config;
     }
 
     /**
@@ -1115,5 +1125,10 @@ class context_helper {
         }
 
         return false;
+    }
+
+    public function is_single_section() {
+        $sections = $this->get_sections();
+        return count($sections) == 1;
     }
 }
