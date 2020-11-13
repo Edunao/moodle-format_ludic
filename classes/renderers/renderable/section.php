@@ -61,7 +61,8 @@ class format_ludic_section extends format_ludic_item {
         $domain = $contexthelper->get_domain();
         if (($domain === 'course' || $domain === 'section') && !$contexthelper->is_student_view_forced() && !$contexthelper->is_single_section()) {
             $this->action = 'getDataLinkAndRedirectTo';
-            $this->link   = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
+            $sectionarg   = ($contexthelper->get_viewmode() == 'overview') ? '&section=' . $section->section : '';
+            $this->link   = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . $sectionarg;
         }
 
         // Edit mode.

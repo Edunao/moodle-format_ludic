@@ -130,8 +130,33 @@ class section_controller extends controller_base {
         $editbuttons = $section->get_edit_buttons();
 
         // Render section form with edit buttons.
-        $output = $renderer->render_section_form($sectionid);
-        $output .= $renderer->render_buttons($editbuttons, $section->id, 'section');
+        $sectionform = $renderer->render_section_form($sectionid);
+        $sectionform .= $renderer->render_buttons($editbuttons, $section->id, 'section');
+
+//         // Render tabs including the section form
+//         $tabs = [
+//             (object)[
+//                 'title' => 'basics',
+//                 'body'  => $sectionform
+//             ],
+//             (object)[
+//                 'title' => 'weights',
+//                 'body'  => 'weights form'
+//             ],
+//             (object)[
+//                 'title' => 'sequence',
+//                 'body'  => 'sequence form'
+//             ],
+//             (object)[
+//                 'title' => 'skin',
+//                 'body'  => 'skin form'
+//             ],
+//         ];
+//
+//         // Generate the full output
+//         $output = $renderer->render_form_tabs($tabs);
+// NOTE : Althout the above code works, the secondary tab implementations are not yet ready so the following hack restores 'non-tabbed' behaviour
+$output = $sectionform;
 
         // Return html.
         return $output;

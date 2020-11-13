@@ -284,7 +284,7 @@ class skin_manager {
             'default_skin_achievement_page',
             'default_skin_non_ludic_course_module',
             'default_skin_grade_as_score',
-            //'default_skin_grade_as_score_steps',
+            'default_skin_grade_as_score_steps',
             'default_skin_grade_as_abc',
             'default_skin_grade_as_progress',
             'default_skin_progress_as_stairs',

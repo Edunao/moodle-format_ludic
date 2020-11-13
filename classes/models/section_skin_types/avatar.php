@@ -46,31 +46,36 @@ class skin_type_section_avatar extends \format_ludic\section_skin_type {
 
     public static function get_editor_config() {
         $config = [
-            "background" => "image",
-            "slots"      => [
-                "name" => "text",
-                "icon" => "image",
+            'background' => 'image',
+            'maxcash'    => 'int',
+            'slots'      => [
+                'name' => 'text',
+                'icon' => 'image',
             ],
-            "items"      => [
-                'slot'   => "text",
-                'name'   => "text",
+            'items'      => [
+                'slot'   => 'text',
+                'name'   => 'text',
                 'icon'   => 'image',
                 'cost'   => 'int',
-                'css'    => 'textarea',
                 'filter' => 'text',
             ]
         ];
         for ($i = 0; $i < 5; ++$i) {
-            $config["items"]['image' . $i] = 'image';
-            $config["items"]['zbias' . $i] = 'int';
+            $config['items']['image' . $i] = 'image';
+            $config['items']['zbias' . $i] = 'int';
         }
         return $config;
+    }
+
+    public static function get_target_string_id() {
+        return 'cs-avatar-target';
     }
 }
 
 class skin_template_section_avatar extends \format_ludic\section_skin_template {
 
     protected $background = "";
+    protected $maxcash    = 0;
     protected $slots      = [];
     protected $items      = [];
 
@@ -78,14 +83,17 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
         // Leave the job of extracting common parameters such as title and description to the parent class.
         parent::__construct($config);
 
-        // Process background configuration.
+        // Store away bas configuration parameters.
         $this->background = isset($config->background) ? $config->background : "";
+        $this->maxcash = isset($config->maxcash) ? max($config->maxcash,10) : 1000;
 
         // Process slots configuration.
         $slotsdata = $config->slots;
+        $order     = 0;
         $slots     = [];
         foreach ($slotsdata as $slotindex => $slotdata) {
             $slot                   = $slotdata;
+            $slot->order            = $order++;
             $slot->index            = $slotindex;
             $slot->items            = [];
             $slots[$slotdata->name] = (array) $slot;
@@ -119,32 +127,31 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
         ];
 
         // User images.
-        global $USER;
-        $useritems = $skindata->section->get_user_skin_data($USER->id);
-        $skinitems = $this->items;
+        $useritems = $skindata->useritems;
+        $itemsdata = $this->items;
         foreach ($useritems as $itemid => $useritem) {
             if (!$useritem->equipped) {
                 continue;
             }
 
-            if (!array_key_exists($itemid, $skinitems)) {
+            if (!array_key_exists($itemid, $itemsdata)) {
                 continue;
             }
 
             for ($i = 0; $i < 5; ++$i) {
-                if ($skinitems[$itemid]['image' . $i] == '') {
+                if ($itemsdata[$itemid]['image' . $i] == '') {
                     continue;
                 }
                 $imageinfo        = new \stdClass();
-                $imageinfo->src   = $skinitems[$itemid]['image' . $i];
+                $imageinfo->src   = $itemsdata[$itemid]['image' . $i];
                 $cleanitemid      = str_replace(' ', '', $itemid);
-                $imageinfo->class = 'filter-' . $skinitems[$itemid]['filter'];
+                $imageinfo->class = 'filter-' . $itemsdata[$itemid]['filter'];
                 $imageinfo->class = ' img-object img-slot-' . $useritem->slot
                     . ' img-object-' . $cleanitemid . ' '
-                    . $skinitems[$itemid]['filter'];
+                    . $itemsdata[$itemid]['filter'];
                 $imageinfo->css   = '';
-                if (isset($skinitems[$itemid]['zbias' . $i])) {
-                    $imageinfo->css .= ' z-index:' . $skinitems[$itemid]['zbias' . $i] . ';';
+                if (isset($itemsdata[$itemid]['zbias' . $i])) {
+                    $imageinfo->css .= ' z-index:' . $itemsdata[$itemid]['zbias' . $i] . ';';
                 }
                 $images[] = $imageinfo;
             }
@@ -154,20 +161,6 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
 
     public function get_css($skindata) {
         $globalcss = $this->css;
-
-        global $USER;
-        $useritems = $skindata->section->get_user_skin_data($USER->id);
-        $skinitems = $this->items;
-        foreach ($useritems as $itemid => $useritem) {
-            if (!$useritem->equipped) {
-                continue;
-            }
-
-            if (!array_key_exists($itemid, $skinitems)) {
-                continue;
-            }
-            $globalcss .= ' ' . $skinitems[$itemid]['css'];
-        }
         return $globalcss;
     }
 
@@ -210,11 +203,21 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
             }
         }
 
-        // Calculate the user's total score and use it as the 'earned cash' value.
-        $skindata->earnedcash = 0;
+        // Sum the activity scores and max scores.
+        $score    = 0;
+        $maxscore = 0;
         foreach ($userdata as $cmdata) {
-            $skindata->earnedcash += $cmdata->score;
+            $score    += $cmdata->score;
+            $maxscore += $cmdata->maxscore;
         }
+        $maxscore = max($maxscore, 1);
+
+        // Derive the target score for the top end of the progression scale.
+        $targetscore   = ($section->target + 0 <= 0) ? $maxscore : max(1, $section->target);
+        $progress      = $score / $targetscore;
+
+        // Calculate the user's total score and use it as the 'earned cash' value.
+        $skindata->earnedcash = intval($progress * $this->maxcash / 5) * 5;
 
         // Figure out how much cash the user has earned and spent.
         $totalcost = 0;
@@ -249,6 +252,9 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
             return false;
         }
 
+        // Dock the cash that was just spent in order to update the remaining cash displayed to the user
+        $skindata->cash -= $item['cost'];
+
         // Add the item to the user's inventory.
         $useritem           = [
             'itemname' => $item['name'],
@@ -270,20 +276,46 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
         global $USER;
         $skindata->selecteditem = $itemname;
         $useritems              = $skindata->useritems;
-        $currentitemid = $itemname;
+        $itemsdata              = $this->items;
+        $currentitemid          = $itemname;
         if (!array_key_exists($currentitemid, $useritems)) {
             return false;
         }
 
         $useritems[$currentitemid]->equipped = !$useritems[$currentitemid]->equipped;
 
-        // Disabled all others slots items.
+        // Disabled all other items for the slot filled by the current choice.
         foreach ($useritems as $itemid => $itemdata) {
             if ($currentitemid == $itemid) {
                 continue;
             }
-
             if ($itemdata->slot == $slotname) {
+                $useritems[$itemid]->equipped = false;
+            }
+        }
+
+        // Determine what filters are now implied by the set of items equipped by the user.
+        $filters = [];
+        foreach ($useritems as $itemid => $useritem) {
+            if (!$useritem->equipped) {
+                continue;
+            }
+            if (!array_key_exists($itemid, $itemsdata)) {
+                continue;
+            }
+            if (!array_key_exists('define', $itemsdata[$itemid]) || !$itemsdata[$itemid]['define']) {
+                continue;
+            }
+            $filters[$itemsdata[$itemid]['define']] = 1;
+        }
+
+        // Disabled items incompatible with updated filters.
+        foreach ($useritems as $itemid => $useritemdata) {
+            if (!array_key_exists($itemid, $itemsdata)) {
+                continue;
+            }
+            $itemdata = (object)$itemsdata[$itemid];
+            if (property_exists($itemdata, 'filter') && $itemdata->filter && !array_key_exists($itemdata->filter, $filters)) {
                 $useritems[$itemid]->equipped = false;
             }
         }
@@ -298,32 +330,51 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
         }
 
         global $PAGE;
-        $renderer = $PAGE->get_renderer('format_ludic');
+        $renderer   = $PAGE->get_renderer('format_ludic');
+        $money      = $skindata->cash;
+        $useritems  = $skindata->useritems;
+        $slotsdata  = $this->slots;
+        $itemsdata  = $this->items;
+        $slots      = [];
+        $slotsowned = [];
+        $slotsother = [];
+        $filters    = [];
+        $htmls      = [];
 
-        $htmls = [];
-
-        // Prepare inventory.
-        $money     = $skindata->cash;
-        $useritems = $skindata->useritems;
-        $slotsdata = $this->slots;
-        $itemsdata = $this->items;
-        $slots     = [];
-
-        foreach ($slotsdata as $slotindex => $slotdata) {
-            $slot                     = $slotdata;
-            $slot['index']            = $slotindex;
-            $slot['items']            = [];
-            $slots[$slotdata['name']] = (array) $slot;
+        // Determine what filters are implied by the set of items equipped by the user.
+        foreach ($useritems as $itemid => $useritem) {
+            if (!$useritem->equipped) {
+                continue;
+            }
+            if (!array_key_exists($itemid, $itemsdata)) {
+                continue;
+            }
+            if (!array_key_exists('define', $itemsdata[$itemid])) {
+                continue;
+            }
+            $filters[$itemsdata[$itemid]['define']] = 1;
         }
 
+        // Prepare inventory.
+        $order = 0;
+        foreach ($slotsdata as $slotindex => $slotdata) {
+            $slot                   = $slotdata;
+            $slotname               = $slotdata['name'];
+            $slot['order']          = $order++;
+            $slot['index']          = $slotindex;
+            $slot['items']          = [];
+            $slots[$slotname]       = $slot;
+        }
         foreach ($itemsdata as $itemid => $itemdata) {
             $itemdata = (object) $itemdata;
             if (!array_key_exists($itemdata->slot, $slots)) {
                 continue;
             }
-
+            if (property_exists($itemdata, 'filter') && $itemdata->filter && !array_key_exists($itemdata->filter, $filters)) {
+                continue;
+            }
             $itemdata->itemid = $itemid;
-            $itemdata->state = 'notbuy';
+            $itemdata->state = 'notowned';
             if (array_key_exists($itemid, $useritems)) {
                 $itemdata->state = 'notequipped';
                 if ($useritems[$itemid]->equipped == true) {
@@ -338,29 +389,38 @@ class skin_template_section_avatar extends \format_ludic\section_skin_template {
             }
 
             $itemdata->sectionid = $skindata->section->dbrecord->id;
-            if ($itemid == $skindata->selecteditem) {
-                $itemdata->isselected = ' selected ';
-            } else {
-                $itemdata->isselected = ' passelected';
-            }
 
             // Prepare inventory icon.
+            $slotname       = $itemdata->slot;
             $iconimg        = $itemdata->icon;
             $icon           = new \stdClass();
             $icon->src      = format_ludic_get_skin_image_url($iconimg);
             $icon->alt      = $itemdata->name;
             $itemdata->icon = $icon;
 
-            $slots[$itemdata->slot]['items'][] = (array) $itemdata;
+            if ($itemdata->state == 'notowned') {
+                if (!array_key_exists($slotname, $slotsother)) {
+                    $slotsother[$slotname] = $slots[$slotname];
+                }
+                $slotsother[$slotname]['items'][] = (array) $itemdata;
+            } else {
+                if (!array_key_exists($slotname, $slotsowned)) {
+                    $slotsowned[$slotname] = $slots[$slotname];
+                }
+                $slotsowned[$slotname]['items'][] = (array) $itemdata;
+            }
         }
 
-        $inventorycontent = $renderer->render_avatar_inventory($slots);
+        // sort the slots into order and render them into an inventory html block.
+        usort($slotsowned, function ($a, $b) { return ($a['order'] <=> $b['order']); });
+        usort($slotsother, function ($a, $b) { return ($a['order'] <=> $b['order']); });
+        $inventorycontent = $renderer->render_avatar_inventory($slotsowned, $slotsother);
 
         $htmls[] = [
             'classes' => 'inventory no-ludic-event ',
             'content' => $renderer->render_popup(
                 'avatar-inventory-' . $skindata->section->sectioninfo->id,
-                "Magasin",
+                get_string('cs-avatar-inventory', 'format_ludic'),
                 $inventorycontent
             ),
         ];

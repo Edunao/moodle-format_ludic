@@ -1,7 +1,7 @@
 {
   "domain": "section",
   "skintype": "collection",
-  "skinname": "",
+  "skinname": "bundled",
   "title": "Animal Collection",
   "description": "A bookcase of trophies for completed activities",
   "css": ".skin-tile .skin-img:not(.image-0){position:absolute}",

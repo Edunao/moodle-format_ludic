@@ -14,64 +14,73 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
-<div class="no-ludic-event inventory-container">
+<div class="no-ludic-event inventory-container avatar">
     <div class="avatar-preview"></div>
     <div class="inventory-content">
-    {{#slots}}
-    <div class="slot slot-{{name}}" >
-        <div class="slot-title">{{name}}</div>
-        <div class="slot-items">
+    {{#slotsowned}}
+        <div class="slot slot-{{name}}" >
+            <div class="slot-title">{{name}}</div>
+            <div class="owned-items">
             {{#items}}
-            <div class="slot-item {{isselected}} {{filter}}">
-                <div class="slot-item-name">{{name}}</div>
-                <div class="slot-item-icon">
-                    {{#icon}}
-                    <img src="{{src}}" alt="{{alt}}" class="{{classes}}">
-                    {{/icon}}
+                <div class="slot-item {{isselected}} {{filter}}">
+                    <div class="slot-item-icon">
+                        {{#icon}}
+                        <img src="{{src}}" alt="{{alt}}" class="{{classes}} clickable" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
+                    data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">
+                        {{/icon}}
+                    </div>
                 </div>
-                <div class="slot-item-state {{state}}">
-
-                    <div class="slot-item-buy" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                         data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar"
-                    >
-
-                        {{^cantbuy}}
-                        <div class="slot-item-price" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                             data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar">{{cost}}
-                        </div>
-                        <div class="slot-item-price-text" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                             data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar">{{# str }}skin-avatar-buy, format_ludic{{/
-                            str }}</div>
-                        {{/cantbuy}}
-
-                        {{#cantbuy}}
-                        <div class="slot-item-price cant-buy" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}">{{cost}}</div>
-                        <div class="slot-item-price-text cant-buy" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                             data-slotname="{{slot}}">{{# str }}skin-avatar-notmoney, format_ludic{{/ str }}</div>
-                        {{/cantbuy}}
-                    </div>
-
-                    <div class="slot-item-equipped ludic-switch" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                         data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">
-                        <input type="checkbox" checked>
-                        <span class="ludic-slider round" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                              data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar"></span>
-
-                    </div>
-
-                    <div class="slot-item-notequipped ludic-switch" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                         data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar">
-                        <input type="checkbox" >
-                        <span class="ludic-slider round" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
-                              data-slotname="{{slot}}" data-action="avatar_toggle_item" data-controller="skin" data-callback="updateAvatar"></span>
-                    </div>
-
-                </div>
-
-            </div>
             {{/items}}
+            </div>
         </div>
-    </div>
-    {{/slots}}
+    {{/slotsowned}}
+
+    {{#slotsother}}
+        <div class="slot slot-{{name}}" >
+            <div class="slot-title">{{name}}</div>
+            <div class="slot-items">
+                {{#items}}
+                    {{^cantbuy}}
+                    <div class="slot-item">
+                        <div class="slot-item-name">{{name}}</div>
+                        <div class="slot-item-icon">
+                            {{#icon}}
+                            <img src="{{src}}" alt="{{alt}}" class="{{classes}} clickable" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}"
+                                data-slotname="{{slot}}" data-action="avatar_buy_item" data-controller="skin" data-callback="updateAvatar">
+                            {{/icon}}
+                        </div>
+                        <div class="slot-item-state {{state}}">
+                            <div class="slot-item-buy">
+                                <div class="slot-item-price">
+                                    {{cost}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{/cantbuy}}
+                    {{#cantbuy}}
+                    <div class="slot-item">
+                        <div class="slot-item-name cant-buy">{{name}}</div>
+                        <div class="slot-item-icon">
+                            {{#icon}}
+                            <img src="{{src}}" alt="{{alt}}" class="{{classes}} cant-buy">
+                            {{/icon}}
+                        </div>
+                        <div class="slot-item-state {{state}}">
+                            <div class="slot-item-buy">
+                                <div class="slot-item-price cant-buy" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}">
+                                    {{cost}}
+                                </div>
+                                <!-- div class="slot-item-price-text cant-buy" data-sectionid="{{sectionid}}" data-itemname="{{itemid}}" data-slotname="{{slot}}">
+                                    {{#str}}cs-avatar-notmoney, format_ludic{{/str}}
+                                </div -->
+                            </div>
+                        </div>
+                    </div>
+                    {{/cantbuy}}
+                {{/items}}
+            </div>
+        </div>
+    {{/slotsother}}
     </div>
 </div>

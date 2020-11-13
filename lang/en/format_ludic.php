@@ -54,10 +54,12 @@ $string['edit-skin-images'] = 'Image Library';
 $string['edit-skin-config'] = 'Skin Configuration';
 $string['edit-skin-new']    = 'New Skin';
 
-
 // Header bar.
 $string['header-bar-menu']            = 'Useful links';
 $string['header-bar-preview-section'] = 'Preview section';
+$string['header-bar-view-course']     = 'View course';
+$string['header-bar-edit-course']     = 'Back to course';
+$string['header-bar-edit-skins']      = 'Edit skins';
 $string['header-no-content']          = 'No content available';
 
 // Section edition.
@@ -71,8 +73,7 @@ $string['section-no-cm']          = 'No content available';
 $string['edit-title-section']     = 'Sections :';
 $string['addsection-button']      = 'Add section';
 
-
-// Course module edition.
+// Course module editing.
 $string['course-module-skin-selection'] = 'Select an appearance for the course module';
 $string['label-course-module-title']    = 'Title';
 $string['label-course-module-visible']  = 'Visible';
@@ -102,6 +103,7 @@ $string['access-chained-and-grouped']      = 'Chained and grouped with predecess
 $string['access-chained-and-grouped-desc'] = 'The item will become visible at the same moment as it\'s predecessor but will only become available after the predecessor has been completed.​';
 
 // Skin.
+$string['label-skin-selection']         = 'Appearance';
 $string['cm-skin-inline-title']         = 'In page';
 $string['cm-skin-inline-description']   = 'Allows labels and other such content to be displayed inline';
 $string['cm-skin-menubar-title']        = 'Menu bar';
@@ -110,16 +112,21 @@ $string['cm-skin-stealth-title']        = 'Stealth';
 $string['cm-skin-stealth-description']  = 'Allows labels and other such content to be stealth in course';
 $string['cs-skin-noludic-title']        = 'Static';
 $string['cs-skin-noludic-description']  = 'No gamification';
-$string['label-skin-selection']         = 'Appearance';
+
+// Skin-specifics.
+$string['cs-avatar-target-title']       = 'Target Value (Or 0 for none)';
+$string['cs-avatar-target-help']        = 'If the value of thie field is non-zero then it can be used to set the target value explicitly, for ues when students are not required to complete all possible activities';
+$string['cs-avatar-inventory']          = 'Inventory';
+$string['cs-avatar-notmoney']           = 'Not enough money !';
+$string['cs-avatar-buy']                = 'Buy now !';
 $string['cs-progress-target-title']     = 'Target Value (Or 0 for none)';
 $string['cs-progress-target-help']      = 'If the value of thie field is non-zero then it can be used to set the target value explicitly, for ues when students are not required to complete all possible activities';
+$string['cs-score-target-title']        = 'Target Value (Or 0 for none)';
+$string['cs-score-target-help']         = 'If the value of thie field is non-zero then it can be used to set the target value explicitly, for ues when students are not required to complete all possible activities';
 $string['cm-score-targetmin-title']     = 'Lowest grade pass [0..100]';
 $string['cm-score-targetmin-help']      = 'If the value of this field is non-zero then it overrides the default lowest grade pass threshold';
 $string['cm-score-targetmax-title']     = 'Highest grade pass [0..100]';
 $string['cm-score-targetmax-help']      = 'If the value of this field is non-zero then it overrides the default highest grade pass threshold';
-
-$string['skin-avatar-notmoney'] = 'Not enough money !';
-$string['skin-avatar-buy'] = 'Buy now !';
 
 // Settings.
 $string['setting-weight-title']       = 'Activity Values';
@@ -150,7 +157,7 @@ $string['delete']               = 'Delete';
 $string['assign']               = 'Assign roles';
 $string['collapsed-alt']        = 'Collapsed';
 $string['editskins']            = 'Customize skins';
-$string['editcourse']           = 'Edit course';
+$string['editcourse']           = 'Back to course';
 
 
 // Popups.

@@ -1,7 +1,7 @@
 {
     "domain": "course_module",
     "skintype": "score",
-    "skinname": "",
+    "skinname": "bundled",
     "title": "discrete grade-based score",
     "description": "Points award for passing key grade thresholds",
     "css": ".sub-tile.skin-tile .skin-text {font-size:200%;} \n .sub-tile.skin-tile .skin-text.score{display: block;position: absolute;left: 59%;bottom: 38%;font-size:150%;font-weight:bold;} \n .sub-tile.skin-tile .skin-text.score::after{content: \"pts\";font-size:100%;font-weight:normal;}\n ",

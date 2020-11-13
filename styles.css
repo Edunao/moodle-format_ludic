@@ -174,7 +174,7 @@
 .format-ludic .item.coursemodule .title-tile {
     font-size: 1.5em;
     line-height: normal;
-    width: 100%;
+    width: 280px;
 }
 
 .format-ludic .ludic-container.container-parents.section .item .skin-img-container {
@@ -227,17 +227,17 @@ div.skin-img {
 
 .format-ludic .item .skin-tile .number {
     font-family: 'Montserrat-Black';
-    font-size: 60px;
+    font-size: 500%;
 }
 
 .format-ludic .item .skin-tile .percent {
     font-family: 'Montserrat-Black';
-    font-size: 60px;
+    font-size: 500%;
 }
 
 .format-ludic .item .skin-tile .unit {
     font-family: 'Montserrat-Medium';
-    font-size: 40px;
+    font-size: 66%;
 }
 
 /* Inline "skin" activity */
@@ -301,7 +301,7 @@ div.skin-img {
 }
 
 .skin-type-avatar .skin-extra-html.inventory .modal {
-    /*display: block;*/
+    cursor: auto;
 }
 
 .skin-type-avatar .slot-title {
@@ -329,7 +329,7 @@ div.skin-img {
     }
 }
 
-.skin-type-avatar .slot-item:not(:last-child) {
+.skin-type-avatar .slot-items .slot-item:not(:last-child) {
     border-bottom: 1px dotted #1d1061;
 }
 
@@ -346,9 +346,13 @@ div.skin-img {
     display: block;
 }
 
-.skin-type-avatar .slot-item .slot-item-state .cant-buy {
-    cursor: not-allowed;
+.skin-type-avatar .slot-item .cant-buy {
     color: #a7a4a4;
+}
+
+.skin-type-avatar .slot-item img.cant-buy {
+    cursor: not-allowed;
+    opacity: 35%;
 }
 
 .skin-type-avatar .slot-item-name,
@@ -357,8 +361,20 @@ div.skin-img {
     flex-basis: 33%;
 }
 
-.slot-item-state.notbuy .slot-item-equipped,
-.slot-item-state.notbuy .slot-item-notequipped {
+.avatar.inventory-container .owned-items {
+    max-width: 600px;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.avatar.inventory-container .owned-items .slot-item,
+.avatar.inventory-container .owned-items .slot-item .slot-item-icon {
+    display: inline;
+}
+
+.slot-item-state.notowned .slot-item-equipped,
+.slot-item-state.notowned .slot-item-notequipped {
     display: none;
 }
 
@@ -415,7 +431,8 @@ div.skin-img {
     content: "$";
 }
 
-.inventory-container .avatar-preview {
+.inventory-container .
+-preview {
     flex-basis: 500px;
     margin-bottom: 10px;
     margin-left: auto;
@@ -502,7 +519,7 @@ div.skin-img {
     display: flex;
     align-items: center;
     margin-bottom: 25px;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
 }
 
@@ -511,22 +528,23 @@ div.skin-img {
 }
 
 .section-view .ludic-container.section-description {
-    max-width: 50%;
-    flex-shrink: 1;
     color: #1D1061;
+    margin-left: 20px;
 }
-
 
 #ludic-main-container .section-container.ludic-container.has-description #section-block {
-    flex-basis: 50%;
-    flex-grow: 1;
-    min-width: 350px;
-    max-width: 500px;
+    width: 600px;
 }
 
-/*#section-block > .section {
-    max-width: 580px;
-}*/
+@media (max-width: 1350px) {
+    #ludic-main-container .section-container.ludic-container.has-description {
+        flex-wrap: wrap;
+    }
+
+    .section-view .ludic-container.section-description {
+        margin-left: 0px;
+    }
+}
 
 @media (max-width: 800px) {
     #section-block > .section {
@@ -546,7 +564,7 @@ div.skin-img {
     background-repeat: no-repeat;
     position: absolute;
     right: 0;
-    bottom: 5px;
+    top: 235px;
     background-color: white;
 }
 
@@ -555,6 +573,11 @@ div.skin-img {
     width: 100%;
     height: 100%;
 }
+
+.format-ludic .coursemodules-container.ludic-container > div.inline {
+    white-space: normal;
+}
+
 
 
 /* -----------------------------------------
@@ -617,6 +640,7 @@ div.skin-img {
     background-color: #F2F0EC;
     padding: 5px 10px;
     text-align: center;
+    word-break: break-word;
 }
 
 #ludic-main-container.editmode .item.section .item-title {
@@ -955,6 +979,45 @@ input:checked + .ludic-slider:before {
 
 .ludic-slider.round:before {
     border-radius: 50%;
+}
+
+
+/* -----------------------------------------
+    TABS in forms
+ */
+
+.ludic-form-tabs-container > input
+{
+    display: none
+}
+
+.ludic-form-tabs-container > div.form-tab {
+    display: none;
+}
+
+.ludic-form-tabs-container > input:checked + div.form-tab {
+    display: block;
+}
+
+.ludic-form-tabs-container .form-tab-menu > label {
+    margin-left: 0.5em;
+    margin-bottom: 0;
+    padding: 0.5em 1.5em;
+    border: 1px solid lightgrey;
+    border-top-left-radius: 0.25em;
+    border-top-right-radius: 0.25em;
+}
+
+.ludic-form-tabs-container .form-tab-menu > label.selected {
+    border-bottom: 1px solid white;
+    font-weight: bold;
+}
+
+.ludic-form-tabs-container .form-tab-body {
+    border-top: 1px solid lightgrey;
+    padding-top: 1em;
+    margin-top: -1px;
+    width: 100%;
 }
 
 

@@ -136,7 +136,7 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
 
     public function setup_skin_data($skindata, $userdata, $section) {
 
-        // Aggregate the course section scores.
+        // Sum the course section scores.
         $score    = 0;
         $maxscore = 0;
         foreach ($userdata as $cmdata) {

@@ -1,8 +1,8 @@
 {
     "domain": "section",
     "skintype": "score",
-    "skinname": "",
-    "title": "Score wand Trophy",
+    "skinname": "bundled",
+    "title": "Score with Trophies",
     "description": "Accumulated points from activities rewarded with varying trophies",
     "css": " \n .skin-text.score{display: block;position: absolute;bottom: 0px;width: 100%;text-align: center;} \n \n ",
     "steps": [
@@ -13,13 +13,13 @@
             "css": ""
         },
         {
-            "threshold": 300,
+            "threshold": 200,
             "background": "default-user-skins\/score_and_trophies\/score_and_trophies-2",
             "text": "",
             "css": ""
         },
         {
-            "threshold": 500,
+            "threshold": 400,
             "background": "default-user-skins\/score_and_trophies\/score_and_trophies-3",
             "text": "",
             "css": ""
@@ -31,13 +31,13 @@
             "css": ""
         },
         {
-            "threshold": 700,
+            "threshold": 800,
             "background": "default-user-skins\/score_and_trophies\/score_and_trophies-5",
             "text": "",
             "css": ""
         },
         {
-            "threshold": 800,
+            "threshold": 1000,
             "background": "default-user-skins\/score_and_trophies\/score_and_trophies-6",
             "text": "",
             "css": ""

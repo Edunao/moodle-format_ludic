@@ -1,7 +1,7 @@
 {
     "domain": "course_module",
     "skintype": "score",
-    "skinname": "",
+    "skinname": "bundled",
     "title": "ABC grade",
     "description": "Grade diaplyed as a letter",
     "css": ".sub-tile.skin-tile .skin-text {display:none} .sub-tile.skin-tile .skin-text.extratext{display:block;position: absolute;left: 48%;bottom: 11%;font-size:550%;font-weight:bold;font-family:'sf-action-man'}",

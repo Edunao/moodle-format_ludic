@@ -1,7 +1,7 @@
 {
     "domain": "section",
     "skintype": "achievement",
-    "skinname": "",
+    "skinname": "bundled",
     "title": "Achievement Medals",
     "description": "Medals board showing numbers of activities successfully completed and numbers yet to be attempted",
     "background": "default-user-skins\/achievement-medal-set\/achievement-medal-set-bg",

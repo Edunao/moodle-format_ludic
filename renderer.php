@@ -86,12 +86,13 @@ class format_ludic_renderer extends format_section_renderer_base {
     /**
      * @param $id
      * @param string $title
-     * @param array $slots
+     * @param array $slotsowned
+     * @param array $slotsother
      * @return string
      */
-    public function render_avatar_inventory($slots = []) {
+    public function render_avatar_inventory($slotsowned = [], $slotsother = []) {
         require_once(__DIR__ . '/classes/renderers/renderable/avatar_inventory.php');
-        $avatarinventory = new format_ludic_avatar_inventory($slots);
+        $avatarinventory = new format_ludic_avatar_inventory($slotsowned, $slotsother);
         return $this->render($avatarinventory);
     }
 
@@ -165,6 +166,17 @@ class format_ludic_renderer extends format_section_renderer_base {
         require_once(__DIR__ . '/classes/renderers/renderable/buttons.php');
         $buttons = new format_ludic_buttons($buttons, $itemid, $type);
         return $this->render($buttons);
+    }
+
+    /**
+     * @param array $tabs
+     * @return string
+     * @throws coding_exception
+     */
+    public function render_form_tabs($tabs) {
+        require_once(__DIR__ . '/classes/renderers/renderable/form_tabs.php');
+        $tabs = new format_ludic_form_tabs($tabs);
+        return $this->render($tabs);
     }
 
     /**
@@ -278,8 +290,22 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render_from_template('format_ludic/modchooser', $modchooser);
     }
 
+    /**
+     * @param format_ludic_avatar_inventory $avatarinventory
+     * @return bool|string
+     * @throws moodle_exception
+     */
     protected function render_format_ludic_avatar_inventory(format_ludic_avatar_inventory $avatarinventory) {
         return $this->render_from_template('format_ludic/avatar_inventory', $avatarinventory);
+    }
+
+    /**
+     * @param format_ludic_form_tabs $tabs
+     * @return bool|string
+     * @throws moodle_exception
+     */
+    protected function render_format_ludic_form_tabs(format_ludic_form_tabs $tabs) {
+        return $this->render_from_template('format_ludic/form_tabs', $tabs);
     }
 
     /**
@@ -430,7 +456,7 @@ class format_ludic_renderer extends format_section_renderer_base {
      */
     public function render_overview_page() {
         return $this->render_from_template('format_ludic/page', [
-            'globaldescription'   => $this->contexthelper->get_global_description(),
+            'globaldescription'   => $this->format_summary_text($this->contexthelper->get_global_section()->dbrecord),
             'parentstype'         => 'section',
             'parenttitle'         => get_string('edit-title-section', 'format_ludic'),
             'parentscontent'      => $this->render_course_sections(),
@@ -448,7 +474,8 @@ class format_ludic_renderer extends format_section_renderer_base {
         return $this->render_from_template('format_ludic/section_page', [
             'section'       => $this->render_section($sectionobj),
             'coursemodules' => $this->render_course_modules($sectionid),
-            'description'   => $sectionobj->get_description()
+            'description' => $this->format_summary_text($sectionobj->dbrecord),
+
         ]);
     }
 
@@ -466,7 +493,7 @@ class format_ludic_renderer extends format_section_renderer_base {
             'globalcoursemodules' => $this->render_course_modules($this->contexthelper->get_global_section_id()),
             'section'             => $this->render_section($sectionobj),
             'coursemodules'       => $this->render_course_modules($sectionid),
-            'description'         => $sectionobj->get_description()
+            'description' => $this->format_summary_text($sectionobj->dbrecord),
         ]);
     }
 

@@ -61,6 +61,7 @@ class coursemodule_form extends form {
         require_once(__DIR__ . '/elements/select_form_element.php');
         require_once(__DIR__ . '/elements/checkbox_form_element.php');
 
+        $isinlineonly = plugin_supports('mod', $this->object->cminfo->modname, FEATURE_NO_VIEW_LINK, false);
         $sectionidx = $this->object->section->dbrecord->section;
         $elements   = [];
 
@@ -78,8 +79,9 @@ class coursemodule_form extends form {
             ['required' => true]
         );
 
+
         // Course module skin id.
-        $isinlineonly = plugin_supports('mod', $this->object->cminfo->modname, FEATURE_NO_VIEW_LINK, false);
+
         if (!$isinlineonly) {
             $editinfo = $this->object->skin->get_edit_info();
             $elements[] = new selection_popup_form_element(
@@ -101,6 +103,8 @@ class coursemodule_form extends form {
                     'skindescription' => $editinfo->description,
                 ]
             );
+        }else{
+            $elements[] = new hidden_form_element('skinid', 'course-module-skinid', $this->object->skinid, 0);
         }
 
         // Course module weight.
@@ -193,7 +197,7 @@ class coursemodule_form extends form {
      */
     public function validate_child() {
         // start by verifying that we have all of the properties that we expect
-        foreach(['id', 'name', 'visible', 'skinid', 'weight', 'targetmin', 'targetmax'] as $fieldname) {
+        foreach(['id', 'visible', 'skinid', 'weight', 'targetmin', 'targetmax'] as $fieldname) {
             if (!array_key_exists($fieldname, $this->formvalues)) {
                 throw new \Exception('Missing field in inpout data: '. $fieldname);
             }

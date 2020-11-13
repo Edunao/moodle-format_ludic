@@ -1,7 +1,7 @@
 {
     "domain": "section",
     "skintype": "fixed_image",
-    "skinname": "",
+    "skinname": "bundled",
     "title": "fixed image",
     "description": "Fixed image for a non-gamified course section",
     "css": "",

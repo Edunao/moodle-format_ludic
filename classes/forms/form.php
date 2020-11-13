@@ -95,7 +95,7 @@ abstract class form {
         $renderer = $PAGE->get_renderer('format_ludic');
         $elements = $this->elements;
 
-        // Fulfill form content from elements.
+        // Generate form content from elements.
         foreach ($elements as $element) {
             $this->content .= $element->render();
         }

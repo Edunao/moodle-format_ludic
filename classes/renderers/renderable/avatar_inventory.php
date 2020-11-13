@@ -28,15 +28,17 @@ defined('MOODLE_INTERNAL') || die();
 
 class format_ludic_avatar_inventory implements renderable {
 
-    public $slots;
+    public $slotsowned;
+    public $slotsother;
 
     /**
      * format_ludic_popup constructor.
      *
      * @param array $slots
      */
-    public function __construct($slots = []) {
-        $this->slots = array_values($slots);
+    public function __construct($slotsowned = [], $slotsother = []) {
+        $this->slotsowned = array_values($slotsowned);
+        $this->slotsother = array_values($slotsother);
     }
 
 }

@@ -1,7 +1,7 @@
 {
     "domain": "section",
     "skintype": "progress",
-    "skinname": "default",
+    "skinname": "bundled",
     "title": "rocket story",
     "description": "Representation of progress as a story that unfolds as the student progresses",
     "css": "@keyframes ludic-rocket-story-move-x4{ from{background-position-x:0px;} to{background-position-x:-2320px;} } @keyframes ludic-rocket-story-move-y2{ from{background-position-y:0px;} to{background-position-y:-900px;} } @keyframes ludic-rocket-story-move-x5{ from{background-position-x:0px;} to{background-position-x:-2900px;} } @keyframes ludic-rocket-story-move-y4{ from{background-position-y:0px;} to{background-position-y:-1800px;} } @keyframes ludic-rocket-story-pulsate{ from{opacity:20%;} to{opacity:100%;} }",

@@ -383,9 +383,6 @@ define(['jquery', 'jqueryui', 'core/templates', 'core/log'], function($, ui, tem
 
             this.initAvatar(selectorId);
             $('#avatar-inventory-' + sectionid).modal('show');
-
-            let scrollvalue = $('#avatar-inventory-' + sectionid + ' .slot-item.selected').position().top;
-            $('#avatar-inventory-' + sectionid + ' .inventory-content').animate({scrollTop: scrollvalue - 30}, 0);
         },
 
         /**

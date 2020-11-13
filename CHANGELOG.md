@@ -1,5 +1,25 @@
 # LUDIC course format : Release Notes
 
+## 3.5.3 - 2020-11-14
+
+### CHANGED
+
+- The section image in student section view pages now acts as a link back to the course overview page
+- The calculation of score thresholds for the section score skin has been updated to work on the same basis as the section progress skin
+- The calculation of cash for the section avatar skin has been updated to work on the same basis as the section progress skin
+- The section Avatar skin inventory display has been reworked
+
+### FIXED
+
+- The text in the section score display didn't scale correctly on the overview page
+- Remaining cash was not updated correctly after purchasing an item in the avatar skin
+- Word-wrap default setting was no-wrap for inline content
+- Section summary text was displayed incorrectly in student section view screens
+
+### NOTE
+
+- All skin configurations are reset with the installation of this update
+
 ## 3.5.2 - 2020-11-05
 
 ### ADDED
@@ -43,4 +63,4 @@
 
 ## 3.5.0 - 2020-09-30
 
-Initial version submitted to Moodle.org for publication, Supporting Moodle 3.5 to 3.8
+- Initial version submitted to Moodle.org for publication, Supporting Moodle 3.5 to 3.8

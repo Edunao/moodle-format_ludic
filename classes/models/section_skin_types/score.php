@@ -53,6 +53,10 @@ class skin_type_section_score extends \format_ludic\section_skin_type {
             ]
         ];
     }
+
+    public static function get_target_string_id() {
+        return 'cs-score-target';
+    }
 }
 
 class skin_template_section_score extends \format_ludic\section_skin_template {
@@ -117,16 +121,25 @@ class skin_template_section_score extends \format_ludic\section_skin_template {
     }
 
     public function setup_skin_data($skindata, $userdata, $section) {
-        // Aggregate the course section scores.
-        $score = 0;
+        // Sum the course section scores.
+        $score    = 0;
+        $maxscore = 0;
         foreach ($userdata as $cmdata) {
-            $score += $cmdata->score;
+            $score    += $cmdata->score;
+            $maxscore += $cmdata->maxscore;
         }
+        $maxscore = max($maxscore, 1);
+
+        // Derive the target score for the top end of the progression scale.
+        $targetscore   = ($section->target + 0 <= 0) ? $maxscore : max(1, $section->target);
+        $laststepscore = max(1, end($this->steps)->threshold);
+        $stepfactor    = 1 / $laststepscore;
+        $progress      = min(1, $score / $targetscore);
 
         // Find current step.
         $currentstep = $this->steps[0];
         foreach ($this->steps as $step) {
-            if ($score < $step->threshold) {
+            if ($progress < $step->threshold * $stepfactor) {
                 break;
             }
             $currentstep = $step;

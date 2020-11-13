@@ -50,5 +50,13 @@ function xmldb_format_ludic_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2020093002, 'format', 'ludic');
     }
 
+    if ($oldversion < 2020111401) {
+        // Reset all ludic config due to big change in base skin config
+        $DB->delete_records('course_format_options', [
+            'format' => 'ludic',
+            'name'   => 'ludic_config'
+        ]);
+    }
+
     return true;
 }

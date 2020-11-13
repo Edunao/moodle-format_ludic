@@ -85,6 +85,14 @@ class context_helper {
      */
     private $page = null;
 
+
+    /**
+     * Moodle renderer object.
+     *
+     * @var \renderer
+     */
+    private $renderer = null;
+
     /**
      * Moodle $USER.
      *
@@ -120,6 +128,11 @@ class context_helper {
      */
     private $dataapi = null;
 
+    /**
+     * Manipulate files.
+     *
+     * @var file_api
+     */
     public $fileapi = null;
 
     /**
@@ -167,6 +180,11 @@ class context_helper {
      */
     private $sections = null;
 
+    /**
+     * Current course sections.
+     *
+     * @var section[]
+     */
     private $sectionsbyid = [];
 
     /**
@@ -451,6 +469,18 @@ class context_helper {
      */
     public function get_course_module_id() {
         return isset($this->page->cm->id) ? $this->page->cm->id : 0;
+    }
+
+    /**
+     * Return the renderer.
+     *
+     * @return object
+     */
+    public function get_renderer() {
+        if ($this->renderer === null) {
+            $this->renderer = $this->page->get_renderer('format_ludic');
+        }
+        return $this->renderer;
     }
 
     /**
@@ -819,7 +849,7 @@ class context_helper {
         $globalsection = $this->get_global_section();
 
         // Return section 0 description.
-        return !empty($globalsection) ? $globalsection->sectioninfo->summary : '';
+        return !empty($globalsection) ? $globalsection->dbrecord->summary : '';
     }
 
     /**
