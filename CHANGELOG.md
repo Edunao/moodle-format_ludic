@@ -1,5 +1,11 @@
 # LUDIC course format : Release Notes
 
+## 3.5.4 - 2020-12-16
+
+### FIXED
+- Section titles were echoed directly without filtering (github issue #1)
+- Checking capabilities rather than roles
+
 ## 3.5.3 - 2020-11-14
 
 ### CHANGED

@@ -203,7 +203,7 @@ class format_ludic extends \format_base {
 
         $dbapi = $this->contexthelper->get_database_api();
         $name  = $dbapi->get_section_name_by_courseid_and_sectionidx($this->courseid, $sectionnum);
-        return !empty($name) ? $name : get_string('default-section-title', 'format_ludic', $sectionnum);
+        return !empty($name) ? format_string($name, true ): get_string('default-section-title', 'format_ludic', $sectionnum);
     }
 
     /**

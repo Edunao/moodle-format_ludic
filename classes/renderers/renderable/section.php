@@ -51,7 +51,7 @@ class format_ludic_section extends format_ludic_item {
         $this->selectorid   = 'ludic-section-' . $section->section;
         $this->itemtype     = 'section';
         $this->id           = $section->id;
-        $this->tooltip      = $section->get_title();
+        $this->tooltip      = format_string($section->get_title(), true);
         $this->order        = $section->section;
         $this->isnotvisible = !$section->visible;
         $this->parent       = true;

@@ -673,8 +673,7 @@ class format_ludic_renderer extends format_section_renderer_base {
             }
 
         }
-        $output .= '</div>';
-
+        
         return $output;
     }
 

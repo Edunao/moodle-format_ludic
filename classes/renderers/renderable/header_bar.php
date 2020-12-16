@@ -76,9 +76,7 @@ class format_ludic_header_bar implements renderable {
                     $section->name = get_string('section0name', 'format_ludic');
                     $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid;
                 } else {
-                    $section->name = $section->name != '' ?
-                        $section->name :
-                        get_string('default-section-title', 'format_ludic', $section->section);
+                    $section->name = $section->name != '' ? format_string($section->name, true) : get_string('default-section-title', 'format_ludic', $section->section);
                     $section->link = $CFG->wwwroot . '/course/view.php?id=' . $section->courseid . '&section=' . $section->section;
                 }
             }
@@ -212,9 +210,7 @@ class format_ludic_header_bar implements renderable {
         $list = [];
 
         // Exit in different cases.
-        if (!$this->contexthelper->user_has_student_role()
-            || $this->contexthelper->get_domain() != 'coursemodule'
-            || $this->contexthelper->get_section_idx() <= 0) {
+        if (!$this->contexthelper->user_has_student_role() || $this->contexthelper->get_domain() != 'coursemodule' || $this->contexthelper->get_section_idx() <= 0) {
 
             // If current user is not student, don't show options.
             // Add an option only in course module.
@@ -258,11 +254,12 @@ class format_ludic_header_bar implements renderable {
         // Initialize list.
         $list = [];
 
-        $isteacher        = $this->contexthelper->user_has_role_in_course('teacher');
-        $iseditingteacher = $this->contexthelper->user_has_role_in_course('editingteacher');
         $isadmin          = $this->contexthelper->is_user_admin();
         $courseid         = $this->contexthelper->get_course_id();
+        $context          = context_course::instance($courseid);
         $isstudent        = $this->contexthelper->user_has_student_role();
+        $iseditingteacher = has_capability('moodle/course:manageactivities', $context);
+        $isteacher        = has_capability('moodle/course:viewhiddencourses', $context);
 
         // User must be admin or editing teacher or teacher.
         if (!$isadmin && !$iseditingteacher && !$isteacher) {

@@ -575,21 +575,6 @@ class context_helper {
     }
 
     /**
-     * Check if user has the role defined in short name.
-     *
-     * @param $roleshortname
-     * @return bool
-     * @throws \dml_exception
-     * @throws \coding_exception
-     */
-    public function user_has_role_in_course($roleshortname) {
-        if (!$roleid = $this->dbapi->get_role_id_by_role_shortname($roleshortname)) {
-            return false;
-        }
-        return user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_id());
-    }
-
-    /**
      * Check if user is student (true even after changing the role)
      *
      * @return bool
@@ -597,27 +582,7 @@ class context_helper {
      * @throws \dml_exception
      */
     public function user_has_student_role() {
-        return !has_capability('moodle/course:manageactivities', $this->get_course_context());
-    }
-
-    /**
-     * Checks if the current user has one role in an array of role short names.
-     *
-     * @param $roleshortnames array
-     * @return bool
-     * @throws \dml_exception
-     * @throws \coding_exception
-     */
-    public function user_has_one_role_in_course($roleshortnames) {
-        $hasrole = false;
-        foreach ($roleshortnames as $roleshortname) {
-            if (!$roleid = $this->dbapi->get_role_id_by_role_shortname($roleshortname)) {
-                $hasrole = false;
-                continue;
-            }
-            $hasrole = user_has_role_assignment($this->get_user_id(), $roleid, $this->get_context_id());
-        }
-        return $hasrole;
+        return !has_capability('moodle/course:viewhiddencourses', $this->get_course_context());
     }
 
     /**

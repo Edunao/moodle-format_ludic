@@ -93,7 +93,7 @@ abstract class skinned_section extends \format_ludic\skinned_item {
     }
 
     public function get_instance_title() {
-        return $this->section->name;
+        return format_string($this->section->name,true);
     }
 
     public function get_instance_name() {

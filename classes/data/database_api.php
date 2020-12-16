@@ -319,17 +319,6 @@ class database_api {
     }
 
     /**
-     * Get role id by his shortname.
-     *
-     * @param $roleshortname
-     * @return mixed
-     * @throws \dml_exception
-     */
-    public function get_role_id_by_role_shortname($roleshortname) {
-        return $this->db->get_field('role', 'id', ['shortname' => $roleshortname]);
-    }
-
-    /**
      * Update section using moodle function.
      *
      * @param $moodlecourse

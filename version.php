@@ -28,4 +28,4 @@ $plugin->version    = 2020111401;        // The current plugin version (Date: YY
 $plugin->requires   = 2018051700;        // Requires this Moodle version.
 $plugin->component  = 'format_ludic';    // Full name of the plugin (used for diagnostics).
 $plugin->maturity   = MATURITY_STABLE;
-$plugin->release    = '3.5.3';
+$plugin->release    = '3.5.4';
