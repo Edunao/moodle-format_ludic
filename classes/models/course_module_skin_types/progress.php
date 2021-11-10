@@ -111,7 +111,7 @@ class skin_template_course_module_progress extends \format_ludic\course_module_s
     public function get_texts_to_render($skindata) {
         return [
             [
-                'text'  => $skindata->progress ,
+                'text'  => (int) $skindata->progress ,
                 'class' => 'percent number'
             ],
             [

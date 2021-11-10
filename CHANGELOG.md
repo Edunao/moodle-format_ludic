@@ -1,5 +1,11 @@
 # LUDIC course format : Release Notes
 
+## 3.5.5 - 2021-11-10
+- Fix backup/restore and cm/section duplication
+- Fix single-section page appareance
+- Add FR lang file
+- Fix score and progress display when the number is not an integer
+
 ## 3.5.4 - 2020-12-16
 
 ### FIXED

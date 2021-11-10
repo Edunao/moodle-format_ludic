@@ -116,11 +116,11 @@ class skin_template_section_progress extends \format_ludic\section_skin_template
     public function get_texts_to_render($skindata) {
         return [
             [
-                'text'  => $skindata->progress . '<span class="unit">pts</span>',
+                'text'  => (int) $skindata->progress . '<span class="unit">pts</span>',
                 'class' => 'score number'
             ],
             [
-                'text'  => $skindata->progress,
+                'text'  => (int) $skindata->progress,
                 'class' => 'number percent'
             ],
             [

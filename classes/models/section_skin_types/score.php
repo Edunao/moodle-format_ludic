@@ -106,7 +106,7 @@ class skin_template_section_score extends \format_ludic\section_skin_template {
     public function get_texts_to_render($skindata) {
         return [
             [
-                'text'  => $skindata->score . '<span class="unit">pts</span>',
+                'text'  => (int) $skindata->score . '<span class="unit">pts</span>',
                 'class' => 'score number'
             ],
             [

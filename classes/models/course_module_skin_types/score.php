@@ -114,7 +114,7 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
         $weight = $skindata->weight;
         return [
             [
-                'text'  => $skindata->score,
+                'text'  => (int) $skindata->score,
                 'class' => 'score'
             ],
             [

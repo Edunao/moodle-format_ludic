@@ -61,7 +61,7 @@ class backup_format_ludic_plugin extends backup_format_plugin {
 
         // Create one standard named plugin element (the visible container).
         // The sectionid and courseid not required as populated on restore.
-        $pluginwrapper = new backup_nested_element($this->get_recommended_name(), null, array('skinid'));
+        $pluginwrapper = new backup_nested_element($this->get_recommended_name(), null, array('skinid', 'target'));
 
         // Connect the visible container ASAP.
         $plugin->add_child($pluginwrapper);
@@ -89,7 +89,9 @@ class backup_format_ludic_plugin extends backup_format_plugin {
         $pluginwrapper = new backup_nested_element($this->get_recommended_name(), null, array(
                 'skinid',
                 'weight',
-                'access'
+                'access',
+                'targetmin',
+                'targetmax',
         ));
 
         // Connect the visible container ASAP.

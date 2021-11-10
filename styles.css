@@ -78,6 +78,10 @@
     margin-bottom: 0;
 }
 
+.format-ludic .single-section-view .course-view.card {
+    display: none;
+}
+
 @media (max-width: 1050px) {
     .format-ludic #region-main .card-body {
         padding: 0;
@@ -207,6 +211,7 @@
 
 div.skin-img {
     background-size: cover;
+    background-position: center;
     background-repeat: no-repeat;
 }
 
