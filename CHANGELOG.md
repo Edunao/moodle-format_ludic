@@ -5,6 +5,7 @@
 - Fix single-section page appareance
 - Add FR lang file
 - Fix score and progress display when the number is not an integer
+- Fix custom skin background position
 
 ## 3.5.4 - 2020-12-16
 
