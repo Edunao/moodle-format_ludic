@@ -81,6 +81,7 @@ abstract class skinned_item extends model {
         $output   = '';
         $css      = $this->get_additional_css();
         $css      = str_replace("\n", "", $css);
+        $css      = preg_replace("/\/\*.*\*\//", "", $css);
         $cssarray = [];
         $success  = preg_match_all('/[ \t\n\r]*(@keyframe.*?{.*?({.*?}.*?)*})|[ \t\n\r]*(.*?{.*?})/', $css, $cssarray);
 

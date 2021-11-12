@@ -39,6 +39,9 @@ class skinned_course_module_achievement extends \format_ludic\skinned_course_mod
 }
 
 class skin_type_course_module_achievement extends \format_ludic\course_module_skin_type {
+	private $editimage = "default";
+	private $maxscore = 0;
+
     public static function get_name() {
         return 'achievement';
     }
@@ -94,7 +97,12 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
             ];
             // Clamp the score to the 0..100 range.
             $this->steps[$achievementlevel]->score = max($this->steps[$achievementlevel]->score, 0);
-            $this->steps[$achievementlevel]->score = min($this->steps[$achievementlevel]->score, 100);
+            
+            $this->maxscore = max($this->maxscore, $this->steps[$achievementlevel]->score);
+			if (isset($step->background) && $step->background) {
+				$this->editimage = $step->background;
+			}
+
         }
 
         // If no steps were found at all then just put in a default one.
@@ -112,7 +120,7 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
         for ($i = 0; $i < $lowest; ++$i) {
             $this->steps[$i] = $this->steps[$lowest];
         }
-        for ($i = $lowest + 1; $i < 4; ++$i) {
+        for ($i = $lowest + 1; $i <= 4; ++$i) {
             $this->steps[$i] = $this->steps[$i] ?: $this->steps[$i - 1];
         }
     }
@@ -123,7 +131,7 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
      * @return \stdClass
      */
     public function get_edit_image() {
-        return $this->steps[4]->background;
+        return $this->editimage;
     }
 
 
@@ -185,7 +193,9 @@ class skin_template_course_module_achievement extends \format_ludic\course_modul
         $step = $this->steps[$idx];
 
         // Calculate the result score.
-        $score = $step->score * $userdata->weight / 100;
+        $factor = $this->maxscore ? $step->score / $this->maxscore : 0;
+		$cleanfactor = ceil($factor * 20) / 20;
+		$score = $cleanfactor * $userdata->weight;
 
         // Store away the results.
         $skindata->score        = $score;

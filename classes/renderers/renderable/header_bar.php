@@ -58,6 +58,7 @@ class format_ludic_header_bar implements renderable {
         $this->contexthelper  = \format_ludic\context_helper::get_instance($PAGE);
         $this->optionslist    = $this->get_options_list();
         $this->hasoptions     = count($this->optionslist) > 0;
+        $this->hassections    = false;
         $this->notstudentview = !$this->contexthelper->is_student_view_forced();
         $editmode             = $this->contexthelper->is_editing();
 
@@ -81,8 +82,11 @@ class format_ludic_header_bar implements renderable {
                 }
             }
 
-            $this->sections = array_values($this->sections);
+            $this->sections     = array_values($this->sections);
+            $this->hassections  = count($this->sections) > 2; // Only consider that we have sections if we have at least section 0 + 2 other visible sections
         }
+        $this->hasoptionsorsections = $this->hasoptions || $this->hassections;
+        $this->hasoptionsandsections = $this->hasoptions && $this->hassections;
 
         // Javascript parameters.
         $params = [
@@ -96,7 +100,6 @@ class format_ludic_header_bar implements renderable {
         $PAGE->requires->strings_for_js(format_ludic_get_strings_for_js($editmode), 'format_ludic');
         $PAGE->requires->js('/course/format/ludic/format.js');
         $PAGE->requires->js_call_amd('format_ludic/format_ludic', 'init', ['params' => $params]);
-
     }
 
     /**
@@ -139,9 +142,13 @@ class format_ludic_header_bar implements renderable {
         // Keep course modules with menu bar skin.
         $this->coursemodules = [];
         foreach ($coursemodules as $coursemodule) {
-            if ($coursemodule->skin->get_type_name() === 'menubar') {
-                $this->coursemodules[] = $coursemodule;
+            if ($coursemodule->skin->get_type_name() !== 'menubar') {
+                continue;
             }
+            if ($coursemodule->visible !== true) {
+                continue;
+            }
+            $this->coursemodules[] = $coursemodule;
         }
         // Store course modules, then return them.
         return $this->coursemodules;

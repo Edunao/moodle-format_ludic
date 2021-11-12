@@ -69,7 +69,7 @@ class skin_template_course_module_progress extends \format_ludic\course_module_s
 
         // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step)) {
+            if (!property_exists($step, 'threshold')) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;

@@ -71,6 +71,10 @@ class format_ludic_course_module extends format_ludic_item {
             $this->draggable = true;
             $this->droppable = true;
 
+            // Redirect to course module on double click.
+            $this->link2   = $coursemodule->get_link();
+            $this->action2 = 'getDataLinkAndRedirectTo2';
+
         } else {
 
             // Redirect to course module on click.

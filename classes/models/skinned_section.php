@@ -108,4 +108,8 @@ abstract class skinned_section extends \format_ludic\skinned_item {
     public function get_target_string_id() {
         return $this->skintype->get_target_string_id();
     }
+
+    public function has_in_section_view() {
+        return method_exists($this->skintype, 'has_in_section_view') ? $this->skintype->has_in_section_view() : true;
+    }
 }

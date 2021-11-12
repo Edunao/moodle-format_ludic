@@ -86,8 +86,9 @@ define(['jquery', 'jqueryui', 'core/templates', 'core/log'], function($, ui, tem
 
             // Click on element with data-action attribute.
             // Exclude not ludic element, because plugin like quiz use data-action.
-            $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar, #page-course-format-ludic-edit_skins')
-                .on('click', '[data-action]', function(e) {
+console.log("Registering click");
+            $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar, #page-course-format-ludic-edit_skins').on('click', '[data-action]', function(e) {
+console.log("Triggering click");
                 if (!$(this).is(e.target)) {
                     if ($(e.target).hasClass('no-ludic-event') || $(e.target).parents('.no-ludic-event').length > 0
                         || ($(e.target).parents('.no-ludic-event').length > 0 && $(e.target).data('action') === undefined)
@@ -160,6 +161,33 @@ define(['jquery', 'jqueryui', 'core/templates', 'core/log'], function($, ui, tem
                     ludic.callFunction(action, params);
                 }
             });
+
+            // Double Click on element with data-ludicaction2 attribute.
+console.log("Registering dbl click");
+            $('body.format-ludic.path-course-view, body.format-ludic #ludic-header-bar, #page-course-format-ludic-edit_skins').on('dblclick', '[data-ludicaction2]', function(e) {
+console.log("Triggering double click");
+                // Get data.
+                let item = $(this);
+                let action = item.data('ludicaction2');
+
+                // Params for ajax call or javascript function.
+                // TODO get all data-* as params.
+                let params = {
+                    item: item,
+                    id: item.data('id') ? item.data('id') : null,
+                    selectorId: item.data('selectorid') ? item.data('selectorid') : null,
+                    type: item.data('type') ? item.data('type') : null,
+                    itemId: item.data('itemid') ? item.data('itemid') : null,
+                    itemType: item.data('itemtype') ? item.data('itemtype') : null,
+                    callback: null,
+                };
+                // Try to construct a selector id.
+                let hasItemSelectorId = params.itemType && params.itemId;
+                params.itemSelectorId = hasItemSelectorId ? '.item.' + params.itemType + '[data-id="' + params.itemId + '"]' : null;
+
+                // Only an action => call javascript function dynamically.
+                ludic.callFunction(action, params);
+            });
         },
 
         /**
@@ -170,6 +198,7 @@ define(['jquery', 'jqueryui', 'core/templates', 'core/log'], function($, ui, tem
          * @returns {mixed}
          */
         callFunction: function(name, params = {}) {
+console.log("Triggering callFunction", name, params);
             // Define all possible parameters here.
             let html = params.html ? params.html : null;
             let callback = params.callback ? params.callback : null;
@@ -588,12 +617,22 @@ define(['jquery', 'jqueryui', 'core/templates', 'core/log'], function($, ui, tem
         },
 
         /**
-         * Return data link
+         * Redirect to the url indicated by data-link html tag argument.
          *
          * @param {jquery} item
          */
         getDataLinkAndRedirectTo: function(item) {
             let url = $(item).data('link');
+            ludic.redirectTo(url);
+        },
+
+        /**
+         * Redirect to the url indicated by data-ludiclink2 html tag argument.
+         *
+         * @param {jquery} item
+         */
+        getDataLinkAndRedirectTo2: function(item) {
+            let url = $(item).data('ludiclink2');
             ludic.redirectTo(url);
         },
 

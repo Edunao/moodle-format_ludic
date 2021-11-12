@@ -140,6 +140,7 @@
 
 .format-ludic .item .skin-tile {
     position: relative;
+    overflow: hidden;
 }
 
 .format-ludic .item.section .skin-tile {
@@ -539,6 +540,11 @@ div.skin-img {
 
 #ludic-main-container .section-container.ludic-container.has-description #section-block {
     width: 600px;
+}
+
+#ludic-main-container.section-view .coursemodules-container .skin-img,
+#ludic-main-container.single-section-view .coursemodules-container .skin-img {
+    background-size: contain;
 }
 
 @media (max-width: 1350px) {

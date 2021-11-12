@@ -1,15 +1,46 @@
 # LUDIC course format : Release Notes
 
+## 3.5.6 - 2021-11-12
+
+### FIXED
+
+- Fixed display of activity tiles in section view to use 'contain' and not 'cover' background image size
+- Fixed display of tiles to not alllow overflow (eg of text) outside the tile perimeter (which previously caused invisible space around text to overlap completion checkboxes making them unclickable)
+- CSS configuration for fixed image section skins was not applied
+- Comments of the form /* ... */ in CSS configurations were incorrectly handled when composing course and section view pages.
+- Useful links menu included course modules even if they were hidden (and so inaccessible).
+- Fixed fill of missing steps, score evaluation and edit image of cm_achievement skin
+- Fixed score evaluation of cm_score skin
+- Updated abc skin default value to have more beautily number displayed
+
+### CHANGED 
+
+- Improved the behaviour of fixed image section type to not include the image at the top of the section page (to only include it in the course overview page)
+- Improved the default paramaters of the "ABC grade" skin to provide scores in the ratio of 50:75:100 for the C, B and A grades respectively (the settings were previously 33:66:100)
+- Useful links menu no longer displays course sections if there is only one section in the course
+- Usefule links menu, and the associated header bar, are no longer displayed if the menu would be empty 
+
+### ADDED
+
+- Double click on course module tiles in editing views now goes tot he course module (like a single click would in student view) 
+
 ## 3.5.5 - 2021-11-10
-- Fix backup/restore and cm/section duplication
-- Fix single-section page appareance
-- Add FR lang file
-- Fix score and progress display when the number is not an integer
-- Fix custom skin background position
+
+### FIXED
+
+- Fixed backup/restore and cm/section duplication
+- Fixed a glitch on the single-section page appareance which sometimes included a small blank rectangle at the top of the page 
+- Fixed score and progress display to round numbers to nice values
+- Fixed custom skin background position
+
+### ADDED
+
+- Add French lang file
 
 ## 3.5.4 - 2020-12-16
 
 ### FIXED
+
 - Section titles were echoed directly without filtering (github issue #1)
 - Checking capabilities rather than roles
 

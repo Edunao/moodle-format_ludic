@@ -470,12 +470,18 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_section_page($sectionid) {
-        $sectionobj = $this->contexthelper->get_section_by_id($sectionid);
-        return $this->render_from_template('format_ludic/section_page', [
-            'section'       => $this->render_section($sectionobj),
-            'coursemodules' => $this->render_course_modules($sectionid),
-            'description' => $this->format_summary_text($sectionobj->dbrecord),
+        $sectionobj         = $this->contexthelper->get_section_by_id($sectionid);
+        $sectionskin        = \format_ludic\skin_manager::get_instance()->skin_section($sectionobj->skinid, $sectionobj);
+        $description        = $this->format_summary_text($sectionobj->dbrecord);
+        $showsectiondiv     = $sectionskin->has_in_section_view() || $description;
+        $sectionhtml        = $sectionskin->has_in_section_view() ? $this->render_section($sectionobj) : '';
+        $moduleshtml        = $this->render_course_modules($sectionid);
 
+        return $this->render_from_template('format_ludic/section_page', [
+            'showsectiondiv'    => $showsectiondiv,
+            'section'           => $sectionhtml,
+            'coursemodules'     => $moduleshtml,
+            'description'       => $description,
         ]);
     }
 
@@ -485,15 +491,21 @@ class format_ludic_renderer extends format_section_renderer_base {
      * @throws moodle_exception
      */
     public function render_single_section_page($sectionid) {
-        $sectionobj = $this->contexthelper->get_section_by_id($sectionid);
+        $sectionobj         = $this->contexthelper->get_section_by_id($sectionid);
+        $sectionskin        = \format_ludic\skin_manager::get_instance()->skin_section($sectionobj->skinid, $sectionobj);
+        $description        = $this->format_summary_text($sectionobj->dbrecord);
+        $showsectiondiv     = $sectionskin->has_in_section_view() || $description;
+        $sectionhtml        = $sectionskin->has_in_section_view() ? $this->render_section($sectionobj) : '';
+        $moduleshtml        = $this->render_course_modules($sectionid);
         return $this->render_from_template('format_ludic/single_section_page', [
             'globaldescription'   => $this->contexthelper->get_global_description(),
             'parentstype'         => 'section',
             'parenttitle'         => get_string('edit-title-section', 'format_ludic'),
             'globalcoursemodules' => $this->render_course_modules($this->contexthelper->get_global_section_id()),
-            'section'             => $this->render_section($sectionobj),
-            'coursemodules'       => $this->render_course_modules($sectionid),
-            'description' => $this->format_summary_text($sectionobj->dbrecord),
+            'showsectiondiv'      => $showsectiondiv,
+            'section'             => $sectionhtml,
+            'coursemodules'       => $moduleshtml,
+            'description'         => $description,
         ]);
     }
 
@@ -673,7 +685,7 @@ class format_ludic_renderer extends format_section_renderer_base {
             }
 
         }
-        
+
         return $output;
     }
 

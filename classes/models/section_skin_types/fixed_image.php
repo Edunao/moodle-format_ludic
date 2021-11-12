@@ -48,6 +48,10 @@ class skin_type_section_fixed_image extends \format_ludic\section_skin_type {
             "background"  => "image",
         ];
     }
+
+    public static function has_in_section_view() {
+        return false;
+    }
 }
 
 class skin_template_section_fixed_image extends \format_ludic\section_skin_template {
@@ -70,7 +74,7 @@ class skin_template_section_fixed_image extends \format_ludic\section_skin_templ
     }
 
     public function get_css($skindata) {
-        return '';
+        return $this->css;
     }
 
     public function get_texts_to_render($skindata) {

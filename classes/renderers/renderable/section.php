@@ -107,8 +107,6 @@ class format_ludic_section extends format_ludic_item {
             $this->droppable               = $isnotglobalsection;
 
         } else {
-
-            // The skin will render all section content.
             $this->content = $section->skin->render_skinned_tile();
 
             if ($contexthelper->get_section_id() == $section->id) {

@@ -69,7 +69,7 @@ class skin_template_section_score extends \format_ludic\section_skin_template {
 
         // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step)) {
+            if (!property_exists($step, 'threshold')) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;

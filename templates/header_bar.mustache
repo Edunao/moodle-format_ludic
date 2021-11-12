@@ -31,6 +31,7 @@
         ]
     }
 }}
+{{#hasoptionsorsections}}
 <div id="ludic-header-bar" class="format-ludic header-bar navbar navbar-light bg-light">
 
         <a class="btn btn-primary nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -49,13 +50,16 @@
             {{/optionslist}}
             {{/notstudentview}}
             {{/hasoptions}}
-
+<!--
             {{^hasoptions}}
             {{#str}}header-no-content, format_ludic{{/str}}
             {{/hasoptions}}
-
+-->
+{{#hasoptionsandsections}}
             <div class="dropdown-divider"></div>
+{{/hasoptionsandsections}}
 
+{{#hassections}}
             <div class="header-sections-list ">
 
                 {{#sections}}
@@ -64,11 +68,10 @@
                 {{/sections}}
 
             </div>
-
+{{/hassections}}
         </div>
 </div>
-
-
+{{/hasoptionsorsections}}
 
 
 

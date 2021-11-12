@@ -74,7 +74,7 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
 
         // Copy steps into an associative array, indexed by threshold and sort it.
         foreach ($config->steps as $step) {
-            if (!array_key_exists('threshold', $step) || $step->threshold < 0 || $step->threshold > 100) {
+            if (!property_exists($step, 'threshold') || $step->threshold < 0 || $step->threshold > 100) {
                 continue;
             }
             $stepsbythreshod[$step->threshold] = $step;
@@ -180,7 +180,10 @@ class skin_template_course_module_score extends \format_ludic\course_module_skin
         // Evaluate out the score from the step, interpolating a value range if one is provided
         $rawscore    = format_ludic_resolve_ranges_in_text($step->score, $cleanfactor);
         $maxscore    = format_ludic_resolve_ranges_in_text($this->steps[$numsteps - 1]->score, 1.0);
-        $score       = $maxscore ? $rawscore / $maxscore * $userdata->weight : 0;
+        $scorefactor      = $maxscore ? $rawscore / $maxscore : 0;
+		$cleanscorefactor = ceil($scorefactor * 20) / 20.0;
+		$score            = $cleanscorefactor * $userdata->weight;
+
 
         // Store away the results.
         $skindata->grade    = $grade;

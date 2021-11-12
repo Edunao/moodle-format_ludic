@@ -37,16 +37,20 @@ along with Moodle.  If not, see
 
     <div class="section-view card">
         <div class="card-body">
+            {{#showsectiondiv}}
             <div class="section-container ludic-container{{#description}} has-description{{/description}}">
+                {{#section}}
                 <div id="section-block" class="ludic-container section-block">
                     {{{section}}}
                 </div>
+                {{/section}}
                 {{#description}}
                 <div id="section-description" class="ludic-container section-description">
                     {{{description}}}
                 </div>
                 {{/description}}
             </div>
+            {{/showsectiondiv}}
 
             <div class="coursemodules-container ludic-container container-parents ">
                 {{{coursemodules}}}
